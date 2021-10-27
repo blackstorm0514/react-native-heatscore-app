@@ -1,16 +1,16 @@
 import React from 'react';
-// import { AppearanceProvider } from 'react-native-appearance';
-// import { SafeAreaProvider } from 'react-native-safe-area-context';
-// import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
-// import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import { AppearanceProvider } from 'react-native-appearance';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { AppLoading } from './app-loading.component';
-// import { appMappings, appThemes } from './app-theming';
-// import { AppIconsPack } from './app-icons-pack';
-// import { StatusBar } from '../components/status-bar.component';
+import { appMappings, appThemes } from './app-theming';
+import { AppIconsPack } from './app-icons-pack';
+import { StatusBar } from '../components/status-bar.component';
 import { SplashImage } from '../components/splash-image.component';
-// import { AppNavigator } from '../navigation/app.navigator';
+import { AppNavigator } from '../navigation/app.navigator';
 import { AppStorage } from '../services/app-storage.service';
-// import { Theming } from '../services/theme.service';
+import { Theming } from '../services/theme.service';
 import Main from './main';
 
 const loadingTasks = [
@@ -28,25 +28,25 @@ const defaultConfig = {
 };
 
 const App = ({ mapping, theme }) => {
-    // const [mappingContext, currentMapping] = Theming.useMapping(appMappings, mapping);
-    // const [themeContext, currentTheme] = Theming.useTheming(appThemes, mapping, theme);
+    const [mappingContext, currentMapping] = Theming.useMapping(appMappings, mapping);
+    const [themeContext, currentTheme] = Theming.useTheming(appThemes, mapping, theme);
 
     return (
         <React.Fragment>
-            {/* <IconRegistry icons={[EvaIconsPack, AppIconsPack]} /> */}
-            <Main />
-            {/* <AppearanceProvider>
+            <IconRegistry icons={[EvaIconsPack, AppIconsPack]} />
+            <AppearanceProvider>
                 <ApplicationProvider {...currentMapping} theme={currentTheme}>
                     <Theming.MappingContext.Provider value={mappingContext}>
                         <Theming.ThemeContext.Provider value={themeContext}>
                             <SafeAreaProvider>
-                                <StatusBar />
+                                {/* <StatusBar /> */}
                                 <AppNavigator />
+                                {/* <Main /> */}
                             </SafeAreaProvider>
                         </Theming.ThemeContext.Provider>
                     </Theming.MappingContext.Provider>
                 </ApplicationProvider>
-            </AppearanceProvider> */}
+            </AppearanceProvider>
         </React.Fragment>
     );
 };

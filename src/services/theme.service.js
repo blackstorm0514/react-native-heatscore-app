@@ -1,11 +1,11 @@
 import React from 'react';
-import { Appearance, AppearancePreferences, ColorSchemeName } from 'react-native-appearance';
+import { Appearance } from 'react-native-appearance';
 import { AppStorage } from './app-storage.service';
 
 export class Theming {
 
-    static MappingContext = React.createContext < MappingContextValue > (null);
-    static ThemeContext = React.createContext < ThemeContextValue > (null);
+    static MappingContext = React.createContext(null);
+    static ThemeContext = React.createContext(null);
 
     /**
      * @see MappingContextValue
