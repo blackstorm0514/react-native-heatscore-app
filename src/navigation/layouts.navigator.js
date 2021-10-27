@@ -4,7 +4,7 @@ import { AuthNavigator } from './auth.navigator';
 // import { SocialNavigator } from './social.navigator';
 // import { ArticlesNavigator } from './articles.navigator';
 // import { MessagingNavigator } from './messaging.navigator';
-// import { DashboardsNavigator } from './dashboards.navigator';
+import { DashboardsNavigator } from './dashboards.navigator';
 // import { EcommerceNavigator } from './ecommerce.navigator';
 import { LayoutsScreen } from '../scenes/layouts/layouts.component';
 
@@ -17,7 +17,7 @@ export const LayoutsNavigator = () => (
         {/* <Stack.Screen name='Social' component={SocialNavigator} /> */}
         {/* <Stack.Screen name='Articles' component={ArticlesNavigator} /> */}
         {/* <Stack.Screen name='Messaging' component={MessagingNavigator} /> */}
-        {/* <Stack.Screen name='Dashboards' component={DashboardsNavigator} /> */}
+        <Stack.Screen name='Dashboards' component={DashboardsNavigator} />
         {/* <Stack.Screen name='Ecommerce' component={EcommerceNavigator} /> */}
     </Stack.Navigator>
 );
