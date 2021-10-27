@@ -1,0 +1,58 @@
+import React, { useState, useCallback } from 'react';
+import { StyleSheet } from 'react-native';
+import {
+    Select,
+    SelectItem,
+    SelectGroup,
+} from '@ui-kitten/components';
+
+export const MultiselectShowcase = (props) => {
+    const [selectedIndex, setSelectedIndex] = useState(props.selectedIndex);
+
+    const renderOption = useCallback(
+        (item, index) => <SelectItem title={item.title} key={index} />,
+        []
+    );
+
+    const renderGroup = useCallback(
+        (item, index) => (
+            <SelectGroup title={item.title} key={index}>
+                {item.items.map(renderOption)}
+            </SelectGroup>
+        ),
+        []
+    );
+
+    const multipleValues =
+        selectedIndex && selectedIndex instanceof Array
+            ? selectedIndex
+                .map((index) => {
+                    return props.data[index.section]?.items[index.row].title;
+                })
+                .join(', ')
+            : null;
+
+    const displayValue = () => (props.groupedOptions ? multipleValues : null);
+
+    return (
+        <>
+            <Select
+                {...props}
+                value={selectedIndex && displayValue()}
+                selectedIndex={selectedIndex}
+                onSelect={(index) => setSelectedIndex(index)}
+                style={styles.select}
+            >
+                {props.groupedOptions
+                    ? props.data.map(renderGroup)
+                    : props.data.map(renderOption)}
+            </Select>
+        </>
+    );
+};
+
+const styles = StyleSheet.create({
+    select: {
+        width: 200,
+    },
+});

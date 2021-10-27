@@ -34,36 +34,36 @@ import { TopNavigationScreen } from '../scenes/components/top-navigation/top-nav
 const Stack = createStackNavigator();
 
 export const ComponentsNavigator = () => (
-  <Stack.Navigator headerMode='none'>
-    <Stack.Screen name='Components' component={ComponentsScreen} />
-    <Stack.Screen name='Autocomplete' component={AutocompleteScreen} />
-    <Stack.Screen name='Avatar' component={AvatarScreen} />
-    <Stack.Screen name='BottomNavigation' component={BottomNavigationScreen} />
-    <Stack.Screen name='Button' component={ButtonScreen} />
-    <Stack.Screen name='ButtonGroup' component={ButtonGroupScreen} />
-    <Stack.Screen name='Calendar' component={CalendarScreen} />
-    <Stack.Screen name='Card' component={CardScreen} />
-    <Stack.Screen name='CheckBox' component={CheckBoxScreen} />
-    <Stack.Screen name='Datepicker' component={DatepickerScreen} />
-    <Stack.Screen name='Drawer' component={DrawerScreen} />
-    <Stack.Screen name='Icon' component={IconScreen} />
-    <Stack.Screen name='Input' component={InputScreen} />
-    <Stack.Screen name='Layout' component={LayoutScreen} />
-    <Stack.Screen name='List' component={ListScreen} />
-    <Stack.Screen name='Menu' component={MenuScreen} />
-    <Stack.Screen name='Modal' component={ModalScreen} />
-    <Stack.Screen name='OverflowMenu' component={OverflowMenuScreen} />
-    <Stack.Screen name='Popover' component={PopoverScreen} />
-    <Stack.Screen name='Radio' component={RadioScreen} />
-    <Stack.Screen name='RadioGroup' component={RadioGroupScreen} />
-    <Stack.Screen name='RangeCalendar' component={RangeCalendarScreen} />
-    <Stack.Screen name='RangeDatepicker' component={RangeDatepickerScreen} />
-    <Stack.Screen name='Select' component={SelectScreen} />
-    <Stack.Screen name='Spinner' component={SpinnerScreen} />
-    <Stack.Screen name='TabView' component={TabViewScreen} />
-    <Stack.Screen name='Text' component={TextScreen} />
-    <Stack.Screen name='Toggle' component={ToggleScreen} />
-    <Stack.Screen name='Tooltip' component={TooltipScreen} />
-    <Stack.Screen name='TopNavigation' component={TopNavigationScreen} />
-  </Stack.Navigator>
+    <Stack.Navigator headerMode='none'>
+        <Stack.Screen name='Components' component={ComponentsScreen} />
+        <Stack.Screen name='Autocomplete' component={AutocompleteScreen} />
+        <Stack.Screen name='Avatar' component={AvatarScreen} />
+        <Stack.Screen name='BottomNavigation' component={BottomNavigationScreen} />
+        <Stack.Screen name='Button' component={ButtonScreen} />
+        <Stack.Screen name='ButtonGroup' component={ButtonGroupScreen} />
+        <Stack.Screen name='Calendar' component={CalendarScreen} />
+        <Stack.Screen name='Card' component={CardScreen} />
+        <Stack.Screen name='CheckBox' component={CheckBoxScreen} />
+        <Stack.Screen name='Datepicker' component={DatepickerScreen} />
+        <Stack.Screen name='Drawer' component={DrawerScreen} />
+        <Stack.Screen name='Icon' component={IconScreen} />
+        <Stack.Screen name='Input' component={InputScreen} />
+        <Stack.Screen name='Layout' component={LayoutScreen} />
+        <Stack.Screen name='List' component={ListScreen} />
+        <Stack.Screen name='Menu' component={MenuScreen} />
+        <Stack.Screen name='Modal' component={ModalScreen} />
+        <Stack.Screen name='OverflowMenu' component={OverflowMenuScreen} />
+        <Stack.Screen name='Popover' component={PopoverScreen} />
+        <Stack.Screen name='Radio' component={RadioScreen} />
+        <Stack.Screen name='RadioGroup' component={RadioGroupScreen} />
+        <Stack.Screen name='RangeCalendar' component={RangeCalendarScreen} />
+        <Stack.Screen name='RangeDatepicker' component={RangeDatepickerScreen} />
+        <Stack.Screen name='Select' component={SelectScreen} />
+        <Stack.Screen name='Spinner' component={SpinnerScreen} />
+        <Stack.Screen name='TabView' component={TabViewScreen} />
+        <Stack.Screen name='Text' component={TextScreen} />
+        <Stack.Screen name='Toggle' component={ToggleScreen} />
+        <Stack.Screen name='Tooltip' component={TooltipScreen} />
+        <Stack.Screen name='TopNavigation' component={TopNavigationScreen} />
+    </Stack.Navigator>
 );
