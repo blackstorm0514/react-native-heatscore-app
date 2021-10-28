@@ -12,7 +12,7 @@ import { LibrariesScreen } from '../scenes/libraries/libraries.component';
 const BottomTab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
-const initialTabRoute = __DEV__ ? 'Components' : 'Layouts';
+const initialTabRoute = 'Layouts';
 
 const ROOT_ROUTES = ['Home', 'Layouts', 'Components', 'Themes'];
 

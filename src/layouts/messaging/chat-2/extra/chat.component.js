@@ -5,6 +5,9 @@ import { ChatMessageContent } from './chat-message-content.component';
 import { ChatMessageGroup } from './chat-message-group.component';
 import { ChatMessage } from './chat-message.component';
 import { Message } from './data';
+import { ChatService } from './chat.service';
+
+const chatService = new ChatService();
 
 export const Chat = (props) => {
 

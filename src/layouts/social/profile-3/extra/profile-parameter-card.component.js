@@ -22,7 +22,7 @@ export const ProfileParameterCard = (props) => {
                 <Text appearance='hint'>
                     {hint}
                 </Text>
-                {icon(styles.icon)}
+                {icon({ style: styles.icon })}
             </View>
             <Text
                 style={styles.valueLabel}

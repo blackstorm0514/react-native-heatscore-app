@@ -7,6 +7,8 @@ import { ChatMessage } from './chat-message.component';
 import { ChatService } from './chat.service';
 import { Message } from './data';
 
+const chatService = new ChatService();
+
 export const Chat = (props) => {
 
     const listRef = React.useRef();

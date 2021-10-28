@@ -36,7 +36,7 @@ export default () => {
 
     const [messages, setMessages] = React.useState(initialMessages);
     const [message, setMessage] = React.useState(null);
-    const [attachmentsMenuVisible, setAttachmentsMenuVisible] = React.useState < boolean > (false);
+    const [attachmentsMenuVisible, setAttachmentsMenuVisible] = React.useState(false);
 
     const sendButtonEnabled = () => {
         return message && message.length > 0;
