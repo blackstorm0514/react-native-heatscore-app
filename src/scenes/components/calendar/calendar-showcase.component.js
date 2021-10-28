@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Divider } from '@ui-kitten/components';
+import { Button, Divider, Calendar } from '@ui-kitten/components';
 
 export const CalendarShowcase = ({ withFooter, ...props }) => {
 
     const calendarRef = React.useRef();
-    const [date, setDate] = React.useState < Date > (props.date);
+    const [date, setDate] = React.useState(props.date);
 
     const onTodayPress = () => {
         calendarRef.current.scrollToToday();

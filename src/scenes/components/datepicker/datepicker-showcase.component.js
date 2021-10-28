@@ -5,7 +5,7 @@ import { Datepicker } from '@ui-kitten/components';
 
 export const DatepickerShowcase = (props) => {
 
-    const [date, setDate] = React.useState < Date > (null);
+    const [date, setDate] = React.useState(null);
 
     return (
         <Datepicker
