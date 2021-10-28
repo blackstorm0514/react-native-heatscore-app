@@ -1,5 +1,3 @@
-import { ImageSourcePropType } from 'react-native';
-
 export class Profile {
     constructor(firstName, lastName, photo, location, followers, following, posts) {
         this.firstName = firstName;
@@ -50,7 +48,7 @@ export class Post {
 
     static plant3() {
         return new Post(
-            require('../assets/../assets/image-plant-3.jpg'),
+            require('../assets/image-plant-3.jpg'),
             'Plants',
         );
     }
