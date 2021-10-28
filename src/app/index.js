@@ -11,13 +11,8 @@ import { SplashImage } from '../components/splash-image.component';
 import { AppNavigator } from '../navigation/app.navigator';
 import { AppStorage } from '../services/app-storage.service';
 import { Theming } from '../services/theme.service';
-import Main from './main';
 
 const loadingTasks = [
-    // () => LoadFontsTask({
-    //   'opensans-regular': require('../assets/fonts/opensans-regular.ttf'),
-    //   'roboto-regular': require('../assets/fonts/roboto-regular.ttf'),
-    // }),
     () => AppStorage.getMapping(defaultConfig.mapping).then(result => ['mapping', result]),
     () => AppStorage.getTheme(defaultConfig.theme).then(result => ['theme', result]),
 ];
@@ -41,7 +36,6 @@ const App = ({ mapping, theme }) => {
                             <SafeAreaProvider>
                                 {/* <StatusBar /> */}
                                 <AppNavigator />
-                                {/* <Main /> */}
                             </SafeAreaProvider>
                         </Theming.ThemeContext.Provider>
                     </Theming.MappingContext.Provider>
