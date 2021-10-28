@@ -17,7 +17,7 @@ export const LoadAssetsTask = (assets) => {
  * @property {any} fallback - Fallback configuration that is used as default application configuration.
  * May be useful at first run.
  *
- * @property {(props: { loaded: boolean }) => React.ReactElement} placeholder - Element to render
+ * @property {(props: { loaded }) => React.ReactElement} placeholder - Element to render
  * while application is loading.
  *
  * @property {(result: any) => React.ReactElement} children - Should return Application component
