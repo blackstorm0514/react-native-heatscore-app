@@ -48,13 +48,3 @@ export const AppNavigator = () => (
         </BottomTab.Navigator>
     </NavigationContainer>
 );
-
-// export const AppNavigator = () => (
-//     <NavigationContainer theme={navigatorTheme}>
-//         <Drawer.Navigator
-//             screenOptions={{ gestureEnabled: false }}
-//             drawerContent={props => <HomeDrawer {...props} />}>
-//             <Drawer.Screen name='Home' component={HomeTabsNavigator} />
-//         </Drawer.Navigator>
-//     </NavigationContainer>
-// );
