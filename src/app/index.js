@@ -6,10 +6,9 @@ import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { AppLoading } from './app-loading.component';
 import { appMappings, appThemes } from './app-theming';
 import { SplashImage } from '../components/splash-image.component';
-// import { AppNavigator } from '../navigation/app.navigator';
+import { AppNavigator } from '../navigation/app.navigator';
 import { AppStorage } from '../services/app-storage.service';
 import { Theming } from '../services/theme.service';
-import WebViewComponent from '../layout/webview.component';
 
 const loadingTasks = [
     () => AppStorage.getToken(defaultConfig.userToken).then(result => ['userToken', result]),
@@ -33,8 +32,7 @@ const App = ({ mapping, theme, userToken }) => {
                     <Theming.MappingContext.Provider value={mappingContext}>
                         <Theming.ThemeContext.Provider value={themeContext}>
                             <SafeAreaProvider>
-                                {/* <AppNavigator /> */}
-                                <WebViewComponent />
+                                <AppNavigator />
                             </SafeAreaProvider>
                         </Theming.ThemeContext.Provider>
                     </Theming.MappingContext.Provider>
