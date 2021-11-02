@@ -9,6 +9,7 @@ import { SplashImage } from '../components/splash-image.component';
 import { AppNavigator } from '../navigation/app.navigator';
 import { AppStorage } from '../services/app-storage.service';
 import { Theming } from '../services/theme.service';
+import { VectorIconsPack } from './vector-icons-pack';
 
 const loadingTasks = [
     () => AppStorage.getToken(defaultConfig.userToken).then(result => ['userToken', result]),
@@ -26,7 +27,7 @@ const App = ({ mapping, theme, userToken }) => {
 
     return (
         <React.Fragment>
-            <IconRegistry icons={[EvaIconsPack]} />
+            <IconRegistry icons={[EvaIconsPack, VectorIconsPack]} />
             <AppearanceProvider>
                 <ApplicationProvider {...currentMapping} theme={currentTheme}>
                     <Theming.MappingContext.Provider value={mappingContext}>

@@ -1,17 +1,14 @@
 import React from 'react';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { createStackNavigator } from '@react-navigation/stack';
-import { HomeBottomNavigation } from '../scenes/home/home-bottom-navigation.component';
+import { HomeBottomNavigation } from '../components/home-bottom-navigation.component';
+import { AuthNavigator } from './auth.navigator';
 import MainScreen from '../app/main';
 import WebViewComponent from '../layout/webview.component';
 
-const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
-const Drawer = createDrawerNavigator();
 
-const initialTabRoute = 'News';
+const initialTabRoute = 'Auth';
 
 const navigatorTheme = {
     ...DefaultTheme,
@@ -43,7 +40,7 @@ export const AppNavigator = () => (
                 component={MainScreen}
                 options={{ headerShown: false }} />
             <BottomTab.Screen name='Auth'
-                component={MainScreen}
+                component={AuthNavigator}
                 options={{ headerShown: false }} />
         </BottomTab.Navigator>
     </NavigationContainer>

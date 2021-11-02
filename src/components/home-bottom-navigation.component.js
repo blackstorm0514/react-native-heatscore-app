@@ -2,8 +2,10 @@ import React from 'react';
 import { Animated } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BottomNavigationTab, Divider, StyleService } from '@ui-kitten/components';
-import { BrandBottomNavigation } from '../../components/brand-bottom-navigation.component';
-import { ColorPaletteIcon, LayoutIcon, PersonOutlineIcon, StarOutlineIcon } from '../../components/icons';
+import { BrandBottomNavigation } from './brand-bottom-navigation.component';
+import {
+    UserIcon, NewsIcon, ClipboardIcon, FootballIcon
+} from './icons';
 
 const useVisibilityAnimation = (visible) => {
 
@@ -50,19 +52,19 @@ export const HomeBottomNavigation = ({ navigation, state, descriptors }) => {
                 onSelect={onSelect}>
                 <BottomNavigationTab
                     title='Scores'
-                    icon={LayoutIcon}
+                    icon={FootballIcon}
                 />
                 <BottomNavigationTab
                     title='News'
-                    icon={StarOutlineIcon}
+                    icon={NewsIcon}
                 />
                 <BottomNavigationTab
                     title='Score Card'
-                    icon={ColorPaletteIcon}
+                    icon={ClipboardIcon}
                 />
                 <BottomNavigationTab
                     title='Auth'
-                    icon={PersonOutlineIcon}
+                    icon={UserIcon}
                 />
             </BrandBottomNavigation>
         </Animated.View>
