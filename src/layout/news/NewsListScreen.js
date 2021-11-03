@@ -6,10 +6,11 @@ import {
     Image
 } from 'react-native';
 import { Button, List, Text, Spinner } from '@ui-kitten/components';
-import { ImageOverlay } from '../../../components/image-overlay.component';
+import { ImageOverlay } from '../../components/image-overlay.component';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
-import { ApiService } from '../../../services/api.service';
-import { PlusOutlineIcon } from '../../../components/icons';
+import { ApiService } from '../../services/api.service';
+import { PlusOutlineIcon } from '../../components/icons';
+import OverlayImage from '../../assets/images/image-splash.png';
 
 const LoadingIndicator = (props) => (
     <View style={[props.style, styles.indicator]}>
@@ -138,7 +139,7 @@ export default ({ navigation }) => {
             />}
             {!headingNews && <ImageOverlay
                 style={styles.container}
-                source={require('./assets/image-background.jpg')}>
+                source={OverlayImage}>
             </ImageOverlay>}
             {loading && <OrientationLoadingOverlay
                 visible={true}
@@ -165,12 +166,13 @@ const styles = StyleSheet.create({
         width: '50%',
         marginTop: 30,
         alignSelf: 'center',
-        fontSize: 20
+        fontSize: 20,
+        marginBottom: 10,
     },
     headingNewsContainer: {
         justifyContent: 'center',
         paddingHorizontal: 15,
-        height: 320,
+        minHeight: 320,
         marginBottom: 4,
     },
     headingNewsTitle: {

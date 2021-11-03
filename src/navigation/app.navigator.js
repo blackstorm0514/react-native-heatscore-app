@@ -4,12 +4,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeBottomNavigation } from '../components/home-bottom-navigation.component';
 import { AuthNavigator } from './auth.navigator';
 import { NewsNavigator } from './news.navigator';
+import { ScoresNavigator } from './scores.navigator';
 import MainScreen from '../app/main';
-import WebViewComponent from '../layout/webview.component';
+// import WebViewComponent from '../layout/webview.component';
 
 const BottomTab = createBottomTabNavigator();
 
-const initialTabRoute = 'News';
+const initialTabRoute = 'Scores';
 
 const navigatorTheme = {
     ...DefaultTheme,
@@ -23,6 +24,8 @@ const TabBarVisibilityOptions = ({ route }) => {
     return { tabBarVisible: true };
 };
 
+const screenOption = { headerShown: false };
+
 export const AppNavigator = () => (
     <NavigationContainer theme={navigatorTheme}>
         <BottomTab.Navigator
@@ -30,18 +33,17 @@ export const AppNavigator = () => (
             initialRouteName={initialTabRoute}
             tabBar={props => <HomeBottomNavigation {...props} />}>
             <BottomTab.Screen name='Scores'
-                initialParams={{ url: 'http://app.heatscore.co/soccer/4090101' }}
-                component={WebViewComponent}
-                options={{ headerShown: false }} />
+                component={ScoresNavigator}
+                options={screenOption} />
             <BottomTab.Screen name='News'
                 component={NewsNavigator}
-                options={{ headerShown: false }} />
+                options={screenOption} />
             <BottomTab.Screen name='Score Card'
                 component={MainScreen}
-                options={{ headerShown: false }} />
+                options={screenOption} />
             <BottomTab.Screen name='Auth'
                 component={AuthNavigator}
-                options={{ headerShown: false }} />
+                options={screenOption} />
         </BottomTab.Navigator>
     </NavigationContainer>
 );

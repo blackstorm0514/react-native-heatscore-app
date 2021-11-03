@@ -6,9 +6,11 @@ import { Dimensions } from 'react-native';
 
 class WebViewComponent extends Component {
     render() {
-        // console.log(this.props)
         const { route: { params: { url } } } = this.props;
-        return <WebView source={{ uri: url }} />;
+        return <WebView
+            source={{ uri: url }}
+            automaticallyAdjustContentInsets={true}
+        />;
     }
 }
 

@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     image: {
         width: undefined,
         height: undefined,
-        resizeMode: 'contain',
+        resizeMode: 'cover',
     },
 });
 
