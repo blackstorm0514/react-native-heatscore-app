@@ -21,9 +21,9 @@ const defaultConfig = {
     theme: 'dark',
 };
 
-const App = ({ mapping, theme, userToken }) => {
+const App = ({ userToken }) => {
     const [mappingContext, currentMapping] = Theming.useMapping(appMappings, defaultConfig.mapping);
-    const [themeContext, currentTheme] = Theming.useTheming(appThemes, mapping, defaultConfig.theme);
+    const [themeContext, currentTheme] = Theming.useTheming(appThemes, defaultConfig.mapping, defaultConfig.theme);
 
     return (
         <React.Fragment>

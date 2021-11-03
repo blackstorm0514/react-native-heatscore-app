@@ -13,6 +13,11 @@ import {
 import { ImageOverlay } from '../../../components/image-overlay.component';
 import { EmailIcon, PhoneIcon } from '../../../components/icons';
 import { KeyboardAvoidingView } from '../../../components/keyboard-avoiding-view';
+import {
+    GoogleSignin,
+    GoogleSigninButton,
+    statusCodes,
+} from '@react-native-google-signin/google-signin';
 
 export default ({ navigation }) => {
 
@@ -41,12 +46,6 @@ export default ({ navigation }) => {
     const onSMSCodeIconPress = () => {
         setSMSCodeVisible(!smsCodeVisible);
     };
-
-    const renderIconPassword = (props) => (
-        <TouchableWithoutFeedback onPress={onPasswordIconPress}>
-            <Icon {...props} name='lock' />
-        </TouchableWithoutFeedback>
-    );
 
     const renderIconSMS = (props) => (
         <TouchableWithoutFeedback onPress={onSMSCodeIconPress}>
@@ -97,22 +96,7 @@ export default ({ navigation }) => {
                     <Tab
                         title={renderTabEmailTitle}>
                         <View style={styles.tabContentContainer}>
-                            <Input
-                                status='control'
-                                placeholder='Email'
-                                accessoryRight={EmailIcon}
-                                value={email}
-                                onChangeText={setEmail}
-                            />
-                            <Input
-                                style={styles.formInput}
-                                status='control'
-                                placeholder='Password'
-                                secureTextEntry={!passwordVisible}
-                                accessoryRight={renderIconPassword}
-                                value={password}
-                                onChangeText={setPassword}
-                            />
+
                         </View>
                     </Tab>
                     <Tab

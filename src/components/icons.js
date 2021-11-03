@@ -104,21 +104,29 @@ export const PhoneIcon = (style) => (
 
 export const ArrowForwardIconOutline = (style) => (
     <Icon {...style} name='arrow-forward-outline' />
-  );
-  
-  export const FacebookIcon = (style) => (
+);
+
+export const FacebookIcon = (style) => (
     <Icon {...style} name='facebook' />
-  );
-  
-  export const GoogleIcon = (style) => (
+);
+
+export const GoogleIcon = (style) => (
     <Icon {...style} name='google' />
-  );
-  
-  export const HeartIconFill = (style) => (
+);
+
+export const HeartIconFill = (style) => (
     <Icon {...style} name='heart' />
-  );
-  
-  export const TwitterIcon = (style) => (
+);
+
+export const TwitterIcon = (style) => (
     <Icon {...style} name='twitter' />
-  );
-  
+);
+
+export const MessageCircleIcon = (style) => (
+    <Icon {...style} name='message-circle-outline' />
+);
+
+export const PlusOutlineIcon = (style) => (
+    <Icon {...style} name="plus-outline" />
+
+)

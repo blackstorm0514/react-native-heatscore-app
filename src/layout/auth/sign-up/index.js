@@ -12,14 +12,13 @@ import {
     Icon
 } from '@ui-kitten/components';
 import { ImageOverlay } from '../../../components/image-overlay.component';
+import { KeyboardAvoidingView } from '../../../components/keyboard-avoiding-view';
 import {
     ArrowForwardIconOutline,
     FacebookIcon,
     GoogleIcon,
-    HeartIconFill,
-} from './extra/icons';
-import { KeyboardAvoidingView } from '../../../components/keyboard-avoiding-view';
-import { PhoneIcon } from '../../../components/icons';
+    HeartIconFill, PhoneIcon
+} from '../../../components/icons';
 
 export default ({ navigation }) => {
     const [phoneNumber, setPhoneNumber] = React.useState();

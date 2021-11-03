@@ -3,12 +3,13 @@ import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeBottomNavigation } from '../components/home-bottom-navigation.component';
 import { AuthNavigator } from './auth.navigator';
+import { NewsNavigator } from './news.navigator';
 import MainScreen from '../app/main';
 import WebViewComponent from '../layout/webview.component';
 
 const BottomTab = createBottomTabNavigator();
 
-const initialTabRoute = 'Auth';
+const initialTabRoute = 'News';
 
 const navigatorTheme = {
     ...DefaultTheme,
@@ -33,8 +34,7 @@ export const AppNavigator = () => (
                 component={WebViewComponent}
                 options={{ headerShown: false }} />
             <BottomTab.Screen name='News'
-                initialParams={{ url: 'https://demo-livematchpro.statscore.com/en/soccer?configId=60dc694d4321eaff1879f0cf&eventId=4284014' }}
-                component={WebViewComponent}
+                component={NewsNavigator}
                 options={{ headerShown: false }} />
             <BottomTab.Screen name='Score Card'
                 component={MainScreen}
