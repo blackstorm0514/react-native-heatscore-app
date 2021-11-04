@@ -128,5 +128,16 @@ export const MessageCircleIcon = (style) => (
 
 export const PlusOutlineIcon = (style) => (
     <Icon {...style} name="plus-outline" />
-
 )
+
+export const ChevronDownIcon = (style) => (
+    <Icon {...style} name="chevron-down-outline" />
+);
+
+export const ArrowDownIcon = (style) => (
+    <Icon {...style} name="arrow-down-outline" />
+);
+
+export const ArrowDownwardIcon = (style) => (
+    <Icon {...style} name="arrow-ios-downward-outline" />
+);
