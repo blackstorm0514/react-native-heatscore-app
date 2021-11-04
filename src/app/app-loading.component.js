@@ -1,9 +1,17 @@
 import React from 'react';
+import { AppStorage } from '../services/app-storage.service';
+import { connect } from 'react-redux';
+import { getEvent } from '../redux/services';
+import { actions } from '../redux/reducer';
 
-export const AppLoading = (props) => {
+const loadingTasks = [
+    () => AppStorage.getToken(null).then(result => ['userToken', result]),
+];
+
+const AppLoading = ({ initialConfig, children, placeholder, tabs, getEventSuccess }) => {
 
     const [loading, setLoading] = React.useState(true);
-    const loadingResult = props.initialConfig || {};
+    const loadingResult = initialConfig || {};
 
     const onTasksFinish = () => {
         setLoading(false);
@@ -25,17 +33,37 @@ export const AppLoading = (props) => {
         return task().then(saveTaskResult);
     };
 
+    const loadIniitalEvents = tabs.map(tab => {
+        return new Promise((resolve, reject) => {
+            getEvent(tab.date)
+                .then(({ data: result }) => {
+                    const { data, favorites } = result;
+                    getEventSuccess(tab.key, { data, favorites });
+                })
+                .finally(() => {
+                    resolve();
+                })
+        })
+    })
+
     const startTasks = async () => {
-        if (props.tasks) {
-            return Promise.all(props.tasks.map(createRunnableTask));
+        if (loadingTasks) {
+            return Promise.all([...loadingTasks.map(createRunnableTask), ...loadIniitalEvents]);
         }
         return Promise.resolve();
     };
 
+
     return (
         <React.Fragment>
-            {!loading && props.children(loadingResult)}
-            {props.placeholder && props.placeholder({ loading })}
+            {!loading && children(loadingResult)}
+            {placeholder && placeholder({ loading })}
         </React.Fragment>
     );
 };
+
+const mapStateToProps = (state) => ({
+    tabs: state.tabs
+});
+
+export default connect(mapStateToProps, ({ getEventSuccess: actions.getEventSuccess }))(AppLoading);

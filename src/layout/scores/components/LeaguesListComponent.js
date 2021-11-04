@@ -60,7 +60,6 @@ export default ({ navigation, league }) => {
                 </View>
                 <View style={styles.eventItemStatus}>
                     <Text style={styles.eventItemStatusText}>{time_str}</Text>
-                    {/* <Text style={styles.eventItemStatusText}>2nd</Text> */}
                 </View>
             </TouchableOpacity>
         )

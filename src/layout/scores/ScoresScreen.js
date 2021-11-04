@@ -6,30 +6,16 @@ import {
 } from 'react-native';
 import { Button } from '@ui-kitten/components';
 import { ArrowDownwardIcon } from '../../components/icons';
-import { format, addDays, subDays } from 'date-fns';
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import { TabView, TabBar } from 'react-native-tab-view';
 import ScoresPerDayScreen from './ScoresPerDayScreen';
+import { connect } from 'react-redux';
 
-export default ({ navigation }) => {
+const ScoresScreen = ({ navigation, tabs }) => {
     const [index, setIndex] = useState(7);
     const layout = useWindowDimensions();
 
-    const tabs = [];
-    const sceneMap = {};
-    const today = new Date();
-    for (let i = 7; i > 0; i--) {
-        const date = subDays(today, i);
-        const tab = format(date, "MMM dd");
-        tabs.push({ key: tab, title: tab, date: date });
-    }
-    tabs.push({ key: 'Today', title: 'Today', date: today });
-    for (let i = 1; i < 8; i++) {
-        const date = addDays(today, i);
-        const tab = format(date, "MMM dd");
-        tabs.push({ key: tab, title: tab, date: date });
-    }
     const renderScene = ({ route }) => (
-        <ScoresPerDayScreen date={route.date} navigation={navigation} />
+        <ScoresPerDayScreen date={route.date} keyDate={route.key} navigation={navigation} />
     );
     const [routes] = useState(tabs);
 
@@ -52,7 +38,6 @@ export default ({ navigation }) => {
                 All Scores
             </Button>
             <TabView
-                lazy
                 renderTabBar={renderTabBar}
                 navigationState={{ index, routes }}
                 renderScene={renderScene}
@@ -62,6 +47,12 @@ export default ({ navigation }) => {
         </View>
     )
 };
+
+const mapStateToProps = (state) => ({
+    tabs: state.tabs
+});
+
+export default connect(mapStateToProps, null)(ScoresScreen);
 
 const styles = StyleSheet.create({
     container: {

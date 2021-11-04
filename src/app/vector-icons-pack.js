@@ -7,6 +7,7 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome5ProIcon from 'react-native-vector-icons/FontAwesome5Pro';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 
 const FontAwesome5IconProvider = (name) => ({
     toReactElement: ({ style: { width, height, tintColor, ...otherStyle } }) => {
@@ -40,12 +41,21 @@ const EvilIconProvider = (name) => ({
     },
 });
 
+const IoniconProvider = (name) => ({
+    toReactElement: ({ style: { width, height, tintColor, ...otherStyle } }) => {
+        return (
+            <Ionicon style={otherStyle} size={width} color={tintColor} name={name} />
+        )
+    },
+});
+
 export const VectorIconsPack = {
     name: 'vector',
     icons: {
         'football': FontAwesome5IconProvider('football-ball'),
         'news': FontAwesomeIconProvider('newspaper-o'),
         'clipboard': FeatherIconProvider('clipboard'),
-        'user': FeatherIconProvider('user')
+        'user': FeatherIconProvider('user'),
+        'refresh': IoniconProvider('refresh'),
     },
 };

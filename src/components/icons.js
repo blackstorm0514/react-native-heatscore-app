@@ -141,3 +141,7 @@ export const ArrowDownIcon = (style) => (
 export const ArrowDownwardIcon = (style) => (
     <Icon {...style} name="arrow-ios-downward-outline" />
 );
+
+export const RefreshIcon = (style) => (
+    <Icon {...style} name="refresh" pack="vector" />
+)

@@ -4,42 +4,22 @@ import {
     View,
 } from 'react-native';
 import { Button, Text, List } from '@ui-kitten/components';
-import { PlusOutlineIcon } from '../../components/icons';
+import { PlusOutlineIcon, RefreshIcon } from '../../components/icons';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
-import { ApiService } from '../../services/api.service';
 import LeaguesListComponent from './components/LeaguesListComponent';
+import { TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
+import { actions } from '../../redux/reducer';
 
-export default ({ date, navigation }) => {
-    let newDate = new Date(date);
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const day = date.getDate();
-    newDate = new Date(year, month, day);
-
-    const [favorites, setFavorites] = useState(null);
-    const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        getEventsData();
-    }, [date]);
+const ScoresPerDayScreen = ({ date, navigation, keyDate, events, getEventAction }) => {
+    let event = events.find(event => event.key == keyDate);
+    if (!event) {
+        return null;
+    }
+    const { data, loading, favorites, key } = event;
 
     const getEventsData = () => {
-        setLoading(true);
-        ApiService.get('/events', { params: { date: newDate } })
-            .then(({ data: result }) => {
-                const { favorites, data } = result;
-                // console.log(data)
-                setLoading(false);
-                setFavorites(favorites);
-                setData(data);
-            })
-            .catch((error) => {
-                // console.log(error);
-                setLoading(false);
-                setFavorites(null);
-                setData(null);
-            })
+        getEventAction(keyDate);
     }
 
     const renderFavorite = () => (
@@ -60,11 +40,9 @@ export default ({ date, navigation }) => {
         return <LeaguesListComponent league={item} navigation={navigation} />
     }
 
-    const onScroll = ({ nativeEvent }) => {
-        if (nativeEvent.contentOffset.y == 0 && loading == false) {
-            // getEventsData();
-        }
-    }
+    const onFloatinActionClick = () => {
+        getEventsData();
+    };
 
     return (
         <View style={styles.container}>
@@ -80,11 +58,24 @@ export default ({ date, navigation }) => {
                 data={data ? data : []}
                 renderItem={renderLeagues}
                 ListHeaderComponent={renderFavorite}
-                onScroll={onScroll}
             />
+            <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={onFloatinActionClick}
+                style={styles.floatingActionButtonStyle}>
+                <RefreshIcon
+                    style={styles.floatingActionButtonIconStyle}
+                />
+            </TouchableOpacity>
         </View>
     )
 };
+
+const mapStateToProps = (state) => ({
+    events: state.events
+});
+
+export default connect(mapStateToProps, ({ getEventAction: actions.getEventAction }))(ScoresPerDayScreen);
 
 const styles = StyleSheet.create({
     container: {
@@ -124,5 +115,24 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginTop: 15,
         fontWeight: 'bold'
+    },
+    floatingActionButtonStyle: {
+        position: 'absolute',
+        width: 40,
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        right: 10,
+        bottom: 10,
+        backgroundColor: '#666',
+        shadowColor: 'white',
+        shadowOpacity: 0.6,
+        shadowOffset: { width: 5, height: 5 },
+        borderRadius: 200 / 2
+    },
+    floatingActionButtonIconStyle: {
+        width: 30,
+        height: 30,
+        tintColor: '#FFFFFF'
     },
 });

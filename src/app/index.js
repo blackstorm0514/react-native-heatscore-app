@@ -3,17 +3,14 @@ import { AppearanceProvider } from 'react-native-appearance';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
-import { AppLoading } from './app-loading.component';
+import AppLoading from './app-loading.component';
 import { appMappings, appThemes } from './app-theming';
 import { SplashImage } from '../components/splash-image.component';
 import { AppNavigator } from '../navigation/app.navigator';
-import { AppStorage } from '../services/app-storage.service';
 import { Theming } from '../services/theme.service';
 import { VectorIconsPack } from './vector-icons-pack';
-
-const loadingTasks = [
-    () => AppStorage.getToken(defaultConfig.userToken).then(result => ['userToken', result]),
-];
+import { Provider } from 'react-redux';
+import { store } from '../redux/store';
 
 const defaultConfig = {
     userToken: null,
@@ -51,10 +48,11 @@ const Splash = ({ loading }) => (
 );
 
 export default () => (
-    <AppLoading
-        tasks={loadingTasks}
-        initialConfig={defaultConfig}
-        placeholder={Splash}>
-        {props => <App {...props} />}
-    </AppLoading>
+    <Provider store={store}>
+        <AppLoading
+            initialConfig={defaultConfig}
+            placeholder={Splash}>
+            {props => <App {...props} />}
+        </AppLoading>
+    </Provider>
 );
