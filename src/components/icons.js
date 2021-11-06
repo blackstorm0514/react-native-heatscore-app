@@ -10,6 +10,10 @@ export const ArrowIosForwardIcon = (style) => (
     <Icon {...style} name='arrow-ios-forward' />
 );
 
+export const PaperPlaneIcon = (style) => (
+    <Icon {...style} name='paper-plane' />
+);
+
 export const BookIcon = (style) => (
     <Icon {...style} name='book' />
 );

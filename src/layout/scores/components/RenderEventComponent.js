@@ -10,14 +10,24 @@ import { format } from 'date-fns';
 
 export default class RenderEventComponent extends PureComponent {
     onItemPress = () => {
+        const { navigation, event } = this.props;
+        if (navigation)
+            navigation.navigate('EventDetail', { event: event })
+    }
 
+    ordinal_suffix_of = (i) => {
+        var j = i % 10, k = i % 100;
+        if (j == 1) return i + "st";
+        if (j == 2) return i + "nd";
+        if (j == 3) return i + "rd";
+        return i + "th";
     }
 
     render() {
-        const { navigation, event } = this.props;
+        const { event } = this.props;
         if (!event) return null;
 
-        const { home, away, time, time_status, ss } = event;
+        const { home, away, time, time_status, ss, timer } = event;
         const time_str = format(new Date(time), "hh:mm aa");
         let score_home = '';
         let score_away = '';
@@ -25,6 +35,46 @@ export default class RenderEventComponent extends PureComponent {
             const scores = ss.split('-');
             score_home = scores[0];
             score_away = scores[1];
+        }
+        let status_text = null;
+        let status_class = styles.eventItemStatusNotStarted;
+        switch (time_status) {
+            case "1":
+                status_text = timer ? this.ordinal_suffix_of(Number(timer.q)) : 'In Play';
+                status_class = styles.eventItemStatusInPlay;
+                break;
+            case "2":
+                status_text = 'Not Confirmed';
+                status_class = styles.eventItemStatusToBeConfirmed;
+                break;
+            case "3":
+                status_text = 'Final';
+                status_class = styles.eventItemStatusEnded;
+                break;
+            case "4":
+                status_class = styles.eventItemStatusOther;
+                status_text = 'Postponed';
+                break;
+            case "5":
+                status_text = 'Cancelled';
+                status_class = styles.eventItemStatusOther;
+                break;
+            case "6":
+                status_text = 'Walkover';
+                status_class = styles.eventItemStatusOther;
+                break;
+            case "7":
+                status_text = 'Interrupted';
+                status_class = styles.eventItemStatusOther;
+                break;
+            case "8":
+                status_text = 'Abandoned';
+                status_class = styles.eventItemStatusOther;
+                break;
+            case "9":
+                status_text = 'Retired';
+                status_class = styles.eventItemStatusOther;
+                break;
         }
 
         return (
@@ -38,7 +88,7 @@ export default class RenderEventComponent extends PureComponent {
                             style={styles.teamLogoImage}
                             source={{ uri: `https://assets.b365api.com/images/team/m/${home.image_id}.png` }}
                         />}
-                        <Text style={styles.eventItemTeamName}>{home.name}</Text>
+                        <Text style={styles.eventItemTeamName} numberOfLines={1}>{home.name}</Text>
                         <Text style={styles.eventItemTeamScore}>{score_home}</Text>
                     </View>
                     <View style={styles.eventItemTeam}>
@@ -46,12 +96,14 @@ export default class RenderEventComponent extends PureComponent {
                             style={styles.teamLogoImage}
                             source={{ uri: `https://assets.b365api.com/images/team/m/${away.image_id}.png` }}
                         />}
-                        <Text style={styles.eventItemTeamName}>{away.name}</Text>
+                        <Text style={styles.eventItemTeamName} numberOfLines={1}>{away.name}</Text>
                         <Text style={styles.eventItemTeamScore}>{score_away}</Text>
                     </View>
                 </View>
                 <View style={styles.eventItemStatus}>
-                    <Text style={styles.eventItemStatusText}>{time_str}</Text>
+                    <Text style={[status_class, styles.eventItemStatusText]}>{time_str}</Text>
+                    {status_text &&
+                        <Text style={[status_class, styles.eventItemStatusText]} numberOfLines={1}>{status_text}</Text>}
                 </View>
             </TouchableOpacity>
         )
@@ -67,14 +119,29 @@ const styles = StyleSheet.create({
         paddingVertical: 10
     },
     eventItemStatus: {
-        flex: 1,
+        flex: 2,
         justifyContent: 'center'
     },
     eventItemStatusText: {
         fontSize: 16,
-        color: 'white',
         marginVertical: 8,
-        textAlign: 'right'
+        textAlign: 'right',
+        overflow: 'hidden'
+    },
+    eventItemStatusNotStarted: {
+        color: 'white'
+    },
+    eventItemStatusToBeConfirmed: {
+        color: 'blue'
+    },
+    eventItemStatusEnded: {
+        color: 'green'
+    },
+    eventItemStatusInPlay: {
+        color: 'red'
+    },
+    eventItemStatusOther: {
+        color: 'yellow'
     },
     eventItemDetail: {
         flex: 5,

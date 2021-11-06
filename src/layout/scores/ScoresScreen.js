@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { Component, useState } from 'react';
 import {
     StyleSheet,
     View,
-    useWindowDimensions
+    Dimensions
 } from 'react-native';
 import { Button, TopNavigationAction, TopNavigation } from '@ui-kitten/components';
 import { ArrowDownwardIcon, ArrowIosBackIcon } from '../../components/icons';
@@ -11,26 +11,39 @@ import ScoresPerDayScreen from './ScoresPerDayScreen';
 import ScoresLeagueScreen from './ScoresLeagueScreen';
 import { connect } from 'react-redux';
 
-const ScoresScreen = ({ navigation, tabs }) => {
-    const [index, setIndex] = useState(7);
-    const [league, setLeague] = useState(null);
-    const layout = useWindowDimensions();
-    const [routes] = useState(tabs);
+class ScoresScreen extends Component {
+    constructor(props) {
+        super(props);
+        const { tabs } = props;
+        this.state = {
+            index: 7,
+            league: null,
+            routes: tabs
+        }
+    }
 
-    const renderScene = ({ route }) => (
-        league ? <ScoresLeagueScreen
-            date={route.date}
-            navigation={navigation}
-            league={league}
-        /> :
+    renderScene = ({ route }) => {
+        const { league } = this.state;
+        const { navigation } = this.props;
+        if (league) {
+            return (
+                <ScoresLeagueScreen
+                    date={route.date}
+                    navigation={navigation}
+                    league={league}
+                />
+            )
+        }
+        return (
             <ScoresPerDayScreen
                 date={route.date}
                 keyDate={route.key}
-                setLeague={setLeague}
+                setLeague={(league) => this.setState({ league: league })}
                 navigation={navigation} />
-    );
+        )
+    }
 
-    const renderTabBar = (props) => (
+    renderTabBar = (props) => (
         <TabBar
             {...props}
             scrollEnabled
@@ -41,38 +54,49 @@ const ScoresScreen = ({ navigation, tabs }) => {
         />
     )
 
-    const goBackAction = () => (
-        league ? <TopNavigationAction
-            icon={ArrowIosBackIcon}
-            onPress={() => setLeague(null)}
-        /> : null
-    )
+    goBackAction = () => {
+        const { league } = this.state;
+        if (league) {
+            return (
+                <TopNavigationAction
+                    icon={ArrowIosBackIcon}
+                    onPress={() => this.setState({ league: null })}
+                />
+            )
+        }
+        return null;
+    }
 
-    const renderTitle = () => (
-        <Button style={styles.allScoresButton}
+    renderTitle = () => {
+        const { league } = this.props;
+        return <Button style={styles.allScoresButton}
             accessoryRight={ArrowDownwardIcon}
             size="large">
             {league ? league.name : 'All Scores'}
         </Button>
-    )
-    console.log(league)
-    return (
-        <View style={styles.container}>
-            <TopNavigation
-                accessoryLeft={goBackAction}
-                title={renderTitle}
-            />
-            <TabView
-                lazy
-                // lazyPreloadDistance={2}
-                renderTabBar={renderTabBar}
-                navigationState={{ index, routes }}
-                renderScene={renderScene}
-                onIndexChange={setIndex}
-                initialLayout={{ width: layout.width }}
-            />
-        </View>
-    )
+    }
+
+    render() {
+        const { index, routes } = this.state;
+
+        return (
+            <View style={styles.container} >
+                <TopNavigation
+                    accessoryLeft={this.goBackAction}
+                    title={this.renderTitle}
+                />
+                <TabView
+                    lazy
+                    lazyPreloadDistance={1}
+                    renderTabBar={this.renderTabBar}
+                    navigationState={{ index, routes }}
+                    renderScene={this.renderScene}
+                    onIndexChange={(index) => this.setState({ index })}
+                    initialLayout={{ width: Dimensions.get('window').width }}
+                />
+            </View>
+        )
+    }
 };
 
 const mapStateToProps = (state) => ({
@@ -85,8 +109,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'black'
-    },
-    topBarContainer: {
     },
     allScoresButton: {
         color: 'white',
