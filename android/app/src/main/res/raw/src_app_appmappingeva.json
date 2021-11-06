@@ -19,7 +19,6 @@
             "appearances": {
                 "default": {
                     "mapping": {
-                        "barStyle": "dark-content",
                         "backgroundColor": "black"
                     }
                 }
