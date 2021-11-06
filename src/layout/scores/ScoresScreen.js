@@ -4,20 +4,31 @@ import {
     View,
     useWindowDimensions
 } from 'react-native';
-import { Button } from '@ui-kitten/components';
-import { ArrowDownwardIcon } from '../../components/icons';
+import { Button, TopNavigationAction, TopNavigation } from '@ui-kitten/components';
+import { ArrowDownwardIcon, ArrowIosBackIcon } from '../../components/icons';
 import { TabView, TabBar } from 'react-native-tab-view';
 import ScoresPerDayScreen from './ScoresPerDayScreen';
+import ScoresLeagueScreen from './ScoresLeagueScreen';
 import { connect } from 'react-redux';
 
 const ScoresScreen = ({ navigation, tabs }) => {
     const [index, setIndex] = useState(7);
+    const [league, setLeague] = useState(null);
     const layout = useWindowDimensions();
+    const [routes] = useState(tabs);
 
     const renderScene = ({ route }) => (
-        <ScoresPerDayScreen date={route.date} keyDate={route.key} navigation={navigation} />
+        league ? <ScoresLeagueScreen
+            date={route.date}
+            navigation={navigation}
+            league={league}
+        /> :
+            <ScoresPerDayScreen
+                date={route.date}
+                keyDate={route.key}
+                setLeague={setLeague}
+                navigation={navigation} />
     );
-    const [routes] = useState(tabs);
 
     const renderTabBar = (props) => (
         <TabBar
@@ -30,14 +41,30 @@ const ScoresScreen = ({ navigation, tabs }) => {
         />
     )
 
+    const goBackAction = () => (
+        league ? <TopNavigationAction
+            icon={ArrowIosBackIcon}
+            onPress={() => setLeague(null)}
+        /> : null
+    )
+
+    const renderTitle = () => (
+        <Button style={styles.allScoresButton}
+            accessoryRight={ArrowDownwardIcon}
+            size="large">
+            {league ? league.name : 'All Scores'}
+        </Button>
+    )
+    console.log(league)
     return (
         <View style={styles.container}>
-            <Button style={styles.allScoresButton}
-                accessoryRight={ArrowDownwardIcon}
-                size="large">
-                All Scores
-            </Button>
+            <TopNavigation
+                accessoryLeft={goBackAction}
+                title={renderTitle}
+            />
             <TabView
+                lazy
+                // lazyPreloadDistance={2}
                 renderTabBar={renderTabBar}
                 navigationState={{ index, routes }}
                 renderScene={renderScene}
@@ -58,6 +85,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'black'
+    },
+    topBarContainer: {
     },
     allScoresButton: {
         color: 'white',

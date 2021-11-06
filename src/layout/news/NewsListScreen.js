@@ -12,12 +12,6 @@ import { ApiService } from '../../services/api.service';
 import { PlusOutlineIcon } from '../../components/icons';
 import OverlayImage from '../../assets/images/image-splash.png';
 
-const LoadingIndicator = (props) => (
-    <View style={[props.style, styles.indicator]}>
-        <Spinner size='small' status='basic' />
-    </View>
-);
-
 export default ({ navigation }) => {
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
@@ -231,10 +225,5 @@ const styles = StyleSheet.create({
     },
     loadButtonText: {
         color: 'white',
-    },
-    indicator: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: 'white'
     },
 });

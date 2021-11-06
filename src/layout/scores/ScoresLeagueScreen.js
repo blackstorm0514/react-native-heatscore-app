@@ -1,49 +1,73 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { Component } from 'react';
 import {
     StyleSheet,
     View,
+    TouchableOpacity
 } from 'react-native';
 import { Button, Text, List } from '@ui-kitten/components';
 import { PlusOutlineIcon, RefreshIcon } from '../../components/icons';
 import LeaguesListComponent from './components/LeaguesListComponent';
-import { TouchableOpacity } from 'react-native';
-import { connect } from 'react-redux';
-import { actions } from '../../redux/reducer';
 import { LoadingIndicator } from './components/LoadingIndicator';
+import { ApiService } from '../../services/api.service';
 import RenderFavoriteComponent from './components/RenderFavoriteComponent';
 
-class ScoresPerDayScreen extends Component {
-    getEventsData = () => {
-        const { getEventAction, keyDate } = this.props;
-        getEventAction(keyDate);
+class ScoresLeagueScreen extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            loading: false,
+            favorites: null,
+            data: null,
+        }
     }
 
-    renderFavorite = (favorites) => (
-        <RenderFavoriteComponent favorites={favorites} />
-    )
+    componentDidMount() {
+        this.getEventsData();
+    }
+
+    getEventsData = () => {
+        const { date, league } = this.props;
+        this.setState({ loading: true });
+        ApiService.get('events/league', { params: { date, league: league.id } })
+            .then(({ data }) => {
+                const { favorites, data: league } = data;
+                this.setState({
+                    loading: false,
+                    favorites: null,
+                    data: league
+                });
+            })
+            .catch(() => {
+                console.log(error);
+                this.setState({
+                    loading: false,
+                    favorites: null,
+                    data: []
+                });
+            })
+    }
 
     renderLeagues = ({ item }) => {
-        const { setLeague, navigation } = this.props;
-        return <LeaguesListComponent
-            league={item}
-            setLeague={setLeague}
-            navigation={navigation} />
+        const { navigation } = this.props;
+        return (
+            <LeaguesListComponent league={item}
+                navigation={navigation} />
+        )
     }
 
     onFloatinActionClick = () => {
         this.getEventsData();
     };
 
+    renderFavorite = (favorites) => (
+        <RenderFavoriteComponent favorites={favorites} />
+    )
+
     render() {
-        const { keyDate, events } = this.props;
-        let event = events.find(event => event.key == keyDate);
-        if (!event) {
-            return null;
-        }
-        const { data, loading, favorites, key } = event;
+        const { loading, data, favorites } = this.state;
 
         return (
-            <View style={styles.container}>
+            <View style={styles.container} >
                 {loading && <LoadingIndicator style={styles.loadingIndicator} />}
                 {!loading && <List
                     style={styles.list}
@@ -55,32 +79,26 @@ class ScoresPerDayScreen extends Component {
                     activeOpacity={0.7}
                     onPress={this.onFloatinActionClick}
                     style={styles.floatingActionButtonStyle}>
-                    <RefreshIcon
-                        style={styles.floatingActionButtonIconStyle}
-                    />
+                    <RefreshIcon style={styles.floatingActionButtonIconStyle} />
                 </TouchableOpacity>
-            </View>
+            </View >
         )
     }
 };
 
-const mapStateToProps = (state) => ({
-    events: state.events
-});
-
-export default connect(mapStateToProps, ({ getEventAction: actions.getEventAction }))(ScoresPerDayScreen);
+export default ScoresLeagueScreen;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'black'
     },
-    loadingIndicator: {
-        flex: 1
-    },
     list: {
         backgroundColor: 'black',
         paddingBottom: 20
+    },
+    loadingIndicator: {
+        flex: 1
     },
     floatingActionButtonStyle: {
         position: 'absolute',
