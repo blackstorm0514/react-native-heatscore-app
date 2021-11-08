@@ -9,7 +9,7 @@ import {
     Button, TopNavigationAction,
     TopNavigation, Text, Modal, Card, Layout, Divider
 } from '@ui-kitten/components';
-import { ArrowIosBackIcon, CloseIcon } from '../../components/icons';
+import { ArrowIosBackIcon } from '../../components/icons';
 import { TabView, TabBar } from 'react-native-tab-view';
 import RenderEventMatchupComponent from './components/RenderEventMatchupComponent';
 import RenderEventChatComponent from './components/RenderEventChatComponent';

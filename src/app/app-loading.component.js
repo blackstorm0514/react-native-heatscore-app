@@ -14,7 +14,7 @@ const AppLoading = ({ initialConfig, children, placeholder, tabs, getEventSucces
     const loadingResult = initialConfig || {};
 
     const onTasksFinish = () => {
-        setLoading(false);
+        setTimeout(() => { setLoading(false); }, 2000);
     };
 
     React.useEffect(() => {

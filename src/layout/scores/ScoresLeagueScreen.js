@@ -30,12 +30,13 @@ class ScoresLeagueScreen extends Component {
         this.setState({ loading: true });
         ApiService.get('events/league', { params: { date, league: league.id } })
             .then(({ data }) => {
-                const { favorites, data: league } = data;
+                const { favorites, data: leagueData } = data;
                 this.setState({
                     loading: false,
                     favorites: null,
-                    data: league
+                    data: leagueData
                 });
+                console.log(date, league.id, leagueData[0].events.length)
             })
             .catch(() => {
                 console.log(error);

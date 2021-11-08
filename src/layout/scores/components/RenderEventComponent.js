@@ -75,6 +75,10 @@ export default class RenderEventComponent extends PureComponent {
                 status_text = 'Retired';
                 status_class = styles.eventItemStatusOther;
                 break;
+            case "99":
+                status_text = 'Removed';
+                status_class = styles.eventItemStatusOther;
+                break;
         }
 
         return (
