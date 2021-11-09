@@ -2,7 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import ProfileScreen from '../layout/auth/profile/ProfileScreen';
 import FavoritesScreen from '../layout/auth/favorites/FavoritesScreen';
-import { AuthSignupNavigator } from './auth.signu.navigator';
+import { AuthSignupNavigator } from './auth.signup.navigator';
 
 const Stack = createStackNavigator();
 
