@@ -3,12 +3,11 @@ import { Text, Layout } from '@ui-kitten/components';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { TopNavigationComponent } from './components/TopNavigationComponent';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 export default function SignupHomeScreen({ navigation }) {
     return (
         <View style={styles.container}>
-            <TopNavigationComponent navigation={navigation} />
+            <TopNavigationComponent navigation={navigation} backPosition="Profile" />
             <Layout level="1" style={styles.layoutContainer}>
                 <Text style={styles.titleText}>Create Free Account</Text>
                 <Text style={styles.offerText}>How would you like to an account?</Text>
@@ -21,7 +20,7 @@ export default function SignupHomeScreen({ navigation }) {
                         </Text>
                         <Text style={styles.phoneText}>Phone Number</Text>
                     </Layout>
-                    <TouchableOpacity activeOpacity={0.8}>
+                    <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('SignupPhone')}>
                         <FontAwesome5Icon
                             name="chevron-right"
                             size={24} color='white' />
@@ -66,12 +65,13 @@ export default function SignupHomeScreen({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#222',
     },
     layoutContainer: {
         flex: 1,
-        backgroundColor: '#111',
-        justifyContent: 'center',
-        paddingHorizontal: 30
+        backgroundColor: '#151515',
+        paddingHorizontal: 30,
+        paddingTop: 40,
     },
     titleText: {
         color: '#E10032',

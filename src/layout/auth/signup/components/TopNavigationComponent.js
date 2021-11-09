@@ -2,9 +2,9 @@ import React from 'react';
 import { TopNavigation, TopNavigationAction } from '@ui-kitten/components';
 import { StyleSheet, Image } from 'react-native'
 import { ArrowIosBackIcon } from '../../../../components/icons';
-import logoScreen from '../../../../assets/images/hs-logo-256.png';
+import logoScreen from '../../../../assets/images/hs-white-256.png';
 
-export const TopNavigationComponent = ({ navigation }) => {
+export const TopNavigationComponent = ({ navigation, backPosition }) => {
     const renderTitle = () => (
         <Image source={logoScreen} style={styles.titleImage} />
     )
@@ -13,7 +13,7 @@ export const TopNavigationComponent = ({ navigation }) => {
         return (
             <TopNavigationAction
                 icon={ArrowIosBackIcon}
-                onPress={() => navigation.navigate('Profile')}
+                onPress={() => navigation.navigate(backPosition ? backPosition : 'Profile')}
             />
         )
     }
