@@ -18,7 +18,7 @@ export default function SignupWithPhoneScreen({ navigation }) {
     }
 
     const onVerifyCodePress = () => {
-
+        navigation.navigate("SignupDetail");
     }
 
     return (
