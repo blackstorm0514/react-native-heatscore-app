@@ -25,7 +25,7 @@ export default class ProfileScreen extends PureComponent {
                 <ProfileSettingComponent
                     style={styles.profileSetting}
                     title='Create Account'
-                    navigateAction={() => { }}
+                    navigateAction={() => navigation.navigate('SignUp')}
                 />
                 <ProfileSettingComponent
                     style={styles.profileSetting}
