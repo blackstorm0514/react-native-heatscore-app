@@ -36,7 +36,6 @@ class ScoresLeagueScreen extends Component {
                     favorites: null,
                     data: leagueData
                 });
-                console.log(date, league.id, leagueData[0].events.length)
             })
             .catch(() => {
                 console.log(error);

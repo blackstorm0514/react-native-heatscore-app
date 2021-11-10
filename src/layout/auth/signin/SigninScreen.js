@@ -10,7 +10,7 @@ export default function SigninScreen({ navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const onNextButtonPressed = () => {
+    const onSignInButtonPressed = () => {
     }
 
     return (
@@ -50,7 +50,7 @@ export default function SigninScreen({ navigation }) {
                     <Button
                         style={styles.signInButton}
                         size='large'
-                        onPress={onNextButtonPressed}>
+                        onPress={onSignInButtonPressed}>
                         SIGN  IN
                     </Button>
 

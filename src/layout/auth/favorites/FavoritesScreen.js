@@ -45,7 +45,11 @@ export default class FavoritesScreen extends PureComponent {
 
     addFavoriteAction = () => {
         return (
-            <TopNavigationAction icon={PlusOutlineIcon} />
+            <TopNavigationAction icon={(props) => {
+                const { style, ...otherProps } = props;
+                return <PlusOutlineIcon {...otherProps} style={[style, { tintColor: 'red' }]} />
+            }
+            } />
         )
     }
 
