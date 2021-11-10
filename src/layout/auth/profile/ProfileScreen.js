@@ -20,7 +20,7 @@ export default class ProfileScreen extends PureComponent {
                 <ProfileSettingComponent
                     style={[styles.profileSetting, styles.section]}
                     title='Sign In'
-                    navigateAction={() => { }}
+                    navigateAction={() => navigation.navigate('SignIn')}
                 />
                 <ProfileSettingComponent
                     style={styles.profileSetting}

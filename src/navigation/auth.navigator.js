@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import ProfileScreen from '../layout/auth/profile/ProfileScreen';
 import FavoritesScreen from '../layout/auth/favorites/FavoritesScreen';
 import { AuthSignupNavigator } from './auth.signup.navigator';
+import SigninScreen from '../layout/auth/signin/SigninScreen';
 
 const Stack = createStackNavigator();
 
@@ -13,6 +14,7 @@ export const AuthNavigator = ({ navigation }) => {
             <Stack.Screen name='Profile' component={ProfileScreen} options={{ headerShown: false }} />
             <Stack.Screen name='Favorites' component={FavoritesScreen} options={{ headerShown: false }} />
             <Stack.Screen name="SignUp" component={AuthSignupNavigator} options={{ headerShown: false }} />
+            <Stack.Screen name="SignIn" component={SigninScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
     )
 };

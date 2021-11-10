@@ -32,6 +32,7 @@ export default function SignupDetailScreen({ navigation }) {
                                 style={styles.formInput}
                                 status='control'
                                 placeholder='John Doe'
+                                placeholderTextColor="#888"
                                 value={username}
                                 onChangeText={setUsername}
                             />
@@ -43,6 +44,7 @@ export default function SignupDetailScreen({ navigation }) {
                                     style={styles.formInput}
                                     status='control'
                                     placeholder='John'
+                                    placeholderTextColor="#888"
                                     value={firstname}
                                     onChangeText={setFirstName}
                                 />
@@ -53,6 +55,7 @@ export default function SignupDetailScreen({ navigation }) {
                                     style={styles.formInput}
                                     status='control'
                                     placeholder='Doe'
+                                    placeholderTextColor="#888"
                                     value={lastname}
                                     onChangeText={setLastName}
                                 />
@@ -64,6 +67,7 @@ export default function SignupDetailScreen({ navigation }) {
                                 style={styles.formInput}
                                 status='control'
                                 placeholder='jone.doe@gmail.com'
+                                placeholderTextColor="#888"
                                 value={email}
                                 onChangeText={setEmail}
                             />
@@ -74,6 +78,7 @@ export default function SignupDetailScreen({ navigation }) {
                                 style={styles.formInput}
                                 status='control'
                                 placeholder='Create a Password'
+                                placeholderTextColor="#888"
                                 value={password}
                                 secureTextEntry
                                 onChangeText={setPassword}
@@ -85,6 +90,7 @@ export default function SignupDetailScreen({ navigation }) {
                                 style={styles.formInput}
                                 status='control'
                                 placeholder='Confirm Password'
+                                placeholderTextColor="#888"
                                 value={passwordConfirm}
                                 secureTextEntry
                                 onChangeText={setPasswordConfirm}
