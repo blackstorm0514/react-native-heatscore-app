@@ -1,11 +1,9 @@
 import React from 'react';
 import { Animated } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BottomNavigationTab, Divider, StyleService } from '@ui-kitten/components';
+import { BottomNavigationTab, Text, StyleService } from '@ui-kitten/components';
 import { BrandBottomNavigation } from './brand-bottom-navigation.component';
-import {
-    UserIcon, NewsIcon, ClipboardIcon, FootballIcon
-} from './icons';
+import { UserIcon, NewsIcon, ClipboardIcon, FootballIcon } from './icons';
 
 const useVisibilityAnimation = (visible) => {
 
@@ -32,6 +30,49 @@ const useVisibilityAnimation = (visible) => {
     };
 };
 
+const renderTabIcons = (name, currentRoute, otherProps) => {
+    const { style } = otherProps;
+    const defaultStyle = {
+        height: style.height,
+        width: style.width,
+        marginVertical: 2,
+    }
+    let active = false;
+    switch (name) {
+        case 'Scores':
+            active = currentRoute.name == 'Scores';
+            return <FootballIcon style={{ ...defaultStyle, tintColor: active ? '#FFF' : '#999' }} />
+        case 'News':
+            active = currentRoute.name == 'News';
+            return <NewsIcon style={{ ...defaultStyle, tintColor: active ? '#FFF' : '#999' }} />
+        case 'Score Card':
+            active = currentRoute.name == 'Score Card';
+            return <ClipboardIcon style={{ ...defaultStyle, tintColor: active ? '#FFF' : '#999' }} />
+        case 'Me':
+            active = currentRoute.name == 'Auth';
+            return <UserIcon style={{ ...defaultStyle, tintColor: active ? '#FFF' : '#999' }} />
+    }
+}
+
+const renderTabTitle = (name, currentRoute) => {
+    let active = false;
+    const defaultStyle = { fontSize: 14 };
+    switch (name) {
+        case 'Scores':
+            active = currentRoute.name == 'Scores';
+            return <Text style={{ ...defaultStyle, color: active ? '#FFF' : '#999' }} >Scores</Text>
+        case 'News':
+            active = currentRoute.name == 'News';
+            return <Text style={{ ...defaultStyle, color: active ? '#FFF' : '#999' }} >News</Text>
+        case 'Score Card':
+            active = currentRoute.name == 'Score Card';
+            return <Text style={{ ...defaultStyle, color: active ? '#FFF' : '#999' }} >Score Card</Text>
+        case 'Me':
+            active = currentRoute.name == 'Auth';
+            return <Text style={{ ...defaultStyle, color: active ? '#FFF' : '#999' }} >Me</Text>
+    }
+}
+
 export const HomeBottomNavigation = ({ navigation, state, descriptors }) => {
 
     const focusedRoute = state.routes[state.index];
@@ -46,26 +87,29 @@ export const HomeBottomNavigation = ({ navigation, state, descriptors }) => {
 
     return (
         <Animated.View style={[styles.container, transforms, { paddingBottom: tabBarVisible ? safeAreaInsets.bottom : 0 }]}>
-            <Divider style={styles.divider} />
             <BrandBottomNavigation
                 appearance='noIndicator'
                 selectedIndex={state.index}
                 onSelect={onSelect}>
                 <BottomNavigationTab
-                    title='Scores'
-                    icon={FootballIcon}
+                    title={() => renderTabTitle('Scores', focusedRoute)}
+                    icon={(props) => renderTabIcons('Scores', focusedRoute, props)}
+                    style={styles.bottomTab}
                 />
                 <BottomNavigationTab
-                    title='News'
-                    icon={NewsIcon}
+                    title={() => renderTabTitle('News', focusedRoute)}
+                    icon={(props) => renderTabIcons('News', focusedRoute, props)}
+                    style={styles.bottomTab}
                 />
                 <BottomNavigationTab
-                    title='Score Card'
-                    icon={ClipboardIcon}
+                    title={() => renderTabTitle('Score Card', focusedRoute)}
+                    icon={(props) => renderTabIcons('Score Card', focusedRoute, props)}
+                    style={styles.bottomTab}
                 />
                 <BottomNavigationTab
-                    title='Auth'
-                    icon={UserIcon}
+                    title={() => renderTabTitle('Me', focusedRoute)}
+                    icon={(props) => renderTabIcons('Me', focusedRoute, props)}
+                    style={styles.bottomTab}
                 />
             </BrandBottomNavigation>
         </Animated.View>
@@ -80,5 +124,10 @@ const styles = StyleService.create({
     },
     divider: {
         backgroundColor: 'white'
+    },
+    bottomTab: {
+        backgroundColor: '#000',
+        tintColor: '#FFF',
+        color: '#FFF'
     }
 });
