@@ -4,7 +4,7 @@ import {
     View,
     Dimensions
 } from 'react-native';
-import { Button, TopNavigationAction, TopNavigation } from '@ui-kitten/components';
+import { Button, TopNavigationAction, TopNavigation, Text } from '@ui-kitten/components';
 import { ArrowDownwardIcon, ArrowIosBackIcon } from '../../components/icons';
 import { TabView, TabBar } from 'react-native-tab-view';
 import ScoresPerDayScreen from './ScoresPerDayScreen';
@@ -68,11 +68,13 @@ class ScoresScreen extends Component {
     }
 
     renderTitle = () => {
-        const { league } = this.props;
+        const { league } = this.state;
         return <Button style={styles.allScoresButton}
             accessoryRight={ArrowDownwardIcon}
             size="large">
-            {league ? league.name : 'All Scores'}
+            <Text numberOfLines={1}>
+                {league ? league.name : 'All Scores'}
+            </Text>
         </Button>
     }
 
@@ -116,7 +118,7 @@ const styles = StyleSheet.create({
         borderColor: 0,
         backgroundColor: 'black',
         fontSize: 20,
-        width: '50%',
+        maxWidth: '70%',
         alignSelf: 'center',
     }
 });

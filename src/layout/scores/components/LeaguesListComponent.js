@@ -2,9 +2,13 @@ import React, { PureComponent } from 'react';
 import {
     StyleSheet,
     View,
+    Dimensions,
+    TouchableOpacity
 } from 'react-native';
 import { Button, Text, List } from '@ui-kitten/components';
 import RenderEventComponent from './RenderEventComponent';
+
+const screenWidth = Dimensions.get('window').width;
 
 export default class LeaguesListComponent extends PureComponent {
 
@@ -13,17 +17,18 @@ export default class LeaguesListComponent extends PureComponent {
 
         return (
             <View style={styles.leagueTitle}>
-                <Text style={styles.leagueTitleText}>{league.name} - {league.sport.name}</Text>
-                {setLeague && <Button style={styles.seeAllLeagueButton}
-                    size='medium'
-                    onPress={() => setLeague({ name: league.name, id: league.league_id })}>
-                    SEE ALL
-                </Button>}
-                {seeRounds && <Button style={styles.seeAllLeagueButton}
-                    size='medium'
-                    onPress={() => seeRounds()}>
-                    SEE ROUNDS
-                </Button>}
+                <Text style={styles.leagueTitleText} numberOfLines={1}>{league.name} - {league.sport.name}</Text>
+                {setLeague &&
+                    <TouchableOpacity activeOpacity={0.8}
+                        onPress={() => setLeague({ name: league.name, id: league.league_id })}>
+                        <Text style={styles.seeAllLeagueButton}>SEE ALL</Text>
+                    </TouchableOpacity>
+                }
+                {seeRounds &&
+                    <TouchableOpacity activeOpacity={0.8} onPress={() => seeRounds()}>
+                        <Text style={styles.seeAllLeagueButton}>SEE ROUNDS</Text>
+                    </TouchableOpacity>
+                }
             </View>
         )
     }
@@ -61,21 +66,23 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         paddingHorizontal: 10,
         flexDirection: 'row',
-        justifyContent: 'space-between',
         borderBottomColor: '#888',
-        borderBottomWidth: 2
+        borderBottomWidth: 2,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: screenWidth
     },
     leagueTitleText: {
         color: 'white',
         fontWeight: 'bold',
-        paddingVertical: 10
+        paddingVertical: 10,
+        maxWidth: '70%'
     },
     seeAllLeagueButton: {
-        alignSelf: 'flex-end',
         textTransform: 'uppercase',
         color: 'white',
-        backgroundColor: '#222',
-        borderColor: '#222',
-        borderRadius: 0
+        fontSize: 12,
+        fontWeight: 'bold',
+        alignSelf: 'flex-end'
     },
 });
