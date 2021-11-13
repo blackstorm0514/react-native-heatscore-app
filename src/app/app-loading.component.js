@@ -40,6 +40,7 @@ const AppLoading = ({ initialConfig, children, placeholder, tabs, getEventSucces
                     const { data, favorites } = result;
                     getEventSuccess(tab.key, { data, favorites });
                 })
+                .catch(() => { })
                 .finally(() => {
                     resolve();
                 })

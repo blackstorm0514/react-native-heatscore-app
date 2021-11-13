@@ -10,7 +10,7 @@ import MainScreen from '../app/main';
 
 const BottomTab = createBottomTabNavigator();
 
-const initialTabRoute = 'Auth';
+const initialTabRoute = 'Scores';
 
 const navigatorTheme = {
     ...DefaultTheme,

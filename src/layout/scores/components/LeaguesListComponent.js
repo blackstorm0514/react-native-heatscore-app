@@ -9,7 +9,7 @@ import RenderEventComponent from './RenderEventComponent';
 export default class LeaguesListComponent extends PureComponent {
 
     renderLeagueHeader = () => {
-        const { setLeague, league } = this.props;
+        const { setLeague, league, seeRounds } = this.props;
 
         return (
             <View style={styles.leagueTitle}>
@@ -18,6 +18,11 @@ export default class LeaguesListComponent extends PureComponent {
                     size='medium'
                     onPress={() => setLeague({ name: league.name, id: league.league_id })}>
                     SEE ALL
+                </Button>}
+                {seeRounds && <Button style={styles.seeAllLeagueButton}
+                    size='medium'
+                    onPress={() => seeRounds()}>
+                    SEE ROUNDS
                 </Button>}
             </View>
         )
@@ -63,7 +68,7 @@ const styles = StyleSheet.create({
     leagueTitleText: {
         color: 'white',
         fontWeight: 'bold',
-        paddingTop: 10
+        paddingVertical: 10
     },
     seeAllLeagueButton: {
         alignSelf: 'flex-end',

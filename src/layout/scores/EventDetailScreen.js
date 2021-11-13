@@ -30,7 +30,6 @@ class EventDetailScreen extends Component {
     componentDidMount() {
         const { route: { params: { event } }, navigation } = this.props;
         if (!event) {
-            console.log('No event');
             navigation.navigate('AllScores');
         }
     }

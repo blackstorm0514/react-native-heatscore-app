@@ -50,8 +50,11 @@ class ScoresLeagueScreen extends Component {
     renderLeagues = ({ item }) => {
         const { navigation } = this.props;
         return (
-            <LeaguesListComponent league={item}
-                navigation={navigation} />
+            <LeaguesListComponent
+                league={item}
+                navigation={navigation}
+                seeRounds={() => navigation.navigate('RoundLeague', { league: { name: item.name, id: item.league_id } })}
+            />
         )
     }
 

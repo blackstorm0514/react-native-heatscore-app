@@ -40,7 +40,7 @@ export default class RenderEventComponent extends PureComponent {
         let status_class = styles.eventItemStatusNotStarted;
         switch (time_status) {
             case "1":
-                status_text = timer ? this.ordinal_suffix_of(Number(timer.q)) : 'In Play';
+                status_text = timer ? this.ordinal_suffix_of(Number(timer.q ? timer.q : (timer.md ? timer.md : 1))) : 'In Play';
                 status_class = styles.eventItemStatusInPlay;
                 break;
             case "2":

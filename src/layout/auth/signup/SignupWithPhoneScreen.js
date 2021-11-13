@@ -1,20 +1,36 @@
 import React, { useRef, useState } from 'react';
 import { Text, Icon, Button, Layout } from '@ui-kitten/components';
-import { StyleSheet, View, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { TopNavigationComponent } from './components/TopNavigationComponent';
-import PhoneInput from "react-native-phone-number-input";
+import PhoneInput, { isValidNumber } from "react-native-phone-number-input";
 import { KeyboardAvoidingView } from '../../../components/keyboard-avoiding-view';
 import CodeInput from 'react-native-confirmation-code-input';
-
+import parsePhoneNumber from 'libphonenumber-js';
+import { ApiService } from '../../../services/api.service';
 
 export default function SignupWithPhoneScreen({ navigation }) {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [formattedPhoneNumber, setFormattedPhoneNumber] = useState('');
+    const [error, setError] = useState(null);
     const [sentCode, setSentCode] = useState(false);
-    const phoneInput = useRef(null);
 
     const onSendVerificationButtonPress = () => {
-        setSentCode(true);
+        const isValid = isValidNumber(formattedPhoneNumber);
+        if (!isValid) {
+            setError('Phone number is not valid. Please input again.');
+            return;
+        }
+        const phoneNumber = parsePhoneNumber(formattedPhoneNumber)
+        const formatted = phoneNumber.formatInternational()
+        setError(null);
+
+        ApiService.post('/auth/signup-phone', { phone: formatted })
+            .then(({ data }) => {
+
+            })
+            .catch(() => {
+                setError('Can\'t send verification code. Please try again later.');
+            })
     }
 
     const onVerifyCodePress = () => {
@@ -41,8 +57,7 @@ export default function SignupWithPhoneScreen({ navigation }) {
                         <View style={styles.phoneInputContainer}>
                             <Text>Enter Phone Number</Text>
                             <PhoneInput
-                                ref={phoneInput}
-                                defaultValue={phoneNumber}
+                                value={phoneNumber}
                                 defaultCode="CA"
                                 layout="first"
                                 onChangeText={(text) => { setPhoneNumber(text); }}
@@ -56,7 +71,16 @@ export default function SignupWithPhoneScreen({ navigation }) {
                                 flagButtonStyle={styles.phoneFlagButtonStyle}
                                 withShadow
                                 placeholder=" "
+                                disableArrowIcon
+                                textInputProps={{
+                                    selectionColor: '#aaa',
+                                    textContentType: 'telephoneNumber',
+                                    dataDetectorTypes: 'phoneNumber',
+                                    keyboardType: 'phone-pad',
+                                    maxLength: 14
+                                }}
                             />
+                            {error && <Text style={styles.errorText}>{error}</Text>}
                         </View>
                     </View>
                     <Button
@@ -155,7 +179,6 @@ const styles = StyleSheet.create({
         color: 'white',
         padding: 0,
         margin: 0,
-
     },
     phoneCodeTextStyle: {
         color: 'white'
@@ -172,6 +195,11 @@ const styles = StyleSheet.create({
         borderColor: '#E10032',
         color: 'white',
         marginBottom: 30
+    },
+    errorText: {
+        color: '#E10032',
+        fontSize: 16,
+        marginTop: 20,
     },
     resendCode: {
         marginTop: 30,
