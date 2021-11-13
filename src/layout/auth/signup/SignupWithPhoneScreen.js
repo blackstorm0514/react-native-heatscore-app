@@ -15,22 +15,25 @@ export default function SignupWithPhoneScreen({ navigation }) {
     const [sentCode, setSentCode] = useState(false);
 
     const onSendVerificationButtonPress = () => {
-        const isValid = isValidNumber(formattedPhoneNumber);
-        if (!isValid) {
-            setError('Phone number is not valid. Please input again.');
-            return;
-        }
-        const phoneNumber = parsePhoneNumber(formattedPhoneNumber)
-        const formatted = phoneNumber.formatInternational()
-        setError(null);
+        setSentCode(true);
 
-        ApiService.post('/auth/signup-phone', { phone: formatted })
-            .then(({ data }) => {
+        // const isValid = isValidNumber(formattedPhoneNumber);
+        // if (!isValid) {
+        //     setError('Phone number is not valid. Please input again.');
+        //     return;
+        // }
+        // const phoneNumber = parsePhoneNumber(formattedPhoneNumber)
+        // const formatted = phoneNumber.formatInternational()
+        // setError(null);
 
-            })
-            .catch(() => {
-                setError('Can\'t send verification code. Please try again later.');
-            })
+        // ApiService.post('/auth/signup-phone', { phone: formatted })
+        //     .then(({ data }) => {
+
+        //     })
+        //     .catch(() => {
+        //         setError('Can\'t send verification code. Please try again later.');
+        //     })
+
     }
 
     const onVerifyCodePress = () => {

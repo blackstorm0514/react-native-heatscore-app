@@ -9,22 +9,22 @@ export default class ProfileSettingComponent extends PureComponent {
 
         return (
             <React.Fragment>
-                <Layout
-                    level='1'
-                    {...layoutProps}
-                    style={[styles.container, style]}>
-                    <Text category='s1'>{title}</Text>
-                    <Layout style={styles.rightContainer}>
-                        {value && <Text category='s1'>{value}</Text>}
-                        {navigateAction &&
-                            <TouchableOpacity activeOpacity={0.7} onPress={navigateAction}>
+                <TouchableOpacity activeOpacity={0.7} onPress={navigateAction}>
+                    <Layout
+                        level='1'
+                        {...layoutProps}
+                        style={[styles.container, style]}>
+                        <Text category='s1'>{title}</Text>
+                        <Layout style={styles.rightContainer}>
+                            {value && <Text category='s1'>{value}</Text>}
+                            {navigateAction &&
                                 <FontAwesome5Icon
                                     style={styles.forwardButton}
                                     name="chevron-right"
-                                    size={20} color='white' />
-                            </TouchableOpacity>}
+                                    size={20} color='white' />}
+                        </Layout>
                     </Layout>
-                </Layout>
+                </TouchableOpacity>
             </React.Fragment>
         );
     }

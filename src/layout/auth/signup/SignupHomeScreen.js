@@ -1,16 +1,24 @@
 import React, { PureComponent } from 'react';
-import { Text, Layout } from '@ui-kitten/components';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { Text, Layout, List } from '@ui-kitten/components';
+import { StyleSheet, View, TouchableOpacity, SafeAreaView } from 'react-native';
 import { TopNavigationComponent } from './components/TopNavigationComponent';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 export default function SignupHomeScreen({ navigation }) {
-    return (
-        <View style={styles.container}>
-            <TopNavigationComponent navigation={navigation} backPosition="Profile" />
-            <Layout level="1" style={styles.layoutContainer}>
-                <Text style={styles.titleText}>Create Free Account</Text>
-                <Text style={styles.offerText}>How would you like to an account?</Text>
+    const renderLoginLink = () => {
+        return <Text style={styles.haveAccountText}>Already have an account?  <Text style={styles.loginText}>Login</Text></Text>
+    }
+
+    const renderHeader = () => {
+        return <>
+            <Text style={styles.titleText}>Create Free Account</Text>
+            <Text style={styles.offerText}>How would you like to an account?</Text>
+        </>
+    }
+
+    const renderItem = ({ item }) => {
+        if (item == 'phone') {
+            return (
                 <Layout style={styles.boxContainer}>
                     <Layout style={styles.boxLeftContainer}>
                         <Text style={styles.withText}>
@@ -26,21 +34,10 @@ export default function SignupHomeScreen({ navigation }) {
                             size={24} color='white' />
                     </TouchableOpacity>
                 </Layout>
-                <Layout style={styles.boxContainer}>
-                    <Layout style={styles.boxLeftContainer}>
-                        <Text style={styles.withText}>
-                            With    <FontAwesome5Icon
-                                name="facebook-square"
-                                size={18} color='#fff' />
-                        </Text>
-                        <Text style={styles.phoneText}>Facebook</Text>
-                    </Layout>
-                    <TouchableOpacity activeOpacity={0.8}>
-                        <FontAwesome5Icon
-                            name="chevron-right"
-                            size={24} color='white' />
-                    </TouchableOpacity>
-                </Layout>
+            )
+        }
+        if (item == 'google') {
+            return (
                 <Layout style={styles.boxContainer}>
                     <Layout style={styles.boxLeftContainer}>
                         <Text style={styles.withText}>
@@ -56,9 +53,40 @@ export default function SignupHomeScreen({ navigation }) {
                             size={24} color='white' />
                     </TouchableOpacity>
                 </Layout>
-                <Text style={styles.haveAccountText}>Already have an account?  <Text style={styles.loginText}>Login</Text></Text>
-            </Layout>
-        </View>
+
+            )
+        }
+        if (item == 'facebook') {
+            return (
+                <Layout style={styles.boxContainer}>
+                    <Layout style={styles.boxLeftContainer}>
+                        <Text style={styles.withText}>
+                            With    <FontAwesome5Icon
+                                name="facebook-square"
+                                size={18} color='#fff' />
+                        </Text>
+                        <Text style={styles.phoneText}>Facebook</Text>
+                    </Layout>
+                    <TouchableOpacity activeOpacity={0.8}>
+                        <FontAwesome5Icon
+                            name="chevron-right"
+                            size={24} color='white' />
+                    </TouchableOpacity>
+                </Layout>
+            )
+        }
+    }
+
+    return (
+        <SafeAreaView style={styles.container}>
+            <TopNavigationComponent navigation={navigation} backPosition="Profile" />
+            <List style={styles.layoutContainer}
+                ListHeaderComponent={renderHeader}
+                ListFooterComponent={renderLoginLink}
+                renderItem={renderItem}
+                data={['phone', 'google', 'facebook']}
+            />
+        </SafeAreaView>
     );
 };
 
@@ -68,21 +96,23 @@ const styles = StyleSheet.create({
         backgroundColor: '#222',
     },
     layoutContainer: {
-        flex: 1,
+        // flex: 1,
         backgroundColor: '#151515',
         paddingHorizontal: 30,
-        paddingTop: 40,
+        paddingTop: 20,
     },
     titleText: {
         color: '#E10032',
         alignSelf: 'center',
         fontSize: 32,
-        textTransform: 'uppercase'
+        textTransform: 'uppercase',
+        textAlign: 'center'
     },
     offerText: {
         color: '#FFF',
         fontSize: 20,
-        marginVertical: 16
+        marginVertical: 16,
+        textAlign: 'center'
     },
     boxContainer: {
         width: '100%',
@@ -116,6 +146,7 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         marginTop: 24,
+        marginBottom: 36
     },
     loginText: {
         color: '#E10032',

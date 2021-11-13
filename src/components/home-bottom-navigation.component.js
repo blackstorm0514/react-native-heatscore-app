@@ -48,7 +48,7 @@ const renderTabIcons = (name, currentRoute, otherProps) => {
         case 'Score Card':
             active = currentRoute.name == 'Score Card';
             return <ClipboardIcon style={{ ...defaultStyle, tintColor: active ? '#FFF' : '#999' }} />
-        case 'Me':
+        case 'Account':
             active = currentRoute.name == 'Auth';
             return <UserIcon style={{ ...defaultStyle, tintColor: active ? '#FFF' : '#999' }} />
     }
@@ -60,16 +60,16 @@ const renderTabTitle = (name, currentRoute) => {
     switch (name) {
         case 'Scores':
             active = currentRoute.name == 'Scores';
-            return <Text style={{ ...defaultStyle, color: active ? '#FFF' : '#999' }} >Scores</Text>
+            return <Text style={{ ...defaultStyle, color: active ? '#FFF' : '#999' }} >{name}</Text>
         case 'News':
             active = currentRoute.name == 'News';
-            return <Text style={{ ...defaultStyle, color: active ? '#FFF' : '#999' }} >News</Text>
+            return <Text style={{ ...defaultStyle, color: active ? '#FFF' : '#999' }} >{name}</Text>
         case 'Score Card':
             active = currentRoute.name == 'Score Card';
-            return <Text style={{ ...defaultStyle, color: active ? '#FFF' : '#999' }} >Score Card</Text>
-        case 'Me':
+            return <Text style={{ ...defaultStyle, color: active ? '#FFF' : '#999' }} >{name}</Text>
+        case 'Account':
             active = currentRoute.name == 'Auth';
-            return <Text style={{ ...defaultStyle, color: active ? '#FFF' : '#999' }} >Me</Text>
+            return <Text style={{ ...defaultStyle, color: active ? '#FFF' : '#999' }} >{name}</Text>
     }
 }
 
@@ -107,8 +107,8 @@ export const HomeBottomNavigation = ({ navigation, state, descriptors }) => {
                     style={styles.bottomTab}
                 />
                 <BottomNavigationTab
-                    title={() => renderTabTitle('Me', focusedRoute)}
-                    icon={(props) => renderTabIcons('Me', focusedRoute, props)}
+                    title={() => renderTabTitle('Account', focusedRoute)}
+                    icon={(props) => renderTabIcons('Account', focusedRoute, props)}
                     style={styles.bottomTab}
                 />
             </BrandBottomNavigation>

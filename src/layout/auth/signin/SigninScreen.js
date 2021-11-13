@@ -14,9 +14,9 @@ export default function SigninScreen({ navigation }) {
     }
 
     return (
-        <KeyboardAvoidingView>
-            <View style={styles.container}>
-                <TopNavigationComponent navigation={navigation} backPosition="Profile" />
+        <View style={styles.container}>
+            <TopNavigationComponent navigation={navigation} backPosition="Profile" />
+            <KeyboardAvoidingView>
                 <Layout level="1" style={styles.layoutContainer}>
                     <View>
                         <Text style={styles.titleText}>SIGN IN</Text>
@@ -68,8 +68,8 @@ export default function SigninScreen({ navigation }) {
                         </View>
                     </View>
                 </Layout>
-            </View>
-        </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
+        </View>
     );
 };
 
@@ -124,6 +124,7 @@ const styles = StyleSheet.create({
     },
     socialAuthContainer: {
         marginTop: 40,
+        marginBottom: 20
     },
     socialAuthButtonsContainer: {
         flexDirection: 'row',

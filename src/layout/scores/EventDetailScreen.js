@@ -18,8 +18,8 @@ class EventDetailScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            informModal: false,
-            index: 0,
+            informModal: true,
+            index: 1,
             routes: [
                 { key: 'chat', title: 'Chat' },
                 { key: 'matchup', title: 'MatchUp' },

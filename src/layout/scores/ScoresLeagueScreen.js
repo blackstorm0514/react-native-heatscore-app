@@ -63,7 +63,7 @@ class ScoresLeagueScreen extends Component {
     };
 
     renderFavorite = (favorites) => (
-        <RenderFavoriteComponent favorites={favorites} />
+        favorites ? <RenderFavoriteComponent favorites={favorites} /> : null
     )
 
     render() {

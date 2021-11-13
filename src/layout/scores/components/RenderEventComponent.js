@@ -28,7 +28,7 @@ export default class RenderEventComponent extends PureComponent {
         if (!event) return null;
 
         const { home, away, time, time_status, ss, timer } = event;
-        const time_str = format(new Date(time), "hh:mm aa");
+        let time_str = format(new Date(time), "hh:mm aa");
         let score_home = '';
         let score_away = '';
         if (time_status == "3" || time_status == "1") {
@@ -42,6 +42,7 @@ export default class RenderEventComponent extends PureComponent {
             case "1":
                 status_text = timer ? this.ordinal_suffix_of(Number(timer.q ? timer.q : (timer.md ? timer.md : 1))) : 'In Play';
                 status_class = styles.eventItemStatusInPlay;
+                time_str = '';
                 break;
             case "2":
                 status_text = 'Not Confirmed';

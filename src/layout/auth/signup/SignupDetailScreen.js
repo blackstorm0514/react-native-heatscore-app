@@ -1,6 +1,6 @@
 import React, { PureComponent, useState } from 'react';
 import { Text, Layout, Button, Input } from '@ui-kitten/components';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, SafeAreaView } from 'react-native';
 import { TopNavigationComponent } from './components/TopNavigationComponent';
 import { KeyboardAvoidingView } from '../../../components/keyboard-avoiding-view';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -19,9 +19,9 @@ export default function SignupDetailScreen({ navigation }) {
     }
 
     return (
-        <KeyboardAvoidingView>
-            <View style={styles.container}>
-                <TopNavigationComponent navigation={navigation} backPosition="Profile" />
+        <SafeAreaView style={styles.container}>
+            <TopNavigationComponent navigation={navigation} backPosition="Profile" />
+            <KeyboardAvoidingView>
                 {!success && <Layout level="1" style={styles.layoutContainer}>
                     <View>
                         <Text style={styles.titleText}>Few More Details</Text>
@@ -117,8 +117,8 @@ export default function SignupDetailScreen({ navigation }) {
                         C O N T I N U E
                     </Button>
                 </Layout>}
-            </View>
-        </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
+        </SafeAreaView>
     );
 };
 
@@ -151,7 +151,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#E10032',
         borderColor: '#E10032',
         color: 'white',
-        marginBottom: 30
+        marginBottom: 30,
+        marginTop: 15,
     },
     boxLayout: {
         backgroundColor: '#151515',
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
         borderColor: '#999'
     },
     completeContainer: {
-        paddingTop: 120,
+        paddingTop: 30,
         justifyContent: 'center',
         alignItems: 'center'
     },
