@@ -1,140 +1,183 @@
-import React, { useRef, useState } from 'react';
-import { Text, Icon, Button, Layout } from '@ui-kitten/components';
+import React, { PureComponent, useState } from 'react';
+import { Text, Icon, Button, Layout, Spinner } from '@ui-kitten/components';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { TopNavigationComponent } from './components/TopNavigationComponent';
 import PhoneInput, { isValidNumber } from "react-native-phone-number-input";
 import { KeyboardAvoidingView } from '../../../components/keyboard-avoiding-view';
 import CodeInput from 'react-native-confirmation-code-input';
-import parsePhoneNumber from 'libphonenumber-js';
 import { ApiService } from '../../../services/api.service';
 
-export default function SignupWithPhoneScreen({ navigation }) {
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [formattedPhoneNumber, setFormattedPhoneNumber] = useState('');
-    const [error, setError] = useState(null);
-    const [sentCode, setSentCode] = useState(false);
+const LoadingIndicator = (props) => (
+    <View style={[props.style, styles.indicator]}>
+        <Spinner size='small' status='control' />
+    </View>
+);
 
-    const onSendVerificationButtonPress = () => {
-        setSentCode(true);
-
-        // const isValid = isValidNumber(formattedPhoneNumber);
-        // if (!isValid) {
-        //     setError('Phone number is not valid. Please input again.');
-        //     return;
-        // }
-        // const phoneNumber = parsePhoneNumber(formattedPhoneNumber)
-        // const formatted = phoneNumber.formatInternational()
-        // setError(null);
-
-        // ApiService.post('/auth/signup-phone', { phone: formatted })
-        //     .then(({ data }) => {
-
-        //     })
-        //     .catch(() => {
-        //         setError('Can\'t send verification code. Please try again later.');
-        //     })
-
+export default class SignupWithPhoneScreen extends PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
+            phoneNumber: '',
+            formattedPhoneNumber: '',
+            error: null,
+            sentCode: false,
+            submitting: false,
+            verify_code: ''
+        };
     }
 
-    const onVerifyCodePress = () => {
-        navigation.navigate("SignupDetail");
+    onSendVerificationCode = () => {
+        const { formattedPhoneNumber, submitting } = this.state;
+        if (submitting) return;
+
+        const isValid = isValidNumber(formattedPhoneNumber);
+        if (!isValid) {
+            this.setState({ error: "Phone number is not valid. Please input again." });
+            return;
+        }
+        this.setState({ error: null, submitting: true });
+        ApiService.post('/auth/phone-verify', { phone: formattedPhoneNumber, step: 1 })
+            .then(({ data }) => {
+                const { success, error } = data;
+                if (success) {
+                    this.setState({ sentCode: true, submitting: false });
+                } else {
+                    this.setState({ error: error, submitting: false });
+                }
+            })
+            .catch((error) => {
+                console.warn(error);
+                this.setState({ error: "Cannot send verification code. Please try again later.", submitting: false });
+            })
     }
 
-    return (
-        <KeyboardAvoidingView>
-            <View style={styles.container}>
-                <TopNavigationComponent navigation={navigation} backPosition="SignupHome" />
-                {!sentCode && <Layout style={styles.layoutContainer}>
-                    <View style={styles.headerContainer}>
-                        <Text
-                            style={styles.helloLabel}
-                            status='control'>
-                            CREATE ACCOUNT
-                        </Text>
-                        <Text
-                            style={styles.verifyMessageLabel}
-                            category='s1'
-                            status='control'>
-                            A confirmation code will be sent to your mobile for verification.
-                        </Text>
-                        <View style={styles.phoneInputContainer}>
-                            <Text>Enter Phone Number</Text>
-                            <PhoneInput
-                                value={phoneNumber}
-                                defaultCode="CA"
-                                layout="first"
-                                onChangeText={(text) => { setPhoneNumber(text); }}
-                                onChangeFormattedText={(text) => { setFormattedPhoneNumber(text); }}
-                                autoFocus
-                                withDarkTheme
-                                containerStyle={styles.phoneContainerStyle}
-                                textContainerStyle={styles.phoneTextContainerStyle}
-                                textInputStyle={styles.phoneTextInputStyle}
-                                codeTextStyle={styles.phoneCodeTextStyle}
-                                flagButtonStyle={styles.phoneFlagButtonStyle}
-                                withShadow
-                                placeholder=" "
-                                disableArrowIcon
-                                textInputProps={{
-                                    selectionColor: '#aaa',
-                                    textContentType: 'telephoneNumber',
-                                    dataDetectorTypes: 'phoneNumber',
-                                    keyboardType: 'phone-pad',
-                                    maxLength: 14
-                                }}
-                            />
-                            {error && <Text style={styles.errorText}>{error}</Text>}
+    onVerifyCode = () => {
+        const { navigation } = this.props;
+        const { submitting, verify_code, formattedPhoneNumber } = this.state;
+        if (submitting) return;
+        if (!verify_code) {
+            this.setState({ error: 'Please input 6 digit verification code.' });
+            return;
+        }
+        this.setState({ error: null, submitting: true });
+        ApiService.post('/auth/phone-verify', { verify_code: verify_code, step: 2, phone: formattedPhoneNumber })
+            .then(({ data }) => {
+                const { success, error } = data;
+                if (success) {
+                    this.setState({ submitting: false });
+                    navigation.navigate("SignupDetail", { phone: formattedPhoneNumber });
+                } else {
+                    this.setState({ error: error, submitting: false });
+                }
+            })
+            .catch((error) => {
+                console.warn(error);
+                this.setState({ error: "Cannot verify code. Please try again later.", submitting: false });
+            })
+    }
+
+    render() {
+        const { phoneNumber, error, sentCode, submitting } = this.state;
+        const { navigation } = this.props;
+        return (
+            <KeyboardAvoidingView>
+                <View style={styles.container}>
+                    <TopNavigationComponent navigation={navigation} backPosition="SignupHome" />
+                    {!sentCode && <Layout style={styles.layoutContainer}>
+                        <View style={styles.headerContainer}>
+                            <Text
+                                style={styles.helloLabel}
+                                status='control'>
+                                CREATE ACCOUNT
+                            </Text>
+                            <Text
+                                style={styles.verifyMessageLabel}
+                                category='s1'
+                                status='control'>
+                                A confirmation code will be sent to your mobile for verification.
+                            </Text>
+                            <View style={styles.phoneInputContainer}>
+                                <Text>Enter Phone Number</Text>
+                                <PhoneInput
+                                    value={phoneNumber}
+                                    defaultCode="CA"
+                                    layout="first"
+                                    onChangeText={(text) => { this.setState({ phoneNumber: text }) }}
+                                    onChangeFormattedText={(text) => { this.setState({ formattedPhoneNumber: text }) }}
+                                    autoFocus
+                                    withDarkTheme
+                                    containerStyle={styles.phoneContainerStyle}
+                                    textContainerStyle={styles.phoneTextContainerStyle}
+                                    textInputStyle={styles.phoneTextInputStyle}
+                                    codeTextStyle={styles.phoneCodeTextStyle}
+                                    flagButtonStyle={styles.phoneFlagButtonStyle}
+                                    withShadow
+                                    placeholder=" "
+                                    disableArrowIcon
+                                    textInputProps={{
+                                        selectionColor: '#aaa',
+                                        textContentType: 'telephoneNumber',
+                                        dataDetectorTypes: 'phoneNumber',
+                                        keyboardType: 'phone-pad',
+                                        maxLength: 14
+                                    }}
+                                />
+                                {error && <Text style={styles.errorText}>{error}</Text>}
+                            </View>
                         </View>
-                    </View>
-                    <Button
-                        style={styles.nextButton}
-                        size='large'
-                        onPress={onSendVerificationButtonPress}>
-                        N E X T
-                    </Button>
-                </Layout>}
-                {sentCode && <Layout style={styles.layoutContainer}>
-                    <View style={styles.headerContainer}>
-                        <Text
-                            style={styles.helloLabel}
-                            status='control'>
-                            CREATE ACCOUNT
-                        </Text>
-                        <Text
-                            style={[styles.verifyMessageLabel, { alignSelf: 'center' }]}
-                            category='s1'
-                            status='control'>
-                            Please enter your verification code
-                        </Text>
-                        <View style={styles.phoneInputContainer}>
-                            <CodeInput
-                                codeLength={6}
-                                secureTextEntry
-                                activeColor='#999'
-                                inactiveColor='#555'
-                                autoFocus={false}
-                                ignoreCase={true}
-                                inputPosition='center'
-                                size={50}
-                                onFulfill={(isValid) => { console.log(isValid) }}
-                                containerStyle={{ marginTop: 0 }}
-                                codeInputStyle={{ borderWidth: 1.5 }}
-                            />
-                            <TouchableOpacity activeOpacity={0.8}>
-                                <Text style={styles.resendCode}>Resend Code</Text>
-                            </TouchableOpacity>
+                        <Button
+                            style={styles.nextButton}
+                            size='large'
+                            accessoryLeft={submitting ? LoadingIndicator : null}
+                            onPress={this.onSendVerificationCode}>
+                            {submitting ? null : 'N E X T'}
+                        </Button>
+                    </Layout>}
+                    {sentCode && <Layout style={styles.layoutContainer}>
+                        <View style={styles.headerContainer}>
+                            <Text
+                                style={styles.helloLabel}
+                                status='control'>
+                                CREATE ACCOUNT
+                            </Text>
+                            <Text
+                                style={[styles.verifyMessageLabel, { alignSelf: 'center' }]}
+                                category='s1'
+                                status='control'>
+                                Please enter your verification code
+                            </Text>
+                            <View style={styles.phoneInputContainer}>
+                                <CodeInput
+                                    codeLength={6}
+                                    secureTextEntry
+                                    activeColor='#999'
+                                    inactiveColor='#555'
+                                    autoFocus={false}
+                                    ignoreCase={true}
+                                    inputPosition='center'
+                                    size={50}
+                                    onFulfill={(verify_code) => { this.setState({ verify_code }) }}
+                                    containerStyle={{ marginTop: 0 }}
+                                    codeInputStyle={{ borderWidth: 1.5 }}
+                                />
+                                {error && <Text style={styles.errorText}>{error}</Text>}
+                                <TouchableOpacity activeOpacity={0.8} onPress={this.onSendVerificationCode}>
+                                    <Text style={styles.resendCode}>Resend Code</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
-                    <Button
-                        style={styles.nextButton}
-                        size='large'
-                        onPress={onVerifyCodePress}>
-                        N E X T
-                    </Button>
-                </Layout>}
-            </View>
-        </KeyboardAvoidingView>
-    )
+                        <Button
+                            style={styles.nextButton}
+                            size='large'
+                            accessoryLeft={submitting ? LoadingIndicator : null}
+                            onPress={this.onVerifyCode}>
+                            {submitting ? null : 'N E X T'}
+                        </Button>
+                    </Layout>}
+                </View>
+            </KeyboardAvoidingView>
+        )
+    }
 }
 
 
@@ -210,5 +253,9 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         fontWeight: 'bold',
         fontSize: 16
-    }
+    },
+    indicator: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 });
