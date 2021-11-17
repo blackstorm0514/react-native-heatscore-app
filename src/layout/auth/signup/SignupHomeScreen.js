@@ -3,20 +3,29 @@ import { Text, Layout, List } from '@ui-kitten/components';
 import { StyleSheet, View, TouchableOpacity, SafeAreaView } from 'react-native';
 import { TopNavigationComponent } from './components/TopNavigationComponent';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import {
+    GoogleSignin,
+    statusCodes,
+} from '@react-native-google-signin/google-signin';
+const googleClientID = {
+    android: '893401532366-1vg223i13gku5088khe3ipa6ikalpsue.apps.googleusercontent.com',
+    ios: '',
+    web: '893401532366-dss8umug8f3at3cmsjfii8f86n87iig0.apps.googleusercontent.com'
+}
 
-export default function SignupHomeScreen({ navigation }) {
-    const renderLoginLink = () => {
+export default class SignupHomeScreen extends PureComponent {
+    renderLoginLink = () => {
         return <Text style={styles.haveAccountText}>Already have an account?  <Text style={styles.loginText}>Login</Text></Text>
     }
 
-    const renderHeader = () => {
+    renderHeader = () => {
         return <>
             <Text style={styles.titleText}>Create Free Account</Text>
             <Text style={styles.offerText}>How would you like to an account?</Text>
         </>
     }
 
-    const renderItem = ({ item }) => {
+    renderItem = ({ item }) => {
         if (item == 'phone') {
             return (
                 <Layout style={styles.boxContainer}>
@@ -47,7 +56,7 @@ export default function SignupHomeScreen({ navigation }) {
                         </Text>
                         <Text style={styles.phoneText}>Google</Text>
                     </Layout>
-                    <TouchableOpacity activeOpacity={0.8}>
+                    <TouchableOpacity activeOpacity={0.8} onPress={this.configureGoogleLogin}>
                         <FontAwesome5Icon
                             name="chevron-right"
                             size={24} color='white' />
@@ -77,17 +86,45 @@ export default function SignupHomeScreen({ navigation }) {
         }
     }
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <TopNavigationComponent navigation={navigation} backPosition="Profile" />
-            <List style={styles.layoutContainer}
-                ListHeaderComponent={renderHeader}
-                ListFooterComponent={renderLoginLink}
-                renderItem={renderItem}
-                data={['phone', 'google', 'facebook']}
-            />
-        </SafeAreaView>
-    );
+    configureGoogleLogin = async () => {
+        GoogleSignin.configure({
+            androidClientId: googleClientID.android,
+            webClientId: googleClientID.web,
+            offlineAccess: true,
+        });
+
+        try {
+            await GoogleSignin.hasPlayServices();
+            const userInfo = await GoogleSignin.signIn();
+            console.log(userInfo)
+        } catch (error) {
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                alert("You cancelled the sign in.");
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+                alert("Google sign In operation is in process");
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                alert("Play Services not available");
+            } else {
+                alert("Something unknown went wrong with Google sign in. " + error.message);
+            }
+        }
+    }
+
+    render() {
+        const { navigation } = this.props;
+
+        return (
+            <SafeAreaView style={styles.container}>
+                <TopNavigationComponent navigation={navigation} backPosition="Profile" />
+                <List style={styles.layoutContainer}
+                    ListHeaderComponent={this.renderHeader}
+                    ListFooterComponent={this.renderLoginLink}
+                    renderItem={this.renderItem}
+                    data={['phone', 'google', 'facebook']}
+                />
+            </SafeAreaView>
+        );
+    }
 };
 
 const styles = StyleSheet.create({
