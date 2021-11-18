@@ -56,7 +56,7 @@ export default class SignupHomeScreen extends PureComponent {
                         </Text>
                         <Text style={styles.phoneText}>Google</Text>
                     </Layout>
-                    <TouchableOpacity activeOpacity={0.8} onPress={this.configureGoogleLogin}>
+                    <TouchableOpacity activeOpacity={0.8} onPress={this.configureGoogleSignUp}>
                         <FontAwesome5Icon
                             name="chevron-right"
                             size={24} color='white' />
@@ -86,7 +86,8 @@ export default class SignupHomeScreen extends PureComponent {
         }
     }
 
-    configureGoogleLogin = async () => {
+    configureGoogleSignUp = async () => {
+        const { navigation } = this.props;
         GoogleSignin.configure({
             androidClientId: googleClientID.android,
             webClientId: googleClientID.web,
@@ -96,7 +97,10 @@ export default class SignupHomeScreen extends PureComponent {
         try {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
-            console.log(userInfo)
+            const { idToken, user: { email, familyName: lastname, givenName: firstname, name: username } } = userInfo;
+
+            navigation.navigate('SignupDetail', { googleIdToken: idToken, email, firstname, lastname, username });
+
         } catch (error) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 alert("You cancelled the sign in.");
@@ -105,7 +109,7 @@ export default class SignupHomeScreen extends PureComponent {
             } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
                 alert("Play Services not available");
             } else {
-                alert("Something unknown went wrong with Google sign in. " + error.message);
+                alert("Something unknown went wrong with Google sign up." + error.message);
             }
         }
     }

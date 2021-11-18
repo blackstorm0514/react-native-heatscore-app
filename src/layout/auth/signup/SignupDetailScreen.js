@@ -27,26 +27,24 @@ export default class SignupDetailScreen extends PureComponent {
     constructor(props) {
         super(props);
         const { route: { params } } = props;
-        const { phone } = params;
+        const { phone, facebookIdToken, googleIdToken, email, firstname, lastname, username } = params;
         this.state = {
             phone: phone,
-            username: '',
-            firstname: '',
-            lastname: '',
-            email: '',
+            username: username ? username : '',
+            firstname: firstname ? firstname : '',
+            lastname: lastname ? lastname : '',
+            email: email ? email : '',
             password: '',
             passwordConfirm: '',
             success: false,
             submitting: false,
+            editable: (facebookIdToken || googleIdToken) ? false : true,
             error: errorOject
         }
     }
 
     changeField = (field, value) => {
-        const { error } = this.state;
-        const newError = { ...error };
-        this.setState({ [field]: value, error: newError });
-
+        this.setState({ [field]: value });
     }
 
     onSubmit = () => {
@@ -76,7 +74,7 @@ export default class SignupDetailScreen extends PureComponent {
 
     render() {
         const { navigation } = this.props;
-        const { username, firstname, lastname, email, password, passwordConfirm, success, error, submitting } = this.state;
+        const { username, firstname, lastname, email, password, passwordConfirm, success, error, submitting, editable } = this.state;
         return (
             <SafeAreaView style={styles.container}>
                 <TopNavigationComponent navigation={navigation} backPosition="Profile" />
@@ -94,6 +92,7 @@ export default class SignupDetailScreen extends PureComponent {
                                     placeholderTextColor="#888"
                                     value={username}
                                     onChangeText={(text) => this.changeField('username', text)}
+                                    disabled={!editable}
                                 />
                                 {error && error.username && <Text style={styles.errorText}>{error.username}</Text>}
                             </Layout>
@@ -107,6 +106,7 @@ export default class SignupDetailScreen extends PureComponent {
                                         placeholderTextColor="#888"
                                         value={firstname}
                                         onChangeText={(text) => this.setState({ firstname: text })}
+                                        disabled={!editable}
                                     />
                                     {error && error.firstname && <Text style={styles.errorText}>{error.firstname}</Text>}
                                 </Layout>
@@ -119,6 +119,7 @@ export default class SignupDetailScreen extends PureComponent {
                                         placeholderTextColor="#888"
                                         value={lastname}
                                         onChangeText={(text) => this.setState({ lastname: text })}
+                                        disabled={!editable}
                                     />
                                     {error && error.lastname && <Text style={styles.errorText}>{error.lastname}</Text>}
                                 </Layout>
@@ -132,6 +133,7 @@ export default class SignupDetailScreen extends PureComponent {
                                     placeholderTextColor="#888"
                                     value={email}
                                     onChangeText={(text) => this.setState({ email: text })}
+                                    disabled={!editable}
                                 />
                                 {error && error.email && <Text style={styles.errorText}>{error.email}</Text>}
                             </Layout>
