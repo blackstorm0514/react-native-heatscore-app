@@ -54,6 +54,12 @@ class ScoresPerDayScreen extends Component {
         this.getEventsData();
     };
 
+    renderEmptyList = () => (
+        <View style={{ flex: 1, alignItems: 'center', paddingHorizontal: 10 }}>
+            <Text style={{ fontSize: 16, marginTop: 20 }}>There are no events.</Text>
+        </View>
+    )
+
     render() {
         const { data, loading, favorites } = this.state;
 
@@ -65,6 +71,7 @@ class ScoresPerDayScreen extends Component {
                     data={data ? data : []}
                     renderItem={this.renderLeagues}
                     ListHeaderComponent={() => this.renderFavorite(favorites)}
+                    ListEmptyComponent={this.renderEmptyList}
                 />}
                 <TouchableOpacity
                     activeOpacity={0.7}

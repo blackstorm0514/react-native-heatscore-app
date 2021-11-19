@@ -41,16 +41,22 @@ export default class LeaguesListComponent extends PureComponent {
         )
     }
 
+    renderEmptyList = () => (
+        <View style={{ flex: 1, alignItems: 'center', paddingHorizontal: 10 }}>
+            <Text style={{ fontSize: 16, marginTop: 20 }}>There are no events.</Text>
+        </View>
+    )
+
     render() {
         const { league } = this.props;
 
-        if (!league.events || !league.events.length) return null;
         return (
             <List
                 style={styles.leagueContainer}
                 data={league.events ? league.events : []}
                 renderItem={this.renderEvent}
                 ListHeaderComponent={this.renderLeagueHeader}
+                ListEmptyComponent={this.renderEmptyList}
             />
         )
     }

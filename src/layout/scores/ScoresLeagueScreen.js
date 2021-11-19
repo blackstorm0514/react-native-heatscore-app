@@ -67,6 +67,12 @@ class ScoresLeagueScreen extends Component {
         favorites ? <RenderFavoriteComponent favorites={favorites} /> : null
     )
 
+    renderEmptyList = () => (
+        <View style={{ flex: 1, alignItems: 'center', paddingHorizontal: 10 }}>
+            <Text style={{ fontSize: 16, marginTop: 20 }}>There are no events.</Text>
+        </View>
+    )
+
     render() {
         const { loading, data, favorites } = this.state;
 
@@ -78,6 +84,7 @@ class ScoresLeagueScreen extends Component {
                     data={data ? data : []}
                     renderItem={this.renderLeagues}
                     ListHeaderComponent={() => this.renderFavorite(favorites)}
+                    ListEmptyComponent={this.renderEmptyList}
                 />}
                 <TouchableOpacity
                     activeOpacity={0.7}

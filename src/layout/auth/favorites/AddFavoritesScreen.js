@@ -26,7 +26,7 @@ export default class AddFavoritesScreen extends PureComponent {
     renderItem = ({ item }) => (
         <FavoriteItemComponent
             style={styles.item}
-            message={item}
+            team={item}
             onPress={this.onItemPress}
         />
     );

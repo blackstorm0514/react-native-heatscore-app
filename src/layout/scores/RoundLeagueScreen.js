@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'black',
         fontSize: 20,
         alignSelf: 'center',
-        maxWidth: '60%',
+        maxWidth: '70%',
         overflow: 'hidden'
     },
     tabBarContainer: {
