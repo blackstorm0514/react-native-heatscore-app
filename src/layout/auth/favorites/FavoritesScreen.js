@@ -1,24 +1,30 @@
 import React, { PureComponent } from 'react';
 import { Layout, List, Text, TopNavigation, TopNavigationAction } from '@ui-kitten/components';
 import { StyleSheet, View } from 'react-native'
-import MessageItemComponent from './components/MessageItemComponent';
+import FavoriteItemComponent from './components/FavoriteItemComponent';
 import { ArrowIosBackIcon, PlusOutlineIcon } from '../../../components/icons';
+import { LoadingIndicator } from '../../scores/components/LoadingIndicator';
 
 export default class FavoritesScreen extends PureComponent {
     constructor(props) {
         super(props);
 
         this.state = {
-            favorites: [1, 2, 3, 4],
+            loading: false,
+            favorites: [],
         }
+    }
+
+    componentDidMount() {
+        this.setState({ loading: false });
     }
 
     onItemPress = () => { };
 
-    renderItem = (info) => (
-        <MessageItemComponent
+    renderItem = ({ item }) => (
+        <FavoriteItemComponent
             style={styles.item}
-            message={info.item}
+            message={item}
             onPress={this.onItemPress}
         />
     );
@@ -44,17 +50,17 @@ export default class FavoritesScreen extends PureComponent {
     }
 
     addFavoriteAction = () => {
+        const { navigation } = this.props;
         return (
             <TopNavigationAction icon={(props) => {
                 const { style, ...otherProps } = props;
                 return <PlusOutlineIcon {...otherProps} style={[style, { tintColor: 'red' }]} />
-            }
-            } />
+            }} onPress={() => navigation.navigate('AddFavorite')} />
         )
     }
 
     render() {
-        const { favorites } = this.state;
+        const { favorites, loading } = this.state;
 
         return (
             <View style={styles.container}>
@@ -63,12 +69,13 @@ export default class FavoritesScreen extends PureComponent {
                     accessoryLeft={this.goBackAction}
                     accessoryRight={this.addFavoriteAction}
                 />
-                <List
+                {loading && <LoadingIndicator style={styles.loadingIndicator} />}
+                {!loading && <List
                     style={styles.list}
                     data={favorites}
                     renderItem={this.renderItem}
                     ListHeaderComponent={this.renderHeader}
-                />
+                />}
             </View>
         );
     }
@@ -76,7 +83,8 @@ export default class FavoritesScreen extends PureComponent {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: '#111'
     },
     titleText: {
         fontWeight: 'bold'
@@ -96,5 +104,8 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#222',
         backgroundColor: '#000'
+    },
+    loadingIndicator: {
+        flex: 1
     },
 });

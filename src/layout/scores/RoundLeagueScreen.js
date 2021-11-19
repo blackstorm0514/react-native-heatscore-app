@@ -9,7 +9,7 @@ import { ArrowDownwardIcon, ArrowIosBackIcon } from '../../components/icons';
 import { TabView, TabBar } from 'react-native-tab-view';
 import RenderLeagueRoundComponent from './components/RenderLeagueRoundComponent';
 import RenderLeagueTopComponent from './components/RenderLeagueTopComponent';
-import { ApiService } from '../../services/api.service';
+import { getLeagueRound } from '../../redux/services';
 
 class RoundLeagueScreen extends Component {
     constructor(props) {
@@ -42,7 +42,7 @@ class RoundLeagueScreen extends Component {
     loadRoundData = () => {
         const { league } = this.state;
         this.setState({ loading: true });
-        ApiService.get('/events/league/rounds', { params: { league: league.id } })
+        getLeagueRound(league.id)
             .then(({ data }) => {
                 const { rounds, topassists, topgoals } = data;
                 this.setState({

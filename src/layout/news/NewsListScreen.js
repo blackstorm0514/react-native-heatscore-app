@@ -5,12 +5,12 @@ import {
     View,
     Image
 } from 'react-native';
-import { Button, List, Text, Spinner } from '@ui-kitten/components';
+import { Button, List, Text } from '@ui-kitten/components';
 import { ImageOverlay } from '../../components/image-overlay.component';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
-import { ApiService } from '../../services/api.service';
 import { PlusOutlineIcon } from '../../components/icons';
 import OverlayImage from '../../assets/images/image-splash.png';
+import { getNews } from '../../redux/services';
 
 export default ({ navigation }) => {
     const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ export default ({ navigation }) => {
     const onLoadNews = (page) => {
         setPage(page);
         setLoading(true);
-        ApiService.get('/news', { params: { page } })
+        getNews(page)
             .then(({ data }) => {
                 const { success, total, data: news, per_page } = data;
                 if (success) {

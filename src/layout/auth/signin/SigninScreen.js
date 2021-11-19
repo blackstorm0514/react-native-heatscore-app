@@ -7,9 +7,9 @@ import { ValidateFields } from '../../../services/validator.service';
 import { AppStorage } from '../../../services/app-storage.service';
 import { actions } from '../../../redux/reducer';
 import { connect } from 'react-redux';
-import { ApiService } from '../../../services/api.service';
 import { GoogleSignin, statusCodes, GoogleSigninButton } from '@react-native-google-signin/google-signin';
 import { GoogleConfigure } from '../../../services/google.service';
+import { signIn, signInGoogle } from '../../../redux/services';
 
 const LoadingIndicator = (props) => (
     <View style={[props.style, styles.indicator]}>
@@ -47,7 +47,7 @@ class SignInForm extends PureComponent {
             return;
         }
         this.setState({ error: errorOject, submitting: true });
-        ApiService.post('/auth/signin', { email, password })
+        signIn(email, password)
             .then(({ data }) => {
                 const { success, error, user, accessToken } = data;
                 if (success) {
@@ -74,7 +74,7 @@ class SignInForm extends PureComponent {
             const userInfo = await GoogleSignin.signIn();
             const { idToken } = userInfo;
 
-            ApiService.post('/auth/signin-google', { idToken })
+            signInGoogle(idToken)
                 .then(({ data }) => {
                     const { success, error, user, accessToken } = data;
                     if (success) {
@@ -171,47 +171,6 @@ class SignInForm extends PureComponent {
 }
 
 class SigninScreen extends PureComponent {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            email: '',
-            password: '',
-            error: errorOject,
-            submitting: false,
-        }
-    }
-
-    changeField = (field, value) => {
-        this.setState({ [field]: value });
-    }
-
-    onSignInButtonPressed = () => {
-        const { email, password } = this.state;
-        const { navigation, setUserAction } = this.props;
-        const result = ValidateFields({ email });
-        if (result != true) {
-            this.setState({ error: { ...errorOject, ...result } });
-            return;
-        }
-        this.setState({ error: errorOject, submitting: true });
-        ApiService.post('/auth/signin', { email, password })
-            .then(({ data }) => {
-                const { success, error, user, accessToken } = data;
-                if (success) {
-                    this.setState({ submitting: false });
-                    setUserAction(user);
-                    AppStorage.setToken(accessToken).then(() => navigation.navigate('Profile'));
-                } else {
-                    this.setState({ submitting: false, error: { ...errorOject, ...error } });
-                }
-            })
-            .catch((error) => {
-                console.warn(error);
-                this.setState({ submitting: false, error: { ...errorOject, server: 'Cannot post data. Please try again later.' } });
-            });
-    }
-
     render() {
         const { navigation } = this.props;
 

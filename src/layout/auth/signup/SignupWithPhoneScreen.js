@@ -5,7 +5,7 @@ import { TopNavigationComponent } from './components/TopNavigationComponent';
 import PhoneInput, { isValidNumber } from "react-native-phone-number-input";
 import { KeyboardAvoidingView } from '../../../components/keyboard-avoiding-view';
 import CodeInput from 'react-native-confirmation-code-input';
-import { ApiService } from '../../../services/api.service';
+import { phoneVerify } from '../../../redux/services';
 
 const LoadingIndicator = (props) => (
     <View style={[props.style, styles.indicator]}>
@@ -36,7 +36,7 @@ export default class SignupWithPhoneScreen extends PureComponent {
             return;
         }
         this.setState({ error: null, submitting: true });
-        ApiService.post('/auth/phone-verify', { phone: formattedPhoneNumber, step: 1 })
+        phoneVerify({ phone: formattedPhoneNumber, step: 1 })
             .then(({ data }) => {
                 const { success, error } = data;
                 if (success) {
@@ -60,7 +60,7 @@ export default class SignupWithPhoneScreen extends PureComponent {
             return;
         }
         this.setState({ error: null, submitting: true });
-        ApiService.post('/auth/phone-verify', { verify_code: verify_code, step: 2, phone: formattedPhoneNumber })
+        phoneVerify({ verify_code: verify_code, step: 2, phone: formattedPhoneNumber })
             .then(({ data }) => {
                 const { success, error } = data;
                 if (success) {

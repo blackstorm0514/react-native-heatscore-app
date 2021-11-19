@@ -10,6 +10,7 @@ import LeaguesListComponent from './components/LeaguesListComponent';
 import { LoadingIndicator } from './components/LoadingIndicator';
 import { ApiService } from '../../services/api.service';
 import RenderFavoriteComponent from './components/RenderFavoriteComponent';
+import { getLeagueEvents } from '../../redux/services';
 
 class ScoresLeagueScreen extends Component {
     constructor(props) {
@@ -28,7 +29,7 @@ class ScoresLeagueScreen extends Component {
     getEventsData = () => {
         const { date, league } = this.props;
         this.setState({ loading: true });
-        ApiService.get('events/league', { params: { date, league: league.id } })
+        getLeagueEvents(date, league.id)
             .then(({ data }) => {
                 const { favorites, data: leagueData } = data;
                 this.setState({

@@ -3,13 +3,12 @@ import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
-export default class MessageItemComponent extends PureComponent {
+export default class FavoriteItemComponent extends PureComponent {
     render() {
         const { style: itemStyle, ...listItemProps } = this.props;
         return (
             <View
                 {...listItemProps}
-                level="1"
                 style={[itemStyle, styles.itemContainer]}>
                 <Image
                     style={styles.teamLogoImage}

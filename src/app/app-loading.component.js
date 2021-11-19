@@ -1,12 +1,7 @@
 import React from 'react';
-import { AppStorage } from '../services/app-storage.service';
 import { connect } from 'react-redux';
 import { actions } from '../redux/reducer';
-import { ApiService } from '../services/api.service';
-
-// const loadingTasks = [
-//     () => AppStorage.getToken(null).then(result => ['userToken', result]),
-// ];
+import { getProfile } from '../redux/services';
 
 const AppLoading = ({ initialConfig, children, placeholder, setUserAction }) => {
 
@@ -25,7 +20,7 @@ const AppLoading = ({ initialConfig, children, placeholder, setUserAction }) => 
 
     const startTasks = async () => {
         try {
-            const { data: { success, user } } = await ApiService.get('/auth/profile');
+            const { data: { success, user } } = await getProfile();
             success && setUserAction(user);
             return Promise.resolve();
         } catch (error) {

@@ -5,9 +5,8 @@ import { TopNavigationComponent } from './components/TopNavigationComponent';
 import { KeyboardAvoidingView } from '../../../components/keyboard-avoiding-view';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { ValidateFields } from '../../../services/validator.service';
-import { ApiService } from '../../../services/api.service';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { GoogleLogOut } from '../../../services/google.service';
+import { signUp } from '../../../redux/services';
 
 const LoadingIndicator = (props) => (
     <View style={[props.style, styles.indicator]}>
@@ -58,7 +57,7 @@ class SignupDetailForm extends PureComponent {
         }
         this.setState({ error: errorOject, submitting: true });
 
-        ApiService.post('/auth/signup', { username, firstname, lastname, email, password, passwordConfirm, phone })
+        signUp({ username, firstname, lastname, email, password, passwordConfirm, phone })
             .then(({ data }) => {
                 const { success, error } = data;
                 if (success) {
