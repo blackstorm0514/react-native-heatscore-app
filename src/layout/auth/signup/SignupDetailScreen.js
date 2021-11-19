@@ -6,6 +6,8 @@ import { KeyboardAvoidingView } from '../../../components/keyboard-avoiding-view
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { ValidateFields } from '../../../services/validator.service';
 import { ApiService } from '../../../services/api.service';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { GoogleLogOut } from '../../../services/google.service';
 
 const LoadingIndicator = (props) => (
     <View style={[props.style, styles.indicator]}>
@@ -23,7 +25,7 @@ const errorOject = {
     server: null
 };
 
-export default class SignupDetailScreen extends PureComponent {
+class SignupDetailForm extends PureComponent {
     constructor(props) {
         super(props);
         const { route: { params } } = props;
@@ -50,7 +52,6 @@ export default class SignupDetailScreen extends PureComponent {
     onSubmit = () => {
         const { username, firstname, lastname, email, password, passwordConfirm, phone } = this.state;
         const result = ValidateFields({ username, firstname, lastname, email, password, passwordConfirm });
-        console.log(result);
         if (result != true) {
             this.setState({ error: { ...errorOject, ...result } });
             return;
@@ -62,6 +63,8 @@ export default class SignupDetailScreen extends PureComponent {
                 const { success, error } = data;
                 if (success) {
                     this.setState({ submitting: false, success: true });
+
+                    GoogleLogOut();
                 } else {
                     this.setState({ submitting: false, error: { ...errorOject, ...error } });
                 }
@@ -76,118 +79,127 @@ export default class SignupDetailScreen extends PureComponent {
         const { navigation } = this.props;
         const { username, firstname, lastname, email, password, passwordConfirm, success, error, submitting, editable } = this.state;
         return (
+            <KeyboardAvoidingView>
+                {!success && <Layout level="1" style={styles.layoutContainer}>
+                    <View>
+                        <Text style={styles.titleText}>Few More Details</Text>
+                        <Text style={styles.offerText}>We just need a few more details to complete your account setup. Only your username will be displayed publicly.</Text>
+                        <Layout style={styles.boxLayout}>
+                            <Text>Username (min 6 characters)</Text>
+                            <Input
+                                style={styles.formInput}
+                                status='control'
+                                placeholder='John Doe'
+                                placeholderTextColor="#888"
+                                value={username}
+                                onChangeText={(text) => this.changeField('username', text)}
+                                disabled={!editable}
+                            />
+                            {error && error.username && <Text style={styles.errorText}>{error.username}</Text>}
+                        </Layout>
+                        <Layout style={[styles.boxLayout, { flexDirection: 'row', marginTop: 0, paddingHorizontal: 0 }]}>
+                            <Layout style={[styles.boxLayout, { flex: 1 }]}>
+                                <Text>First Name</Text>
+                                <Input
+                                    style={styles.formInput}
+                                    status='control'
+                                    placeholder='John'
+                                    placeholderTextColor="#888"
+                                    value={firstname}
+                                    onChangeText={(text) => this.setState({ firstname: text })}
+                                    disabled={!editable}
+                                />
+                                {error && error.firstname && <Text style={styles.errorText}>{error.firstname}</Text>}
+                            </Layout>
+                            <Layout style={[styles.boxLayout, { flex: 1 }]}>
+                                <Text>Last Name</Text>
+                                <Input
+                                    style={styles.formInput}
+                                    status='control'
+                                    placeholder='Doe'
+                                    placeholderTextColor="#888"
+                                    value={lastname}
+                                    onChangeText={(text) => this.setState({ lastname: text })}
+                                    disabled={!editable}
+                                />
+                                {error && error.lastname && <Text style={styles.errorText}>{error.lastname}</Text>}
+                            </Layout>
+                        </Layout>
+                        <Layout style={styles.boxLayout}>
+                            <Text>Email</Text>
+                            <Input
+                                style={styles.formInput}
+                                status='control'
+                                placeholder='jone.doe@gmail.com'
+                                placeholderTextColor="#888"
+                                value={email}
+                                onChangeText={(text) => this.setState({ email: text })}
+                                disabled={!editable}
+                            />
+                            {error && error.email && <Text style={styles.errorText}>{error.email}</Text>}
+                        </Layout>
+                        <Layout style={styles.boxLayout}>
+                            <Text>Create a Password</Text>
+                            <Input
+                                style={styles.formInput}
+                                status='control'
+                                placeholder='Create a Password'
+                                placeholderTextColor="#888"
+                                value={password}
+                                secureTextEntry
+                                onChangeText={(text) => this.setState({ password: text })}
+                            />
+                            {error && error.password && <Text style={styles.errorText}>{error.password}</Text>}
+                        </Layout>
+                        <Layout style={styles.boxLayout}>
+                            <Text>Confirm Password</Text>
+                            <Input
+                                style={styles.formInput}
+                                status='control'
+                                placeholder='Confirm Password'
+                                placeholderTextColor="#888"
+                                value={passwordConfirm}
+                                secureTextEntry
+                                onChangeText={(text) => this.setState({ passwordConfirm: text })}
+                            // accessoryRight={}
+                            />
+                            {error && error.passwordConfirm && <Text style={styles.errorText}>{error.passwordConfirm}</Text>}
+                        </Layout>
+                    </View>
+                    {error && error.server && <Text style={styles.errorText}>{error.server}</Text>}
+                    <Button
+                        style={styles.nextButton}
+                        size='large'
+                        accessoryLeft={submitting ? LoadingIndicator : null}
+                        onPress={this.onSubmit}>
+                        {submitting ? null : 'N E X T'}
+                    </Button>
+                </Layout>}
+                {success && <Layout level="1" style={styles.layoutContainer}>
+                    <View style={styles.completeContainer}>
+                        <Ionicons size={120} color='#E10032' name='checkmark-circle-outline' />
+                        <Text style={styles.youareInText}>You're in</Text>
+                        <Text style={styles.accountCompletedText}>Your account has been completed. You will receive a confirmation email</Text>
+                    </View>
+                    <Button
+                        style={styles.nextButton}
+                        size='large'
+                        onPress={() => navigation.navigate('Profile')}>
+                        C O N T I N U E
+                    </Button>
+                </Layout>}
+            </KeyboardAvoidingView>
+        );
+    }
+};
+
+export default class SignupDetailScreen extends PureComponent {
+    render() {
+        const { navigation } = this.props;
+        return (
             <SafeAreaView style={styles.container}>
                 <TopNavigationComponent navigation={navigation} backPosition="Profile" />
-                <KeyboardAvoidingView>
-                    {!success && <Layout level="1" style={styles.layoutContainer}>
-                        <View>
-                            <Text style={styles.titleText}>Few More Details</Text>
-                            <Text style={styles.offerText}>We just need a few more details to complete your account setup. Only your username will be displayed publicly.</Text>
-                            <Layout style={styles.boxLayout}>
-                                <Text>Username (min 6 characters)</Text>
-                                <Input
-                                    style={styles.formInput}
-                                    status='control'
-                                    placeholder='John Doe'
-                                    placeholderTextColor="#888"
-                                    value={username}
-                                    onChangeText={(text) => this.changeField('username', text)}
-                                    disabled={!editable}
-                                />
-                                {error && error.username && <Text style={styles.errorText}>{error.username}</Text>}
-                            </Layout>
-                            <Layout style={[styles.boxLayout, { flexDirection: 'row', marginTop: 0, paddingHorizontal: 0 }]}>
-                                <Layout style={[styles.boxLayout, { flex: 1 }]}>
-                                    <Text>First Name</Text>
-                                    <Input
-                                        style={styles.formInput}
-                                        status='control'
-                                        placeholder='John'
-                                        placeholderTextColor="#888"
-                                        value={firstname}
-                                        onChangeText={(text) => this.setState({ firstname: text })}
-                                        disabled={!editable}
-                                    />
-                                    {error && error.firstname && <Text style={styles.errorText}>{error.firstname}</Text>}
-                                </Layout>
-                                <Layout style={[styles.boxLayout, { flex: 1 }]}>
-                                    <Text>Last Name</Text>
-                                    <Input
-                                        style={styles.formInput}
-                                        status='control'
-                                        placeholder='Doe'
-                                        placeholderTextColor="#888"
-                                        value={lastname}
-                                        onChangeText={(text) => this.setState({ lastname: text })}
-                                        disabled={!editable}
-                                    />
-                                    {error && error.lastname && <Text style={styles.errorText}>{error.lastname}</Text>}
-                                </Layout>
-                            </Layout>
-                            <Layout style={styles.boxLayout}>
-                                <Text>Email</Text>
-                                <Input
-                                    style={styles.formInput}
-                                    status='control'
-                                    placeholder='jone.doe@gmail.com'
-                                    placeholderTextColor="#888"
-                                    value={email}
-                                    onChangeText={(text) => this.setState({ email: text })}
-                                    disabled={!editable}
-                                />
-                                {error && error.email && <Text style={styles.errorText}>{error.email}</Text>}
-                            </Layout>
-                            <Layout style={styles.boxLayout}>
-                                <Text>Create a Password</Text>
-                                <Input
-                                    style={styles.formInput}
-                                    status='control'
-                                    placeholder='Create a Password'
-                                    placeholderTextColor="#888"
-                                    value={password}
-                                    secureTextEntry
-                                    onChangeText={(text) => this.setState({ password: text })}
-                                />
-                                {error && error.password && <Text style={styles.errorText}>{error.password}</Text>}
-                            </Layout>
-                            <Layout style={styles.boxLayout}>
-                                <Text>Confirm Password</Text>
-                                <Input
-                                    style={styles.formInput}
-                                    status='control'
-                                    placeholder='Confirm Password'
-                                    placeholderTextColor="#888"
-                                    value={passwordConfirm}
-                                    secureTextEntry
-                                    onChangeText={(text) => this.setState({ passwordConfirm: text })}
-                                // accessoryRight={}
-                                />
-                                {error && error.passwordConfirm && <Text style={styles.errorText}>{error.passwordConfirm}</Text>}
-                            </Layout>
-                        </View>
-                        {error && error.server && <Text style={styles.errorText}>{error.server}</Text>}
-                        <Button
-                            style={styles.nextButton}
-                            size='large'
-                            accessoryLeft={submitting ? LoadingIndicator : null}
-                            onPress={this.onSubmit}>
-                            {submitting ? null : 'N E X T'}
-                        </Button>
-                    </Layout>}
-                    {success && <Layout level="1" style={styles.layoutContainer}>
-                        <View style={styles.completeContainer}>
-                            <Ionicons size={120} color='#E10032' name='checkmark-circle-outline' />
-                            <Text style={styles.youareInText}>You're in</Text>
-                            <Text style={styles.accountCompletedText}>Your account has been completed. You will receive a confirmation email</Text>
-                        </View>
-                        <Button
-                            style={styles.nextButton}
-                            size='large'
-                            onPress={() => navigation.navigate('Profile')}>
-                            C O N T I N U E
-                        </Button>
-                    </Layout>}
-                </KeyboardAvoidingView>
+                <SignupDetailForm {...this.props} />
             </SafeAreaView>
         );
     }

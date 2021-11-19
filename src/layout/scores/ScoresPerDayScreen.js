@@ -1,8 +1,5 @@
 import React, { Component, useEffect, useState } from 'react';
-import {
-    StyleSheet,
-    View,
-} from 'react-native';
+import { StyleSheet, View, } from 'react-native';
 import { Button, Text, List } from '@ui-kitten/components';
 import { PlusOutlineIcon, RefreshIcon } from '../../components/icons';
 import LeaguesListComponent from './components/LeaguesListComponent';
@@ -11,11 +8,34 @@ import { connect } from 'react-redux';
 import { actions } from '../../redux/reducer';
 import { LoadingIndicator } from './components/LoadingIndicator';
 import RenderFavoriteComponent from './components/RenderFavoriteComponent';
+import { getEvent } from '../../redux/services';
 
 class ScoresPerDayScreen extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            loading: false,
+            data: null,
+            favorites: null,
+        }
+    }
+
+    componentDidMount() {
+        this.getEventsData();
+    }
+
     getEventsData = () => {
-        const { getEventAction, keyDate } = this.props;
-        getEventAction(keyDate);
+        const { date, keyDate } = this.props;
+        this.setState({ loading: true });
+        getEvent(date)
+            .then(({ data: result }) => {
+                const { data, favorites } = result;
+                this.setState({ loading: false, data, favorites });
+            })
+            .catch(() => {
+                this.setState({ loading: false, data: null, favorites: null });
+            })
     }
 
     renderFavorite = (favorites) => (
@@ -35,12 +55,7 @@ class ScoresPerDayScreen extends Component {
     };
 
     render() {
-        const { keyDate, events } = this.props;
-        let event = events.find(event => event.key == keyDate);
-        if (!event) {
-            return null;
-        }
-        const { data, loading, favorites, key } = event;
+        const { data, loading, favorites } = this.state;
 
         return (
             <View style={styles.container}>
@@ -65,10 +80,9 @@ class ScoresPerDayScreen extends Component {
 };
 
 const mapStateToProps = (state) => ({
-    events: state.events
 });
 
-export default connect(mapStateToProps, ({ getEventAction: actions.getEventAction }))(ScoresPerDayScreen);
+export default connect(mapStateToProps, null)(ScoresPerDayScreen);
 
 const styles = StyleSheet.create({
     container: {

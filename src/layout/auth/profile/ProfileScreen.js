@@ -1,37 +1,62 @@
 import React, { PureComponent } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, Alert } from 'react-native';
 import ProfileSettingComponent from './components/ProfileSettingComponent';
 import { TopNavigation, Text } from '@ui-kitten/components';
+import { connect } from 'react-redux';
+import { actions } from '../../../redux/reducer';
+import { AppStorage } from '../../../services/app-storage.service';
+import { GoogleLogOut } from '../../../services/google.service';
 
-export default class ProfileScreen extends PureComponent {
-
+class ProfileScreen extends PureComponent {
     renderTitle = () => {
         return <Text style={styles.titleText}>My Account</Text>
     }
 
-    render() {
-        const { navigation } = this.props;
+    logOutAction = () => {
+        Alert.alert(
+            "Log out from Heatscore",
+            "Are you sure you want to log out from HeatScore?",
+            [
+                {
+                    text: "Yes",
+                    onPress: () => {
+                        const { setUserAction } = this.props;
+                        AppStorage.removeToken(null).then(() => setUserAction(null));
+                        GoogleLogOut();
+                    },
+                },
+                { text: "No", },
+            ]
+        );
+    }
 
+    render() {
+        const { navigation, user } = this.props;
         return (
             <ScrollView style={styles.container}>
                 <TopNavigation
                     title={this.renderTitle}
                 />
-                <ProfileSettingComponent
+                {!user && <ProfileSettingComponent
                     style={[styles.profileSetting, styles.section]}
                     title='Sign In'
                     navigateAction={() => navigation.navigate('SignIn')}
-                />
-                <ProfileSettingComponent
+                />}
+                {!user && <ProfileSettingComponent
                     style={styles.profileSetting}
                     title='Create Account'
                     navigateAction={() => navigation.navigate('SignUp')}
-                />
-                <ProfileSettingComponent
+                />}
+                {user && <ProfileSettingComponent
+                    style={[styles.profileSetting, styles.section]}
+                    title='Log out'
+                    navigateAction={this.logOutAction}
+                />}
+                {user && <ProfileSettingComponent
                     style={styles.profileSetting}
                     title='Account Details'
                     navigateAction={() => { }}
-                />
+                />}
                 <ProfileSettingComponent
                     style={[styles.profileSetting, styles.section]}
                     title='Edition'
@@ -57,6 +82,12 @@ export default class ProfileScreen extends PureComponent {
         );
     }
 };
+
+const mapStateToProps = (state) => ({
+    user: state.user,
+});
+
+export default connect(mapStateToProps, { setUserAction: actions.setUserAction })(ProfileScreen);
 
 const styles = StyleSheet.create({
     container: {

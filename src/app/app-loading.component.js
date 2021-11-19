@@ -1,14 +1,14 @@
 import React from 'react';
 import { AppStorage } from '../services/app-storage.service';
 import { connect } from 'react-redux';
-import { getEvent } from '../redux/services';
 import { actions } from '../redux/reducer';
+import { ApiService } from '../services/api.service';
 
-const loadingTasks = [
-    () => AppStorage.getToken(null).then(result => ['userToken', result]),
-];
+// const loadingTasks = [
+//     () => AppStorage.getToken(null).then(result => ['userToken', result]),
+// ];
 
-const AppLoading = ({ initialConfig, children, placeholder, tabs, getEventSuccess }) => {
+const AppLoading = ({ initialConfig, children, placeholder, setUserAction }) => {
 
     const [loading, setLoading] = React.useState(true);
     const loadingResult = initialConfig || {};
@@ -23,37 +23,18 @@ const AppLoading = ({ initialConfig, children, placeholder, tabs, getEventSucces
         }
     }, [loading]);
 
-    const saveTaskResult = (result) => {
-        if (result) {
-            loadingResult[result[0]] = result[1];
-        }
-    };
-
-    const createRunnableTask = (task) => {
-        return task().then(saveTaskResult);
-    };
-
-    const loadIniitalEvents = tabs.map(tab => {
-        return new Promise((resolve, reject) => {
-            getEvent(tab.date)
-                .then(({ data: result }) => {
-                    const { data, favorites } = result;
-                    getEventSuccess(tab.key, { data, favorites });
-                })
-                .catch(() => { })
-                .finally(() => {
-                    resolve();
-                })
-        })
-    })
-
     const startTasks = async () => {
-        if (loadingTasks) {
-            return Promise.all([...loadingTasks.map(createRunnableTask), ...loadIniitalEvents]);
+        try {
+            const { data: { success, user } } = await ApiService.get('/auth/profile');
+            if (success) {
+                setUserAction(user);
+            }
+            return Promise.resolve();
+        } catch (error) {
+            console.warn(error);
+            return Promise.resolve();
         }
-        return Promise.resolve();
     };
-
 
     return (
         <React.Fragment>
@@ -63,8 +44,4 @@ const AppLoading = ({ initialConfig, children, placeholder, tabs, getEventSucces
     );
 };
 
-const mapStateToProps = (state) => ({
-    tabs: state.tabs
-});
-
-export default connect(mapStateToProps, ({ getEventSuccess: actions.getEventSuccess }))(AppLoading);
+export default connect(null, { setUserAction: actions.setUserAction })(AppLoading);

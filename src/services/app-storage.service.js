@@ -19,8 +19,8 @@ export class AppStorage {
     };
 
     static getToken = (fallback) => {
-        return AsyncStorage.getItem(TOKEN_KEY).then((theme) => {
-            return theme || fallback;
+        return AsyncStorage.getItem(TOKEN_KEY).then((token) => {
+            return token || fallback;
         });
     };
 
@@ -35,4 +35,8 @@ export class AppStorage {
     static setToken = (token) => {
         return AsyncStorage.setItem(TOKEN_KEY, token);
     };
+
+    static removeToken = () => {
+        return AsyncStorage.removeItem(TOKEN_KEY);
+    }
 }

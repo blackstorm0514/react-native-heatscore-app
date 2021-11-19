@@ -3,15 +3,8 @@ import { Text, Layout, List } from '@ui-kitten/components';
 import { StyleSheet, View, TouchableOpacity, SafeAreaView } from 'react-native';
 import { TopNavigationComponent } from './components/TopNavigationComponent';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import {
-    GoogleSignin,
-    statusCodes,
-} from '@react-native-google-signin/google-signin';
-const googleClientID = {
-    android: '893401532366-1vg223i13gku5088khe3ipa6ikalpsue.apps.googleusercontent.com',
-    ios: '',
-    web: '893401532366-dss8umug8f3at3cmsjfii8f86n87iig0.apps.googleusercontent.com'
-}
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import { GoogleConfigure } from '../../../services/google.service';
 
 export default class SignupHomeScreen extends PureComponent {
     renderLoginLink = () => {
@@ -88,11 +81,7 @@ export default class SignupHomeScreen extends PureComponent {
 
     configureGoogleSignUp = async () => {
         const { navigation } = this.props;
-        GoogleSignin.configure({
-            androidClientId: googleClientID.android,
-            webClientId: googleClientID.web,
-            offlineAccess: true,
-        });
+        GoogleSignin.configure(GoogleConfigure);
 
         try {
             await GoogleSignin.hasPlayServices();
@@ -100,12 +89,11 @@ export default class SignupHomeScreen extends PureComponent {
             const { idToken, user: { email, familyName: lastname, givenName: firstname, name: username } } = userInfo;
 
             navigation.navigate('SignupDetail', { googleIdToken: idToken, email, firstname, lastname, username });
-
         } catch (error) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-                alert("You cancelled the sign in.");
+                // alert("You cancelled the sign up.");
             } else if (error.code === statusCodes.IN_PROGRESS) {
-                alert("Google sign In operation is in process");
+                alert("Google sign up operation is in process");
             } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
                 alert("Play Services not available");
             } else {

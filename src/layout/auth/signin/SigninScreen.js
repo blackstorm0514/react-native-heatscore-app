@@ -1,21 +1,112 @@
 import React, { PureComponent, useState } from 'react';
-import { Text, Layout, Button, Input } from '@ui-kitten/components';
+import { Text, Layout, Button, Input, Spinner } from '@ui-kitten/components';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { TopNavigationComponent } from '../signup/components/TopNavigationComponent';
 import { KeyboardAvoidingView } from '../../../components/keyboard-avoiding-view';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { ValidateFields } from '../../../services/validator.service';
+import { AppStorage } from '../../../services/app-storage.service';
+import { actions } from '../../../redux/reducer';
+import { connect } from 'react-redux';
+import { ApiService } from '../../../services/api.service';
+import { GoogleSignin, statusCodes, GoogleSigninButton } from '@react-native-google-signin/google-signin';
+import { GoogleConfigure } from '../../../services/google.service';
 
-export default function SigninScreen({ navigation }) {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+const LoadingIndicator = (props) => (
+    <View style={[props.style, styles.indicator]}>
+        <Spinner size='small' status='control' />
+    </View>
+);
 
-    const onSignInButtonPressed = () => {
+const errorOject = {
+    email: null,
+    server: null
+}
+
+class SignInForm extends PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            email: '',
+            password: '',
+            error: errorOject,
+            submitting: false,
+        }
     }
 
-    return (
-        <View style={styles.container}>
-            <TopNavigationComponent navigation={navigation} backPosition="Profile" />
+    changeField = (field, value) => {
+        this.setState({ [field]: value });
+    }
+
+    onSignInButtonPressed = () => {
+        const { email, password } = this.state;
+        const { navigation, setUserAction } = this.props;
+        const result = ValidateFields({ email });
+        if (result != true) {
+            this.setState({ error: { ...errorOject, ...result } });
+            return;
+        }
+        this.setState({ error: errorOject, submitting: true });
+        ApiService.post('/auth/signin', { email, password })
+            .then(({ data }) => {
+                const { success, error, user, accessToken } = data;
+                if (success) {
+                    this.setState({ submitting: false });
+                    setUserAction(user);
+                    AppStorage.setToken(accessToken).then(() => navigation.navigate('Profile'));
+                } else {
+                    this.setState({ submitting: false, error: { ...errorOject, ...error } });
+                }
+            })
+            .catch((error) => {
+                console.warn(error);
+                this.setState({ submitting: false, error: { ...errorOject, server: 'Cannot post data. Please try again later.' } });
+            });
+    }
+
+    onGoogleSignIn = async () => {
+        const { setUserAction, navigation } = this.props;
+        this.setState({ submitting: true });
+
+        GoogleSignin.configure(GoogleConfigure);
+        try {
+            await GoogleSignin.hasPlayServices();
+            const userInfo = await GoogleSignin.signIn();
+            const { idToken } = userInfo;
+
+            ApiService.post('/auth/signin-google', { idToken })
+                .then(({ data }) => {
+                    const { success, error, user, accessToken } = data;
+                    if (success) {
+                        this.setState({ submitting: false });
+                        setUserAction(user);
+                        AppStorage.setToken(accessToken).then(() => navigation.navigate('Profile'));
+                    } else {
+                        this.setState({ submitting: false, error: { ...errorOject, ...error } });
+                    }
+                })
+                .catch((error) => {
+                    console.warn(error);
+                    this.setState({ submitting: false, error: { ...errorOject, server: 'Cannot post data. Please try again later.' } });
+                });
+        } catch (error) {
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                // alert("You cancelled the sign in.");
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+                alert("Google sign in operation is in process");
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                alert("Play Services not available");
+            } else {
+                alert("Something unknown went wrong with Google sign in. " + error.message);
+            }
+            this.setState({ submitting: false });
+        }
+    }
+
+    render() {
+        const { email, password, error, submitting } = this.state;
+
+        return (
             <KeyboardAvoidingView>
                 <Layout level="1" style={styles.layoutContainer}>
                     <View>
@@ -27,8 +118,9 @@ export default function SigninScreen({ navigation }) {
                                 placeholder='jone.doe@gmail.com'
                                 placeholderTextColor="#888"
                                 value={email}
-                                onChangeText={setEmail}
+                                onChangeText={(text) => this.changeField('email', text)}
                             />
+                            {error && error.email && <Text style={styles.errorText}>{error.email}</Text>}
                         </Layout>
                         <Layout style={styles.boxLayout}>
                             <Text>Password</Text>
@@ -38,7 +130,7 @@ export default function SigninScreen({ navigation }) {
                                 placeholderTextColor="#888"
                                 value={password}
                                 secureTextEntry
-                                onChangeText={setPassword}
+                                onChangeText={(text) => this.changeField('password', text)}
                             />
                         </Layout>
                         <Layout style={styles.boxLayout}>
@@ -46,31 +138,90 @@ export default function SigninScreen({ navigation }) {
                                 <Text style={styles.forgotPasswordText}>Forgot password</Text>
                             </TouchableOpacity>
                         </Layout>
+                        {error && error.server && <Text style={styles.errorText}>{error.server}</Text>}
                     </View>
                     <Button
                         style={styles.signInButton}
                         size='large'
-                        onPress={onSignInButtonPressed}>
-                        SIGN  IN
+                        accessoryLeft={submitting ? LoadingIndicator : null}
+                        onPress={this.onSignInButtonPressed}>
+                        {submitting ? null : 'SIGN  IN'}
                     </Button>
 
                     <View style={styles.socialAuthContainer}>
-                        <Text style={styles.socialAuthHintText}>
-                            OR
-                        </Text>
+                        <Text style={styles.socialAuthHintText}>OR</Text>
                         <View style={styles.socialAuthButtonsContainer}>
                             <TouchableOpacity activeOpacity={0.8}>
-                                <MaterialIcons color='blue' name='facebook' size={50} />
+                                <GoogleSigninButton
+                                    // style={{ width: 200, height: 50 }}
+                                    size={GoogleSigninButton.Size.Wide}
+                                    color={GoogleSigninButton.Color.Light}
+                                    onPress={() => this.onGoogleSignIn()}
+                                    disabled={submitting} />
                             </TouchableOpacity>
-                            <TouchableOpacity activeOpacity={0.8}>
+                            {/* <TouchableOpacity activeOpacity={0.8}>
                                 <FontAwesome color='red' name='google-plus-official' size={50} />
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
                     </View>
                 </Layout>
             </KeyboardAvoidingView>
-        </View>
-    );
+        );
+    }
+}
+
+class SigninScreen extends PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            email: '',
+            password: '',
+            error: errorOject,
+            submitting: false,
+        }
+    }
+
+    changeField = (field, value) => {
+        this.setState({ [field]: value });
+    }
+
+    onSignInButtonPressed = () => {
+        const { email, password } = this.state;
+        const { navigation, setUserAction } = this.props;
+        const result = ValidateFields({ email });
+        if (result != true) {
+            this.setState({ error: { ...errorOject, ...result } });
+            return;
+        }
+        this.setState({ error: errorOject, submitting: true });
+        ApiService.post('/auth/signin', { email, password })
+            .then(({ data }) => {
+                const { success, error, user, accessToken } = data;
+                if (success) {
+                    this.setState({ submitting: false });
+                    setUserAction(user);
+                    AppStorage.setToken(accessToken).then(() => navigation.navigate('Profile'));
+                } else {
+                    this.setState({ submitting: false, error: { ...errorOject, ...error } });
+                }
+            })
+            .catch((error) => {
+                console.warn(error);
+                this.setState({ submitting: false, error: { ...errorOject, server: 'Cannot post data. Please try again later.' } });
+            });
+    }
+
+    render() {
+        const { navigation } = this.props;
+
+        return (
+            <View style={styles.container}>
+                <TopNavigationComponent navigation={navigation} backPosition="Profile" />
+                <SignInForm {...this.props} />
+            </View>
+        );
+    }
 };
 
 const styles = StyleSheet.create({
@@ -123,18 +274,30 @@ const styles = StyleSheet.create({
         fontSize: 18
     },
     socialAuthContainer: {
-        marginTop: 40,
-        marginBottom: 20
+        marginTop: 20,
+        marginBottom: 30
     },
     socialAuthButtonsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        paddingHorizontal: 90
+        // flexDirection: 'row',
+        // justifyContent: 'space-evenly',
+        // paddingHorizontal: 90
+        alignItems: 'center'
     },
     socialAuthHintText: {
         alignSelf: 'center',
-        marginBottom: 24,
+        marginBottom: 16,
         color: 'white',
         fontSize: 20
     },
+    errorText: {
+        color: '#E10032',
+        fontSize: 12,
+        marginTop: 4,
+    },
+    indicator: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 });
+
+export default connect(null, { setUserAction: actions.setUserAction })(SigninScreen);
