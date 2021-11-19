@@ -26,9 +26,7 @@ const AppLoading = ({ initialConfig, children, placeholder, setUserAction }) => 
     const startTasks = async () => {
         try {
             const { data: { success, user } } = await ApiService.get('/auth/profile');
-            if (success) {
-                setUserAction(user);
-            }
+            success && setUserAction(user);
             return Promise.resolve();
         } catch (error) {
             console.warn(error);
