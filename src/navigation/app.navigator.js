@@ -34,7 +34,7 @@ export const AppNavigator = () => (
             tabBar={props => <HomeBottomNavigation {...props} />}>
             <BottomTab.Screen name='Scores'
                 component={ScoresNavigator}
-                options={screenOption} />
+                options={{ headerShown: false }} />
             <BottomTab.Screen name='News'
                 component={NewsNavigator}
                 options={screenOption} />

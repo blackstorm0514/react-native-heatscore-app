@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, PureComponent } from 'react';
 import {
     StyleSheet,
     TouchableOpacity,
     View,
-    Image
+    Image,
+    BackHandler
 } from 'react-native';
 import { Button, List, Text } from '@ui-kitten/components';
 import { ImageOverlay } from '../../components/image-overlay.component';
@@ -12,16 +13,41 @@ import { PlusOutlineIcon } from '../../components/icons';
 import OverlayImage from '../../assets/images/image-splash.png';
 import { getNews } from '../../redux/services';
 
-export default ({ navigation }) => {
-    const [loading, setLoading] = useState(false);
-    const [page, setPage] = useState(1);
-    const [listNews, setListNews] = useState([]);
-    const [headingNews, setHeadingNews] = useState(null);
-    const [gotAll, setGotAll] = useState(false);
+export default class NewsListScreen extends PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
+            loading: false,
+            page: 1,
+            listNews: [],
+            headingNews: null,
+            gotAll: false
+        }
+    }
+    componentDidMount() {
+        this.onLoadNews(1);
+        this.backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            this.backAction
+        );
+    }
 
-    const onLoadNews = (page) => {
-        setPage(page);
-        setLoading(true);
+    componentWillUnmount() {
+        this.backHandler.remove();
+    }
+
+    backAction = () => {
+        const { navigation } = this.props;
+        navigation.navigate('Scores')
+        return true;
+    };
+
+    onLoadNews = (page) => {
+        const { listNews } = this.state;
+        this.setState({
+            loading: true,
+            page: page
+        });
         getNews(page)
             .then(({ data }) => {
                 const { success, total, data: news, per_page } = data;
@@ -29,80 +55,89 @@ export default ({ navigation }) => {
                     if (news.length > 0) {
                         if (page == 1) {
                             const [headingNews, ...listNews] = news;
-                            setHeadingNews(headingNews);
-                            setListNews(listNews);
+                            this.setState({
+                                headingNews: headingNews,
+                                listNews: listNews,
+                                loading: false,
+                                total: page * per_page >= total
+                            });
                         } else {
-                            setListNews([...listNews, ...news]);
-                        }
-                        if (page * per_page >= total) {
-                            setGotAll(true);
+                            this.setState({
+                                listNews: [...listNews, ...news],
+                                loading: false,
+                                total: page * per_page >= total
+                            })
                         }
                     }
+                } else {
+                    this.setState({ loading: false });
                 }
-                setLoading(false);
             })
             .catch(error => {
                 console.log("Getting News Error: ", JSON.stringify(error));
-                setLoading(false);
+                this.setState({ loading: false })
             });
     }
 
-    useEffect(() => {
-        onLoadNews(1);
-    }, [navigation])
-
-    const onItemPress = (newsItem) => {
+    goToItemDetail = (newsItem) => {
+        const { navigation } = this.props;
         navigation && navigation.navigate('NewsDetail', { uri: newsItem.url });
     };
 
-    const renderHeadingItem = () => (
-        <ImageOverlay
-            style={styles.headingNewsContainer}
-            source={{ uri: headingNews.urlToImage }}>
-            <Text
-                style={styles.headingNewsTitle}
-                status='control'
-                category='h3'>
-                {headingNews.title}
-            </Text>
-            <Text
-                style={styles.headingNewsDescription}
-                category='h6'
-                status='control'>
-                {headingNews.description}
-            </Text>
-            {headingNews.source && headingNews.source.name && <Text
-                style={styles.headingNewsSource}
-                category='h6'
-                status='control'>
-                {headingNews.source.name}
-            </Text>}
-            <Button
-                style={styles.readButton}
-                status='control'
-                onPress={() => onItemPress(headingNews)}>
-                READ
-            </Button>
-        </ImageOverlay>
-    );
-
-    const renderFooterItem = () => (
-        loading || gotAll ? null :
-            <Button
-                style={styles.loadButton}
-                accessoryRight={PlusOutlineIcon}
-                onPress={() => onLoadNews(page + 1)}>
-                <Text style={styles.loadButtonText}>
-                    LOAD MORE
+    renderHeadingItem = () => {
+        const { headingNews } = this.state;
+        return (
+            <ImageOverlay
+                style={styles.headingNewsContainer}
+                source={{ uri: headingNews.urlToImage }}>
+                <Text
+                    style={styles.headingNewsTitle}
+                    status='control'
+                    category='h3'>
+                    {headingNews.title}
                 </Text>
-            </Button>
-    )
+                <Text
+                    style={styles.headingNewsDescription}
+                    category='h6'
+                    status='control'>
+                    {headingNews.description}
+                </Text>
+                {headingNews.source && headingNews.source.name && <Text
+                    style={styles.headingNewsSource}
+                    category='h6'
+                    status='control'>
+                    {headingNews.source.name}
+                </Text>}
+                <Button
+                    style={styles.readButton}
+                    status='control'
+                    onPress={() => this.goToItemDetail(headingNews)}>
+                    READ
+                </Button>
+            </ImageOverlay>
+        )
+    };
 
-    const renderNewsItem = (info) => (
+    renderFooterItem = () => {
+        const { loading, gotAll, page } = this.state;
+        return (
+            loading || gotAll ? null :
+                <Button
+                    style={styles.loadButton}
+                    accessoryRight={PlusOutlineIcon}
+                    onPress={() => this.onLoadNews(page + 1)}>
+                    <Text style={styles.loadButtonText}>
+                        LOAD MORE
+                    </Text>
+                </Button>
+        )
+    }
+
+    renderNewsItem = (info) => (
         <TouchableOpacity
             style={styles.item}
             activeOpacity={0.95}
-            onPress={() => onItemPress(info.item)}>
+            onPress={() => this.goToItemDetail(info.item)}>
             <View style={styles.itemSection}>
                 <Text
                     style={styles.itemTitle}
@@ -122,30 +157,32 @@ export default ({ navigation }) => {
         </TouchableOpacity>
     );
 
-    return (
-        <View style={styles.container}>
-            {headingNews && <List
-                style={styles.list}
-                data={listNews}
-                renderItem={renderNewsItem}
-                ListHeaderComponent={renderHeadingItem}
-                ListFooterComponent={renderFooterItem}
-            />}
-            {!headingNews && <ImageOverlay
-                style={styles.container}
-                source={OverlayImage}>
-            </ImageOverlay>}
-            {loading && <OrientationLoadingOverlay
-                visible={true}
-                color="white"
-                indicatorSize="large"
-                messageFontSize={24}
-                message="Loading..."
-            />}
-
-        </View>
-    );
-};
+    render() {
+        const { headingNews, listNews, loading } = this.state;
+        return (
+            <View style={styles.container}>
+                {headingNews && <List
+                    style={styles.list}
+                    data={listNews}
+                    renderItem={this.renderNewsItem}
+                    ListHeaderComponent={this.renderHeadingItem}
+                    ListFooterComponent={this.renderFooterItem}
+                />}
+                {!headingNews && <ImageOverlay
+                    style={styles.container}
+                    source={OverlayImage}>
+                </ImageOverlay>}
+                {loading && <OrientationLoadingOverlay
+                    visible={true}
+                    color="white"
+                    indicatorSize="large"
+                    messageFontSize={24}
+                    message="Loading..."
+                />}
+            </View>
+        );
+    };
+}
 
 const styles = StyleSheet.create({
     container: {

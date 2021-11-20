@@ -5,20 +5,11 @@ import NewsDetailScreen from '../layout/news/NewsDetailScreen';
 import { StyleSheet } from 'react-native';
 
 const Stack = createStackNavigator();
+const screenOption = { headerShown: false };
 
 export const NewsNavigator = () => (
     <Stack.Navigator initialRouteName="AllNews">
-        <Stack.Screen name='AllNews' component={NewsListScreen} options={{ headerShown: false }} />
-        <Stack.Screen name='NewsDetail' component={NewsDetailScreen} options={{
-            headerShown: true, title: 'Show News Detail',
-            headerStyle: styles.header,
-            headerTintColor: "white"
-        }} />
+        <Stack.Screen name='AllNews' component={NewsListScreen} options={screenOption} />
+        <Stack.Screen name='NewsDetail' component={NewsDetailScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
 );
-
-const styles = StyleSheet.create({
-    header: {
-        backgroundColor: 'black',
-    }
-});
