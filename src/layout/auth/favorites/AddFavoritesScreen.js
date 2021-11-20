@@ -1,12 +1,18 @@
 import React, { PureComponent } from 'react';
 import { Layout, List, Text, TopNavigation, Input, Button } from '@ui-kitten/components';
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Dimensions } from 'react-native'
 import FavoriteItemComponent from './components/FavoriteItemComponent';
 import { CloseIcon, SearchIcon } from '../../../components/icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { LoadingIndicator } from '../../scores/components/LoadingIndicator';
+import { addFavorite, searchTeams } from '../../../redux/services';
+import { connect } from 'react-redux';
+import { actions } from '../../../redux/reducer';
+import Toast from 'react-native-simple-toast';
 
-export default class AddFavoritesScreen extends PureComponent {
+const screenWidth = Dimensions.get('window').width;
+
+class AddFavoritesScreen extends PureComponent {
     constructor(props) {
         super(props);
 
@@ -17,19 +23,51 @@ export default class AddFavoritesScreen extends PureComponent {
         }
     }
 
-    componentDidMount() {
-        this.setState({ loading: false });
-    }
+    onAddFavorite = (sport, team, favorite) => {
+        const { addFavoritesAction } = this.props;
+        if (favorite) {
+            return;
+        }
+        addFavorite(sport, team)
+            .then(({ data }) => {
+                const { success, error } = data;
+                if (success) {
+                    addFavoritesAction({ sport, team });
+                    Toast.show(`${team.name} successfully added to your favorites.`);
+                } else {
+                    Toast.show(error);
+                }
+            })
+            .catch(error => {
+                console.warn(error);
+                Toast.show('Cannot add your favorite, Please try again later.');
+            });
+    };
 
-    onItemPress = () => { };
+    renderTeamItem = ({ item, sport }) => {
+        return (
+            <FavoriteItemComponent
+                style={styles.item}
+                team={item}
+                sport={sport}
+                onPress={this.onAddFavorite}
+            />
+        )
+    };
 
-    renderItem = ({ item }) => (
-        <FavoriteItemComponent
-            style={styles.item}
-            team={item}
-            onPress={this.onItemPress}
+    renderSportItem = ({ item }) => (
+        <List
+            data={item.teams}
+            renderItem={(props) => this.renderTeamItem({ ...props, sport: item._id })}
+            ListHeaderComponent={() => this.renderSportHeader(item._id)}
         />
-    );
+    )
+
+    renderSportHeader = (sport) => (
+        <View style={styles.sportsTitle}>
+            <Text style={styles.sportsTitleText} numberOfLines={1}>{sport}</Text>
+        </View>
+    )
 
     customSearchIcon = () => {
         return <SearchIcon style={styles.searchIcon} />
@@ -63,9 +101,20 @@ export default class AddFavoritesScreen extends PureComponent {
     }
 
     searchTeams = () => {
-        const { search } = this.state;
+        const { search, loading } = this.state;
+        if (loading) return;
         if (search) {
             this.setState({ loading: true, items: [] });
+            searchTeams(search)
+                .then(({ data }) => {
+                    this.setState({ loading: false, items: data });
+                })
+                .catch(error => {
+                    console.warn(error);
+                    this.setState({ loading: false, items: [] });
+                })
+        } else {
+            this.setState({ items: [] });
         }
     }
 
@@ -80,14 +129,14 @@ export default class AddFavoritesScreen extends PureComponent {
     }
 
     render() {
-        const { items: favorites, loading } = this.state;
+        const { items } = this.state;
 
         return (
             <View style={styles.container}>
                 <List
                     style={styles.list}
-                    data={favorites}
-                    renderItem={this.renderItem}
+                    data={items}
+                    renderItem={this.renderSportItem}
                     ListHeaderComponent={this.renderHeader}
                     ListEmptyComponent={this.renderEmpty}
                 />
@@ -95,6 +144,13 @@ export default class AddFavoritesScreen extends PureComponent {
         );
     }
 };
+
+const mapStateToProps = (state) => ({
+    favorites: state.favorites,
+});
+
+
+export default connect(mapStateToProps, { addFavoritesAction: actions.addFavoritesAction })(AddFavoritesScreen)
 
 const styles = StyleSheet.create({
     container: {
@@ -133,8 +189,6 @@ const styles = StyleSheet.create({
         tintColor: '#FFF'
     },
     searchButton: {
-        // alignSelf: 'baseline',
-        // width: '100%',
         backgroundColor: '#111',
         borderColor: '#111',
         color: 'white',
@@ -148,5 +202,22 @@ const styles = StyleSheet.create({
     noResultText: {
         paddingHorizontal: 10,
         textAlign: 'center'
-    }
+    },
+    sportsTitle: {
+        backgroundColor: '#222',
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        flexDirection: 'row',
+        borderBottomColor: '#888',
+        borderBottomWidth: 2,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: screenWidth
+    },
+    sportsTitleText: {
+        color: 'white',
+        fontWeight: 'bold',
+        paddingVertical: 5,
+        maxWidth: '100%'
+    },
 });

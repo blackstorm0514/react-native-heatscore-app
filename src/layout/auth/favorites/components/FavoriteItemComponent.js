@@ -2,26 +2,40 @@ import React, { PureComponent } from 'react';
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import { connect } from 'react-redux';
 
-export default class FavoriteItemComponent extends PureComponent {
+class FavoriteItemComponent extends PureComponent {
+    constructor(props) {
+        super(props);
+    }
+
     render() {
-        const { style: itemStyle, ...listItemProps } = this.props;
+        const { style: itemStyle, onPress, team, sport, favorites } = this.props;
+        console.log(favorites)
+        const exist = favorites && favorites.find(favorite => favorite.team.name == team.name && favorite.sport == sport);
+
         return (
             <View
-                {...listItemProps}
                 style={[itemStyle, styles.itemContainer]}>
                 <Image
                     style={styles.teamLogoImage}
-                    source={{ uri: 'https://assets.b365api.com/images/team/m/3.png' }}
+                    source={{ uri: `https://assets.b365api.com/images/team/m/${team.image_id}.png` }}
                 />
-                <Text category='h6' style={styles.teamName}>Los Angeles Lakers</Text>
-                <TouchableOpacity activeOpacity={0.8} style={styles.toggleFavorite}>
-                    <FontAwesomeIcon name="star" color='gold' size={20} style={styles.toggleFavoriteIcon} />
+                <Text category='h6' style={styles.teamName}>{team.name}</Text>
+                <TouchableOpacity activeOpacity={0.8} style={styles.toggleFavorite} onPress={() => onPress(sport, team, exist)}>
+                    {exist && <FontAwesomeIcon name="star" color='gold' size={20} style={styles.toggleFavoriteIcon} />}
+                    {!exist && <FontAwesomeIcon name="star-o" color='#888' size={20} style={styles.toggleFavoriteIcon} />}
                 </TouchableOpacity>
             </View>
         );
     }
 };
+
+const mapStateToProps = (state) => ({
+    favorites: state.favorites,
+});
+
+export default connect(mapStateToProps, null)(FavoriteItemComponent);
 
 const styles = StyleSheet.create({
     itemContainer: {

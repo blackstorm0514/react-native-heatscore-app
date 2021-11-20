@@ -61,11 +61,13 @@ class ProfileScreen extends PureComponent {
                     style={[styles.profileSetting, styles.section]}
                     title='Edition'
                     value="US - English"
+                    disabled={user == null}
                     navigateAction={() => { }}
                 />
                 <ProfileSettingComponent
                     style={styles.profileSetting}
                     title='Favourites'
+                    disabled={user == null}
                     navigateAction={() => navigation.navigate('Favorites')}
                 />
                 <ProfileSettingComponent

@@ -35,3 +35,19 @@ export const phoneVerify = (data) => {
 export const getNews = (page) => {
     return ApiService.get('/news', { params: { page } });
 }
+
+export const searchTeams = (search) => {
+    return ApiService.get('/favorites/search', { params: { search } });
+}
+
+export const getFavorites = () => {
+    return ApiService.get('/favorites/all');
+}
+
+export const addFavorite = (sport, team) => {
+    return ApiService.post('/favorites/add', { sport, team });
+}
+
+export const removeFavorite = (sport, team) => {
+    return ApiService.post('/favorites/remove', { sport, team });
+}

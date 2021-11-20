@@ -16,6 +16,8 @@ target 'HeatScore' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'react-native-simple-toast', :path => '../node_modules/react-native-simple-toast'
+
   target 'HeatScoreTests' do
     inherit! :complete
     # Pods for testing

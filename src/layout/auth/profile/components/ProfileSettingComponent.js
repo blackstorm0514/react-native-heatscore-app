@@ -5,11 +5,11 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 export default class ProfileSettingComponent extends PureComponent {
     render() {
-        const { style, title, value, navigateAction, ...layoutProps } = this.props;
+        const { style, title, value, navigateAction, disabled, ...layoutProps } = this.props;
 
         return (
             <React.Fragment>
-                <TouchableOpacity activeOpacity={0.7} onPress={navigateAction}>
+                <TouchableOpacity activeOpacity={0.7} onPress={navigateAction} disabled={disabled}>
                     <Layout
                         level='1'
                         {...layoutProps}

@@ -4,30 +4,53 @@ import { StyleSheet, View } from 'react-native'
 import FavoriteItemComponent from './components/FavoriteItemComponent';
 import { ArrowIosBackIcon, PlusOutlineIcon } from '../../../components/icons';
 import { LoadingIndicator } from '../../scores/components/LoadingIndicator';
+import { connect } from 'react-redux';
+import { getFavorites } from '../../../redux/services';
+import { actions } from '../../../redux/reducer';
+import Toast from 'react-native-simple-toast';
 
-export default class FavoritesScreen extends PureComponent {
+class FavoritesScreen extends PureComponent {
     constructor(props) {
         super(props);
 
         this.state = {
             loading: false,
-            favorites: [],
         }
     }
 
     componentDidMount() {
-        this.setState({ loading: false });
+        const { setFavoritesAction } = this.props;
+        this.setState({ loading: true });
+        getFavorites()
+            .then(({ data }) => {
+                const { success, favorites, error } = data;
+                if (success) {
+                    setFavoritesAction(favorites);
+                    this.setState({ loading: false });
+                } else {
+                    this.setState({ loading: false });
+                    Toast.show(error);
+                }
+            })
+            .catch((error) => {
+                console.warn(error);
+                this.setState({ loading: false });
+                Toast.show('Cannot get favorite teams.');
+            })
     }
 
     onItemPress = () => { };
 
-    renderItem = ({ item }) => (
-        <FavoriteItemComponent
-            style={styles.item}
-            message={item}
-            onPress={this.onItemPress}
-        />
-    );
+    renderItem = ({ item }) => {
+        return (
+            <FavoriteItemComponent
+                style={styles.item}
+                team={item.team}
+                sport={item.sport}
+                onPress={this.onItemPress}
+            />
+        );
+    }
 
     renderHeader = () => (
         <Layout style={styles.header} level='1'>
@@ -60,7 +83,8 @@ export default class FavoritesScreen extends PureComponent {
     }
 
     render() {
-        const { favorites, loading } = this.state;
+        const { loading } = this.state;
+        const { favorites } = this.props;
 
         return (
             <View style={styles.container}>
@@ -80,6 +104,15 @@ export default class FavoritesScreen extends PureComponent {
         );
     }
 };
+
+const mapStateToProps = (state) => ({
+    favorites: state.favorites,
+});
+
+export default connect(mapStateToProps, {
+    setFavoritesAction: actions.setFavoritesAction,
+    removeFavoritesAction: actions.removeFavoritesAction
+})(FavoritesScreen);
 
 const styles = StyleSheet.create({
     container: {
