@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Layout, List, Text, TopNavigation, Input, Button } from '@ui-kitten/components';
-import { StyleSheet, View, Dimensions } from 'react-native'
+import { StyleSheet, View, Dimensions, BackHandler } from 'react-native'
 import FavoriteItemComponent from './components/FavoriteItemComponent';
 import { CloseIcon, SearchIcon } from '../../../components/icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -21,6 +21,18 @@ class AddFavoritesScreen extends PureComponent {
             items: [],
             loading: false,
         }
+    }
+
+    componentDidMount() {
+        const { navigation } = this.props;
+        this.backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            () => { navigation.navigate('Favorites'); return true; }
+        );
+    }
+
+    componentWillUnmount() {
+        this.backHandler.remove();
     }
 
     onAddFavorite = (sport, team, favorite) => {

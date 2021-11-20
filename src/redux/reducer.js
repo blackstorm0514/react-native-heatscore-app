@@ -16,7 +16,7 @@ export const actions = {
     setUserAction: (user) => ({ type: actionTypes.setUserAction, user }),
     setFavoritesAction: (favorites) => ({ type: actionTypes.setFavoritesAction, favorites }),
     addFavoritesAction: (favorite) => ({ type: actionTypes.addFavoritesAction, favorite }),
-    removeFavoritesAction: (favorite) => ({ type: actionTypes.setFavoritesAction, favorite }),
+    removeFavoritesAction: (favorite) => ({ type: actionTypes.removeFavoritesAction, favorite }),
 }
 
 export const rootReducer = (state = INITIAL_STATE, action) => {
@@ -34,8 +34,8 @@ export const rootReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 favorites: state.favorites.filter(favorite =>
-                    favorite.sport == action.favorite.sport &&
-                    favorite.team.name == action.favorite.team.name)
+                    favorite.sport != action.favorite.sport ||
+                    favorite.team.name != action.favorite.team.name)
             };
 
         default:

@@ -1,12 +1,24 @@
 import React, { PureComponent } from 'react';
 import { Text, Layout, List } from '@ui-kitten/components';
-import { StyleSheet, View, TouchableOpacity, SafeAreaView } from 'react-native';
+import { StyleSheet, BackHandler, TouchableOpacity, SafeAreaView } from 'react-native';
 import { TopNavigationComponent } from './components/TopNavigationComponent';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { GoogleConfigure } from '../../../services/google.service';
 
 export default class SignupHomeScreen extends PureComponent {
+    componentDidMount() {
+        const { navigation } = this.props;
+        this.backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            () => { navigation.navigate('Profile'); return true; }
+        );
+    }
+
+    componentWillUnmount() {
+        this.backHandler.remove();
+    }
+
     renderLoginLink = () => {
         return <Text style={styles.haveAccountText}>Already have an account?  <Text style={styles.loginText}>Login</Text></Text>
     }
@@ -19,6 +31,7 @@ export default class SignupHomeScreen extends PureComponent {
     }
 
     renderItem = ({ item }) => {
+        const { navigation } = this.props;
         if (item == 'phone') {
             return (
                 <Layout style={styles.boxContainer}>

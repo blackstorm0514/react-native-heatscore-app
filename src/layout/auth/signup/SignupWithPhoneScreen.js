@@ -1,6 +1,6 @@
 import React, { PureComponent, useState } from 'react';
 import { Text, Icon, Button, Layout, Spinner } from '@ui-kitten/components';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, BackHandler } from 'react-native';
 import { TopNavigationComponent } from './components/TopNavigationComponent';
 import PhoneInput, { isValidNumber } from "react-native-phone-number-input";
 import { KeyboardAvoidingView } from '../../../components/keyboard-avoiding-view';
@@ -24,6 +24,18 @@ export default class SignupWithPhoneScreen extends PureComponent {
             submitting: false,
             verify_code: ''
         };
+    }
+
+    componentDidMount() {
+        const { navigation } = this.props;
+        this.backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            () => { navigation.navigate('SignupHome'); return true; }
+        );
+    }
+
+    componentWillUnmount() {
+        this.backHandler.remove();
     }
 
     onSendVerificationCode = () => {

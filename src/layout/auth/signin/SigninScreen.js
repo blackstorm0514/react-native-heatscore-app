@@ -1,6 +1,6 @@
 import React, { PureComponent, useState } from 'react';
 import { Text, Layout, Button, Input, Spinner } from '@ui-kitten/components';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, BackHandler } from 'react-native';
 import { TopNavigationComponent } from '../signup/components/TopNavigationComponent';
 import { KeyboardAvoidingView } from '../../../components/keyboard-avoiding-view';
 import { ValidateFields } from '../../../services/validator.service';
@@ -171,6 +171,18 @@ class SignInForm extends PureComponent {
 }
 
 class SigninScreen extends PureComponent {
+    componentDidMount() {
+        const { navigation } = this.props;
+        this.backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            () => { navigation.navigate('Profile'); return true; }
+        );
+    }
+
+    componentWillUnmount() {
+        this.backHandler.remove();
+    }
+
     render() {
         const { navigation } = this.props;
 

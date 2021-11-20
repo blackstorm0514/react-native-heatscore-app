@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import { Layout, List, Text, TopNavigation, TopNavigationAction } from '@ui-kitten/components';
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, BackHandler } from 'react-native'
 import FavoriteItemComponent from './components/FavoriteItemComponent';
 import { ArrowIosBackIcon, PlusOutlineIcon } from '../../../components/icons';
 import { LoadingIndicator } from '../../scores/components/LoadingIndicator';
 import { connect } from 'react-redux';
-import { getFavorites } from '../../../redux/services';
+import { getFavorites, removeFavorite } from '../../../redux/services';
 import { actions } from '../../../redux/reducer';
 import Toast from 'react-native-simple-toast';
 
@@ -19,7 +19,7 @@ class FavoritesScreen extends PureComponent {
     }
 
     componentDidMount() {
-        const { setFavoritesAction } = this.props;
+        const { setFavoritesAction, navigation } = this.props;
         this.setState({ loading: true });
         getFavorites()
             .then(({ data }) => {
@@ -36,10 +36,34 @@ class FavoritesScreen extends PureComponent {
                 console.warn(error);
                 this.setState({ loading: false });
                 Toast.show('Cannot get favorite teams.');
-            })
+            });
+
+        this.backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            () => { navigation.navigate('Profile'); return true; }
+        );
     }
 
-    onItemPress = () => { };
+    componentWillUnmount() {
+        this.backHandler.remove();
+    }
+
+    onRemoveFavorites = (sport, team) => {
+        const { removeFavoritesAction } = this.props;
+        removeFavorite(sport, team)
+            .then(({ data }) => {
+                const { success, error } = data;
+                if (success) {
+                    removeFavoritesAction({ sport, team });
+                    Toast.show('Successfully removed');
+                } else {
+                    Toast.show(error);
+                }
+            })
+            .catch(() => {
+                Toast.show('Cannot remove favorite team. Please try again later.');
+            })
+    };
 
     renderItem = ({ item }) => {
         return (
@@ -47,7 +71,7 @@ class FavoritesScreen extends PureComponent {
                 style={styles.item}
                 team={item.team}
                 sport={item.sport}
-                onPress={this.onItemPress}
+                onPress={this.onRemoveFavorites}
             />
         );
     }

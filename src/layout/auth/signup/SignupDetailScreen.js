@@ -1,6 +1,6 @@
 import React, { PureComponent, useState } from 'react';
 import { Text, Layout, Button, Input, Spinner } from '@ui-kitten/components';
-import { StyleSheet, View, TouchableOpacity, SafeAreaView } from 'react-native';
+import { StyleSheet, View, BackHandler, SafeAreaView } from 'react-native';
 import { TopNavigationComponent } from './components/TopNavigationComponent';
 import { KeyboardAvoidingView } from '../../../components/keyboard-avoiding-view';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -193,6 +193,18 @@ class SignupDetailForm extends PureComponent {
 };
 
 export default class SignupDetailScreen extends PureComponent {
+    componentDidMount() {
+        const { navigation } = this.props;
+        this.backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            () => { navigation.navigate('SignupHome'); return true; }
+        );
+    }
+
+    componentWillUnmount() {
+        this.backHandler.remove();
+    }
+
     render() {
         const { navigation } = this.props;
         return (

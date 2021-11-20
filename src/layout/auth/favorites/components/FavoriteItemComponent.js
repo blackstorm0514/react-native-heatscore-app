@@ -11,7 +11,6 @@ class FavoriteItemComponent extends PureComponent {
 
     render() {
         const { style: itemStyle, onPress, team, sport, favorites } = this.props;
-        console.log(favorites)
         const exist = favorites && favorites.find(favorite => favorite.team.name == team.name && favorite.sport == sport);
 
         return (
@@ -21,7 +20,7 @@ class FavoriteItemComponent extends PureComponent {
                     style={styles.teamLogoImage}
                     source={{ uri: `https://assets.b365api.com/images/team/m/${team.image_id}.png` }}
                 />
-                <Text category='h6' style={styles.teamName}>{team.name}</Text>
+                <Text category='h6' style={styles.teamName} numberOfLines={1}>{team.name}</Text>
                 <TouchableOpacity activeOpacity={0.8} style={styles.toggleFavorite} onPress={() => onPress(sport, team, exist)}>
                     {exist && <FontAwesomeIcon name="star" color='gold' size={20} style={styles.toggleFavoriteIcon} />}
                     {!exist && <FontAwesomeIcon name="star-o" color='#888' size={20} style={styles.toggleFavoriteIcon} />}
@@ -51,7 +50,8 @@ const styles = StyleSheet.create({
         resizeMode: 'center',
     },
     teamName: {
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        maxWidth: '70%'
     },
     toggleFavorite: {
         alignSelf: 'flex-end',

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { ScrollView, StyleSheet, Alert } from 'react-native';
+import { ScrollView, StyleSheet, Alert, BackHandler } from 'react-native';
 import ProfileSettingComponent from './components/ProfileSettingComponent';
 import { TopNavigation, Text } from '@ui-kitten/components';
 import { connect } from 'react-redux';
@@ -8,6 +8,19 @@ import { AppStorage } from '../../../services/app-storage.service';
 import { GoogleLogOut } from '../../../services/google.service';
 
 class ProfileScreen extends PureComponent {
+
+    componentDidMount() {
+        const { navigation } = this.props;
+        this.backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            () => { navigation.navigate('Scores'); return true; }
+        );
+    }
+
+    componentWillUnmount() {
+        this.backHandler.remove();
+    }
+
     renderTitle = () => {
         return <Text style={styles.titleText}>My Account</Text>
     }
