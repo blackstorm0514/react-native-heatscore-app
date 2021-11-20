@@ -26,21 +26,33 @@ class ScoresPerDayScreen extends Component {
     }
 
     getEventsData = () => {
-        const { date, keyDate } = this.props;
+        const { date } = this.props;
         this.setState({ loading: true });
         getEvent(date)
             .then(({ data: result }) => {
                 const { data, favorites } = result;
-                this.setState({ loading: false, data, favorites });
+                this.setState({
+                    loading: false,
+                    data: data,
+                    favorites: favorites && favorites.length ? favorites : null
+                });
             })
             .catch(() => {
                 this.setState({ loading: false, data: null, favorites: null });
             })
     }
 
-    renderFavorite = (favorites) => (
-        favorites ? <RenderFavoriteComponent favorites={favorites} /> : null
-    )
+    renderFavorite = () => {
+        const { navigation } = this.props;
+        const { favorites } = this.state;
+        if (favorites) {
+            return (
+                <RenderFavoriteComponent favorites={favorites}
+                    navigation={navigation} />
+            )
+        }
+        return null;
+    }
 
     renderLeagues = ({ item }) => {
         const { setLeague, navigation } = this.props;
@@ -70,7 +82,7 @@ class ScoresPerDayScreen extends Component {
                     style={styles.list}
                     data={data ? data : []}
                     renderItem={this.renderLeagues}
-                    ListHeaderComponent={() => this.renderFavorite(favorites)}
+                    ListHeaderComponent={this.renderFavorite}
                     ListEmptyComponent={this.renderEmptyList}
                 />}
                 <TouchableOpacity

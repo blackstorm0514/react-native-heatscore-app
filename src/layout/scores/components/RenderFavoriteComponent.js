@@ -3,10 +3,24 @@ import {
     StyleSheet,
     View,
 } from 'react-native';
-import { Button, Text } from '@ui-kitten/components';
+import { Button, Text, List } from '@ui-kitten/components';
 import { PlusOutlineIcon } from '../../../components/icons';
+import RenderEventComponent from './RenderEventComponent';
 
 export default class RenderFavoriteComponent extends Component {
+    renderEvent = ({ item }) => {
+        const { navigation } = this.props;
+        return (
+            <RenderEventComponent event={item}
+                navigation={navigation} />
+        )
+    }
+
+    goToAddFavorite = () => {
+        const { navigation } = this.props;
+        navigation.navigate('Auth', { screen: 'AddFavorite' });
+    }
+
     render() {
         const { favorites } = this.props;
 
@@ -18,9 +32,14 @@ export default class RenderFavoriteComponent extends Component {
                         appearance='ghost'
                         status='danger'
                         size='medium'
+                        onPress={this.goToAddFavorite}
                         accessoryLeft={PlusOutlineIcon} />
                 </View>
-                <Text style={styles.addFavoriteText}>Add Favorites</Text>
+                <List
+                    style={styles.list}
+                    data={favorites}
+                    renderItem={this.renderEvent}
+                />
             </View>
         )
     }
@@ -29,7 +48,7 @@ export default class RenderFavoriteComponent extends Component {
 
 const styles = StyleSheet.create({
     favoriteContainer: {
-        paddingBottom: 15
+        paddingBottom: 0
     },
     favoriteTitle: {
         backgroundColor: '#222',
@@ -51,11 +70,7 @@ const styles = StyleSheet.create({
         height: 20,
         alignSelf: 'flex-end'
     },
-    addFavoriteText: {
-        color: 'white',
-        textTransform: 'uppercase',
-        alignSelf: 'center',
-        marginTop: 15,
-        fontWeight: 'bold'
+    list: {
+        backgroundColor: 'black',
     },
 });

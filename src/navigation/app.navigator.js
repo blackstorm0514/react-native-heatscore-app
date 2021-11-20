@@ -24,7 +24,7 @@ const TabBarVisibilityOptions = ({ route }) => {
     return { tabBarVisible: true };
 };
 
-const screenOption = { headerShown: false };
+const screenOption = { headerShown: false, unmountOnBlur: true };
 
 export const AppNavigator = () => (
     <NavigationContainer theme={navigatorTheme}>

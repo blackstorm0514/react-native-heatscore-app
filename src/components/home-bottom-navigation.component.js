@@ -82,7 +82,8 @@ export const HomeBottomNavigation = ({ navigation, state, descriptors }) => {
     const transforms = useVisibilityAnimation(tabBarVisible);
 
     const onSelect = (index) => {
-        navigation.navigate(state.routeNames[index]);
+        console.log(state.routeNames)
+        navigation.navigate(state.routeNames[index], { initial: true });
     };
 
     return (

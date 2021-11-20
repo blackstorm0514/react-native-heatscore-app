@@ -34,7 +34,7 @@ class ScoresLeagueScreen extends Component {
                 const { favorites, data: leagueData } = data;
                 this.setState({
                     loading: false,
-                    favorites: null,
+                    favorites: favorites && favorites.length ? favorites : null,
                     data: leagueData
                 });
             })
@@ -63,9 +63,17 @@ class ScoresLeagueScreen extends Component {
         this.getEventsData();
     };
 
-    renderFavorite = (favorites) => (
-        favorites ? <RenderFavoriteComponent favorites={favorites} /> : null
-    )
+    renderFavorite = () => {
+        const { navigation } = this.props;
+        const { favorites } = this.state;
+        if (favorites) {
+            return (
+                <RenderFavoriteComponent favorites={favorites}
+                    navigation={navigation} />
+            )
+        }
+        return null;
+    }
 
     renderEmptyList = () => (
         <View style={{ flex: 1, alignItems: 'center', paddingHorizontal: 10 }}>
@@ -74,7 +82,7 @@ class ScoresLeagueScreen extends Component {
     )
 
     render() {
-        const { loading, data, favorites } = this.state;
+        const { loading, data } = this.state;
 
         return (
             <View style={styles.container} >
@@ -83,7 +91,7 @@ class ScoresLeagueScreen extends Component {
                     style={styles.list}
                     data={data ? data : []}
                     renderItem={this.renderLeagues}
-                    ListHeaderComponent={() => this.renderFavorite(favorites)}
+                    ListHeaderComponent={this.renderFavorite}
                     ListEmptyComponent={this.renderEmptyList}
                 />}
                 <TouchableOpacity
