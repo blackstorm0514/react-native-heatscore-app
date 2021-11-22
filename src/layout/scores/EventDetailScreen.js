@@ -18,8 +18,8 @@ class EventDetailScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            informModal: true,
-            index: 1,
+            informModal: false,
+            index: 0,
             routes: [
                 { key: 'chat', title: 'Chat' },
                 { key: 'matchup', title: 'MatchUp' },
@@ -112,9 +112,10 @@ class EventDetailScreen extends Component {
     )
 
     renderScene = ({ route }) => {
+        const { route: { params: { event } } } = this.props;
         if (route.key == 'chat')
-            return <RenderEventChatComponent />
-        return <RenderEventMatchupComponent />
+            return <RenderEventChatComponent event={event} />
+        return <RenderEventMatchupComponent event={event} />
     }
 
     render() {

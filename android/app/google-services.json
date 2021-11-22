@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "893401532366",
+    "project_id": "heatscore-app",
+    "storage_bucket": "heatscore-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:893401532366:android:9a522917fa66cc688c0d9f",
+        "android_client_info": {
+          "package_name": "com.heatscore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "893401532366-1vg223i13gku5088khe3ipa6ikalpsue.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.heatscore",
+            "certificate_hash": "4a01f1e6b17c08a4b141b0102df5b658bd7f3764"
+          }
+        },
+        {
+          "client_id": "893401532366-dss8umug8f3at3cmsjfii8f86n87iig0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLanuqR3ahnSXYEgQM2gkOP32N8GJThCU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "893401532366-dss8umug8f3at3cmsjfii8f86n87iig0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

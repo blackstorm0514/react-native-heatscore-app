@@ -10,7 +10,7 @@ const Stack = createStackNavigator();
 export const ScoresNavigator = () => (
     <Stack.Navigator initialRouteName="AllScores">
         <Stack.Screen name='AllScores' component={ScoresScreen} options={{ headerShown: false }} />
-        <Stack.Screen name='EventDetail' component={EventDetailScreen} options={{ headerShown: false }} />
+        <Stack.Screen name='EventDetail' component={EventDetailScreen} options={{ headerShown: false, unmountOnBlur: false, }} />
         <Stack.Screen name='RoundLeague' component={RoundLeagueScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
 );
