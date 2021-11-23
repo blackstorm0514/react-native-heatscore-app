@@ -1,30 +1,53 @@
-import React, { Component, PureComponent } from 'react';
+import React, { Component, createRef, PureComponent } from 'react';
 import {
     StyleSheet,
     View,
-    Platform,
-    TouchableOpacity
+    TouchableOpacity,
+    ImageBackground
 } from 'react-native';
 import { Button, Text, List, Icon, Input } from '@ui-kitten/components';
 import { LoadingIndicator } from './LoadingIndicator';
 import { format } from 'date-fns';
 import FeatherIcon from 'react-native-vector-icons/dist/Feather';
 import firestore from '@react-native-firebase/firestore';
-import { GiftedChat } from 'react-native-gifted-chat'
 import { connect } from 'react-redux';
 import Toast from 'react-native-simple-toast';
-import { InputToolbar, Actions, Composer, Send, LoadEarlier } from 'react-native-gifted-chat';
+import { GiftedChat, InputToolbar, Actions, Composer, Send, LoadEarlier } from 'react-native-gifted-chat';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { Modalize } from 'react-native-modalize';
+import GifScroller from './GifScroller';
+import { CloseIcon } from '../../../components/icons';
+import { v4 as uuidv4 } from 'uuid';
+
+const GIPHY_API_KEY = "7X7ECHNRQ3AC";
 const MESSAGE_LIMIT = 20;
 
 class RenderChatItem extends PureComponent {
     render() {
         const { chat } = this.props;
-        const { user, createdAt, text } = chat;
+        const { user, createdAt, text, image } = chat;
         const time_str = format(new Date(createdAt.seconds * 1000), "MMM d, hh:mm aaa");
+        if (image) {
+            return (
+                <TouchableOpacity style={styles.chatItemContainer}
+                    activeOpacity={0.9}>
+                    <FeatherIcon
+                        size={30}
+                        color='#ddd'
+                        name='user'
+                    />
+                    <View style={styles.chatContentContainer}>
+                        <Text style={styles.chatTime}>{time_str}</Text>
+                        <Text style={styles.chatContent}>{user.username}</Text>
+                        <ImageBackground source={{ uri: image }} style={styles.chatImage} />
+                    </View>
+                </TouchableOpacity>
+            );
+        }
         return (
             <TouchableOpacity style={styles.chatItemContainer}
-                activeOpacity={0.7}>
+                activeOpacity={0.9}>
                 <FeatherIcon
                     size={30}
                     color='#ddd'
@@ -32,8 +55,7 @@ class RenderChatItem extends PureComponent {
                 />
                 <View style={styles.chatContentContainer}>
                     <Text style={styles.chatTime}>{time_str}</Text>
-                    <Text style={styles.chatContent}>{user.username}: <Text style={{ color: 'white', fontWeight: '100' }}>{text}</Text>
-                    </Text>
+                    <Text style={styles.chatContent}>{user.username}: <Text style={{ color: 'white', fontWeight: '100' }}>{text}</Text></Text>
                 </View>
             </TouchableOpacity>
         )
@@ -52,8 +74,11 @@ class RenderEventChatComponent extends Component {
             oldChats: [],
             room_id: null,
             messagesListener: null,
-            lastVisible: null
+            lastVisible: null,
+            gifSearch: ''
         }
+
+        this.modalizeRef = createRef(null);
     }
 
     componentDidMount() {
@@ -192,6 +217,24 @@ class RenderEventChatComponent extends Component {
         }
     }
 
+    onGIFSelect = (url) => {
+        const { room_id } = this.state;
+        const { user } = this.props;
+        if (url && room_id) {
+            firestore()
+                .collection('ROOMS')
+                .doc(room_id)
+                .collection('MESSAGES')
+                .add({
+                    _id: uuidv4(),
+                    createdAt: new Date(),
+                    image: url,
+                    user: user
+                })
+        }
+        this.onCloseModal();
+    }
+
     componentWillUnmount() {
         const { messagesListener } = this.state;
         if (messagesListener) messagesListener();
@@ -243,8 +286,71 @@ class RenderEventChatComponent extends Component {
         )
     }
 
+    renderActions = (props) => {
+        const { user } = this.props;
+        return (
+            <Actions
+                {...props}
+                containerStyle={{
+                    width: 40,
+                    height: 40,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginLeft: 4,
+                    marginRight: 4,
+                    marginBottom: 0,
+                }}
+                icon={() => (
+                    <MaterialIcons
+                        size={32}
+                        name="emoji-emotions"
+                        color="#ddd"
+                    />
+                )}
+                onPressActionButton={() => {
+                    if (user) {
+                        this.modalizeRef.current?.open();
+                    } else {
+                        Toast.show('Please login to send message.');
+                        return;
+                    }
+                }}
+            />
+        )
+    }
+
+    onCloseModal = () => {
+        this.modalizeRef.current?.close();
+    }
+
+    customClearIcon = () => {
+        const { gifSearch } = this.state;
+        return gifSearch ? <TouchableOpacity activeOpacity={0.8} onPress={() => this.setState({ gifSearch: '' })}>
+            <CloseIcon style={styles.searchIcon} />
+        </TouchableOpacity> : null
+    }
+
+    renderModalHeader = () => {
+        const { gifSearch } = this.state;
+        return (
+            <View style={styles.modalHeader}>
+                <Input
+                    style={styles.searchInput}
+                    placeholder='Search ...'
+                    placeholderTextColor="#888"
+                    value={gifSearch}
+                    onChangeText={(search) => this.setState({ gifSearch: search })}
+                    accessoryRight={this.customClearIcon}
+                />
+                <Button style={styles.searchButton}
+                    onPress={this.onCloseModal}
+                    size='large'>Close</Button>
+            </View>
+        )
+    }
+
     render() {
-        const { recentChats, oldChats, loadingEarlier } = this.state;
+        const { recentChats, oldChats, loadingEarlier, gifSearch } = this.state;
         const { user } = this.props;
 
         return (
@@ -266,7 +372,18 @@ class RenderEventChatComponent extends Component {
                     loadEarlier
                     onLoadEarlier={this.onLoadEarlier}
                     renderLoadEarlier={this.renderLoadEarlier}
+                    renderActions={this.renderActions}
                 />
+                <Modalize
+                    ref={this.modalizeRef}
+                    HeaderComponent={this.renderModalHeader}
+                    scrollViewProps={{ showsVerticalScrollIndicator: true }}
+                    adjustToContentHeight={true}>
+                    <GifScroller
+                        inputText={gifSearch}
+                        handleGifSelect={this.onGIFSelect}
+                    />
+                </Modalize>
             </View>
         )
     }
@@ -311,13 +428,20 @@ const styles = StyleSheet.create({
         color: 'orange',
         fontWeight: 'bold'
     },
+    chatImage: {
+        height: 100,
+        minWidth: 100,
+        maxWidth: '100%',
+        marginTop: 10
+    },
     messageInput: {
         marginHorizontal: 0,
         marginVertical: 0,
         fontSize: 16,
         backgroundColor: '#222',
         borderRadius: 4,
-        paddingLeft: 10
+        paddingLeft: 10,
+        color: 'white'
     },
     sendButton: {
         marginRight: 4,
@@ -326,5 +450,41 @@ const styles = StyleSheet.create({
     iconButton: {
         width: 24,
         height: 24,
+    },
+    overlay: {
+        backgroundColor: 'rgba(0,0,0,0.2)',
+        flex: 1,
+        justifyContent: 'flex-end',
+    },
+    modalContainer: {
+        backgroundColor: 'white',
+        paddingTop: 12,
+        borderTopRightRadius: 12,
+        borderTopLeftRadius: 12,
+    },
+    modalHeader: {
+        paddingHorizontal: 16,
+        paddingVertical: 2,
+        backgroundColor: '#111',
+        flexDirection: 'row'
+    },
+    searchInput: {
+        marginTop: 6,
+        backgroundColor: '#000',
+        borderWidth: 0,
+        borderRadius: 6,
+        flex: 1,
+        tintColor: '#FFF'
+    },
+    searchButton: {
+        backgroundColor: '#111',
+        borderColor: '#111',
+        color: 'white',
+    },
+    searchIcon: {
+        height: 20,
+        width: 20,
+        marginHorizontal: 4,
+        tintColor: '#FFF'
     },
 });
