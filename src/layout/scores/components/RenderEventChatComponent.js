@@ -13,8 +13,9 @@ import firestore from '@react-native-firebase/firestore';
 import { GiftedChat } from 'react-native-gifted-chat'
 import { connect } from 'react-redux';
 import Toast from 'react-native-simple-toast';
-import { InputToolbar, Actions, Composer, Send } from 'react-native-gifted-chat';
+import { InputToolbar, Actions, Composer, Send, LoadEarlier } from 'react-native-gifted-chat';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+const MESSAGE_LIMIT = 20;
 
 class RenderChatItem extends PureComponent {
     render() {
@@ -45,10 +46,13 @@ class RenderEventChatComponent extends Component {
         const event_id = props.event ? props.event.event_id : null;
         this.state = {
             event_id: event_id,
-            loading: false,
-            chats: [],
+            loadingEarlier: false,
+            earlierChatsAvailable: true,
+            recentChats: [],
+            oldChats: [],
             room_id: null,
             messagesListener: null,
+            lastVisible: null
         }
     }
 
@@ -92,26 +96,85 @@ class RenderEventChatComponent extends Component {
             .doc(room_id)
             .collection('MESSAGES')
             .orderBy('createdAt', 'desc')
+            .limit(MESSAGE_LIMIT)
             .onSnapshot(querySnapshot => {
-                const messages = querySnapshot.docs.map(doc => {
-                    const firebaseData = doc.data();
-                    const data = {
-                        createdAt: new Date(firebaseData.createdAt),
-                        ...firebaseData
-                    };
-
-                    return data;
+                const chats = querySnapshot.docs.map(snapshot => {
+                    return snapshot.data();
                 });
-                this.setState({ loading: false, chats: messages });
+                const { recentChats } = this.state;
+                if (recentChats.length > 0) {
+                    const newRecentChats = [];
+                    for (let i = 0; i < chats.length; i++) {
+                        if (chats[i]._id === recentChats[0]._id) {
+                            break;
+                        }
+                        newRecentChats.push(chats[i]);
+                    }
+                    this.setState({ recentChats: [...newRecentChats, ...recentChats] });
+                } else {
+                    this.setState({
+                        recentChats: chats,
+                        earlierChatsAvailable: chats.length >= MESSAGE_LIMIT,
+                        lastVisible: querySnapshot.docs[chats.length - 1]
+                    });
+                }
             });
 
-        this.setState({ loading: true, messagesListener: newMessagesListener });
+        this.setState({ messagesListener: newMessagesListener });
+    }
+
+    onLoadEarlier = () => {
+        const { earlierChatsAvailable, oldChats, recentChats, room_id, lastVisible } = this.state;
+        if (!earlierChatsAvailable || !room_id) {
+            this.setState({ earlierChatsAvailable: false });
+            return;
+        }
+
+        this.setState({ isLoadingEarlier: true });
+        firestore()
+            .collection('ROOMS')
+            .doc(room_id)
+            .collection('MESSAGES')
+            .orderBy('createdAt', 'desc')
+            .startAfter(lastVisible)
+            .limit(MESSAGE_LIMIT)
+            .get()
+            .then(querySnapshot => {
+                const chats = querySnapshot.docs.map(snapshot => {
+                    return snapshot.data()
+                });
+                if (chats.length === 0) {
+                    this.setState({ earlierChatsAvailable: false, isLoadingEarlier: false });
+                } else {
+                    this.setState({
+                        oldChats: [...oldChats, ...chats],
+                        isLoadingEarlier: false,
+                        lastVisible: querySnapshot.docs[chats.length - 1]
+                    });
+                }
+            })
+            .catch(error => {
+                console.warn(error);
+                this.setState({ isLoadingEarlier: false });
+            });
+    }
+
+    renderLoadEarlier = (props) => {
+        const { earlierChatsAvailable } = this.state;
+        if (!earlierChatsAvailable) return null;
+        return (
+            <LoadEarlier {...props}
+                containerStyle={{ backgroundColor: '#000' }}
+                wrapperStyle={{ borderRadius: 0, backgroundColor: '#000' }}
+            />
+        )
     }
 
     handleSend = (messages) => {
         const { room_id } = this.state;
+        const { user } = this.props;
         const message = messages[0];
-        if (message && message.user == null) {
+        if (message && user == null) {
             Toast.show('Please login to send message.');
             return;
         }
@@ -136,10 +199,6 @@ class RenderEventChatComponent extends Component {
 
     renderChatItem = ({ currentMessage }) => {
         return <RenderChatItem chat={currentMessage} />
-    }
-
-    onLoadEarlier = () => {
-
     }
 
     renderInputToolbar = (props) => (
@@ -185,17 +244,16 @@ class RenderEventChatComponent extends Component {
     }
 
     render() {
-        const { loading, chats } = this.state;
+        const { recentChats, oldChats, loadingEarlier } = this.state;
         const { user } = this.props;
 
         return (
             <View style={styles.container}>
-                {/* {loading && <LoadingIndicator style={styles.loadingIndicator} />} */}
                 <GiftedChat
-                    messages={chats}
+                    messages={[...recentChats, ...oldChats]}
                     onSend={message => this.handleSend(message)}
                     alwaysShowSend
-                    user={user}
+                    user={user ? user : { username: 'Anonymous' }}
                     placeholder="Send a message..."
                     scrollToBottom={true}
                     renderDay={this.renderChatDay}
@@ -204,6 +262,10 @@ class RenderEventChatComponent extends Component {
                     renderComposer={this.renderComposer}
                     renderInputToolbar={this.renderInputToolbar}
                     renderLoading={() => <LoadingIndicator style={styles.loadingIndicator} />}
+                    isLoadingEarlier={loadingEarlier}
+                    loadEarlier
+                    onLoadEarlier={this.onLoadEarlier}
+                    renderLoadEarlier={this.renderLoadEarlier}
                 />
             </View>
         )

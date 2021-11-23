@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import AutoHeightWebView from 'react-native-autoheight-webview'
 import { ImageOverlay } from '../../../components/image-overlay.component';
 import OverlayImage from '../../../assets/images/image-splash.png';
+import WebView from 'react-native-webview';
 
 export default class RenderEventMatchupComponent extends Component {
     render() {
@@ -11,7 +12,7 @@ export default class RenderEventMatchupComponent extends Component {
             <ImageOverlay
                 style={styles.container}
                 source={OverlayImage}>
-                {/* <AutoHeightWebView
+                {/* <WebView
                     source={{ uri: 'http://app.heatscore.co:8080/soccer/4090101?lang=en' }}
                 /> */}
             </ImageOverlay>
