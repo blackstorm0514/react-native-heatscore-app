@@ -1,28 +1,24 @@
 import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import AutoHeightWebView from 'react-native-autoheight-webview'
-import { ImageOverlay } from '../../../components/image-overlay.component';
-import OverlayImage from '../../../assets/images/image-splash.png';
-import WebView from 'react-native-webview';
 
 export default class RenderEventMatchupComponent extends Component {
     render() {
 
         return (
-            <ImageOverlay
-                style={styles.container}
-                source={OverlayImage}>
-                {/* <WebView
+            <View style={styles.container}>
+                <AutoHeightWebView
                     source={{ uri: 'http://app.heatscore.co:8080/soccer/4090101?lang=en' }}
-                /> */}
-            </ImageOverlay>
+                />
+            </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: '#111'
     },
 
 });
