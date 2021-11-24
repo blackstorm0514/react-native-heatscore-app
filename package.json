@@ -50,6 +50,7 @@
     "react-native-pager-view": "^5.4.7",
     "react-native-phone-number-input": "^2.1.0",
     "react-native-reanimated": "^2.2.3",
+    "react-native-responsive-fontsize": "^0.5.1",
     "react-native-safari-view": "^2.1.0",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-simple-toast": "^1.1.3",
