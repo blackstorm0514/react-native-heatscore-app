@@ -1,14 +1,7 @@
-import React, { Component, createRef, PureComponent } from 'react';
-import {
-    StyleSheet,
-    View,
-    TouchableOpacity,
-    ImageBackground
-} from 'react-native';
-import { Button, Text, List, Icon, Input } from '@ui-kitten/components';
+import React, { Component, createRef } from 'react';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { Button, Input } from '@ui-kitten/components';
 import { LoadingIndicator } from './LoadingIndicator';
-import { format } from 'date-fns';
-import FeatherIcon from 'react-native-vector-icons/dist/Feather';
 import firestore from '@react-native-firebase/firestore';
 import { connect } from 'react-redux';
 import Toast from 'react-native-simple-toast';
@@ -19,48 +12,9 @@ import { Modalize } from 'react-native-modalize';
 import GifScroller from './GifScroller';
 import { CloseIcon } from '../../../components/icons';
 import { v4 as uuidv4 } from 'uuid';
-
-const GIPHY_API_KEY = "7X7ECHNRQ3AC";
+import ChatInformModal from './chats/ChatInformModal';
+import RenderChatItem from './chats/RenderChatItem';
 const MESSAGE_LIMIT = 20;
-
-class RenderChatItem extends PureComponent {
-    render() {
-        const { chat } = this.props;
-        const { user, createdAt, text, image } = chat;
-        const time_str = format(new Date(createdAt.seconds * 1000), "MMM d, hh:mm aaa");
-        if (image) {
-            return (
-                <TouchableOpacity style={styles.chatItemContainer}
-                    activeOpacity={0.9}>
-                    <FeatherIcon
-                        size={30}
-                        color='#ddd'
-                        name='user'
-                    />
-                    <View style={styles.chatContentContainer}>
-                        <Text style={styles.chatTime}>{time_str}</Text>
-                        <Text style={styles.chatContent}>{user.username}</Text>
-                        <ImageBackground source={{ uri: image }} style={styles.chatImage} />
-                    </View>
-                </TouchableOpacity>
-            );
-        }
-        return (
-            <TouchableOpacity style={styles.chatItemContainer}
-                activeOpacity={0.9}>
-                <FeatherIcon
-                    size={30}
-                    color='#ddd'
-                    name='user'
-                />
-                <View style={styles.chatContentContainer}>
-                    <Text style={styles.chatTime}>{time_str}</Text>
-                    <Text style={styles.chatContent}>{user.username}: <Text style={{ color: 'white', fontWeight: '100' }}>{text}</Text></Text>
-                </View>
-            </TouchableOpacity>
-        )
-    }
-}
 
 class RenderEventChatComponent extends Component {
     constructor(props) {
@@ -75,7 +29,7 @@ class RenderEventChatComponent extends Component {
             room_id: null,
             messagesListener: null,
             lastVisible: null,
-            gifSearch: ''
+            gifSearch: '',
         }
 
         this.modalizeRef = createRef(null);
@@ -355,6 +309,7 @@ class RenderEventChatComponent extends Component {
 
         return (
             <View style={styles.container}>
+                <ChatInformModal />
                 <GiftedChat
                     messages={[...recentChats, ...oldChats]}
                     onSend={message => this.handleSend(message)}
@@ -373,6 +328,7 @@ class RenderEventChatComponent extends Component {
                     onLoadEarlier={this.onLoadEarlier}
                     renderLoadEarlier={this.renderLoadEarlier}
                     renderActions={this.renderActions}
+                    bottomOffset={10}
                 />
                 <Modalize
                     ref={this.modalizeRef}
@@ -404,35 +360,6 @@ const styles = StyleSheet.create({
     },
     list: {
         backgroundColor: '#111',
-    },
-    chatItemContainer: {
-        flexDirection: 'row',
-        paddingHorizontal: 20,
-        borderBottomColor: '#222',
-        borderBottomWidth: 1,
-        paddingVertical: 10
-    },
-    userIcon: {
-        width: 30, height: 30
-    },
-    chatContentContainer: {
-        marginHorizontal: 20
-    },
-    chatTime: {
-        color: '#888',
-        fontSize: 14,
-    },
-    chatContent: {
-        fontSize: 14,
-        marginTop: 6,
-        color: 'orange',
-        fontWeight: 'bold'
-    },
-    chatImage: {
-        height: 100,
-        minWidth: 100,
-        maxWidth: '100%',
-        marginTop: 10
     },
     messageInput: {
         marginHorizontal: 0,

@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
     StyleSheet,
     View,
-    TouchableOpacity
+    TouchableOpacity,
+    FlatList
 } from 'react-native';
 import { Button, Text, List } from '@ui-kitten/components';
 import { PlusOutlineIcon, RefreshIcon } from '../../components/icons';
@@ -87,10 +88,11 @@ class ScoresLeagueScreen extends Component {
         return (
             <View style={styles.container} >
                 {loading && <LoadingIndicator style={styles.loadingIndicator} />}
-                {!loading && <List
+                {!loading && <FlatList
                     style={styles.list}
                     data={data ? data : []}
                     renderItem={this.renderLeagues}
+                    keyExtractor={(item, index) => index.toString()}
                     ListHeaderComponent={this.renderFavorite}
                     ListEmptyComponent={this.renderEmptyList}
                 />}

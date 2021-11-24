@@ -6,8 +6,8 @@ import {
     Dimensions
 } from 'react-native';
 import {
-    Button, TopNavigationAction,
-    TopNavigation, Text, Modal, Card, Layout, Divider
+    TopNavigationAction,
+    TopNavigation, Text
 } from '@ui-kitten/components';
 import { ArrowIosBackIcon } from '../../components/icons';
 import { TabView, TabBar } from 'react-native-tab-view';
@@ -18,8 +18,7 @@ class EventDetailScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            informModal: false,
-            index: 0,
+            index: 1,
             routes: [
                 { key: 'chat', title: 'Chat' },
                 { key: 'matchup', title: 'MatchUp' },
@@ -66,38 +65,6 @@ class EventDetailScreen extends Component {
         </View>
     }
 
-    renderInformModal = () => {
-        const { informModal } = this.state;
-        return <Modal
-            visible={informModal}
-            backdropStyle={styles.backDrop}
-            onBackdropPress={() => { }}>
-            <Card style={styles.informModalCard}>
-                <Text category='h6'>Welcome To HeatScore Chat</Text>
-
-                <View style={styles.modalBodyContainer}>
-                    <Text>Here are a few house rules:</Text>
-                    <Text style={{ marginTop: 10 }}>1. No spamming</Text>
-                    <Text>2. No harassing or bullying</Text>
-                    <Text>3. Have respect for one another</Text>
-                    <Text>4. No trolling</Text>
-                    <Text>5. No illegal or inappropriate material</Text>
-                    <Text style={{ marginTop: 10 }}>Please report any user breaking the rules. </Text>
-                </View>
-
-                <View style={styles.modalFooterContainer}>
-                    <Button style={styles.footerControl}
-                        onPress={() => this.setState({ informModal: false })}
-                        status='danger'
-                        appearance='ghost'
-                        size='giant'>
-                        Accept
-                    </Button>
-                </View>
-            </Card>
-        </Modal>
-    }
-
     renderTabBar = (props) => (
         <View style={styles.tabBarContainer}>
             <TabBar
@@ -126,7 +93,6 @@ class EventDetailScreen extends Component {
                     accessoryLeft={this.goBackAction}
                     title={this.renderTitle}
                 />
-                {this.renderInformModal()}
                 <TabView
                     renderTabBar={this.renderTabBar}
                     navigationState={{ index, routes }}
@@ -159,26 +125,6 @@ const styles = StyleSheet.create({
         width: 20,
         height: 20,
         resizeMode: 'contain',
-    },
-    backDrop: {
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    informModalCard: {
-        marginHorizontal: 20,
-        backgroundColor: '#222',
-        flex: 1
-    },
-    modalBodyContainer: {
-        marginVertical: 15
-    },
-    modalFooterContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-    },
-    footerControl: {
-        marginHorizontal: 4,
-        backgroundColor: '#222',
-        color: 'red'
     },
     tabBarContainer: {
         flexDirection: 'row',

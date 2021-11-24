@@ -39,4 +39,12 @@ export class AppStorage {
     static removeToken = () => {
         return AsyncStorage.removeItem(TOKEN_KEY);
     }
+
+    static getItem = (key) => {
+        return AsyncStorage.getItem(key);
+    }
+
+    static setItem = (key, value) => {
+        return AsyncStorage.setItem(key, value);
+    }
 }

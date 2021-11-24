@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from 'react';
-import { StyleSheet, View, } from 'react-native';
+import { FlatList, StyleSheet, View, } from 'react-native';
 import { Button, Text, List } from '@ui-kitten/components';
 import { PlusOutlineIcon, RefreshIcon } from '../../components/icons';
 import LeaguesListComponent from './components/LeaguesListComponent';
@@ -78,10 +78,11 @@ class ScoresPerDayScreen extends Component {
         return (
             <View style={styles.container}>
                 {loading && <LoadingIndicator style={styles.loadingIndicator} />}
-                {!loading && <List
+                {!loading && <FlatList
                     style={styles.list}
                     data={data ? data : []}
                     renderItem={this.renderLeagues}
+                    keyExtractor={(item, index) => index.toString()}
                     ListHeaderComponent={this.renderFavorite}
                     ListEmptyComponent={this.renderEmptyList}
                 />}

@@ -3,7 +3,8 @@ import {
     StyleSheet,
     View,
     Dimensions,
-    TouchableOpacity
+    TouchableOpacity,
+    FlatList
 } from 'react-native';
 import { Button, Text, List } from '@ui-kitten/components';
 import RenderEventComponent from './RenderEventComponent';
@@ -36,7 +37,7 @@ export default class LeaguesListComponent extends PureComponent {
     renderEvent = ({ item }) => {
         const { navigation } = this.props;
         return (
-            <RenderEventComponent event={item}
+            <RenderEventComponent event={item} key={item.event_id}
                 navigation={navigation} />
         )
     }
@@ -51,10 +52,11 @@ export default class LeaguesListComponent extends PureComponent {
         const { league } = this.props;
 
         return (
-            <List
+            <FlatList
                 style={styles.leagueContainer}
                 data={league.events ? league.events : []}
                 renderItem={this.renderEvent}
+                keyExtractor={(item) => item.event_id.toString()}
                 ListHeaderComponent={this.renderLeagueHeader}
                 ListEmptyComponent={this.renderEmptyList}
             />
@@ -64,7 +66,7 @@ export default class LeaguesListComponent extends PureComponent {
 
 const styles = StyleSheet.create({
     leagueContainer: {
-        paddingBottom: 15,
+        // paddingBottom: 15,
         backgroundColor: 'black'
     },
     leagueTitle: {

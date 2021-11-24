@@ -20,7 +20,13 @@ export default class SignupHomeScreen extends PureComponent {
     }
 
     renderLoginLink = () => {
-        return <Text style={styles.haveAccountText}>Already have an account?  <Text style={styles.loginText}>Login</Text></Text>
+        const { navigation } = this.props;
+        return <Text style={styles.haveAccountText}>
+            Already have an account?
+            <TouchableOpacity onPress={() => navigation.navigate('SignIn')} activeOpacity={0.8}>
+                <Text style={styles.loginText}>Login</Text>
+            </TouchableOpacity>
+        </Text>
     }
 
     renderHeader = () => {
@@ -34,60 +40,41 @@ export default class SignupHomeScreen extends PureComponent {
         const { navigation } = this.props;
         if (item == 'phone') {
             return (
-                <Layout style={styles.boxContainer}>
-                    <Layout style={styles.boxLeftContainer}>
-                        <Text style={styles.withText}>
-                            With    <FontAwesome5Icon
-                                name="phone-alt"
-                                size={18} color='#fff' />
-                        </Text>
-                        <Text style={styles.phoneText}>Phone Number</Text>
-                    </Layout>
-                    <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('SignupPhone')}>
+                <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('SignupPhone')}>
+                    <Layout style={styles.boxContainer}>
+                        <Layout style={styles.boxLeftContainer}>
+                            <Text style={styles.withText}>
+                                With    <FontAwesome5Icon
+                                    name="phone-alt"
+                                    size={18} color='#fff' />
+                            </Text>
+                            <Text style={styles.phoneText}>Phone Number</Text>
+                        </Layout>
                         <FontAwesome5Icon
                             name="chevron-right"
                             size={24} color='white' />
-                    </TouchableOpacity>
-                </Layout>
+                    </Layout>
+                </TouchableOpacity>
             )
         }
         if (item == 'google') {
             return (
-                <Layout style={styles.boxContainer}>
-                    <Layout style={styles.boxLeftContainer}>
-                        <Text style={styles.withText}>
-                            With    <FontAwesome5Icon
-                                name="google"
-                                size={18} color='#fff' />
-                        </Text>
-                        <Text style={styles.phoneText}>Google</Text>
-                    </Layout>
-                    <TouchableOpacity activeOpacity={0.8} onPress={this.configureGoogleSignUp}>
+                <TouchableOpacity activeOpacity={0.8} onPress={this.configureGoogleSignUp}>
+                    <Layout style={styles.boxContainer}>
+                        <Layout style={styles.boxLeftContainer}>
+                            <Text style={styles.withText}>
+                                With    <FontAwesome5Icon
+                                    name="google"
+                                    size={18} color='#fff' />
+                            </Text>
+                            <Text style={styles.phoneText}>Google</Text>
+                        </Layout>
                         <FontAwesome5Icon
                             name="chevron-right"
                             size={24} color='white' />
-                    </TouchableOpacity>
-                </Layout>
+                    </Layout>
+                </TouchableOpacity>
 
-            )
-        }
-        if (item == 'facebook') {
-            return (
-                <Layout style={styles.boxContainer}>
-                    <Layout style={styles.boxLeftContainer}>
-                        <Text style={styles.withText}>
-                            With    <FontAwesome5Icon
-                                name="facebook-square"
-                                size={18} color='#fff' />
-                        </Text>
-                        <Text style={styles.phoneText}>Facebook</Text>
-                    </Layout>
-                    <TouchableOpacity activeOpacity={0.8}>
-                        <FontAwesome5Icon
-                            name="chevron-right"
-                            size={24} color='white' />
-                    </TouchableOpacity>
-                </Layout>
             )
         }
     }
@@ -125,7 +112,7 @@ export default class SignupHomeScreen extends PureComponent {
                     ListHeaderComponent={this.renderHeader}
                     ListFooterComponent={this.renderLoginLink}
                     renderItem={this.renderItem}
-                    data={['phone', 'google', 'facebook']}
+                    data={['phone', 'google']}
                 />
             </SafeAreaView>
         );
@@ -138,7 +125,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#222',
     },
     layoutContainer: {
-        // flex: 1,
         backgroundColor: '#151515',
         paddingHorizontal: 30,
         paddingTop: 20,
