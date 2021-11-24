@@ -92,7 +92,6 @@ class SignupDetailForm extends PureComponent {
                                 placeholderTextColor="#888"
                                 value={username}
                                 onChangeText={(text) => this.changeField('username', text)}
-                                disabled={!editable}
                             />
                             {error && error.username && <Text style={styles.errorText}>{error.username}</Text>}
                         </Layout>
@@ -106,7 +105,6 @@ class SignupDetailForm extends PureComponent {
                                     placeholderTextColor="#888"
                                     value={firstname}
                                     onChangeText={(text) => this.setState({ firstname: text })}
-                                    disabled={!editable}
                                 />
                                 {error && error.firstname && <Text style={styles.errorText}>{error.firstname}</Text>}
                             </Layout>
@@ -119,7 +117,6 @@ class SignupDetailForm extends PureComponent {
                                     placeholderTextColor="#888"
                                     value={lastname}
                                     onChangeText={(text) => this.setState({ lastname: text })}
-                                    disabled={!editable}
                                 />
                                 {error && error.lastname && <Text style={styles.errorText}>{error.lastname}</Text>}
                             </Layout>
