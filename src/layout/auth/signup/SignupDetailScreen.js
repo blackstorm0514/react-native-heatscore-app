@@ -69,7 +69,7 @@ class SignupDetailForm extends PureComponent {
                 }
             })
             .catch((error) => {
-                console.warn(error);
+                // console.warn(error);
                 this.setState({ submitting: false, error: { ...errorOject, server: 'Cannot post data. Please try again later.' } });
             });
     }

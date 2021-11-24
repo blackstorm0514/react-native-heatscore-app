@@ -74,7 +74,7 @@ export default class NewsListScreen extends PureComponent {
                 }
             })
             .catch(error => {
-                console.log("Getting News Error: ", JSON.stringify(error));
+                // console.log("Getting News Error: ", JSON.stringify(error));
                 this.setState({ loading: false })
             });
     }

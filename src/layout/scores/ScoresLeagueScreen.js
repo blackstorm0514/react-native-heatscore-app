@@ -39,7 +39,7 @@ class ScoresLeagueScreen extends Component {
                 });
             })
             .catch(() => {
-                console.log(error);
+                // console.log(error);
                 this.setState({
                     loading: false,
                     favorites: null,

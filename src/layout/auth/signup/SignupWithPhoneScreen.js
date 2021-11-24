@@ -58,7 +58,7 @@ export default class SignupWithPhoneScreen extends PureComponent {
                 }
             })
             .catch((error) => {
-                console.warn(error);
+                // console.warn(error);
                 this.setState({ error: "Cannot send verification code. Please try again later.", submitting: false });
             })
     }
@@ -83,7 +83,7 @@ export default class SignupWithPhoneScreen extends PureComponent {
                 }
             })
             .catch((error) => {
-                console.warn(error);
+                // console.warn(error);
                 this.setState({ error: "Cannot verify code. Please try again later.", submitting: false });
             })
     }
