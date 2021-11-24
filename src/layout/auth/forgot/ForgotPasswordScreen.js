@@ -7,9 +7,8 @@ import { ValidateFields } from '../../../services/validator.service';
 import { AppStorage } from '../../../services/app-storage.service';
 import { actions } from '../../../redux/reducer';
 import { connect } from 'react-redux';
-import { GoogleSignin, statusCodes, GoogleSigninButton } from '@react-native-google-signin/google-signin';
-import { GoogleConfigure } from '../../../services/google.service';
-import { signIn, signInGoogle } from '../../../redux/services';
+import { changePassword } from '../../../redux/services';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const LoadingIndicator = (props) => (
     <View style={[props.style, styles.indicator]}>
@@ -19,16 +18,19 @@ const LoadingIndicator = (props) => (
 
 const errorOject = {
     email: null,
+    password: null,
+    passwordConfirm: null,
     server: null
 }
 
-class SignInForm extends PureComponent {
+class ForgotPasswordForm extends PureComponent {
     constructor(props) {
         super(props);
 
         this.state = {
             email: '',
             password: '',
+            passwordConfirm: '',
             error: errorOject,
             submitting: false,
         }
@@ -39,79 +41,37 @@ class SignInForm extends PureComponent {
     }
 
     onSignInButtonPressed = () => {
-        const { email, password } = this.state;
-        const { navigation, setUserAction } = this.props;
-        const result = ValidateFields({ email });
+        const { email, password, passwordConfirm } = this.state;
+        const { setSuccess } = this.props;
+        const result = ValidateFields({ email, password, passwordConfirm });
         if (result != true) {
             this.setState({ error: { ...errorOject, ...result } });
             return;
         }
         this.setState({ error: errorOject, submitting: true });
-        signIn(email, password)
+        changePassword(email, password)
             .then(({ data }) => {
-                const { success, error, user, accessToken } = data;
+                const { success, error } = data;
                 if (success) {
                     this.setState({ submitting: false });
-                    setUserAction(user);
-                    AppStorage.setToken(accessToken).then(() => navigation.navigate('Profile'));
+                    setSuccess();
                 } else {
                     this.setState({ submitting: false, error: { ...errorOject, ...error } });
                 }
             })
             .catch((error) => {
-                // console.warn(error);
                 this.setState({ submitting: false, error: { ...errorOject, server: 'Cannot post data. Please try again later.' } });
             });
     }
 
-    onGoogleSignIn = async () => {
-        const { setUserAction, navigation } = this.props;
-        this.setState({ submitting: true });
-
-        GoogleSignin.configure(GoogleConfigure);
-        try {
-            await GoogleSignin.hasPlayServices();
-            const userInfo = await GoogleSignin.signIn();
-            const { idToken } = userInfo;
-
-            signInGoogle(idToken)
-                .then(({ data }) => {
-                    const { success, error, user, accessToken } = data;
-                    if (success) {
-                        this.setState({ submitting: false });
-                        setUserAction(user);
-                        AppStorage.setToken(accessToken).then(() => navigation.navigate('Profile'));
-                    } else {
-                        this.setState({ submitting: false, error: { ...errorOject, ...error } });
-                    }
-                })
-                .catch((error) => {
-                    // console.warn(error);
-                    this.setState({ submitting: false, error: { ...errorOject, server: 'Cannot post data. Please try again later.' } });
-                });
-        } catch (error) {
-            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-                // alert("You cancelled the sign in.");
-            } else if (error.code === statusCodes.IN_PROGRESS) {
-                alert("Google sign in operation is in process");
-            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-                alert("Play Services not available");
-            } else {
-                alert("Something unknown went wrong with Google sign in. " + error.message);
-            }
-            this.setState({ submitting: false });
-        }
-    }
-
     render() {
-        const { email, password, error, submitting } = this.state;
-        const { navigation } = this.props;
+        const { email, password, passwordConfirm, error, submitting } = this.state;
 
         return (
             <KeyboardAvoidingView>
                 <Layout level="1" style={styles.layoutContainer}>
                     <View>
-                        <Text style={styles.titleText}>SIGN IN</Text>
+                        <Text style={styles.titleText}>Reset Password</Text>
                         <Layout style={styles.boxLayout}>
                             <Text>Email</Text>
                             <Input
@@ -133,50 +93,49 @@ class SignInForm extends PureComponent {
                                 secureTextEntry
                                 onChangeText={(text) => this.changeField('password', text)}
                             />
+                            {error && error.password && <Text style={styles.errorText}>{error.password}</Text>}
                         </Layout>
                         <Layout style={styles.boxLayout}>
-                            <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('ForgotPassword')}>
-                                <Text style={styles.forgotPasswordText}>Forgot password</Text>
-                            </TouchableOpacity>
+                            <Text>Confirm Password</Text>
+                            <Input
+                                style={styles.formInput}
+                                status='control'
+                                placeholder='Confirm Password'
+                                placeholderTextColor="#888"
+                                value={passwordConfirm}
+                                secureTextEntry
+                                onChangeText={(text) => this.changeField('passwordConfirm', text)}
+                            />
+                            {error && error.passwordConfirm && <Text style={styles.errorText}>{error.passwordConfirm}</Text>}
                         </Layout>
                         {error && error.server && <Text style={styles.errorText}>{error.server}</Text>}
                     </View>
                     <Button
-                        style={styles.signInButton}
+                        style={styles.submitButton}
                         size='large'
                         accessoryLeft={submitting ? LoadingIndicator : null}
                         onPress={this.onSignInButtonPressed}>
-                        {submitting ? null : 'SIGN  IN'}
+                        {submitting ? null : 'S U B M I T'}
                     </Button>
-
-                    <View style={styles.socialAuthContainer}>
-                        <Text style={styles.socialAuthHintText}>OR</Text>
-                        <View style={styles.socialAuthButtonsContainer}>
-                            <TouchableOpacity activeOpacity={0.8}>
-                                <GoogleSigninButton
-                                    // style={{ width: 200, height: 50 }}
-                                    size={GoogleSigninButton.Size.Wide}
-                                    color={GoogleSigninButton.Color.Light}
-                                    onPress={() => this.onGoogleSignIn()}
-                                    disabled={submitting} />
-                            </TouchableOpacity>
-                            {/* <TouchableOpacity activeOpacity={0.8}>
-                                <FontAwesome color='red' name='google-plus-official' size={50} />
-                            </TouchableOpacity> */}
-                        </View>
-                    </View>
                 </Layout>
             </KeyboardAvoidingView>
         );
     }
 }
 
-class SigninScreen extends PureComponent {
+class ForgotPasswordScreen extends PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
+            success: false,
+        }
+    }
+
     componentDidMount() {
         const { navigation } = this.props;
         this.backHandler = BackHandler.addEventListener(
             "hardwareBackPress",
-            () => { navigation.navigate('Profile'); return true; }
+            () => { navigation.navigate('SignIn'); return true; }
         );
     }
 
@@ -186,11 +145,24 @@ class SigninScreen extends PureComponent {
 
     render() {
         const { navigation } = this.props;
+        const { success } = this.state;
 
         return (
             <View style={styles.container}>
-                <TopNavigationComponent navigation={navigation} backPosition="Profile" />
-                <SignInForm {...this.props} navigation={navigation} />
+                <TopNavigationComponent navigation={navigation} backPosition="SignIn" />
+                {!success && <ForgotPasswordForm {...this.props} setSuccess={() => this.setState({ success: true })} />}
+                {success && <Layout level="1" style={styles.layoutContainer}>
+                    <View style={styles.completeContainer}>
+                        <Ionicons size={120} color='#E10032' name='checkmark-circle-outline' />
+                        <Text style={styles.accountCompletedText}>Your request has been submitted. You will receive a confirmation email</Text>
+                    </View>
+                    <Button
+                        style={styles.submitButton}
+                        size='large'
+                        onPress={() => navigation.navigate('SignIn')}>
+                        C O N T I N U E
+                    </Button>
+                </Layout>}
             </View>
         );
     }
@@ -213,12 +185,7 @@ const styles = StyleSheet.create({
         fontSize: 32,
         textTransform: 'uppercase'
     },
-    offerText: {
-        color: '#FFF',
-        fontSize: 16,
-        marginVertical: 16
-    },
-    signInButton: {
+    submitButton: {
         alignSelf: 'baseline',
         width: '100%',
         backgroundColor: '#E10032',
@@ -239,28 +206,6 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderColor: '#999'
     },
-    forgotPasswordText: {
-        color: "#1D2FFF",
-        alignSelf: 'flex-end',
-        marginTop: 10,
-        fontSize: 18
-    },
-    socialAuthContainer: {
-        marginTop: 20,
-        marginBottom: 30
-    },
-    socialAuthButtonsContainer: {
-        // flexDirection: 'row',
-        // justifyContent: 'space-evenly',
-        // paddingHorizontal: 90
-        alignItems: 'center'
-    },
-    socialAuthHintText: {
-        alignSelf: 'center',
-        marginBottom: 16,
-        color: 'white',
-        fontSize: 20
-    },
     errorText: {
         color: '#E10032',
         fontSize: 12,
@@ -270,6 +215,24 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    completeContainer: {
+        paddingTop: 30,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    youareInText: {
+        marginTop: 10,
+        color: '#aaa',
+        fontSize: 40,
+        fontWeight: 'bold',
+        textTransform: 'uppercase'
+    },
+    accountCompletedText: {
+        color: 'white',
+        fontSize: 20,
+        textAlign: 'center',
+        marginTop: 20
+    },
 });
 
-export default connect(null, { setUserAction: actions.setUserAction })(SigninScreen);
+export default ForgotPasswordScreen;

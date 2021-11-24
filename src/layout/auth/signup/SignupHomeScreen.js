@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Text, Layout, List } from '@ui-kitten/components';
-import { StyleSheet, BackHandler, TouchableOpacity, SafeAreaView } from 'react-native';
+import { StyleSheet, BackHandler, TouchableOpacity, SafeAreaView, View } from 'react-native';
 import { TopNavigationComponent } from './components/TopNavigationComponent';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
@@ -21,12 +21,17 @@ export default class SignupHomeScreen extends PureComponent {
 
     renderLoginLink = () => {
         const { navigation } = this.props;
-        return <Text style={styles.haveAccountText}>
-            Already have an account?
-            <TouchableOpacity onPress={() => navigation.navigate('SignIn')} activeOpacity={0.8}>
-                <Text style={styles.loginText}>Login</Text>
-            </TouchableOpacity>
-        </Text>
+        return (
+            <View style={styles.haveAccountContainer}>
+                <Text style={styles.haveAccountText}>
+                    Already have an account?
+                </Text>
+                <TouchableOpacity onPress={() => navigation.navigate('SignIn')} activeOpacity={0.8}>
+                    <Text style={styles.loginText}>Login</Text>
+                </TouchableOpacity>
+            </View>
+
+        )
     }
 
     renderHeader = () => {
@@ -170,14 +175,20 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginTop: 4,
     },
+    haveAccountContainer: {
+        flexDirection: 'row',
+        marginTop: 24,
+    },
     haveAccountText: {
         color: 'white',
         fontSize: 16,
-        marginTop: 24,
-        marginBottom: 36
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     loginText: {
         color: '#E10032',
-        fontWeight: '700'
+        fontWeight: '700',
+        fontSize: 16,
+        marginLeft: 10
     }
 });

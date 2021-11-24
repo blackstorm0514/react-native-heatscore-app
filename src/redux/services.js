@@ -28,6 +28,10 @@ export const signUp = (data) => {
     return ApiService.post('/auth/signup', data);
 }
 
+export const changePassword = (data) => {
+    return ApiService.post('/auth/changepassword', data);
+}
+
 export const phoneVerify = (data) => {
     return ApiService.post('/auth/phone-verify', data);
 }
