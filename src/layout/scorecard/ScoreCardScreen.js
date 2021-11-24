@@ -1,17 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import {
     StyleSheet,
     View,
     Dimensions
 } from 'react-native';
 import { Button, TopNavigationAction, TopNavigation, Text } from '@ui-kitten/components';
-import { ArrowDownwardIcon, ArrowIosBackIcon } from '../../components/icons';
 import { TabView, TabBar } from 'react-native-tab-view';
-import ScoresPerDayScreen from './ScoresPerDayScreen';
-import ScoresLeagueScreen from './ScoresLeagueScreen';
+import ScoreCardPerDayScreen from './ScoreCardPerDayScreen';
 import { format, addDays, subDays } from 'date-fns';
+import { PlusOutlineIcon } from '../../components/icons';
 
-class ScoresScreen extends Component {
+class ScoreCardScreen extends Component {
     constructor(props) {
         super(props);
 
@@ -36,25 +35,14 @@ class ScoresScreen extends Component {
 
         this.state = {
             index: 7,
-            league: null,
             routes: tabs
         }
     }
 
     renderScene = ({ route }) => {
-        const { league } = this.state;
         const { navigation } = this.props;
-        if (league) {
-            return (
-                <ScoresLeagueScreen
-                    date={route.date}
-                    navigation={navigation}
-                    league={league}
-                />
-            )
-        }
         return (
-            <ScoresPerDayScreen
+            <ScoreCardPerDayScreen
                 date={route.date}
                 keyDate={route.key}
                 setLeague={(league) => this.setState({ league: league })}
@@ -73,28 +61,25 @@ class ScoresScreen extends Component {
         />
     )
 
-    goBackAction = () => {
-        const { league } = this.state;
-        if (league) {
-            return (
-                <TopNavigationAction
-                    icon={ArrowIosBackIcon}
-                    onPress={() => this.setState({ league: null })}
-                />
-            )
-        }
-        return null;
-    }
-
     renderTitle = () => {
         const { league } = this.state;
         return <Button style={styles.allScoresButton}
-            accessoryRight={ArrowDownwardIcon}
             size="large">
             <Text numberOfLines={1}>
-                {league ? league.name : 'All Scores'}
+                Score Card
             </Text>
         </Button>
+    }
+
+    addScoreCardAction = () => {
+        return (
+            <Button style={styles.addFavoriteButton}
+                appearance='ghost'
+                status='danger'
+                size='medium'
+                // onPress={this.goToAddFavorite}
+                accessoryLeft={PlusOutlineIcon} />
+        )
     }
 
     render() {
@@ -103,8 +88,8 @@ class ScoresScreen extends Component {
         return (
             <View style={styles.container} >
                 <TopNavigation
-                    accessoryLeft={this.goBackAction}
                     title={this.renderTitle}
+                    accessoryRight={this.addScoreCardAction}
                 />
                 <TabView
                     lazy
@@ -120,7 +105,8 @@ class ScoresScreen extends Component {
     }
 };
 
-export default ScoresScreen;
+
+export default ScoreCardScreen;
 
 const styles = StyleSheet.create({
     container: {
@@ -135,5 +121,10 @@ const styles = StyleSheet.create({
         fontSize: 20,
         maxWidth: '70%',
         alignSelf: 'center',
-    }
+    },
+    addFavoriteButton: {
+        width: 20,
+        height: 20,
+        alignSelf: 'flex-end'
+    },
 });

@@ -5,12 +5,11 @@ import { HomeBottomNavigation } from '../components/home-bottom-navigation.compo
 import { AuthNavigator } from './auth.navigator';
 import { NewsNavigator } from './news.navigator';
 import { ScoresNavigator } from './scores.navigator';
-import MainScreen from '../app/main';
-// import WebViewComponent from '../layout/webview.component';
+import ScoreCardScreen from '../layout/scorecard/ScoreCardScreen';
 
 const BottomTab = createBottomTabNavigator();
 
-const initialTabRoute = 'Scores';
+const initialTabRoute = 'Score Card';
 
 const navigatorTheme = {
     ...DefaultTheme,
@@ -39,7 +38,7 @@ export const AppNavigator = () => (
                 component={NewsNavigator}
                 options={screenOption} />
             <BottomTab.Screen name='Score Card'
-                component={MainScreen}
+                component={ScoreCardScreen}
                 options={screenOption} />
             <BottomTab.Screen name='Auth'
                 component={AuthNavigator}
