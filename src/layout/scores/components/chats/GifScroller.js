@@ -8,7 +8,7 @@ import {
 import { List, Button } from '@ui-kitten/components'
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import axios from 'axios';
-import { LoadingIndicator } from './LoadingIndicator';
+import { LoadingIndicator } from '../LoadingIndicator';
 
 const GIPHY_API_KEY = "7X7ECHNRQ3AC";
 const GIPHY_LIMIT = 10;

@@ -9,7 +9,7 @@ import { GiftedChat, InputToolbar, Actions, Composer, Send, LoadEarlier } from '
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { Modalize } from 'react-native-modalize';
-import GifScroller from './GifScroller';
+import GifScroller from './chats/GifScroller';
 import { CloseIcon } from '../../../components/icons';
 import { v4 as uuidv4 } from 'uuid';
 import ChatInformModal from './chats/ChatInformModal';

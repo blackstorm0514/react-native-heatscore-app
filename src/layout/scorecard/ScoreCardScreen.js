@@ -1,16 +1,19 @@
-import React, { Component, useState } from 'react';
+import React, { PureComponent, createRef } from 'react';
 import {
     StyleSheet,
     View,
-    Dimensions
+    Dimensions,
+    TouchableOpacity
 } from 'react-native';
-import { Button, TopNavigationAction, TopNavigation, Text } from '@ui-kitten/components';
+import { Button, TopNavigation, Text } from '@ui-kitten/components';
 import { TabView, TabBar } from 'react-native-tab-view';
 import ScoreCardPerDayScreen from './ScoreCardPerDayScreen';
 import { format, addDays, subDays } from 'date-fns';
 import { PlusOutlineIcon } from '../../components/icons';
+import { Modalize } from 'react-native-modalize';
+import AddScoreModalContent from './components/AddScoreModalContent';
 
-class ScoreCardScreen extends Component {
+class ScoreCardScreen extends PureComponent {
     constructor(props) {
         super(props);
 
@@ -37,6 +40,8 @@ class ScoreCardScreen extends Component {
             index: 7,
             routes: tabs
         }
+
+        this.addModalRef = createRef();
     }
 
     renderScene = ({ route }) => {
@@ -62,23 +67,36 @@ class ScoreCardScreen extends Component {
     )
 
     renderTitle = () => {
-        const { league } = this.state;
-        return <Button style={styles.allScoresButton}
-            size="large">
-            <Text numberOfLines={1}>
+        return <View style={styles.allScoresButton}>
+            <Text numberOfLines={1} style={{ fontWeight: 'bold', fontSize: 16 }}>
                 Score Card
             </Text>
-        </Button>
+        </View>
     }
 
     addScoreCardAction = () => {
         return (
-            <Button style={styles.addFavoriteButton}
+            <Button style={styles.addScoresButton}
                 appearance='ghost'
                 status='danger'
                 size='medium'
-                // onPress={this.goToAddFavorite}
+                onPress={() => this.addModalRef.current?.open()}
                 accessoryLeft={PlusOutlineIcon} />
+        )
+    }
+
+    renderModalHeader = () => {
+        return (
+            <View style={styles.addModalHeader}>
+                <TouchableOpacity activeOpacity={0.7}
+                    onPress={() => this.addModalRef.current?.close()}>
+                    <Text style={styles.modalHeaderAction}>Cancel</Text>
+                </TouchableOpacity>
+                <Text style={styles.modalHeaderTitle}>Add Game</Text>
+                <TouchableOpacity activeOpacity={0.7}>
+                    <Text style={styles.modalHeaderAction}>Save</Text>
+                </TouchableOpacity>
+            </View>
         )
     }
 
@@ -100,6 +118,13 @@ class ScoreCardScreen extends Component {
                     onIndexChange={(index) => this.setState({ index })}
                     initialLayout={{ width: Dimensions.get('window').width }}
                 />
+                <Modalize
+                    ref={this.addModalRef}
+                    HeaderComponent={this.renderModalHeader}
+                    scrollViewProps={{ showsVerticalScrollIndicator: true }}
+                    adjustToContentHeight={true}>
+                    <AddScoreModalContent />
+                </Modalize>
             </View>
         )
     }
@@ -122,9 +147,26 @@ const styles = StyleSheet.create({
         maxWidth: '70%',
         alignSelf: 'center',
     },
-    addFavoriteButton: {
+    addScoresButton: {
         width: 20,
         height: 20,
         alignSelf: 'flex-end'
+    },
+    addModalHeader: {
+        flexDirection: 'row',
+        backgroundColor: '#222',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        paddingVertical: 10
+    },
+    modalHeaderAction: {
+        color: '#E10032',
+        fontSize: 14
+    },
+    modalHeaderTitle: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 16
     },
 });
