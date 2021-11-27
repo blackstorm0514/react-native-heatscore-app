@@ -101,6 +101,205 @@
                     }
                 }
             }
+        },
+        "Select": {
+            "appearances": {
+                "mapping": {
+                    "popoverBorderWidth": 0,
+                    "popoverBorderColor": "#000"
+                },
+                "default": {
+                    "variantGroups": {
+                        "status": {
+                            "basic": {
+                                "borderColor": "#000",
+                                "backgroundColor": "#000",
+                                "textColor": "#FFF",
+                                "labelColor": "#FFF",
+                                "captionColor": "#FFF",
+                                "placeholderColor": "#FFF",
+                                "iconTintColor": "#FFF",
+                                "state": {
+                                    "focused": {
+                                        "borderColor": "#000",
+                                        "backgroundColor": "#000"
+                                    },
+                                    "hover": {
+                                        "borderColor": "#000",
+                                        "backgroundColor": "#000"
+                                    },
+                                    "active": {
+                                        "borderColor": "#000",
+                                        "backgroundColor": "#000"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "SelectOption": {
+            "appearances": {
+                "default": {
+                    "mapping": {
+                        "paddingHorizontal": 8,
+                        "paddingVertical": 12,
+                        "backgroundColor": "#000",
+                        "textMarginHorizontal": 8,
+                        "textFontSize": "text-subtitle-1-font-size",
+                        "textFontWeight": "text-subtitle-1-font-weight",
+                        "textFontFamily": "text-subtitle-1-font-family",
+                        "textColor": "#FFF",
+                        "iconWidth": 20,
+                        "iconHeight": 20,
+                        "iconMarginHorizontal": 8,
+                        "iconTintColor": "#FFF",
+                        "state": {
+                            "hover": {
+                                "iconTintColor": "#FFF",
+                                "backgroundColor": "#111"
+                            },
+                            "active": {
+                                "backgroundColor": "#111"
+                            },
+                            "selected": {
+                                "backgroundColor": "#111",
+                                "textColor": "#FFF",
+                                "iconTintColor": "#FFF"
+                            },
+                            "selected.hover": {
+                                "background-color": "#111",
+                                "textColor": "#FFF"
+                            }
+                        }
+                    }
+                },
+                "grouped": {
+                    "mapping": {
+                        "paddingLeft": 16
+                    }
+                }
+            }
+        },
+        "Datepicker": {
+            "appearances": {
+                "default": {
+                    "variantGroups": {
+                        "status": {
+                            "basic": {
+                                "borderColor": "#000",
+                                "backgroundColor": "#000",
+                                "textColor": "#FFFFFF",
+                                "labelColor": "#FFFFFF",
+                                "captionColor": "#FFFFFF",
+                                "placeholderColor": "#FFFFFF",
+                                "iconTintColor": "#FFFFFF",
+                                "state": {
+                                    "active": {
+                                        "borderColor": "color-primary-default",
+                                        "backgroundColor": "background-basic-color-1",
+                                        "textColor": "text-basic-color"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "Calendar": {
+            "appearances": {
+                "default": {
+                    "mapping": {
+                        "borderColor": "#000",
+                        "titleColor": "#FFFFFF",
+                        "iconTintColor": "#FFF",
+                        "weekdayTextColor": "#FFF"
+                    }
+                }
+            }
+        },
+        "CalendarCell": {
+            "appearances": {
+                "default": {
+                    "mapping": {
+                        "backgroundColor": "transparent",
+                        "contentBorderColor": "transparent",
+                        "contentTextColor": "#FFF",
+                        "state": {
+                            "bounding": {
+                                "contentTextColor": "#777"
+                            },
+                            "selected": {
+                                "contentBorderColor": "#444",
+                                "contentBackgroundColor": "#111",
+                                "contentTextColor": "#FFF"
+                            },
+                            "today": {
+                                "contentBorderColor": "#E1003266",
+                                "contentBackgroundColor": "#111"
+                            },
+                            "range": {
+                                "backgroundColor": "#222",
+                                "contentTextColor": "#FFF"
+                            },
+                            "today.range": {
+                                "contentBorderColor": "#E1003266",
+                                "contentBackgroundColor": "#222"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "Popover": {
+            "appearances": {
+                "default": {
+                    "mapping": {
+                        "borderColor": "#111",
+                        "backgroundColor": "#000",
+                        "indicatorBackgroundColor": "#000"
+                    }
+                }
+            }
+        },
+        "Divider": {
+            "appearances": {
+                "default": {
+                    "mapping": {
+                        "backgroundColor": "#888"
+                    }
+                }
+            }
+        },
+        "Input": {
+            "appearances": {
+                "default": {
+                    "variantGroups": {
+                        "status": {
+                            "basic": {
+                                "borderColor": "#000",
+                                "backgroundColor": "#000",
+                                "textColor": "#FFF",
+                                "labelColor": "#FFF",
+                                "placeholderColor": "#888",
+                                "iconTintColor": "#FFF",
+                                "state": {
+                                    "focused": {
+                                        "borderColor": "#111",
+                                        "backgroundColor": "#000"
+                                    },
+                                    "hover": {
+                                        "borderColor": "#111",
+                                        "backgroundColor": "#000"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

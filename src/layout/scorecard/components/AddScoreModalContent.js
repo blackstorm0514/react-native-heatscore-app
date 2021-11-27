@@ -2,13 +2,16 @@ import React, { PureComponent } from "react";
 import {
     StyleSheet,
     View,
-    Dimensions,
     TouchableOpacity,
-    Animated
 } from 'react-native';
 import { Button, Text, ViewPager } from '@ui-kitten/components';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import SwitchToggle from "react-native-switch-toggle";
+import SelectTeamComponent from './SelectTeamComponent';
+import SelectTypeComponent from './SelectTypeComponent';
+import SelectTimeLineComponent from './SelectTimeLineComponent';
+import SelectPointComponent from './SelectPointComponent';
+import SelectEventComponent from './SelectEventComponent';
 
 class ItemComponent extends PureComponent {
     render() {
@@ -48,8 +51,43 @@ export default class AddScoreModalContent extends PureComponent {
             alert_gameStart: true,
             alert_gameEnd: true,
             alert_gameScoring: false,
-            selectedIndex: 0
+            selectedIndex: 0,
+            selectedTab: null,
         };
+    }
+
+    renderTabsForEvent = () => {
+        const { selectedTab } = this.state;
+        switch (selectedTab) {
+            case 'event':
+                return (
+                    <SelectEventComponent
+                        onBack={() => this.setState({ selectedTab: null, selectedIndex: 0 })}
+                        onSelect={(event) => this.setState({ selectedTab: null, selectedIndex: 0, event: event })} />
+                );
+            case 'team':
+                return (
+                    <SelectTeamComponent
+                        onBack={() => this.setState({ selectedTab: null, selectedIndex: 0 })} />
+                );
+            case 'type':
+                return (
+                    <SelectTypeComponent
+                        onBack={() => this.setState({ selectedTab: null, selectedIndex: 0 })} />
+                );
+            case 'timeline':
+                return (
+                    <SelectTimeLineComponent
+                        onBack={() => this.setState({ selectedTab: null, selectedIndex: 0 })} />
+                );
+            case 'points':
+                return (
+                    <SelectPointComponent
+                        onBack={() => this.setState({ selectedTab: null, selectedIndex: 0 })} />
+                );
+            default:
+                return null;
+        }
     }
 
     render() {
@@ -59,28 +97,31 @@ export default class AddScoreModalContent extends PureComponent {
             selectedIndex,
         } = this.state;
         return (
-            <ViewPager selectedIndex={selectedIndex} swipeEnabled={false} style={{ backgroundColor: '#111', flex: 1 }}>
+            <ViewPager selectedIndex={selectedIndex}
+                swipeEnabled={false}
+                style={{ backgroundColor: '#111', flex: 1 }}
+            >
                 <View style={styles.container} key="1">
                     <ItemComponent
                         title="Game"
                         isText="Select"
-                        onPress={() => this.setState({ selectedIndex: 1 })} />
+                        onPress={() => this.setState({ selectedIndex: 1, selectedTab: 'event' })} />
                     <ItemComponent
                         title="Team"
                         isText="Vancouver"
-                        onPress={null} />
+                        onPress={() => this.setState({ selectedIndex: 1, selectedTab: 'team' })} />
                     <ItemComponent
                         title="Type"
                         isText="Spread"
-                        onPress={null} />
+                        onPress={() => this.setState({ selectedIndex: 1, selectedTab: 'type' })} />
                     <ItemComponent
                         title="Time Line"
                         isText="Half Time"
-                        onPress={null} />
+                        onPress={() => this.setState({ selectedIndex: 1, selectedTab: 'timeline' })} />
                     <ItemComponent
                         title="Spread"
                         isText="+1.5"
-                        onPress={null} />
+                        onPress={() => this.setState({ selectedIndex: 1, selectedTab: 'points' })} />
 
                     <Text style={styles.partText}>Manage Alerts</Text>
                     <ItemComponent
@@ -107,8 +148,8 @@ export default class AddScoreModalContent extends PureComponent {
                         onPress={() => this.setState({ alert_gameScoring: !alert_gameScoring })} />
                 </View>
 
-                <View style={styles.container} key="2">
-                    
+                <View style={styles.selectContainer} key="2">
+                    {this.renderTabsForEvent()}
                 </View>
             </ViewPager>
         )
@@ -121,6 +162,10 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingBottom: 20,
         paddingHorizontal: 10
+    },
+    selectContainer: {
+        backgroundColor: '#111',
+        flex: 1,
     },
     itemContainer: {
         flexDirection: 'row',

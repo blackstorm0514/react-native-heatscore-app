@@ -153,3 +153,7 @@ export const RefreshIcon = (style) => (
 export const ArrowForwardIcon = (style) => (
     <Icon {...style} name="arrow-ios-forward-outline" />
 )
+
+export const CalendarIcon = (props) => (
+    <Icon {...props} name='calendar' />
+);

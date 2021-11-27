@@ -12,6 +12,8 @@ import { format, addDays, subDays } from 'date-fns';
 import { PlusOutlineIcon } from '../../components/icons';
 import { Modalize } from 'react-native-modalize';
 import AddScoreModalContent from './components/AddScoreModalContent';
+import { connect } from 'react-redux';
+import Toast from 'react-native-simple-toast';
 
 class ScoreCardScreen extends PureComponent {
     constructor(props) {
@@ -74,13 +76,22 @@ class ScoreCardScreen extends PureComponent {
         </View>
     }
 
+    onAddModalOpen = () => {
+        const { user } = this.props;
+        if (!user) {
+            Toast.show('Please login to add a Score Card.');
+            return;
+        }
+        this.addModalRef.current?.open();
+    }
+
     addScoreCardAction = () => {
         return (
             <Button style={styles.addScoresButton}
                 appearance='ghost'
                 status='danger'
                 size='medium'
-                onPress={() => this.addModalRef.current?.open()}
+                onPress={this.onAddModalOpen}
                 accessoryLeft={PlusOutlineIcon} />
         )
     }
@@ -130,8 +141,11 @@ class ScoreCardScreen extends PureComponent {
     }
 };
 
+const mapStateToProps = (state) => ({
+    user: state.user,
+});
 
-export default ScoreCardScreen;
+export default connect(mapStateToProps, null)(ScoreCardScreen);
 
 const styles = StyleSheet.create({
     container: {
