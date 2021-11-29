@@ -12,18 +12,25 @@ export default class SelectPointComponent extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            points: 0,
+            points: props.points ? props.points : 0,
         }
     }
 
+    onBack = () => {
+        const { onBack, onSelect } = this.props;
+        const { points } = this.state;
+        onSelect(points);
+        onBack();
+    }
+
     render() {
-        const { onBack } = this.props;
+        const { points } = this.state;
 
         return (
             <View style={styles.container}>
                 <View style={styles.titleContainer}>
                     <TouchableOpacity activeOpacity={0.8}
-                        onPress={onBack}>
+                        onPress={this.onBack}>
                         <FontAwesomeIcon
                             color='#fff'
                             size={24} name='angle-left' />
@@ -35,7 +42,7 @@ export default class SelectPointComponent extends PureComponent {
                     <InputSpinner
                         style={styles.spinner}
                         min={null}
-                        value={0}
+                        value={points}
                         step={0.5}
                         precision={1}
                         type='real'

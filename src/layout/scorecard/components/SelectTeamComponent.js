@@ -12,23 +12,26 @@ export default class SelectTeamComponent extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            selected: null,
+            team: props.team ? props.team : null
         }
     }
 
-    onSelectTeam = (team) => {
-        this.setState({ selected: team });
+    onBack = () => {
+        const { onBack, onSelect } = this.props;
+        const { team } = this.state;
+        onSelect(team);
+        onBack();
     }
 
     render() {
-        const { selected } = this.state;
-        const { onBack } = this.props;
+        const { event, type } = this.props;
+        const { team } = this.state;
 
         return (
             <View style={styles.container}>
                 <View style={styles.titleContainer}>
                     <TouchableOpacity activeOpacity={0.8}
-                        onPress={onBack}>
+                        onPress={this.onBack}>
                         <FontAwesomeIcon
                             color='#fff'
                             size={24} name='angle-left' />
@@ -36,28 +39,46 @@ export default class SelectTeamComponent extends PureComponent {
                     <Text style={styles.titleText}>Select a team</Text>
                     <Text></Text>
                 </View>
-                <TouchableOpacity style={styles.radioContainer}
-                    activeOpacity={0.7}
-                    onPress={() => this.onSelectTeam('home')}>
-                    <FontAwesomeIcon color='white' size={20}
-                        name={selected == 'home' ? 'check-circle' : 'circle-thin'} />
-                    <Image
-                        style={styles.teamLogoImage}
-                        source={{ uri: `https://assets.b365api.com/images/team/m/35.png` }}
-                    />
-                    <Text style={styles.selectItemTeamName} numberOfLines={1}>Home Team</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.radioContainer}
-                    activeOpacity={0.7}
-                    onPress={() => this.onSelectTeam('away')}>
-                    <FontAwesomeIcon color='white' size={20}
-                        name={selected == 'away' ? 'check-circle' : 'circle-thin'} />
-                    <Image
-                        style={styles.teamLogoImage}
-                        source={{ uri: `https://assets.b365api.com/images/team/m/36.png` }}
-                    />
-                    <Text style={styles.selectItemTeamName} numberOfLines={1}>Away Team</Text>
-                </TouchableOpacity>
+                {type != 'total' && <>
+                    <TouchableOpacity style={styles.radioContainer}
+                        activeOpacity={0.7}
+                        onPress={() => this.setState({ team: 'home' })}>
+                        <FontAwesomeIcon color='white' size={20}
+                            name={team == 'home' ? 'check-circle' : 'circle-thin'} />
+                        <Image
+                            style={styles.teamLogoImage}
+                            source={{ uri: `https://assets.b365api.com/images/team/m/${event.home.image_id}.png` }}
+                        />
+                        <Text style={styles.selectItemTeamName} numberOfLines={1}>{event.home.name}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.radioContainer}
+                        activeOpacity={0.7}
+                        onPress={() => this.setState({ team: 'away' })}>
+                        <FontAwesomeIcon color='white' size={20}
+                            name={team == 'away' ? 'check-circle' : 'circle-thin'} />
+                        <Image
+                            style={styles.teamLogoImage}
+                            source={{ uri: `https://assets.b365api.com/images/team/m/${event.away.image_id}.png` }}
+                        />
+                        <Text style={styles.selectItemTeamName} numberOfLines={1}>{event.away.name}</Text>
+                    </TouchableOpacity>
+                </>}
+                {type == 'total' && <>
+                    <TouchableOpacity style={styles.radioContainer}
+                        activeOpacity={0.7}
+                        onPress={() => this.setState({ team: 'home' })}>
+                        <FontAwesomeIcon color='white' size={20}
+                            name={team == 'home' ? 'check-circle' : 'circle-thin'} />
+                        <Text style={[styles.selectItemTeamName, styles.selectItemOverUnder]} numberOfLines={1}>Over</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.radioContainer}
+                        activeOpacity={0.7}
+                        onPress={() => this.setState({ team: 'away' })}>
+                        <FontAwesomeIcon color='white' size={20}
+                            name={team == 'away' ? 'check-circle' : 'circle-thin'} />
+                        <Text style={[styles.selectItemTeamName, styles.selectItemOverUnder]} numberOfLines={1}>Under</Text>
+                    </TouchableOpacity>
+                </>}
             </View>
         )
     }
@@ -96,4 +117,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
     },
+    selectItemOverUnder: {
+        marginLeft: 16
+    }
 })

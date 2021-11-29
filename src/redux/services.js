@@ -61,6 +61,9 @@ export const getLeaguesForSport = (sport, query) => {
 }
 
 export const getEventsForLeague = (league, query, startDate, endDate) => {
-    console.log(league, query, startDate, endDate)
     return ApiService.get('/scorecards/league/events', { params: { league, query, startDate, endDate } });
+}
+
+export const addScoreCard = (data) => {
+    return ApiService.post('/scorecards', data);
 }

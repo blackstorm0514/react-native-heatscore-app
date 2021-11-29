@@ -14,6 +14,7 @@ import { Modalize } from 'react-native-modalize';
 import AddScoreModalContent from './components/AddScoreModalContent';
 import { connect } from 'react-redux';
 import Toast from 'react-native-simple-toast';
+import { addScoreCard } from '../../redux/services';
 
 class ScoreCardScreen extends PureComponent {
     constructor(props) {
@@ -40,7 +41,17 @@ class ScoreCardScreen extends PureComponent {
 
         this.state = {
             index: 7,
-            routes: tabs
+            routes: tabs,
+
+            event: null,
+            team: null,
+            type: null,
+            timeline: null,
+            points: null,
+            allowAlerts: true,
+            alert_gameStart: true,
+            alert_gameEnd: true,
+            alert_gameScoring: false,
         }
 
         this.addModalRef = createRef();
@@ -85,7 +96,7 @@ class ScoreCardScreen extends PureComponent {
         this.addModalRef.current?.open();
     }
 
-    addScoreCardAction = () => {
+    addScoreCardActionButton = () => {
         return (
             <Button style={styles.addScoresButton}
                 appearance='ghost'
@@ -104,21 +115,62 @@ class ScoreCardScreen extends PureComponent {
                     <Text style={styles.modalHeaderAction}>Cancel</Text>
                 </TouchableOpacity>
                 <Text style={styles.modalHeaderTitle}>Add Game</Text>
-                <TouchableOpacity activeOpacity={0.7}>
+                <TouchableOpacity activeOpacity={0.7} onPress={this.onAddScoreCard}>
                     <Text style={styles.modalHeaderAction}>Save</Text>
                 </TouchableOpacity>
             </View>
         )
     }
 
+    onAddScoreCard = () => {
+        const {
+            event, team, type, timeline, points,
+            allowAlerts, alert_gameStart, alert_gameEnd, alert_gameScoring
+        } = this.state;
+
+        if (!event) {
+            return Toast.show('Please select an event.');
+        }
+        if (!team) {
+            return Toast.show('Please select a team.');
+        }
+        if (!type) {
+            return Toast.show('Please select a bet type.');
+        }
+        if (!timeline) {
+            return Toast.show('Please select a timeline.');
+        }
+        if (!points && ['spread', 'total'].includes(type)) {
+            return Toast.show('Please select points for spread or total.');
+        }
+
+        addScoreCard({
+            event, team, type, timeline, points,
+            allowAlerts, alert_gameStart, alert_gameEnd, alert_gameScoring
+        })
+            .then(({ data }) => {
+                const { success, error } = data;
+                if (success) {
+                    this.addModalRef.current?.close();
+                } else {
+                    Toast.show(error);
+                }
+            })
+            .catch(error => {
+                Toast.show('Cannot add a score card. Please try again later.');
+            })
+    }
+
     render() {
-        const { index, routes } = this.state;
+        const { index, routes, event, team, type, timeline, points,
+            allowAlerts, alert_gameStart, alert_gameEnd, alert_gameScoring,
+        } = this.state;
 
         return (
             <View style={styles.container} >
                 <TopNavigation
                     title={this.renderTitle}
-                    accessoryRight={this.addScoreCardAction}
+                    accessoryRight={this.addScoreCardActionButton}
                 />
                 <TabView
                     lazy
@@ -134,7 +186,18 @@ class ScoreCardScreen extends PureComponent {
                     HeaderComponent={this.renderModalHeader}
                     scrollViewProps={{ showsVerticalScrollIndicator: true }}
                     adjustToContentHeight={true}>
-                    <AddScoreModalContent />
+                    <AddScoreModalContent
+                        event={event}
+                        team={team}
+                        type={type}
+                        timeline={timeline}
+                        points={points}
+                        allowAlerts={allowAlerts}
+                        alert_gameStart={alert_gameStart}
+                        alert_gameEnd={alert_gameEnd}
+                        alert_gameScoring={alert_gameScoring}
+                        updateEvent={(obj) => this.setState(obj)}
+                    />
                 </Modalize>
             </View>
         )

@@ -12,6 +12,8 @@ import SelectTypeComponent from './SelectTypeComponent';
 import SelectTimeLineComponent from './SelectTimeLineComponent';
 import SelectPointComponent from './SelectPointComponent';
 import SelectEventComponent from './SelectEventComponent';
+import Toast from 'react-native-simple-toast';
+import { capitalizeString, getTimeLineName, truncateString } from "../../../components/functions";
 
 class ItemComponent extends PureComponent {
     render() {
@@ -20,7 +22,7 @@ class ItemComponent extends PureComponent {
             <TouchableOpacity style={styles.itemContainer} activeOpacity={0.8} onPress={isToggle ? null : onPress}>
                 <Text style={styles.itemTitleText}>{title}</Text>
                 {isText && <View style={styles.itemContent}>
-                    <Text style={styles.itemContentText}>{isText}</Text>
+                    <Text style={styles.itemContentText}>{value}</Text>
                     <FontAwesomeIcon style={styles.itemContentIcon} color='#999' size={18} name='angle-right' />
                 </View>}
                 {isToggle && <SwitchToggle
@@ -42,60 +44,133 @@ export default class AddScoreModalContent extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            event: null,
-            team: null,
-            type: null,
-            timeline: null,
-            points: null,
-            allowAlerts: true,
-            alert_gameStart: true,
-            alert_gameEnd: true,
-            alert_gameScoring: false,
             selectedIndex: 0,
             selectedTab: null,
         };
     }
 
+    selectEventPressed = () => {
+        this.setState({ selectedIndex: 1, selectedTab: 'event' });
+    }
+
+    selectItemPressed = (tab) => {
+        const { event } = this.props;
+        if (!event) {
+            Toast.show('You should select an event to choose team.');
+            return;
+        }
+        this.setState({ selectedIndex: 1, selectedTab: tab });
+    }
+
+    selectTeamPressed = () => {
+        const { event, type } = this.props;
+        if (!event) {
+            return Toast.show('You should select an event to choose team.');
+        }
+        if (!type) {
+            return Toast.show('You should select a bet type to choose team.');
+        }
+        this.setState({ selectedIndex: 1, selectedTab: 'team' });
+    }
+
+    selectPointsPressed = () => {
+        const { event, type } = this.props;
+        if (!event) {
+            Toast.show('You should select an event to choose points.');
+            return;
+        }
+        if (!['total', 'spread'].includes(type)) {
+            Toast.show('Points are available in only Total and Spread type.');
+            return;
+        }
+        this.setState({ selectedIndex: 1, selectedTab: 'points' });
+    }
+
+    onSelectEvent = (event) => {
+        const { updateEvent } = this.props;
+        this.setState({
+            selectedTab: null,
+            selectedIndex: 0,
+        });
+        updateEvent({
+            event: event,
+            team: null,
+            type: null,
+            timeline: null,
+            points: null,
+        });
+    }
+
+    onSelectItem = (field, value) => {
+        const { updateEvent } = this.props;
+        if (field == 'type') {
+            updateEvent({ [field]: value, team: null, points: null });
+        } else {
+            updateEvent({ [field]: value });
+        }
+    }
+
     renderTabsForEvent = () => {
         const { selectedTab } = this.state;
+        const { event, team, type, timeline, points } = this.props;
         switch (selectedTab) {
             case 'event':
                 return (
                     <SelectEventComponent
                         onBack={() => this.setState({ selectedTab: null, selectedIndex: 0 })}
-                        onSelect={(event) => this.setState({ selectedTab: null, selectedIndex: 0, event: event })} />
-                );
-            case 'team':
-                return (
-                    <SelectTeamComponent
-                        onBack={() => this.setState({ selectedTab: null, selectedIndex: 0 })} />
+                        onSelect={this.onSelectEvent} />
                 );
             case 'type':
                 return (
                     <SelectTypeComponent
-                        onBack={() => this.setState({ selectedTab: null, selectedIndex: 0 })} />
+                        type={type}
+                        onBack={() => this.setState({ selectedTab: null, selectedIndex: 0 })}
+                        onSelect={(type) => this.onSelectItem('type', type)} />
+                );
+            case 'team':
+                return (
+                    <SelectTeamComponent
+                        event={event}
+                        team={team}
+                        type={type}
+                        onBack={() => this.setState({ selectedTab: null, selectedIndex: 0 })}
+                        onSelect={(team) => this.onSelectItem('team', team)} />
                 );
             case 'timeline':
                 return (
                     <SelectTimeLineComponent
-                        onBack={() => this.setState({ selectedTab: null, selectedIndex: 0 })} />
+                        event={event}
+                        timeline={timeline}
+                        onBack={() => this.setState({ selectedTab: null, selectedIndex: 0 })}
+                        onSelect={(timeline) => this.onSelectItem('timeline', timeline)} />
                 );
             case 'points':
                 return (
                     <SelectPointComponent
-                        onBack={() => this.setState({ selectedTab: null, selectedIndex: 0 })} />
+                        points={points}
+                        onBack={() => this.setState({ selectedTab: null, selectedIndex: 0 })}
+                        onSelect={(points) => this.onSelectItem('points', points)} />
                 );
             default:
                 return null;
         }
     }
 
+    getSelectedTeam = () => {
+        const { event, team, type } = this.props;
+        if (!event || !team || !type) return 'Select';
+        if (type == 'total') {
+            return team == 'home' ? 'Over' : 'Under';
+        }
+        return event[team].name;
+    }
+
     render() {
-        const {
-            event, team, type, timeline, points,
-            allowAlerts, alert_gameStart, alert_gameEnd, alert_gameScoring,
-            selectedIndex,
-        } = this.state;
+        const { selectedIndex } = this.state;
+        const { event, team, type, timeline, points,
+            allowAlerts, alert_gameStart, alert_gameEnd, alert_gameScoring
+        } = this.props;
+
         return (
             <ViewPager selectedIndex={selectedIndex}
                 swipeEnabled={false}
@@ -104,48 +179,53 @@ export default class AddScoreModalContent extends PureComponent {
                 <View style={styles.container} key="1">
                     <ItemComponent
                         title="Game"
-                        isText="Select"
-                        onPress={() => this.setState({ selectedIndex: 1, selectedTab: 'event' })} />
-                    <ItemComponent
-                        title="Team"
-                        isText="Vancouver"
-                        onPress={() => this.setState({ selectedIndex: 1, selectedTab: 'team' })} />
+                        isText={true}
+                        value={event ? `${truncateString(event.home.name)} vs ${truncateString(event.away.name)}` : "Select"}
+                        onPress={this.selectEventPressed} />
                     <ItemComponent
                         title="Type"
-                        isText="Spread"
-                        onPress={() => this.setState({ selectedIndex: 1, selectedTab: 'type' })} />
+                        isText={true}
+                        value={type ? capitalizeString(type) : 'Select'}
+                        onPress={() => this.selectItemPressed('type')} />
+                    <ItemComponent
+                        title="Team"
+                        isText={true}
+                        value={this.getSelectedTeam()}
+                        onPress={this.selectTeamPressed} />
                     <ItemComponent
                         title="Time Line"
-                        isText="Half Time"
-                        onPress={() => this.setState({ selectedIndex: 1, selectedTab: 'timeline' })} />
+                        isText={true}
+                        value={timeline ? getTimeLineName(timeline) : 'Select'}
+                        onPress={() => this.selectItemPressed('timeline')} />
                     <ItemComponent
-                        title="Spread"
-                        isText="+1.5"
-                        onPress={() => this.setState({ selectedIndex: 1, selectedTab: 'points' })} />
+                        title="Points"
+                        isText={true}
+                        value={points ? points : 'Select'}
+                        onPress={this.selectPointsPressed} />
 
                     <Text style={styles.partText}>Manage Alerts</Text>
                     <ItemComponent
                         title="Allow Alerts"
                         isToggle
                         value={allowAlerts}
-                        onPress={() => this.setState({ allowAlerts: !allowAlerts })} />
+                        onPress={() => this.onSelectItem('allowAlerts', !allowAlerts)} />
 
                     <Text style={styles.partText}>Manage Alerts</Text>
                     <ItemComponent
                         title="Game Start"
                         isToggle
                         value={alert_gameStart}
-                        onPress={() => this.setState({ alert_gameStart: !alert_gameStart })} />
+                        onPress={() => this.onSelectItem('alert_gameStart', !alert_gameStart)} />
                     <ItemComponent
                         title="Game End"
                         isToggle
                         value={alert_gameEnd}
-                        onPress={() => this.setState({ alert_gameEnd: !alert_gameEnd })} />
+                        onPress={() => this.onSelectItem('alert_gameEnd', !alert_gameEnd)} />
                     <ItemComponent
                         title="Every Scoring Play"
                         isToggle
                         value={alert_gameScoring}
-                        onPress={() => this.setState({ alert_gameScoring: !alert_gameScoring })} />
+                        onPress={() => this.onSelectItem('alert_gameScoring', !alert_gameScoring)} />
                 </View>
 
                 <View style={styles.selectContainer} key="2">

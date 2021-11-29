@@ -8,27 +8,66 @@ import {
 import { Text } from '@ui-kitten/components';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
+const TIMELINES_PER_SPORTS = {
+    "Soccer": [
+        { name: 'Game', value: 'game' },
+        { name: '1st Half', value: '1st_half' },
+        { name: '2nd Half', value: '2nd_half' },
+    ],
+    "American Football": [
+        { name: 'Game', value: 'game' },
+        { name: '1st Half', value: '1st_half' },
+        { name: '2nd Half', value: '2nd_half' },
+        { name: '1st Quarter', value: '1st_quarter' },
+        { name: '2nd Quarter', value: '2nd_quarter' },
+        { name: '3rd Quarter', value: '3rd_quarter' },
+        { name: '4th Quarter', value: '4th_quarter' },
+    ],
+    "Basketball": [
+        { name: 'Game', value: 'game' },
+        { name: '1st Half', value: '1st_half' },
+        { name: '2nd Half', value: '2nd_half' },
+        { name: '1st Quarter', value: '1st_quarter' },
+        { name: '2nd Quarter', value: '2nd_quarter' },
+        { name: '3rd Quarter', value: '3rd_quarter' },
+        { name: '4th Quarter', value: '4th_quarter' },
+    ],
+    "Ice Hockey": [
+        { name: 'Game', value: 'game' },
+        { name: '1st Peorid', value: '1st_peorid' },
+        { name: '2nd Peorid', value: '2nd_peorid' },
+        { name: '3rd Peorid', value: '3rd_peorid' },
+    ],
+    "Baseball": [
+        { name: 'Game', value: 'game' },
+        { name: '5th Innings', value: '5th_innings' },
+    ],
+}
+
 export default class SelectTimeLineComponent extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            selected: null,
+            timeline: props.timeline ? props.timeline : null
         }
     }
 
-    onSelectTimeLine = (type) => {
-        this.setState({ selected: type });
+    onBack = () => {
+        const { onBack, onSelect } = this.props;
+        const { timeline } = this.state;
+        onSelect(timeline);
+        onBack();
     }
 
     render() {
-        const { selected } = this.state;
-        const { onBack } = this.props;
+        const { event } = this.props;
+        const { timeline } = this.state;
 
         return (
             <View style={styles.container}>
                 <View style={styles.titleContainer}>
                     <TouchableOpacity activeOpacity={0.8}
-                        onPress={onBack}>
+                        onPress={this.onBack}>
                         <FontAwesomeIcon
                             color='#fff'
                             size={24} name='angle-left' />
@@ -36,56 +75,16 @@ export default class SelectTimeLineComponent extends PureComponent {
                     <Text style={styles.titleText}>Select a type</Text>
                     <Text></Text>
                 </View>
-                <TouchableOpacity style={styles.radioContainer}
-                    activeOpacity={0.7}
-                    onPress={() => this.onSelectTimeLine('Game')}>
-                    <FontAwesomeIcon color='white' size={20}
-                        name={selected == 'Game' ? 'check-circle' : 'circle-thin'} />
-
-                    <Text style={styles.selectItemType} numberOfLines={1}>Game</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.radioContainer}
-                    activeOpacity={0.7}
-                    onPress={() => this.onSelectTimeLine('1st_half')}>
-                    <FontAwesomeIcon color='white' size={20}
-                        name={selected == '1st_half' ? 'check-circle' : 'circle-thin'} />
-                    <Text style={styles.selectItemType} numberOfLines={1}>1st Half</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.radioContainer}
-                    activeOpacity={0.7}
-                    onPress={() => this.onSelectTimeLine('2nd_half')}>
-                    <FontAwesomeIcon color='white' size={20}
-                        name={selected == '2nd_half' ? 'check-circle' : 'circle-thin'} />
-                    <Text style={styles.selectItemType} numberOfLines={1}>2nd Half</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.radioContainer}
-                    activeOpacity={0.7}
-                    onPress={() => this.onSelectTimeLine('1st_quarter')}>
-                    <FontAwesomeIcon color='white' size={20}
-                        name={selected == '1st_quarter' ? 'check-circle' : 'circle-thin'} />
-                    <Text style={styles.selectItemType} numberOfLines={1}>1st Quarter</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.radioContainer}
-                    activeOpacity={0.7}
-                    onPress={() => this.onSelectTimeLine('2nd_quarter')}>
-                    <FontAwesomeIcon color='white' size={20}
-                        name={selected == '2nd_quarter' ? 'check-circle' : 'circle-thin'} />
-                    <Text style={styles.selectItemType} numberOfLines={1}>2nd Quarter</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.radioContainer}
-                    activeOpacity={0.7}
-                    onPress={() => this.onSelectTimeLine('3rd_quarter')}>
-                    <FontAwesomeIcon color='white' size={20}
-                        name={selected == '3rd_quarter' ? 'check-circle' : 'circle-thin'} />
-                    <Text style={styles.selectItemType} numberOfLines={1}>3rd Quarter</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.radioContainer}
-                    activeOpacity={0.7}
-                    onPress={() => this.onSelectTimeLine('4th_quarter')}>
-                    <FontAwesomeIcon color='white' size={20}
-                        name={selected == '4th_quarter' ? 'check-circle' : 'circle-thin'} />
-                    <Text style={styles.selectItemType} numberOfLines={1}>4th Quarter</Text>
-                </TouchableOpacity>
+                {TIMELINES_PER_SPORTS[event.sport.name].map(peorid => (
+                    <TouchableOpacity key={peorid.value}
+                        style={styles.radioContainer}
+                        activeOpacity={0.7}
+                        onPress={() => this.setState({ 'timeline': peorid.value })}>
+                        <FontAwesomeIcon color='white' size={20}
+                            name={timeline == peorid.value ? 'check-circle' : 'circle-thin'} />
+                        <Text style={styles.selectItemType} numberOfLines={1}>{peorid.name}</Text>
+                    </TouchableOpacity>
+                ))}
             </View>
         )
     }

@@ -12,23 +12,25 @@ export default class SelectTypeComponent extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            selected: null,
+            type: props.type ? props.type : null
         }
     }
 
-    onSelectType = (type) => {
-        this.setState({ selected: type });
+    onBack = () => {
+        const { onBack, onSelect } = this.props;
+        const { type } = this.state;
+        onSelect(type);
+        onBack();
     }
 
     render() {
-        const { selected } = this.state;
-        const { onBack } = this.props;
+        const { type } = this.state;
 
         return (
             <View style={styles.container}>
                 <View style={styles.titleContainer}>
                     <TouchableOpacity activeOpacity={0.8}
-                        onPress={onBack}>
+                        onPress={this.onBack}>
                         <FontAwesomeIcon
                             color='#fff'
                             size={24} name='angle-left' />
@@ -38,24 +40,24 @@ export default class SelectTypeComponent extends PureComponent {
                 </View>
                 <TouchableOpacity style={styles.radioContainer}
                     activeOpacity={0.7}
-                    onPress={() => this.onSelectType('moneyline')}>
+                    onPress={() => this.setState({ type: 'moneyline' })}>
                     <FontAwesomeIcon color='white' size={20}
-                        name={selected == 'moneyline' ? 'check-circle' : 'circle-thin'} />
-                    
+                        name={type == 'moneyline' ? 'check-circle' : 'circle-thin'} />
+
                     <Text style={styles.selectItemType} numberOfLines={1}>Moneyline</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.radioContainer}
                     activeOpacity={0.7}
-                    onPress={() => this.onSelectType('spread')}>
+                    onPress={() => this.setState({ type: 'spread' })}>
                     <FontAwesomeIcon color='white' size={20}
-                        name={selected == 'spread' ? 'check-circle' : 'circle-thin'} />
+                        name={type == 'spread' ? 'check-circle' : 'circle-thin'} />
                     <Text style={styles.selectItemType} numberOfLines={1}>Spread</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.radioContainer}
                     activeOpacity={0.7}
-                    onPress={() => this.onSelectType('total')}>
+                    onPress={() => this.setState({ type: 'total' })}>
                     <FontAwesomeIcon color='white' size={20}
-                        name={selected == 'total' ? 'check-circle' : 'circle-thin'} />
+                        name={type == 'total' ? 'check-circle' : 'circle-thin'} />
                     <Text style={styles.selectItemType} numberOfLines={1}>Total</Text>
                 </TouchableOpacity>
             </View>
