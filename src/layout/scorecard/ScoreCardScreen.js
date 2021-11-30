@@ -6,7 +6,7 @@ import {
     TouchableOpacity
 } from 'react-native';
 import { Button, TopNavigation, Text } from '@ui-kitten/components';
-import { TabView, TabBar } from 'react-native-tab-view';
+import { TabView, TabBar, TabBarItem, TabBarIndicator } from 'react-native-tab-view';
 import ScoreCardPerDayScreen from './ScoreCardPerDayScreen';
 import { format, addDays, subDays } from 'date-fns';
 import { PlusOutlineIcon } from '../../libs/icons';
@@ -77,10 +77,28 @@ class ScoreCardScreen extends PureComponent {
         <TabBar
             {...props}
             scrollEnabled
-            style={{ backgroundColor: 'black' }}
-            indicatorStyle={{ backgroundColor: 'white' }}
-            tabStyle={{ width: 'auto' }}
-            labelStyle={{ fontWeight: 'bold' }}
+            style={{
+                backgroundColor: 'black',
+                paddingVertical: 0
+            }}
+            indicatorStyle={{
+                backgroundColor: 'white',
+                height: 1,
+                marginVertical: 0,
+            }}
+            tabStyle={{
+                width: 'auto',
+                paddingVertical: 0,
+                paddingHorizontal: 2,
+                marginVertical: 0,
+                minHeight: 30,
+            }}
+            labelStyle={{
+                fontWeight: 'bold',
+                fontSize: 12,
+                marginVertical: 0,
+                paddingVertical: 0
+            }}
         />
     )
 

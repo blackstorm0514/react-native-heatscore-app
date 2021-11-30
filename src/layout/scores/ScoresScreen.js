@@ -66,10 +66,28 @@ class ScoresScreen extends Component {
         <TabBar
             {...props}
             scrollEnabled
-            style={{ backgroundColor: 'black' }}
-            indicatorStyle={{ backgroundColor: 'white' }}
-            tabStyle={{ width: 'auto' }}
-            labelStyle={{ fontWeight: 'bold' }}
+            style={{
+                backgroundColor: 'black',
+                paddingVertical: 0
+            }}
+            indicatorStyle={{
+                backgroundColor: 'white',
+                height: 1,
+                marginVertical: 0,
+            }}
+            tabStyle={{
+                width: 'auto',
+                paddingVertical: 0,
+                paddingHorizontal: 2,
+                marginVertical: 0,
+                minHeight: 30,
+            }}
+            labelStyle={{
+                fontWeight: 'bold',
+                fontSize: 12,
+                marginVertical: 0,
+                paddingVertical: 0
+            }}
         />
     )
 

@@ -45,7 +45,7 @@ class ScoreCardPerDayScreen extends PureComponent {
     renderHeader = (item) => {
         return (
             <View style={styles.listHeader}>
-                <Text>{item}</Text>
+                <Text style={styles.listHeaderText}>{item}</Text>
             </View>
         );
     }
@@ -215,12 +215,17 @@ const styles = StyleSheet.create({
     },
     listHeader: {
         marginVertical: 5,
-        marginHorizontal: 20
+        marginHorizontal: 10,
+    },
+    listHeaderText: {
+        fontSize: 12,
+        color: '#FFF',
+        fontWeight: 'bold'
     },
     floatingActionButtonStyle: {
         position: 'absolute',
-        width: 40,
-        height: 40,
+        width: 30,
+        height: 30,
         alignItems: 'center',
         justifyContent: 'center',
         right: 10,
@@ -232,8 +237,8 @@ const styles = StyleSheet.create({
         borderRadius: 200 / 2
     },
     floatingActionButtonIconStyle: {
-        width: 30,
-        height: 30,
+        width: 20,
+        height: 20,
         tintColor: '#FFFFFF'
     },
 });
