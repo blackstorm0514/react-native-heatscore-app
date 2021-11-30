@@ -4,7 +4,7 @@ import {
     View,
 } from 'react-native';
 import { Button, Text, List } from '@ui-kitten/components';
-import { PlusOutlineIcon } from '../../../components/icons';
+import { PlusOutlineIcon } from '../../../libs/icons';
 import RenderEventComponent from './RenderEventComponent';
 
 export default class RenderFavoriteComponent extends Component {

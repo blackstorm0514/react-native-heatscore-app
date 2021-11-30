@@ -6,7 +6,7 @@ import {
     FlatList
 } from 'react-native';
 import { Button, Text, List } from '@ui-kitten/components';
-import { PlusOutlineIcon, RefreshIcon } from '../../components/icons';
+import { PlusOutlineIcon, RefreshIcon } from '../../libs/icons';
 import LeaguesListComponent from './components/LeaguesListComponent';
 import { LoadingIndicator } from './components/LoadingIndicator';
 import { ApiService } from '../../services/api.service';

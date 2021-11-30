@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Layout, List, Text, TopNavigation, TopNavigationAction } from '@ui-kitten/components';
 import { StyleSheet, View, BackHandler } from 'react-native'
 import FavoriteItemComponent from './components/FavoriteItemComponent';
-import { ArrowIosBackIcon, PlusOutlineIcon } from '../../../components/icons';
+import { ArrowIosBackIcon, PlusOutlineIcon } from '../../../libs/icons';
 import { LoadingIndicator } from '../../scores/components/LoadingIndicator';
 import { connect } from 'react-redux';
 import { getFavorites, removeFavorite } from '../../../redux/services';

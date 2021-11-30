@@ -9,7 +9,7 @@ import { Button, TopNavigation, Text } from '@ui-kitten/components';
 import { TabView, TabBar } from 'react-native-tab-view';
 import ScoreCardPerDayScreen from './ScoreCardPerDayScreen';
 import { format, addDays, subDays } from 'date-fns';
-import { PlusOutlineIcon } from '../../components/icons';
+import { PlusOutlineIcon } from '../../libs/icons';
 import { Modalize } from 'react-native-modalize';
 import AddScoreModalContent from './components/AddScoreModalContent';
 import { connect } from 'react-redux';
@@ -52,6 +52,8 @@ class ScoreCardScreen extends PureComponent {
             alert_gameStart: true,
             alert_gameEnd: true,
             alert_gameScoring: false,
+
+            submitting: false,
         }
 
         this.addModalRef = createRef();
@@ -108,6 +110,7 @@ class ScoreCardScreen extends PureComponent {
     }
 
     renderModalHeader = () => {
+        const { submitting } = this.state;
         return (
             <View style={styles.addModalHeader}>
                 <TouchableOpacity activeOpacity={0.7}
@@ -115,7 +118,10 @@ class ScoreCardScreen extends PureComponent {
                     <Text style={styles.modalHeaderAction}>Cancel</Text>
                 </TouchableOpacity>
                 <Text style={styles.modalHeaderTitle}>Add Game</Text>
-                <TouchableOpacity activeOpacity={0.7} onPress={this.onAddScoreCard}>
+                <TouchableOpacity activeOpacity={0.7}
+                    onPress={this.onAddScoreCard}
+                    disabled={submitting}
+                >
                     <Text style={styles.modalHeaderAction}>Save</Text>
                 </TouchableOpacity>
             </View>
@@ -143,21 +149,36 @@ class ScoreCardScreen extends PureComponent {
         if (!points && ['spread', 'total'].includes(type)) {
             return Toast.show('Please select points for spread or total.');
         }
-
+        this.setState({ submitting: true });
         addScoreCard({
-            event, team, type, timeline, points,
+            event_id: event.event_id, team, type, timeline, points,
             allowAlerts, alert_gameStart, alert_gameEnd, alert_gameScoring
         })
             .then(({ data }) => {
-                const { success, error } = data;
+                const { success, time, error } = data;
                 if (success) {
                     this.addModalRef.current?.close();
+                    this.setState({
+                        event: null,
+                        team: null,
+                        type: null,
+                        timeline: null,
+                        points: null,
+                        allowAlerts: true,
+                        alert_gameStart: true,
+                        alert_gameEnd: true,
+                        alert_gameScoring: false,
+
+                        submitting: false,
+                    })
                 } else {
                     Toast.show(error);
+                    this.setState({ submitting: false });
                 }
             })
             .catch(error => {
                 Toast.show('Cannot add a score card. Please try again later.');
+                this.setState({ submitting: false });
             })
     }
 

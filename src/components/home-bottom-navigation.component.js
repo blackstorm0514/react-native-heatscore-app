@@ -3,7 +3,7 @@ import { Animated } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BottomNavigationTab, Text, StyleService } from '@ui-kitten/components';
 import { BrandBottomNavigation } from './brand-bottom-navigation.component';
-import { UserIcon, NewsIcon, ClipboardIcon, FootballIcon } from './icons';
+import { UserIcon, NewsIcon, ClipboardIcon, FootballIcon } from '../libs/icons';
 
 const useVisibilityAnimation = (visible) => {
 

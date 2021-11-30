@@ -9,7 +9,7 @@ import {
 import { Button, List, Text } from '@ui-kitten/components';
 import { ImageOverlay } from '../../components/image-overlay.component';
 import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
-import { PlusOutlineIcon } from '../../components/icons';
+import { PlusOutlineIcon } from '../../libs/icons';
 import OverlayImage from '../../assets/images/image-splash.png';
 import { getNews } from '../../redux/services';
 

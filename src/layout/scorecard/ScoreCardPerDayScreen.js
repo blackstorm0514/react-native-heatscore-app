@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
-import { FlatList, StyleSheet, View, } from 'react-native';
+import { Alert, FlatList, StyleSheet, View, } from 'react-native';
 import { Text } from '@ui-kitten/components';
-import { RefreshIcon } from '../../components/icons';
+import { RefreshIcon } from '../../libs/icons';
 import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { LoadingIndicator } from '../scores/components/LoadingIndicator';
 import ScoreCardComponent from './components/ScoreCardComponent';
+import { getScoreCards } from '../../redux/services';
 
 class ScoreCardPerDayScreen extends PureComponent {
     constructor(props) {
@@ -13,7 +14,7 @@ class ScoreCardPerDayScreen extends PureComponent {
 
         this.state = {
             loading: false,
-            data: [1],
+            data: [],
         }
     }
 
@@ -23,7 +24,21 @@ class ScoreCardPerDayScreen extends PureComponent {
 
     getEventsData = () => {
         const { date } = this.props;
-
+        const { loading } = this.state;
+        if (loading) return;
+        this.setState({ loading: true });
+        getScoreCards(date)
+            .then(({ data: result }) => {
+                const { success, data: score_cards, error } = result;
+                if (success) {
+                    this.setState({ data: score_cards, loading: false });
+                } else {
+                    this.setState({ data: [], loading: false });
+                }
+            })
+            .catch(() => {
+                this.setState({ loading: false, data: [] });
+            });
     }
 
     renderHeader = (item) => {
@@ -36,35 +51,69 @@ class ScoreCardPerDayScreen extends PureComponent {
 
     renderScoreCard = ({ item }) => {
         return (
-            <ScoreCardComponent event={item} />
+            <ScoreCardComponent
+                card={item}
+                onDeleteCard={this.onDeleteCard}
+            />
         )
     }
 
     renderScoreList = ({ item }) => {
         const { data } = this.state;
+        const notStartedEvents = [];
+        const inPlayEvents = [];
+        const endedEvents = [];
+        const otherEvents = [];
+        for (const card of data) {
+            const { event: { time_status } } = card;
+            switch (time_status) {
+                case '0':
+                    notStartedEvents.push(card);
+                    break;
+                case '1':
+                    inPlayEvents.push(card);
+                    break;
+                case '2':
+                case '3':
+                    endedEvents.push(card);
+                    break;
+                default:
+                    otherEvents.push(card);
+                    break;
+            }
+        }
         switch (item) {
             case 'Not Started':
-                return (
+                return (notStartedEvents.length > 0 &&
                     <FlatList
-                        data={[1, 2, 1]}
+                        data={notStartedEvents}
                         renderItem={this.renderScoreCard}
                         ListHeaderComponent={() => this.renderHeader(item)}
                         keyExtractor={(item, index) => index.toString()}
                     />
                 )
             case 'In-play':
-                return (
+                return (inPlayEvents.length > 0 &&
                     <FlatList
-                        data={[1, 2, 1]}
+                        data={inPlayEvents}
                         renderItem={this.renderScoreCard}
                         ListHeaderComponent={() => this.renderHeader(item)}
                         keyExtractor={(item, index) => index.toString()}
                     />
                 )
             case 'Ended':
-                return (
+                return (endedEvents.length > 0 &&
                     <FlatList
-                        data={[1, 2, 1]}
+                        data={endedEvents}
+                        renderItem={this.renderScoreCard}
+                        ListHeaderComponent={() => this.renderHeader(item)}
+                        keyExtractor={(item, index) => index.toString()}
+                    />
+                )
+            case 'Others':
+                return (otherEvents.length > 0 &&
+                    <FlatList
+                        data={[]}
                         renderItem={this.renderScoreCard}
                         ListHeaderComponent={() => this.renderHeader(item)}
                         keyExtractor={(item, index) => index.toString()}
@@ -73,6 +122,22 @@ class ScoreCardPerDayScreen extends PureComponent {
             default:
                 return null;
         }
+    }
+
+    onDeleteCard = (card_id) => {
+        Alert.alert(
+            "Delete Score Card",
+            "Are you sure you want to delete this card?",
+            [
+                {
+                    text: "Yes",
+                    onPress: () => {
+                        
+                    },
+                },
+                { text: "No", },
+            ]
+        );
     }
 
     renderEmptyList = () => (
@@ -89,14 +154,14 @@ class ScoreCardPerDayScreen extends PureComponent {
                 {loading && <LoadingIndicator style={styles.loadingIndicator} />}
                 {!loading && <FlatList
                     style={styles.list}
-                    data={data && data.length ? ['Not Started', 'In-play', 'Ended'] : []}
+                    data={data && data.length ? ['Not Started', 'In-play', 'Ended', 'Others'] : []}
                     renderItem={this.renderScoreList}
                     keyExtractor={(item, index) => index.toString()}
                     ListEmptyComponent={this.renderEmptyList}
                 />}
                 <TouchableOpacity
                     activeOpacity={0.7}
-                    onPress={this.onFloatinActionClick}
+                    onPress={this.getEventsData}
                     style={styles.floatingActionButtonStyle}>
                     <RefreshIcon
                         style={styles.floatingActionButtonIconStyle}

@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { Text, RangeDatepicker, Select, SelectItem, Autocomplete, AutocompleteItem } from '@ui-kitten/components';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import { CalendarIcon } from "../../../components/icons";
+import { CalendarIcon } from "../../../libs/icons";
 import { getEventsForLeague, getLeaguesForSport } from "../../../redux/services";
 import { format } from 'date-fns';
 import Toast from 'react-native-simple-toast';

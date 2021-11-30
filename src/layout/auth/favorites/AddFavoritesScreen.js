@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Layout, List, Text, TopNavigation, Input, Button } from '@ui-kitten/components';
 import { StyleSheet, View, Dimensions, BackHandler } from 'react-native'
 import FavoriteItemComponent from './components/FavoriteItemComponent';
-import { CloseIcon, SearchIcon } from '../../../components/icons';
+import { CloseIcon, SearchIcon } from '../../../libs/icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { LoadingIndicator } from '../../scores/components/LoadingIndicator';
 import { addFavorite, searchTeams } from '../../../redux/services';

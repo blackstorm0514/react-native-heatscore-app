@@ -67,3 +67,7 @@ export const getEventsForLeague = (league, query, startDate, endDate) => {
 export const addScoreCard = (data) => {
     return ApiService.post('/scorecards', data);
 }
+
+export const getScoreCards = (date) => {
+    return ApiService.get('/scorecards', { params: { date } });
+}

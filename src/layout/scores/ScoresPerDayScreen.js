@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, View, } from 'react-native';
 import { Button, Text, List } from '@ui-kitten/components';
-import { PlusOutlineIcon, RefreshIcon } from '../../components/icons';
+import { PlusOutlineIcon, RefreshIcon } from '../../libs/icons';
 import LeaguesListComponent from './components/LeaguesListComponent';
 import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';

@@ -5,7 +5,7 @@ import {
     Dimensions
 } from 'react-native';
 import { Button, TopNavigationAction, TopNavigation, Text } from '@ui-kitten/components';
-import { ArrowDownwardIcon, ArrowIosBackIcon } from '../../components/icons';
+import { ArrowDownwardIcon, ArrowIosBackIcon } from '../../libs/icons';
 import { TabView, TabBar } from 'react-native-tab-view';
 import RenderLeagueRoundComponent from './components/RenderLeagueRoundComponent';
 import RenderLeagueTopComponent from './components/RenderLeagueTopComponent';
