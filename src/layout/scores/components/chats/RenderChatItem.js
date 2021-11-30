@@ -3,11 +3,16 @@ import {
     StyleSheet,
     View,
     TouchableOpacity,
-    ImageBackground
+    ImageBackground,
+    Image,
+    Dimensions
 } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import { format } from 'date-fns';
 import FeatherIcon from 'react-native-vector-icons/dist/Feather';
+import ScaledImage from './ScaledImage';
+
+const win = Dimensions.get('window');
 
 export default class RenderChatItem extends PureComponent {
     render() {
@@ -26,7 +31,10 @@ export default class RenderChatItem extends PureComponent {
                     <View style={styles.chatContentContainer}>
                         <Text style={styles.chatTime}>{time_str}</Text>
                         <Text style={styles.chatContent}>{user.username}</Text>
-                        <ImageBackground source={{ uri: image }} style={styles.chatImage} />
+                        <ScaledImage
+                            uri={image}
+                            width={win.width - 70}
+                        />
                     </View>
                 </TouchableOpacity>
             );
@@ -48,6 +56,7 @@ export default class RenderChatItem extends PureComponent {
     }
 }
 
+
 const styles = StyleSheet.create({
     chatItemContainer: {
         flexDirection: 'row',
@@ -57,7 +66,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10
     },
     chatContentContainer: {
-        marginHorizontal: 20
+        marginHorizontal: 10
     },
     chatTime: {
         color: '#888',
@@ -68,11 +77,5 @@ const styles = StyleSheet.create({
         marginTop: 6,
         color: 'orange',
         fontWeight: 'bold'
-    },
-    chatImage: {
-        height: 100,
-        minWidth: 100,
-        maxWidth: '100%',
-        marginTop: 10
     },
 });
