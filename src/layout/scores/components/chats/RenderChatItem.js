@@ -21,10 +21,9 @@ export default class RenderChatItem extends PureComponent {
         const time_str = format(new Date(createdAt.seconds * 1000), "MMM d, hh:mm aaa");
         if (image) {
             return (
-                <TouchableOpacity style={styles.chatItemContainer}
-                    activeOpacity={0.9}>
+                <View style={styles.chatItemContainer}>
                     <FeatherIcon
-                        size={30}
+                        size={20}
                         color='#ddd'
                         name='user'
                     />
@@ -36,22 +35,22 @@ export default class RenderChatItem extends PureComponent {
                             width={win.width - 70}
                         />
                     </View>
-                </TouchableOpacity>
+                </View>
             );
         }
+
         return (
-            <TouchableOpacity style={styles.chatItemContainer}
-                activeOpacity={0.9}>
+            <View style={styles.chatItemContainer}>
                 <FeatherIcon
-                    size={30}
+                    size={20}
                     color='#ddd'
                     name='user'
                 />
                 <View style={styles.chatContentContainer}>
                     <Text style={styles.chatTime}>{time_str}</Text>
-                    <Text style={styles.chatContent}>{user.username}: <Text style={{ color: 'white', fontWeight: '100' }}>{text}</Text></Text>
+                    <Text style={styles.chatContent}>{user.username}: <Text style={{ color: 'white', fontWeight: '100', fontSize: 13 }}>{text}</Text></Text>
                 </View>
-            </TouchableOpacity>
+            </View>
         )
     }
 }
@@ -60,21 +59,21 @@ export default class RenderChatItem extends PureComponent {
 const styles = StyleSheet.create({
     chatItemContainer: {
         flexDirection: 'row',
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
         borderBottomColor: '#222',
         borderBottomWidth: 1,
-        paddingVertical: 10
+        paddingVertical: 6
     },
     chatContentContainer: {
         marginHorizontal: 10
     },
     chatTime: {
         color: '#888',
-        fontSize: 14,
+        fontSize: 10,
     },
     chatContent: {
-        fontSize: 14,
-        marginTop: 6,
+        fontSize: 11,
+        marginTop: 2,
         color: 'orange',
         fontWeight: 'bold'
     },

@@ -176,9 +176,8 @@ const styles = StyleSheet.create({
     },
     readButton: {
         width: '50%',
-        marginTop: 20,
+        marginVertical: 10,
         alignSelf: 'center',
-        marginBottom: 10,
     },
     readButtonText: {
         color: '#000',
@@ -194,21 +193,21 @@ const styles = StyleSheet.create({
     headingNewsTitle: {
         zIndex: 1,
         textAlign: 'center',
-        fontSize: 20
+        fontSize: 18
     },
     headingNewsDescription: {
         zIndex: 1,
-        marginTop: 20,
-        fontSize: 16
+        marginTop: 10,
+        fontSize: 14
     },
     headingNewsSource: {
-        marginTop: 15,
-        fontSize: 14
+        marginTop: 10,
+        fontSize: 12
     },
     item: {
         marginBottom: 4,
         flexDirection: 'row',
-        height: 150,
+        height: 100,
         backgroundColor: '#111',
         marginHorizontal: 2,
         padding: 10,

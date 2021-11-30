@@ -5,11 +5,10 @@ import {
     TouchableOpacity,
     FlatList
 } from 'react-native';
-import { Button, Text, List } from '@ui-kitten/components';
-import { PlusOutlineIcon, RefreshIcon } from '../../libs/icons';
+import { Text } from '@ui-kitten/components';
+import { RefreshIcon } from '../../libs/icons';
 import LeaguesListComponent from './components/LeaguesListComponent';
 import { LoadingIndicator } from './components/LoadingIndicator';
-import { ApiService } from '../../services/api.service';
 import RenderFavoriteComponent from './components/RenderFavoriteComponent';
 import { getLeagueEvents } from '../../redux/services';
 
@@ -123,8 +122,8 @@ const styles = StyleSheet.create({
     },
     floatingActionButtonStyle: {
         position: 'absolute',
-        width: 40,
-        height: 40,
+        width: 30,
+        height: 30,
         alignItems: 'center',
         justifyContent: 'center',
         right: 10,
@@ -136,8 +135,8 @@ const styles = StyleSheet.create({
         borderRadius: 200 / 2
     },
     floatingActionButtonIconStyle: {
-        width: 30,
-        height: 30,
+        width: 20,
+        height: 20,
         tintColor: '#FFFFFF'
     },
 });

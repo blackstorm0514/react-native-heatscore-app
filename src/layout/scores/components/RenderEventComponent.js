@@ -64,15 +64,15 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         borderBottomColor: '#222',
         borderBottomWidth: 1,
-        paddingVertical: 10
+        paddingVertical: 4
     },
     eventItemStatus: {
         flex: 2,
         justifyContent: 'center'
     },
     eventItemStatusText: {
-        fontSize: 16,
-        marginVertical: 8,
+        fontSize: 14,
+        marginVertical: 2,
         textAlign: 'right',
         overflow: 'hidden'
     },
@@ -82,23 +82,23 @@ const styles = StyleSheet.create({
     eventItemTeam: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 4
+        marginVertical: 2
     },
     teamLogoImage: {
-        width: 30,
-        height: 30,
+        width: 20,
+        height: 20,
         resizeMode: 'contain',
         flex: 1
     },
     eventItemTeamName: {
         flex: 5,
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: 'bold',
-        marginLeft: 20
+        marginLeft: 10
     },
     eventItemTeamScore: {
         flex: 1,
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: 'bold'
     }
 });

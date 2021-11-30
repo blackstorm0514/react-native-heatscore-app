@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     },
     leagueTitle: {
         backgroundColor: '#222',
-        paddingVertical: 5,
+        paddingVertical: 2,
         paddingHorizontal: 10,
         flexDirection: 'row',
         borderBottomColor: '#888',
@@ -83,8 +83,9 @@ const styles = StyleSheet.create({
     leagueTitleText: {
         color: 'white',
         fontWeight: 'bold',
-        paddingVertical: 10,
-        maxWidth: '70%'
+        paddingVertical: 2,
+        maxWidth: '70%',
+        fontSize: 14
     },
     seeAllLeagueButton: {
         textTransform: 'uppercase',

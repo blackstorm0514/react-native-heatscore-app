@@ -13,6 +13,8 @@ import { ArrowIosBackIcon } from '../../libs/icons';
 import { TabView, TabBar } from 'react-native-tab-view';
 import RenderEventMatchupComponent from './components/RenderEventMatchupComponent';
 import RenderEventChatComponent from './components/RenderEventChatComponent';
+import { truncateString } from '../../libs/functions';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 class EventDetailScreen extends Component {
     constructor(props) {
@@ -49,8 +51,8 @@ class EventDetailScreen extends Component {
             return <Text style={styles.titleText}>Event Not Found</Text>
         }
         const { home, away } = event;
-        return <View style={{ paddingTop: 5 }}>
-            <Text style={styles.titleText}>{event.home.name} vs {event.away.name}</Text>
+        return <View style={{ paddingTop: 2 }}>
+            <Text style={styles.titleText}>{truncateString(event.home.name)} vs {truncateString(event.away.name)}</Text>
             <View style={styles.logoContainer}>
                 <Image
                     style={styles.teamLogoImage}
@@ -70,13 +72,44 @@ class EventDetailScreen extends Component {
             <TabBar
                 {...props}
                 scrollEnabled
-                style={{ backgroundColor: 'black', justifyContent: 'center', }}
-                contentContainerStyle={{ justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}
-                tabStyle={{ width: 'auto' }}
-                labelStyle={{ fontWeight: 'bold' }}
+                style={{
+                    backgroundColor: 'black',
+                    paddingVertical: 0
+                }}
+                indicatorStyle={{
+                    backgroundColor: 'yellow',
+                    height: 1,
+                    marginVertical: 0,
+                }}
+                tabStyle={{
+                    width: 'auto',
+                    paddingVertical: 0,
+                    paddingHorizontal: 2,
+                    marginVertical: 0,
+                    minHeight: 30,
+                    flexDirection: 'row'
+                }}
+                labelStyle={{
+                    fontWeight: 'bold',
+                    fontSize: 14,
+                    marginVertical: 0,
+                    paddingVertical: 0,
+                }}
+                renderIcon={this.renderIcon}
             />
         </View>
     )
+
+    renderIcon = ({ route }) => {
+        if (route.key == 'chat') {
+            return (
+                <Ionicons color='green'
+                    size={20}
+                    name='chatbubble-ellipses-outline' />
+            );
+        }
+        return null;
+    }
 
     renderScene = ({ route }) => {
         const { route: { params: { event } } } = this.props;
@@ -114,7 +147,7 @@ const styles = StyleSheet.create({
     },
     titleText: {
         fontWeight: 'bold',
-        fontSize: 20,
+        fontSize: 14,
     },
     logoContainer: {
         marginTop: 5,

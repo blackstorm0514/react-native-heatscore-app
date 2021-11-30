@@ -226,8 +226,8 @@ class RenderEventChatComponent extends Component {
                 {...props}
                 disabled={!props.text}
                 containerStyle={{
-                    width: 40,
-                    height: 40,
+                    width: 30,
+                    height: 30,
                     alignItems: 'center',
                     justifyContent: 'center',
                     margin: 4,
@@ -235,7 +235,7 @@ class RenderEventChatComponent extends Component {
                     borderRadius: 22
                 }}
             >
-                <Ionicons name='arrow-up' color='white' size={28} />
+                <Ionicons name='arrow-up' color='white' size={20} />
             </Send>
         )
     }
@@ -364,19 +364,20 @@ const styles = StyleSheet.create({
     messageInput: {
         marginHorizontal: 0,
         marginVertical: 0,
-        fontSize: 16,
+        fontSize: 14,
         backgroundColor: '#222',
         borderRadius: 4,
         paddingLeft: 10,
-        color: 'white'
+        color: 'white',
+        paddingVertical: 3,
     },
     sendButton: {
         marginRight: 4,
         alignSelf: 'flex-end',
     },
     iconButton: {
-        width: 24,
-        height: 24,
+        width: 20,
+        height: 20,
     },
     overlay: {
         backgroundColor: 'rgba(0,0,0,0.2)',

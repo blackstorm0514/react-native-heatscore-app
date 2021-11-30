@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
         flex: 6,
         fontSize: 14,
         fontWeight: 'bold',
-        marginLeft: 20
+        marginLeft: 10
     },
     eventItemTeamScore: {
         flex: 1,
