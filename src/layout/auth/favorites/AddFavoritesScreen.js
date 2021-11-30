@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     item: {
-        paddingVertical: 16,
+        paddingVertical: 8,
         borderBottomWidth: 1,
         borderBottomColor: '#222',
         backgroundColor: '#000'
@@ -213,15 +213,16 @@ const styles = StyleSheet.create({
     },
     noResultText: {
         paddingHorizontal: 10,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: 14
     },
     sportsTitle: {
         backgroundColor: '#222',
-        paddingVertical: 5,
+        paddingVertical: 2,
         paddingHorizontal: 10,
         flexDirection: 'row',
         borderBottomColor: '#888',
-        borderBottomWidth: 2,
+        borderBottomWidth: 1,
         alignItems: 'center',
         justifyContent: 'space-between',
         width: screenWidth
@@ -229,7 +230,8 @@ const styles = StyleSheet.create({
     sportsTitleText: {
         color: 'white',
         fontWeight: 'bold',
-        paddingVertical: 5,
-        maxWidth: '100%'
+        paddingVertical: 2,
+        maxWidth: '100%',
+        fontSize: 14,
     },
 });

@@ -20,10 +20,10 @@ class FavoriteItemComponent extends PureComponent {
                     style={styles.teamLogoImage}
                     source={{ uri: `https://assets.b365api.com/images/team/m/${team.image_id}.png` }}
                 />
-                <Text category='h6' style={styles.teamName} numberOfLines={1}>{team.name}</Text>
+                <Text style={styles.teamName} numberOfLines={1}>{team.name}</Text>
                 <TouchableOpacity activeOpacity={0.8} style={styles.toggleFavorite} onPress={() => onPress(sport, team, exist)}>
-                    {exist && <FontAwesomeIcon name="star" color='gold' size={20} style={styles.toggleFavoriteIcon} />}
-                    {!exist && <FontAwesomeIcon name="star-o" color='#888' size={20} style={styles.toggleFavoriteIcon} />}
+                    {exist && <FontAwesomeIcon name="star" color='gold' size={16} style={styles.toggleFavoriteIcon} />}
+                    {!exist && <FontAwesomeIcon name="star-o" color='#888' size={16} style={styles.toggleFavoriteIcon} />}
                 </TouchableOpacity>
             </View>
         );
@@ -44,14 +44,15 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     teamLogoImage: {
-        width: 30,
-        height: 30,
+        width: 20,
+        height: 20,
         marginRight: 10,
         resizeMode: 'center',
     },
     teamName: {
         fontWeight: 'bold',
-        maxWidth: '70%'
+        maxWidth: '70%',
+        fontSize: 14
     },
     toggleFavorite: {
         alignSelf: 'flex-end',

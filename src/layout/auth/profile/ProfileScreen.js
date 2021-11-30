@@ -114,17 +114,13 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     profileSetting: {
-        paddingVertical: 16,
-        paddingHorizontal: 24,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
         backgroundColor: 'black',
         borderColor: '#222',
         borderBottomWidth: 1,
     },
     section: {
-        marginTop: 24,
-    },
-    doneButton: {
-        marginHorizontal: 24,
         marginTop: 24,
     },
 });

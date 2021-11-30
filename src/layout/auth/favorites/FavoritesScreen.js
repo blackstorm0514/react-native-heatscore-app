@@ -154,10 +154,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         paddingTop: 16,
         paddingBottom: 8,
-        backgroundColor: '#111'
+        backgroundColor: '#111',
+        fontSize: 12,
     },
     item: {
-        paddingVertical: 16,
+        paddingVertical: 8,
         borderBottomWidth: 1,
         borderBottomColor: '#222',
         backgroundColor: '#000'

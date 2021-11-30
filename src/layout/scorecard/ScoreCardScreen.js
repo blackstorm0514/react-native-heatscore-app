@@ -16,6 +16,7 @@ import { connect } from 'react-redux';
 import Toast from 'react-native-simple-toast';
 import { addScoreCard } from '../../redux/services';
 
+const screenWidth = Dimensions.get('window').width;
 class ScoreCardScreen extends PureComponent {
     constructor(props) {
         super(props);
@@ -222,7 +223,7 @@ class ScoreCardScreen extends PureComponent {
                     navigationState={{ index, routes }}
                     renderScene={this.renderScene}
                     onIndexChange={(index) => this.setState({ index })}
-                    initialLayout={{ width: Dimensions.get('window').width }}
+                    initialLayout={{ width: screenWidth }}
                 />
                 <Modalize
                     ref={this.addModalRef}
