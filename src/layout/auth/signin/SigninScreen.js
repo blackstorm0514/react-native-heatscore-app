@@ -113,7 +113,7 @@ class SignInForm extends PureComponent {
                     <View>
                         <Text style={styles.titleText}>SIGN IN</Text>
                         <Layout style={styles.boxLayout}>
-                            <Text>Email</Text>
+                            <Text style={styles.formLabel}>Email</Text>
                             <Input
                                 style={styles.formInput}
                                 placeholder='jone.doe@gmail.com'
@@ -124,7 +124,7 @@ class SignInForm extends PureComponent {
                             {error && error.email && <Text style={styles.errorText}>{error.email}</Text>}
                         </Layout>
                         <Layout style={styles.boxLayout}>
-                            <Text>Password</Text>
+                            <Text style={styles.formLabel}>Password</Text>
                             <Input
                                 style={styles.formInput}
                                 placeholder='Password'
@@ -143,10 +143,10 @@ class SignInForm extends PureComponent {
                     </View>
                     <Button
                         style={styles.signInButton}
-                        size='large'
+                        size='small'
                         accessoryLeft={submitting ? LoadingIndicator : null}
                         onPress={this.onSignInButtonPressed}>
-                        {submitting ? null : 'SIGN  IN'}
+                        {submitting ? null : () => <Text style={styles.signInButtonText}>S I G N   I N</Text>}
                     </Button>
 
                     <View style={styles.socialAuthContainer}>
@@ -210,13 +210,8 @@ const styles = StyleSheet.create({
     titleText: {
         color: '#E10032',
         alignSelf: 'center',
-        fontSize: 32,
+        fontSize: 24,
         textTransform: 'uppercase'
-    },
-    offerText: {
-        color: '#FFF',
-        fontSize: 16,
-        marginVertical: 16
     },
     signInButton: {
         alignSelf: 'baseline',
@@ -224,7 +219,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#E10032',
         borderColor: '#E10032',
         color: 'white',
-        marginTop: 30
+        marginTop: 20,
+        paddingVertical: 6,
+    },
+    signInButtonText: {
+        color: '#FFF',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     boxLayout: {
         backgroundColor: '#151515',
@@ -232,34 +233,35 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         marginTop: 15
     },
+    formLabel: {
+        fontSize: 12
+    },
     formInput: {
         marginTop: 6,
         backgroundColor: '#151515',
         borderWidth: 0,
         borderBottomWidth: 1,
-        borderColor: '#999'
+        borderColor: '#999',
+        fontSize: 14
     },
     forgotPasswordText: {
         color: "#1D2FFF",
         alignSelf: 'flex-end',
         marginTop: 10,
-        fontSize: 18
+        fontSize: 12
     },
     socialAuthContainer: {
         marginTop: 20,
         marginBottom: 30
     },
     socialAuthButtonsContainer: {
-        // flexDirection: 'row',
-        // justifyContent: 'space-evenly',
-        // paddingHorizontal: 90
         alignItems: 'center'
     },
     socialAuthHintText: {
         alignSelf: 'center',
         marginBottom: 16,
         color: 'white',
-        fontSize: 20
+        fontSize: 16
     },
     errorText: {
         color: '#E10032',

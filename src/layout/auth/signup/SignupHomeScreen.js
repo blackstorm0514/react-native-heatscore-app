@@ -51,13 +51,13 @@ export default class SignupHomeScreen extends PureComponent {
                             <Text style={styles.withText}>
                                 With    <FontAwesome5Icon
                                     name="phone-alt"
-                                    size={18} color='#fff' />
+                                    size={14} color='#fff' />
                             </Text>
                             <Text style={styles.phoneText}>Phone Number</Text>
                         </Layout>
                         <FontAwesome5Icon
                             name="chevron-right"
-                            size={24} color='white' />
+                            size={20} color='white' />
                     </Layout>
                 </TouchableOpacity>
             )
@@ -70,13 +70,13 @@ export default class SignupHomeScreen extends PureComponent {
                             <Text style={styles.withText}>
                                 With    <FontAwesome5Icon
                                     name="google"
-                                    size={18} color='#fff' />
+                                    size={14} color='#fff' />
                             </Text>
                             <Text style={styles.phoneText}>Google</Text>
                         </Layout>
                         <FontAwesome5Icon
                             name="chevron-right"
-                            size={24} color='white' />
+                            size={20} color='white' />
                     </Layout>
                 </TouchableOpacity>
 
@@ -137,26 +137,26 @@ const styles = StyleSheet.create({
     titleText: {
         color: '#E10032',
         alignSelf: 'center',
-        fontSize: 32,
+        fontSize: 24,
         textTransform: 'uppercase',
         textAlign: 'center'
     },
     offerText: {
         color: '#FFF',
-        fontSize: 20,
+        fontSize: 16,
         marginVertical: 16,
         textAlign: 'center'
     },
     boxContainer: {
         width: '100%',
-        borderWidth: 2,
+        borderWidth: 1,
         borderColor: '#444',
         marginTop: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#000',
-        padding: 20,
+        padding: 16,
         shadowColor: '#999',
         shadowOpacity: 0.8,
         shadowRadius: 5
@@ -166,13 +166,13 @@ const styles = StyleSheet.create({
     },
     withText: {
         color: '#FFF',
-        fontSize: 16
+        fontSize: 14
     },
     phoneText: {
         color: '#E10032',
         textTransform: 'uppercase',
         fontWeight: 'bold',
-        fontSize: 20,
+        fontSize: 18,
         marginTop: 4,
     },
     haveAccountContainer: {
@@ -181,14 +181,14 @@ const styles = StyleSheet.create({
     },
     haveAccountText: {
         color: 'white',
-        fontSize: 16,
+        fontSize: 14,
         alignItems: 'center',
         justifyContent: 'center'
     },
     loginText: {
         color: '#E10032',
         fontWeight: '700',
-        fontSize: 16,
+        fontSize: 14,
         marginLeft: 10
     }
 });

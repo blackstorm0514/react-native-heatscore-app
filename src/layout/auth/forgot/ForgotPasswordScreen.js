@@ -73,7 +73,7 @@ class ForgotPasswordForm extends PureComponent {
                     <View>
                         <Text style={styles.titleText}>Reset Password</Text>
                         <Layout style={styles.boxLayout}>
-                            <Text>Email</Text>
+                            <Text style={styles.formLabel}>Email</Text>
                             <Input
                                 style={styles.formInput}
                                 placeholder='jone.doe@gmail.com'
@@ -84,7 +84,7 @@ class ForgotPasswordForm extends PureComponent {
                             {error && error.email && <Text style={styles.errorText}>{error.email}</Text>}
                         </Layout>
                         <Layout style={styles.boxLayout}>
-                            <Text>Password</Text>
+                            <Text style={styles.formLabel}>Password</Text>
                             <Input
                                 style={styles.formInput}
                                 placeholder='Password'
@@ -96,7 +96,7 @@ class ForgotPasswordForm extends PureComponent {
                             {error && error.password && <Text style={styles.errorText}>{error.password}</Text>}
                         </Layout>
                         <Layout style={styles.boxLayout}>
-                            <Text>Confirm Password</Text>
+                            <Text style={styles.formLabel}>Confirm Password</Text>
                             <Input
                                 style={styles.formInput}
                                 status='control'
@@ -112,10 +112,10 @@ class ForgotPasswordForm extends PureComponent {
                     </View>
                     <Button
                         style={styles.submitButton}
-                        size='large'
+                        size='small'
                         accessoryLeft={submitting ? LoadingIndicator : null}
                         onPress={this.onSignInButtonPressed}>
-                        {submitting ? null : 'S U B M I T'}
+                        {submitting ? null : () => <Text style={styles.submitButtonText}>S U B M I T</Text>}
                     </Button>
                 </Layout>
             </KeyboardAvoidingView>
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     titleText: {
         color: '#E10032',
         alignSelf: 'center',
-        fontSize: 32,
+        fontSize: 24,
         textTransform: 'uppercase'
     },
     submitButton: {
@@ -191,13 +191,22 @@ const styles = StyleSheet.create({
         backgroundColor: '#E10032',
         borderColor: '#E10032',
         color: 'white',
-        marginTop: 30
+        marginTop: 20,
+        paddingVertical: 6,
+    },
+    submitButtonText: {
+        color: '#FFF',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     boxLayout: {
         backgroundColor: '#151515',
         color: 'white',
         paddingHorizontal: 10,
         marginTop: 15
+    },
+    formLabel: {
+        fontSize: 12
     },
     formInput: {
         marginTop: 6,

@@ -13,7 +13,7 @@ const LoadingIndicator = (props) => (
     </View>
 );
 
-export default class SignupWithPhoneScreen extends PureComponent {
+class SignupWithPhoneForm extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -76,6 +76,7 @@ export default class SignupWithPhoneScreen extends PureComponent {
             .then(({ data }) => {
                 const { success, error } = data;
                 if (success) {
+
                     this.setState({ submitting: false });
                     navigation.navigate("SignupDetail", { phone: formattedPhoneNumber });
                 } else {
@@ -93,105 +94,113 @@ export default class SignupWithPhoneScreen extends PureComponent {
         const { navigation } = this.props;
         return (
             <KeyboardAvoidingView>
-                <View style={styles.container}>
-                    <TopNavigationComponent navigation={navigation} backPosition="SignupHome" />
-                    {!sentCode && <Layout style={styles.layoutContainer}>
-                        <View style={styles.headerContainer}>
-                            <Text
-                                style={styles.helloLabel}
-                                status='control'>
-                                CREATE ACCOUNT
-                            </Text>
-                            <Text
-                                style={styles.verifyMessageLabel}
-                                category='s1'
-                                status='control'>
-                                A confirmation code will be sent to your mobile for verification.
-                            </Text>
-                            <View style={styles.phoneInputContainer}>
-                                <Text>Enter Phone Number</Text>
-                                <PhoneInput
-                                    value={phoneNumber}
-                                    defaultCode="CA"
-                                    layout="first"
-                                    onChangeText={(text) => { this.setState({ phoneNumber: text }) }}
-                                    onChangeFormattedText={(text) => { this.setState({ formattedPhoneNumber: text }) }}
-                                    autoFocus
-                                    withDarkTheme
-                                    containerStyle={styles.phoneContainerStyle}
-                                    textContainerStyle={styles.phoneTextContainerStyle}
-                                    textInputStyle={styles.phoneTextInputStyle}
-                                    codeTextStyle={styles.phoneCodeTextStyle}
-                                    flagButtonStyle={styles.phoneFlagButtonStyle}
-                                    withShadow
-                                    placeholder=" "
-                                    disableArrowIcon
-                                    textInputProps={{
-                                        selectionColor: '#aaa',
-                                        textContentType: 'telephoneNumber',
-                                        dataDetectorTypes: 'phoneNumber',
-                                        keyboardType: 'phone-pad',
-                                        maxLength: 14
-                                    }}
-                                />
-                                {error && <Text style={styles.errorText}>{error}</Text>}
-                            </View>
+                {!sentCode && <Layout style={styles.layoutContainer}>
+                    <View style={styles.headerContainer}>
+                        <Text
+                            style={styles.helloLabel}
+                            status='control'>
+                            CREATE ACCOUNT
+                        </Text>
+                        <Text
+                            style={styles.verifyMessageLabel}
+                            category='s1'
+                            status='control'>
+                            A confirmation code will be sent to your mobile for verification.
+                        </Text>
+                        <View style={styles.phoneInputContainer}>
+                            <Text style={styles.formLabel}>Enter Phone Number</Text>
+                            <PhoneInput
+                                value={phoneNumber}
+                                defaultCode="CA"
+                                layout="first"
+                                onChangeText={(text) => { this.setState({ phoneNumber: text }) }}
+                                onChangeFormattedText={(text) => { this.setState({ formattedPhoneNumber: text }) }}
+                                autoFocus
+                                withDarkTheme
+                                containerStyle={styles.phoneContainerStyle}
+                                textContainerStyle={styles.phoneTextContainerStyle}
+                                textInputStyle={styles.phoneTextInputStyle}
+                                codeTextStyle={styles.phoneCodeTextStyle}
+                                flagButtonStyle={styles.phoneFlagButtonStyle}
+                                withShadow
+                                placeholder=" "
+                                disableArrowIcon
+                                textInputProps={{
+                                    selectionColor: '#aaa',
+                                    textContentType: 'telephoneNumber',
+                                    dataDetectorTypes: 'phoneNumber',
+                                    keyboardType: 'phone-pad',
+                                    maxLength: 14
+                                }}
+                            />
+                            {error && <Text style={styles.errorText}>{error}</Text>}
                         </View>
-                        <Button
-                            style={styles.nextButton}
-                            size='large'
-                            accessoryLeft={submitting ? LoadingIndicator : null}
-                            onPress={this.onSendVerificationCode}>
-                            {submitting ? null : 'N E X T'}
-                        </Button>
-                    </Layout>}
-                    {sentCode && <Layout style={styles.layoutContainer}>
-                        <View style={styles.headerContainer}>
-                            <Text
-                                style={styles.helloLabel}
-                                status='control'>
-                                CREATE ACCOUNT
-                            </Text>
-                            <Text
-                                style={[styles.verifyMessageLabel, { alignSelf: 'center' }]}
-                                category='s1'
-                                status='control'>
-                                Please enter your verification code
-                            </Text>
-                            <View style={styles.phoneInputContainer}>
-                                <CodeInput
-                                    codeLength={6}
-                                    secureTextEntry
-                                    activeColor='#999'
-                                    inactiveColor='#555'
-                                    autoFocus={false}
-                                    ignoreCase={true}
-                                    inputPosition='center'
-                                    size={50}
-                                    onFulfill={(verify_code) => { this.setState({ verify_code }) }}
-                                    containerStyle={{ marginTop: 0 }}
-                                    codeInputStyle={{ borderWidth: 1.5 }}
-                                />
-                                {error && <Text style={styles.errorText}>{error}</Text>}
-                                <TouchableOpacity activeOpacity={0.8} onPress={this.onSendVerificationCode}>
-                                    <Text style={styles.resendCode}>Resend Code</Text>
-                                </TouchableOpacity>
-                            </View>
+                    </View>
+                    <Button
+                        style={styles.nextButton}
+                        size='small'
+                        accessoryLeft={submitting ? LoadingIndicator : null}
+                        onPress={this.onSendVerificationCode}>
+                        {submitting ? null : () => <Text style={styles.nextButtonText}>N E X T</Text>}
+                    </Button>
+                </Layout>}
+                {sentCode && <Layout style={styles.layoutContainer}>
+                    <View style={styles.headerContainer}>
+                        <Text
+                            style={styles.helloLabel}
+                            status='control'>
+                            CREATE ACCOUNT
+                        </Text>
+                        <Text
+                            style={[styles.verifyMessageLabel, { alignSelf: 'center' }]}
+                            category='s1'
+                            status='control'>
+                            Please enter your verification code
+                        </Text>
+                        <View style={styles.phoneInputContainer}>
+                            <CodeInput
+                                codeLength={6}
+                                // secureTextEntry
+                                activeColor='#999'
+                                inactiveColor='#555'
+                                autoFocus={false}
+                                ignoreCase={true}
+                                inputPosition='center'
+                                size={50}
+                                onFulfill={(verify_code) => { this.setState({ verify_code }) }}
+                                containerStyle={{ marginTop: 0 }}
+                                codeInputStyle={{ borderWidth: 1.5 }}
+                            />
+                            {error && <Text style={styles.errorText}>{error}</Text>}
+                            <TouchableOpacity activeOpacity={0.8} onPress={this.onSendVerificationCode}>
+                                <Text style={styles.resendCode}>Resend Code</Text>
+                            </TouchableOpacity>
                         </View>
-                        <Button
-                            style={styles.nextButton}
-                            size='large'
-                            accessoryLeft={submitting ? LoadingIndicator : null}
-                            onPress={this.onVerifyCode}>
-                            {submitting ? null : 'N E X T'}
-                        </Button>
-                    </Layout>}
-                </View>
+                    </View>
+                    <Button
+                        style={styles.nextButton}
+                        size='small'
+                        accessoryLeft={submitting ? LoadingIndicator : null}
+                        onPress={this.onVerifyCode}>
+                        {submitting ? null : () => <Text style={styles.nextButtonText}>N E X T</Text>}
+                    </Button>
+                </Layout>}
             </KeyboardAvoidingView>
         )
     }
 }
 
+export default class SignupWithPhoneScreen extends PureComponent {
+    render() {
+        const { navigation } = this.props;
+        return (
+            <View style={styles.container}>
+                <TopNavigationComponent navigation={navigation} backPosition="SignupHome" />
+                <SignupWithPhoneForm {...this.props} />
+            </View>
+        )
+    }
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -209,14 +218,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     helloLabel: {
-        fontSize: 32,
+        fontSize: 24,
         lineHeight: 32,
         color: '#E10032',
         alignSelf: 'center'
     },
+    formLabel: {
+        fontSize: 12
+    },
     verifyMessageLabel: {
         marginTop: 20,
-        fontSize: 18
+        fontSize: 14
     },
     phoneInputContainer: {
         marginTop: 20
@@ -252,7 +264,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#E10032',
         borderColor: '#E10032',
         color: 'white',
-        marginBottom: 30
+        marginBottom: 20
+    },
+    nextButtonText: {
+        color: '#FFF',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     errorText: {
         color: '#E10032',

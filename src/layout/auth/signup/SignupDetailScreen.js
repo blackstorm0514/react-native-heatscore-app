@@ -84,7 +84,7 @@ class SignupDetailForm extends PureComponent {
                         <Text style={styles.titleText}>Few More Details</Text>
                         <Text style={styles.offerText}>We just need a few more details to complete your account setup. Only your username will be displayed publicly.</Text>
                         <Layout style={styles.boxLayout}>
-                            <Text>Username (min 6 characters)</Text>
+                            <Text style={styles.formLabel}>Username (min 6 characters)</Text>
                             <Input
                                 style={styles.formInput}
                                 status='control'
@@ -97,7 +97,7 @@ class SignupDetailForm extends PureComponent {
                         </Layout>
                         <Layout style={[styles.boxLayout, { flexDirection: 'row', marginTop: 0, paddingHorizontal: 0 }]}>
                             <Layout style={[styles.boxLayout, { flex: 1 }]}>
-                                <Text>First Name</Text>
+                                <Text style={styles.formLabel}>First Name</Text>
                                 <Input
                                     style={styles.formInput}
                                     status='control'
@@ -109,7 +109,7 @@ class SignupDetailForm extends PureComponent {
                                 {error && error.firstname && <Text style={styles.errorText}>{error.firstname}</Text>}
                             </Layout>
                             <Layout style={[styles.boxLayout, { flex: 1 }]}>
-                                <Text>Last Name</Text>
+                                <Text style={styles.formLabel}>Last Name</Text>
                                 <Input
                                     style={styles.formInput}
                                     status='control'
@@ -122,7 +122,7 @@ class SignupDetailForm extends PureComponent {
                             </Layout>
                         </Layout>
                         <Layout style={styles.boxLayout}>
-                            <Text>Email</Text>
+                            <Text style={styles.formLabel}>Email</Text>
                             <Input
                                 style={styles.formInput}
                                 status='control'
@@ -135,7 +135,7 @@ class SignupDetailForm extends PureComponent {
                             {error && error.email && <Text style={styles.errorText}>{error.email}</Text>}
                         </Layout>
                         <Layout style={styles.boxLayout}>
-                            <Text>Create a Password</Text>
+                            <Text style={styles.formLabel}>Create a Password</Text>
                             <Input
                                 style={styles.formInput}
                                 status='control'
@@ -148,7 +148,7 @@ class SignupDetailForm extends PureComponent {
                             {error && error.password && <Text style={styles.errorText}>{error.password}</Text>}
                         </Layout>
                         <Layout style={styles.boxLayout}>
-                            <Text>Confirm Password</Text>
+                            <Text style={styles.formLabel}>Confirm Password</Text>
                             <Input
                                 style={styles.formInput}
                                 status='control'
@@ -157,7 +157,6 @@ class SignupDetailForm extends PureComponent {
                                 value={passwordConfirm}
                                 secureTextEntry
                                 onChangeText={(text) => this.setState({ passwordConfirm: text })}
-                            // accessoryRight={}
                             />
                             {error && error.passwordConfirm && <Text style={styles.errorText}>{error.passwordConfirm}</Text>}
                         </Layout>
@@ -165,15 +164,15 @@ class SignupDetailForm extends PureComponent {
                     {error && error.server && <Text style={styles.errorText}>{error.server}</Text>}
                     <Button
                         style={styles.nextButton}
-                        size='large'
+                        size='small'
                         accessoryLeft={submitting ? LoadingIndicator : null}
                         onPress={this.onSubmit}>
-                        {submitting ? null : 'N E X T'}
+                        {submitting ? null : () => <Text style={styles.nextButtonText}>N E X T</Text>}
                     </Button>
                 </Layout>}
                 {success && <Layout level="1" style={styles.layoutContainer}>
                     <View style={styles.completeContainer}>
-                        <Ionicons size={120} color='#E10032' name='checkmark-circle-outline' />
+                        <Ionicons size={100} color='#E10032' name='checkmark-circle-outline' />
                         <Text style={styles.youareInText}>You're in</Text>
                         <Text style={styles.accountCompletedText}>Your account has been completed. You will receive a confirmation email</Text>
                     </View>
@@ -222,18 +221,18 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#151515',
         paddingHorizontal: 30,
-        paddingTop: 40,
+        paddingTop: 30,
         justifyContent: 'space-between'
     },
     titleText: {
         color: '#E10032',
         alignSelf: 'center',
-        fontSize: 32,
+        fontSize: 24,
         textTransform: 'uppercase'
     },
     offerText: {
         color: '#FFF',
-        fontSize: 16,
+        fontSize: 14,
         marginVertical: 16
     },
     nextButton: {
@@ -245,11 +244,19 @@ const styles = StyleSheet.create({
         marginBottom: 30,
         marginTop: 15,
     },
+    nextButtonText: {
+        color: '#FFF',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
     boxLayout: {
         backgroundColor: '#151515',
         color: 'white',
         paddingHorizontal: 10,
         marginTop: 15
+    },
+    formLabel: {
+        fontSize: 12
     },
     formInput: {
         marginTop: 6,
@@ -266,13 +273,13 @@ const styles = StyleSheet.create({
     youareInText: {
         marginTop: 10,
         color: '#aaa',
-        fontSize: 40,
+        fontSize: 30,
         fontWeight: 'bold',
         textTransform: 'uppercase'
     },
     accountCompletedText: {
         color: 'white',
-        fontSize: 20,
+        fontSize: 16,
         textAlign: 'center',
         marginTop: 20
     },
