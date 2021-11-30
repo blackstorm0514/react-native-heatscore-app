@@ -4,7 +4,8 @@ import {
     TouchableOpacity,
     View,
     Image,
-    BackHandler
+    BackHandler,
+    FlatList
 } from 'react-native';
 import { Button, List, Text } from '@ui-kitten/components';
 import { ImageOverlay } from '../../components/image-overlay.component';
@@ -12,6 +13,7 @@ import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay'
 import { PlusOutlineIcon } from '../../libs/icons';
 import OverlayImage from '../../assets/images/image-splash.png';
 import { getNews } from '../../redux/services';
+import { LoadingIndicator } from '../scores/components/LoadingIndicator';
 
 export default class NewsListScreen extends PureComponent {
     constructor(props) {
@@ -74,7 +76,6 @@ export default class NewsListScreen extends PureComponent {
                 }
             })
             .catch(error => {
-                // console.log("Getting News Error: ", JSON.stringify(error));
                 this.setState({ loading: false })
             });
     }
@@ -90,29 +91,21 @@ export default class NewsListScreen extends PureComponent {
             <ImageOverlay
                 style={styles.headingNewsContainer}
                 source={{ uri: headingNews.urlToImage }}>
-                <Text
-                    style={styles.headingNewsTitle}
-                    status='control'
-                    category='h3'>
+                <Text style={styles.headingNewsTitle}>
                     {headingNews.title}
                 </Text>
-                <Text
-                    style={styles.headingNewsDescription}
-                    category='h6'
-                    status='control'>
+                <Text style={styles.headingNewsDescription}>
                     {headingNews.description}
                 </Text>
                 {headingNews.source && headingNews.source.name && <Text
-                    style={styles.headingNewsSource}
-                    category='h6'
-                    status='control'>
+                    style={styles.headingNewsSource}>
                     {headingNews.source.name}
                 </Text>}
-                <Button
-                    style={styles.readButton}
+                <Button style={styles.readButton}
                     status='control'
+                    size='small'
                     onPress={() => this.goToItemDetail(headingNews)}>
-                    READ
+                    {() => <Text style={styles.readButtonText}>R E A D</Text>}
                 </Button>
             </ImageOverlay>
         )
@@ -124,6 +117,7 @@ export default class NewsListScreen extends PureComponent {
             loading || gotAll ? null :
                 <Button
                     style={styles.loadButton}
+                    size='small'
                     accessoryRight={PlusOutlineIcon}
                     onPress={() => this.onLoadNews(page + 1)}>
                     <Text style={styles.loadButtonText}>
@@ -136,17 +130,14 @@ export default class NewsListScreen extends PureComponent {
     renderNewsItem = (info) => (
         <TouchableOpacity
             style={styles.item}
-            activeOpacity={0.95}
+            activeOpacity={0.8}
             onPress={() => this.goToItemDetail(info.item)}>
             <View style={styles.itemSection}>
-                <Text
-                    style={styles.itemTitle}
-                    category='s1'>
+                <Text style={styles.itemTitle}>
                     {info.item.title}
                 </Text>
                 {info.item.source && info.item.source.name && <Text
-                    style={styles.itemSource}
-                    category='h6'>
+                    style={styles.itemSource}>
                     {info.item.source.name}
                 </Text>}
             </View>
@@ -161,24 +152,15 @@ export default class NewsListScreen extends PureComponent {
         const { headingNews, listNews, loading } = this.state;
         return (
             <View style={styles.container}>
-                {headingNews && <List
+                {headingNews && <FlatList
                     style={styles.list}
                     data={listNews}
                     renderItem={this.renderNewsItem}
                     ListHeaderComponent={this.renderHeadingItem}
                     ListFooterComponent={this.renderFooterItem}
+                    keyExtractor={(item, index) => index.toString()}
                 />}
-                {!headingNews && <ImageOverlay
-                    style={styles.container}
-                    source={OverlayImage}>
-                </ImageOverlay>}
-                {loading && <OrientationLoadingOverlay
-                    visible={true}
-                    color="white"
-                    indicatorSize="large"
-                    messageFontSize={24}
-                    message="Loading..."
-                />}
+                {loading && <LoadingIndicator style={styles.loadingIndicator} />}
             </View>
         );
     };
@@ -190,65 +172,63 @@ const styles = StyleSheet.create({
         backgroundColor: 'black'
     },
     list: {
-        // flex: 1,
         backgroundColor: 'black'
     },
     readButton: {
         width: '50%',
-        marginTop: 30,
+        marginTop: 20,
         alignSelf: 'center',
-        fontSize: 20,
         marginBottom: 10,
+    },
+    readButtonText: {
+        color: '#000',
+        fontSize: 14,
+        fontWeight: 'bold',
     },
     headingNewsContainer: {
         justifyContent: 'center',
         paddingHorizontal: 15,
-        minHeight: 320,
+        minHeight: 200,
         marginBottom: 4,
     },
     headingNewsTitle: {
         zIndex: 1,
         textAlign: 'center',
+        fontSize: 20
     },
     headingNewsDescription: {
         zIndex: 1,
         marginTop: 20,
+        fontSize: 16
     },
     headingNewsSource: {
         marginTop: 15,
+        fontSize: 14
     },
     item: {
-        // borderWidth: 2,
-        // borderColor: '#DDD',
-        marginBottom: 6,
+        marginBottom: 4,
         flexDirection: 'row',
         height: 150,
-        backgroundColor: '#05162b',
-        marginHorizontal: 6,
+        backgroundColor: '#111',
+        marginHorizontal: 2,
         padding: 10,
         borderRadius: 4,
-        shadowColor: '#25364b',
-        shadowRadius: 2,
     },
     itemSection: {
         flex: 2,
-        padding: 6,
+        padding: 2,
     },
     itemImageSection: {
         flex: 1,
         padding: 0,
     },
-    itemReactionsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginTop: 24,
-        marginHorizontal: -8,
-    },
     itemTitle: {
         flex: 1,
+        fontSize: 14
     },
     itemSource: {
-        alignSelf: 'baseline'
+        alignSelf: 'baseline',
+        fontSize: 12
     },
     iconButton: {
         paddingHorizontal: 0,
@@ -262,5 +242,9 @@ const styles = StyleSheet.create({
     },
     loadButtonText: {
         color: 'white',
+    },
+    loadingIndicator: {
+        height: 100,
+        justifyContent: 'center'
     },
 });
