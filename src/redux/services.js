@@ -71,3 +71,7 @@ export const addScoreCard = (data) => {
 export const getScoreCards = (date) => {
     return ApiService.get('/scorecards', { params: { date } });
 }
+
+export const deleteScoreCard = (card_id) => {
+    return ApiService.delete(`/scorecards/${card_id}`);
+}

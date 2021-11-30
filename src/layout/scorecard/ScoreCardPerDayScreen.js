@@ -6,7 +6,8 @@ import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { LoadingIndicator } from '../scores/components/LoadingIndicator';
 import ScoreCardComponent from './components/ScoreCardComponent';
-import { getScoreCards } from '../../redux/services';
+import { deleteScoreCard, getScoreCards } from '../../redux/services';
+import Toast from 'react-native-simple-toast';
 
 class ScoreCardPerDayScreen extends PureComponent {
     constructor(props) {
@@ -132,7 +133,19 @@ class ScoreCardPerDayScreen extends PureComponent {
                 {
                     text: "Yes",
                     onPress: () => {
-                        
+                        deleteScoreCard(card_id)
+                            .then(({ data }) => {
+                                const { success, error } = data;
+                                if (success) {
+                                    this.getEventsData();
+                                    Toast.show('Score Card deleted.');
+                                } else {
+                                    Toast.show(error);
+                                }
+                            })
+                            .catch(() => {
+                                Toast.show('Cannot delete card. Please try again later.')
+                            })
                     },
                 },
                 { text: "No", },
@@ -145,6 +158,16 @@ class ScoreCardPerDayScreen extends PureComponent {
             <Text style={{ fontSize: 16, marginTop: 20, textAlign: 'center' }}>Please Click + to add a game to your score card.</Text>
         </View>
     )
+
+    getSnapshotBeforeUpdate(prevProps) {
+        return { reloadRequired: prevProps.newlyAdded !== this.props.newlyAdded };
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (snapshot.reloadRequired) {
+            this.getEventsData();
+        }
+    }
 
     render() {
         const { data, loading } = this.state;

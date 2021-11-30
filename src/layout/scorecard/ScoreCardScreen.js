@@ -54,6 +54,7 @@ class ScoreCardScreen extends PureComponent {
             alert_gameScoring: false,
 
             submitting: false,
+            newlyAdded: null,
         }
 
         this.addModalRef = createRef();
@@ -61,10 +62,12 @@ class ScoreCardScreen extends PureComponent {
 
     renderScene = ({ route }) => {
         const { navigation } = this.props;
+        const { newlyAdded } = this.state;
         return (
             <ScoreCardPerDayScreen
                 date={route.date}
                 keyDate={route.key}
+                newlyAdded={newlyAdded}
                 setLeague={(league) => this.setState({ league: league })}
                 navigation={navigation} />
         )
@@ -170,6 +173,7 @@ class ScoreCardScreen extends PureComponent {
                         alert_gameScoring: false,
 
                         submitting: false,
+                        newlyAdded: time
                     })
                 } else {
                     Toast.show(error);

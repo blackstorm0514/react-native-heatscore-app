@@ -92,7 +92,7 @@ export default class ScoreCardComponent extends PureComponent {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        marginTop: 2,
+        marginTop: 1,
         backgroundColor: '#101010',
     },
     eventWrapper: {
