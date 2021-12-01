@@ -3,8 +3,7 @@ import { StyleSheet, View, ScrollView, Dimensions, Image } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import { TouchableOpacity } from 'react-native';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import { getMatchScore, getPickName, getStatusString, getWinLoss } from '../../../libs/functions';
-import { format } from 'date-fns';
+import { getMatchScore, getPickName, getStatusString, getTimeString, getWinLoss } from '../../../libs/functions';
 
 const screenWidth = Dimensions.get('screen').width;
 
@@ -15,7 +14,7 @@ export default class ScoreCardComponent extends PureComponent {
         const { event: { home, away, scores, timer, sport, time_status }, type, team, timeline, points, time } = card;
         const { home_score, away_score } = getMatchScore(sport, scores, timeline);
 
-        const time_str = format(new Date(time), "hh:mm aa");
+        const time_str = getTimeString(sport, timer, time, time_status);
         const { status_text } = getStatusString(time_status, timer);
 
         const winLoss = getWinLoss(home_score, away_score, team, type, points);
@@ -152,8 +151,8 @@ const styles = StyleSheet.create({
         paddingRight: 8,
     },
     eventItemStatusText: {
-        fontSize: 14,
-        marginVertical: 4,
+        fontSize: 13,
+        marginVertical: 5,
         textAlign: 'right',
         overflow: 'hidden'
     },

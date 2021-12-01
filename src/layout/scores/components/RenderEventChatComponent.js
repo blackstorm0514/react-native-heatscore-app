@@ -14,6 +14,7 @@ import { CloseIcon } from '../../../libs/icons';
 import { v4 as uuidv4 } from 'uuid';
 import ChatInformModal from './chats/ChatInformModal';
 import RenderChatItem from './chats/RenderChatItem';
+import ReportChat from './chats/ReportChat';
 const MESSAGE_LIMIT = 20;
 
 class RenderEventChatComponent extends Component {
@@ -30,9 +31,11 @@ class RenderEventChatComponent extends Component {
             messagesListener: null,
             lastVisible: null,
             gifSearch: '',
+            chatReport: null,
         }
 
-        this.modalizeRef = createRef(null);
+        this.gifModalizeRef = createRef(null);
+        this.reportModalizeRef = createRef(null);
     }
 
     componentDidMount() {
@@ -195,7 +198,8 @@ class RenderEventChatComponent extends Component {
     }
 
     renderChatItem = ({ currentMessage }) => {
-        return <RenderChatItem chat={currentMessage} />
+        return <RenderChatItem chat={currentMessage}
+            onSelectReport={this.onSelectReport} />
     }
 
     renderInputToolbar = (props) => (
@@ -263,7 +267,7 @@ class RenderEventChatComponent extends Component {
                 )}
                 onPressActionButton={() => {
                     if (user) {
-                        this.modalizeRef.current?.open();
+                        this.gifModalizeRef.current?.open();
                     } else {
                         Toast.show('Please login to send message.');
                         return;
@@ -274,7 +278,7 @@ class RenderEventChatComponent extends Component {
     }
 
     onCloseModal = () => {
-        this.modalizeRef.current?.close();
+        this.gifModalizeRef.current?.close();
     }
 
     customClearIcon = () => {
@@ -303,8 +307,18 @@ class RenderEventChatComponent extends Component {
         )
     }
 
+    onSelectReport = async (chatReport) => {
+        await this.setState({ chatReport })
+        this.reportModalizeRef.current?.open();
+    }
+
+    onCloseReport = async () => {
+        await this.setState({ chatReport: null })
+        this.reportModalizeRef.current?.close();
+    }
+
     render() {
-        const { recentChats, oldChats, loadingEarlier, gifSearch } = this.state;
+        const { recentChats, oldChats, loadingEarlier, gifSearch, chatReport } = this.state;
         const { user } = this.props;
 
         return (
@@ -331,14 +345,22 @@ class RenderEventChatComponent extends Component {
                     bottomOffset={10}
                 />
                 <Modalize
-                    ref={this.modalizeRef}
+                    ref={this.gifModalizeRef}
                     HeaderComponent={this.renderModalHeader}
                     scrollViewProps={{ showsVerticalScrollIndicator: true }}
                     adjustToContentHeight={true}>
                     <GifScroller
                         inputText={gifSearch}
                         handleGifSelect={this.onGIFSelect}
+                        onSelectReport={this.onSelectReport}
                     />
+                </Modalize>
+                <Modalize
+                    ref={this.reportModalizeRef}
+                    scrollViewProps={{ showsVerticalScrollIndicator: true }}
+                    adjustToContentHeight={true}>
+                    <ReportChat chatReport={chatReport}
+                        onCloseReport={this.onCloseReport} />
                 </Modalize>
             </View>
         )

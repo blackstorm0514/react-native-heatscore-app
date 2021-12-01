@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { actions } from '../../../redux/reducer';
 import { AppStorage } from '../../../services/app-storage.service';
 import { GoogleLogOut } from '../../../services/google.service';
+import Toast from 'react-native-simple-toast';
 
 class ProfileScreen extends PureComponent {
 
@@ -41,6 +42,15 @@ class ProfileScreen extends PureComponent {
                 { text: "No", },
             ]
         );
+    }
+
+    navigateFavorite = (route) => {
+        const { navigation, user } = this.props;
+        if (user) {
+            navigation.navigate(route);
+        } else {
+            Toast.show('Please log in to view or add favorite teams.');
+        }
     }
 
     render() {
@@ -79,9 +89,8 @@ class ProfileScreen extends PureComponent {
                 />
                 <ProfileSettingComponent
                     style={styles.profileSetting}
-                    title='Favourites'
-                    disabled={user == null}
-                    navigateAction={() => navigation.navigate('Favorites')}
+                    title='Favorites'
+                    navigateAction={() => this.navigateFavorite('Favorites')}
                 />
                 <ProfileSettingComponent
                     style={styles.profileSetting}

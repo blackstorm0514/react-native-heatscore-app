@@ -3,8 +3,6 @@ import {
     StyleSheet,
     View,
     TouchableOpacity,
-    ImageBackground,
-    Image,
     Dimensions
 } from 'react-native';
 import { Text } from '@ui-kitten/components';
@@ -16,12 +14,14 @@ const win = Dimensions.get('window');
 
 export default class RenderChatItem extends PureComponent {
     render() {
-        const { chat } = this.props;
+        const { chat, onSelectReport } = this.props;
         const { user, createdAt, text, image } = chat;
         const time_str = format(new Date(createdAt.seconds * 1000), "MMM d, hh:mm aaa");
         if (image) {
             return (
-                <View style={styles.chatItemContainer}>
+                <TouchableOpacity style={styles.chatItemContainer}
+                    onPress={() => onSelectReport(chat)}
+                    activeOpacity={0.8}>
                     <FeatherIcon
                         size={20}
                         color='#ddd'
@@ -35,12 +35,14 @@ export default class RenderChatItem extends PureComponent {
                             width={win.width - 70}
                         />
                     </View>
-                </View>
+                </TouchableOpacity>
             );
         }
 
         return (
-            <View style={styles.chatItemContainer}>
+            <TouchableOpacity style={styles.chatItemContainer}
+                onPress={() => onSelectReport(chat)}
+                activeOpacity={0.8}>
                 <FeatherIcon
                     size={20}
                     color='#ddd'
@@ -50,11 +52,10 @@ export default class RenderChatItem extends PureComponent {
                     <Text style={styles.chatTime}>{time_str}</Text>
                     <Text style={styles.chatContent}>{user.username}: <Text style={{ color: 'white', fontWeight: '100', fontSize: 13 }}>{text}</Text></Text>
                 </View>
-            </View>
+            </TouchableOpacity>
         )
     }
 }
-
 
 const styles = StyleSheet.create({
     chatItemContainer: {

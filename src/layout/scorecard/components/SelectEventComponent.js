@@ -120,7 +120,7 @@ export default class SelectEventComponent extends PureComponent {
 
     getEventsForLeague = () => {
         const { league, sport: sportIndex, eventQuery, daterange } = this.state;
-        if (!sportIndex || !league || !daterange.startDate || !daterange.endDate) return;
+        if (!sportIndex || !league) return;
         this.setState({
             events: [],
             event: null,

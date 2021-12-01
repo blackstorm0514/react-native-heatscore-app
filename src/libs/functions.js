@@ -4,6 +4,7 @@ import { getBasketballMatchScore } from './getBasketballMatchScore';
 import { getFootballMatchScore } from './getFootballMatchScore';
 import { getIceHockeyMatchScore } from './getIceHockeyScore';
 import { getSoccerMatchScore } from './getSoccerMatchScore';
+import { format } from 'date-fns';
 
 export function capitalizeString(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -31,6 +32,12 @@ export function getTimeLineName(timeline) {
         "3rd_peorid": "3rd Peorid",
     }
     return timelines[timeline];
+}
+
+export function getTimeString(sport, timer, time, time_status) {
+    if (["2", "3"].includes(time_status)) return null;
+    const time_str = format(new Date(time), "hh:mm aa");
+    return time_str;
 }
 
 export function getMatchScore(sport, scores, timeline) {

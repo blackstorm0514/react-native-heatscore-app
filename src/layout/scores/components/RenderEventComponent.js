@@ -6,8 +6,7 @@ import {
     Image
 } from 'react-native';
 import { Text } from '@ui-kitten/components';
-import { format } from 'date-fns';
-import { getMatchScore, getStatusString, ordinal_suffix_of } from '../../../libs/functions';
+import { getMatchScore, getStatusString, getTimeString, ordinal_suffix_of } from '../../../libs/functions';
 
 export default class RenderEventComponent extends PureComponent {
     onItemPress = () => {
@@ -21,7 +20,7 @@ export default class RenderEventComponent extends PureComponent {
         if (!event) return null;
 
         const { home, away, time, time_status, timer, sport, scores } = event;
-        let time_str = format(new Date(time), "hh:mm aa");
+        const time_str = getTimeString(sport, timer, time, time_status);
         const { home_score, away_score } = getMatchScore(sport, scores, 'game');
         const { status_class, status_text } = getStatusString(time_status, timer);
 
@@ -49,7 +48,7 @@ export default class RenderEventComponent extends PureComponent {
                     </View>
                 </View>
                 <View style={styles.eventItemStatus}>
-                    <Text style={[status_class, styles.eventItemStatusText]}>{time_str}</Text>
+                    {time_str && <Text style={[status_class, styles.eventItemStatusText]}>{time_str}</Text>}
                     {status_text &&
                         <Text style={[status_class, styles.eventItemStatusText]} numberOfLines={1}>{status_text}</Text>}
                 </View>
@@ -71,8 +70,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     eventItemStatusText: {
-        fontSize: 14,
-        marginVertical: 2,
+        fontSize: 12,
+        marginVertical: 3,
         textAlign: 'right',
         overflow: 'hidden'
     },

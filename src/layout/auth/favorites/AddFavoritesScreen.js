@@ -107,7 +107,7 @@ class AddFavoritesScreen extends PureComponent {
                 />
                 <Button style={styles.searchButton}
                     onPress={this.searchTeams}
-                    size='large'>Done</Button>
+                    size='medium'>Search</Button>
             </View>
         );
     }

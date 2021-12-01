@@ -151,8 +151,6 @@ GifScroller.defaultProps = {
 };
 
 const styles = StyleSheet.create({
-    scroll: {
-    },
     list: {
         flex: 1,
         backgroundColor: '#222',
