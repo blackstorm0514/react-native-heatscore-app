@@ -56,12 +56,8 @@ export const removeFavorite = (sport, team) => {
     return ApiService.post('/favorites/remove', { sport, team });
 }
 
-export const getLeaguesForSport = (sport, query) => {
-    return ApiService.get('/scorecards/league', { params: { sport, query } });
-}
-
-export const getEventsForLeague = (league, query, startDate, endDate) => {
-    return ApiService.get('/scorecards/league/events', { params: { league, query, startDate, endDate } });
+export const searchEventsForScoreCard = (search) => {
+    return ApiService.get('/scorecards/events', { params: { search } });
 }
 
 export const addScoreCard = (data) => {

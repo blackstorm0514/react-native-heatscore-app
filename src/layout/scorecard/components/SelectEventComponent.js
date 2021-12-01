@@ -3,204 +3,147 @@ import {
     StyleSheet,
     View,
     TouchableOpacity,
-    Image
+    Image,
+    ScrollView,
+    Dimensions
 } from 'react-native';
-import { Text, RangeDatepicker, Select, SelectItem, Autocomplete, AutocompleteItem } from '@ui-kitten/components';
+import { Text, Input, Button, List } from '@ui-kitten/components';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import { CalendarIcon } from "../../../libs/icons";
-import { getEventsForLeague, getLeaguesForSport } from "../../../redux/services";
 import { format } from 'date-fns';
 import Toast from 'react-native-simple-toast';
+import { CloseIcon, SearchIcon } from '../../../libs/icons';
+import { LoadingIndicator } from '../../scores/components/LoadingIndicator';
+import { searchEventsForScoreCard } from "../../../redux/services";
+import { truncateString } from "../../../libs/functions";
 
-const sports = [
-    { title: 'Soccer', id: 1 },
-    { title: 'American Football', id: 12 },
-    { title: 'Basketball', id: 18 },
-    { title: 'Baseball', id: 16 },
-    { title: 'Ice Hockey', id: 17 },
-]
+const screenHeight = Dimensions.get('screen').height;
 
 export default class SelectEventComponent extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            daterange: {},
-            sport: null,
-            league: null,
-            event: null,
-            leagueQuery: '',
-            leagues: [],
-            leagueTypingTimeout: null,
-            eventQuery: '',
+            search: '',
+            loading: false,
             events: [],
-            eventTypingTimeout: null,
-        }
-        this.leagueInput = createRef();
-        this.eventInput = createRef();
-    }
-
-    onSelectDateRange = (daterange) => {
-        this.setState({
-            daterange,
-            eventQuery: '',
-            event: null,
-            events: []
-        });
-    }
-
-    onSelectSport = async (index) => {
-        const { sport } = this.state;
-        if (!sport || sport.row != index.row) {
-            await this.setState({
-                sport: index,
-                league: null,
-                leagueQuery: '',
-            });
+            selectedEvent: null,
+            searchTimeout: null
         }
     }
-
-    onChangeLeagueText = async (text) => {
-        const { leagueTypingTimeout } = this.state;
-        if (leagueTypingTimeout) {
-            clearTimeout(leagueTypingTimeout);
-        }
-        this.setState({
-            leagueQuery: text,
-            leagueTypingTimeout: setTimeout(this.getLeaguesForSport, 500),
-            league: null,
-        });
-    }
-
-    getLeaguesForSport = () => {
-        const { leagueQuery, sport: sportIndex } = this.state;
-        if (!sportIndex) return;
-
-        const sport = sports[sportIndex.row].id;
-        this.setState({
-            leagues: [],
-            eventQuery: '',
-            event: null,
-            events: []
-        });
-        getLeaguesForSport(sport, leagueQuery)
-            .then(({ data }) => {
-                const { success, leagues } = data;
-                if (success) {
-                    this.setState({ leagues: leagues });
-                } else {
-                    this.setState({ leagues: [] });
-                }
-            })
-            .catch(() => {
-                this.setState({ leagues: [] });
-            })
-    }
-
-    onSelectLeague = async (item) => {
-        const { leagues } = this.state;
-        if (leagues.length == 0) return;
-        this.leagueInput.current?.blur();
-        await this.setState({
-            leagueQuery: leagues[item].name,
-            league: leagues[item].league_id,
-        });
-    }
-
-    onChangeEventText = (text) => {
-        const { eventTypingTimeout } = this.state;
-        if (eventTypingTimeout) {
-            clearTimeout(eventTypingTimeout);
-        }
-        this.setState({
-            eventQuery: text,
-            eventTypingTimeout: setTimeout(this.getEventsForLeague, 500),
-            event: null,
-        });
-    }
-
-    getEventsForLeague = () => {
-        const { league, sport: sportIndex, eventQuery, daterange } = this.state;
-        if (!sportIndex || !league) return;
-        this.setState({
-            events: [],
-            event: null,
-            eventQuery: ''
-        });
-        getEventsForLeague(league, eventQuery, daterange.startDate, daterange.endDate)
-            .then(({ data }) => {
-                const { success, events } = data;
-                if (success) {
-                    this.setState({ events: events });
-                } else {
-                    this.setState({ events: [] });
-                }
-            })
-            .catch(() => {
-                this.setState({ events: [] });
-            })
-    }
-
-    onSelectEvent = (item) => {
-        const { events } = this.state;
-        if (events.length == 0) return;
-        this.eventInput.current?.blur();
-        this.setState({
-            eventQuery: `${events[item].home.name} vs ${events[item].away.name}`,
-            event: events[item],
-        });
-    }
-
-    renderSportsOption = (item) => (
-        <SelectItem title={item.title} key={item.title} />
-    );
-
-    renderLeaguesOption = (item, index) => (
-        <AutocompleteItem
-            key={index}
-            title={item.name}
-            style={styles.autocompleteItem}
-            activeOpacity={0.7}
-        />
-    );
-
-    getFormattedDate = (date) => {
-        return format(new Date(date), "eee MMM dd, HH:mm aa");
-    }
-
-    renderEventsOption = (item, index) => (
-        <AutocompleteItem key={index}
-            style={styles.autocompleteItem}
-            activeOpacity={0.7}>
-            <View>
-                <View style={styles.autocompleteEventContainer}>
-                    <Image
-                        style={styles.teamLogoImage}
-                        source={{ uri: `https://assets.b365api.com/images/team/m/${item.home.image_id}.png` }}
-                    />
-                    <Text style={styles.autocompleteEventText}>{item.home.name} vs {item.away.name}</Text>
-                    <Image
-                        style={styles.teamLogoImage}
-                        source={{ uri: `https://assets.b365api.com/images/team/m/${item.away.image_id}.png` }}
-                    />
-                </View>
-                <Text style={styles.eventTimeText}>{this.getFormattedDate(item.time)}</Text>
-            </View>
-        </AutocompleteItem>
-    );
 
     handleOK = () => {
-        const { event } = this.state;
+        const { selectedEvent } = this.state;
         const { onSelect } = this.props;
-        if (!event) {
+        if (!selectedEvent) {
             Toast.show('Please select an event to add Score Card.');
             return;
         }
-        onSelect(event);
+        onSelect(selectedEvent);
+    }
+
+    onChangeText = (search) => {
+        this.setState({ search });
+        if (search) {
+            const { searchTimeout } = this.state;
+            if (searchTimeout) clearTimeout(searchTimeout);
+            this.setState({
+                searchTimeout: setTimeout(this.searchEvents, 500)
+            })
+        }
+    }
+
+    searchEvents = () => {
+        const { search } = this.state;
+        this.setState({ loading: true });
+        searchEventsForScoreCard(search)
+            .then(({ data }) => {
+                const { success, events } = data;
+                if (success) {
+                    this.setState({ loading: false, events: events });
+                } else {
+                    // Toast.show(error);
+                    this.setState({ loading: false, events: [] });
+                }
+            })
+            .catch((error) => {
+                // Toast.show('Cannot get events. Please try again later.');
+                this.setState({ loading: false, events: [] });
+            })
+    }
+
+    customSearchIcon = () => {
+        return <SearchIcon style={styles.searchIcon} />
+    }
+
+    customClearIcon = () => {
+        const { search } = this.state;
+        return search ? <TouchableOpacity activeOpacity={0.8} onPress={() => this.setState({ search: '' })}>
+            <CloseIcon style={styles.searchIcon} />
+        </TouchableOpacity> : null
+    }
+
+    renderEvents = () => {
+        const { loading, events, selectedEvent } = this.state;
+
+        if (loading) {
+            return (
+                <LoadingIndicator style={styles.loadingIndicator} />
+            )
+        }
+        if (events.length == 0) {
+            return (
+                <View style={styles.eventItem}>
+                    <Text style={styles.noResultText}>No Result. Please retry with another terms.</Text>
+                </View>
+            )
+        }
+
+        return (
+            <ScrollView style={styles.eventsContainer}>
+                {events.map((event, index) => {
+                    const selected = selectedEvent && selectedEvent.event_id == event.event_id;
+                    return (
+                        <View style={styles.eventItem} key={index}>
+                            <TouchableOpacity
+                                style={styles.eventItemDetail}
+                                activeOpacity={selected ? 1 : 0.8}
+                                onPress={() => this.setState({ selectedEvent: event })}>
+                                <Text style={styles.eventItemLeague}>{event.league.name}</Text>
+                                <View style={styles.eventItemTeams}>
+                                    <Image
+                                        style={styles.teamLogoImage}
+                                        source={{ uri: `https://assets.b365api.com/images/team/m/${event.home.image_id}.png` }}
+                                    />
+                                    <Text style={styles.eventItemTeamName}>{truncateString(event.home.name)} VS {truncateString(event.away.name)}</Text>
+                                    <Image
+                                        style={styles.teamLogoImage}
+                                        source={{ uri: `https://assets.b365api.com/images/team/m/${event.away.image_id}.png` }}
+                                    />
+                                </View>
+                                <Text style={styles.eventItemDate}>{format(new Date(event.time), "eee yyyy MMM dd, HH:mm aa")}</Text>
+                            </TouchableOpacity>
+                            {selected && <View style={styles.buttonsContainer}>
+                                <TouchableOpacity
+                                    onPress={this.handleOK}
+                                    activeOpacity={0.7}
+                                    style={[styles.buttonStyle, styles.buttonOK]}>
+                                    <Text style={styles.buttonText}>OK</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => this.setState({ selectedEvent: null })}
+                                    activeOpacity={0.7}
+                                    style={[styles.buttonStyle, styles.buttonCancel]}>
+                                    <Text style={styles.buttonText}>Cancel</Text>
+                                </TouchableOpacity>
+                            </View>}
+                        </View>
+                    )
+                })}
+            </ScrollView>
+        );
     }
 
     render() {
         const { onBack } = this.props;
-        const { daterange, sport, events, eventQuery, leagueQuery, leagues } = this.state;
+        const { search } = this.state;
 
         return (
             <View style={styles.container}>
@@ -214,119 +157,122 @@ export default class SelectEventComponent extends PureComponent {
                     <Text style={styles.titleText}>Select an event.</Text>
                     <Text></Text>
                 </View>
-                <View style={styles.formContainer}>
-                    <RangeDatepicker
-                        range={daterange}
-                        onSelect={this.onSelectDateRange}
-                        accessoryRight={CalendarIcon}
-                        label="Select Date Range"
-                        style={styles.rangePickerStyle}
-                        controlStyle={styles.rangePickerControlStyle}
+                <View style={styles.header}>
+                    <Input
+                        style={styles.searchInput}
+                        placeholder='Search Events'
+                        placeholderTextColor="#888"
+                        value={search}
+                        onChangeText={this.onChangeText}
+                        accessoryLeft={this.customSearchIcon}
+                        accessoryRight={this.customClearIcon}
                     />
-                    <Select
-                        label="Select a Sport"
-                        style={styles.selectSport}
-                        placeholder='Select a Sport'
-                        value={sport ? sports[sport.row].title : ''}
-                        selectedIndex={sport}
-                        onSelect={this.onSelectSport}
-                    >
-                        {sports.map(this.renderSportsOption)}
-                    </Select>
-
-                    <Autocomplete
-                        placeholder='Select a League'
-                        style={styles.selectSport}
-                        label='Select a League'
-                        value={leagueQuery}
-                        onSelect={this.onSelectLeague}
-                        onChangeText={this.onChangeLeagueText}
-                        onFocus={this.getLeaguesForSport}
-                        ref={this.leagueInput}
-                    >
-                        {leagues.length > 0 && leagues.map(this.renderLeaguesOption)}
-                        {leagues.length == 0 && <AutocompleteItem
-                            title="No Leagues."
-                            style={styles.autocompleteItem}
-                        />}
-                    </Autocomplete>
-
-                    <Autocomplete
-                        placeholder='Search Event'
-                        style={styles.selectSport}
-                        label='Search Event'
-                        value={eventQuery}
-                        onSelect={this.onSelectEvent}
-                        onChangeText={this.onChangeEventText}
-                        onFocus={this.getEventsForLeague}
-                        ref={this.eventInput}
-                    >
-                        {events.map(this.renderEventsOption)}
-                        {events.length == 0 && <AutocompleteItem
-                            title="No Events."
-                            style={styles.autocompleteItem}
-                        />}
-                    </Autocomplete>
-
-                    <View style={styles.buttonsContainer}>
-                        <TouchableOpacity
-                            onPress={this.handleOK}
-                            activeOpacity={0.7}
-                            style={[styles.buttonStyle, styles.buttonOK]}>
-                            <Text style={styles.buttonText}>OK</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={onBack}
-                            activeOpacity={0.7}
-                            style={[styles.buttonStyle, styles.buttonCancel]}>
-                            <Text style={styles.buttonText}>Cancel</Text>
-                        </TouchableOpacity>
-                    </View>
                 </View>
+                {this.renderEvents()}
             </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
     titleContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         marginBottom: 20,
         paddingTop: 10,
-        paddingHorizontal: 10
+        paddingHorizontal: 10,
+        height: 30,
     },
     titleText: {
-        fontSize: 20,
+        fontSize: 16,
     },
-    formContainer: {
-        paddingHorizontal: 10
+    header: {
+        paddingHorizontal: 16,
+        paddingVertical: 2,
+        backgroundColor: '#111',
     },
-    rangePickerStyle: {
-        // backgroundColor: '#000'
-        color: 'white'
-    },
-    rangePickerControlStyle: {
+    searchInput: {
+        marginTop: 6,
         backgroundColor: '#000',
         borderWidth: 0,
-        color: 'white'
+        borderRadius: 6,
+        flex: 1,
+        tintColor: '#FFF'
     },
-    selectSport: {
-        marginTop: 6
+    searchButton: {
+        backgroundColor: '#111',
+        borderColor: '#111',
+        color: 'white',
+    },
+    searchIcon: {
+        height: 20,
+        width: 20,
+        marginHorizontal: 4,
+        tintColor: '#FFF'
+    },
+    noResultText: {
+        paddingHorizontal: 10,
+        textAlign: 'center',
+        fontSize: 14
+    },
+    eventItem: {
+        paddingVertical: 8,
+        borderBottomWidth: 1,
+        borderTopWidth: 1,
+        borderColor: '#222',
+        backgroundColor: '#111'
+    },
+    loadingIndicator: {
+        flex: 1,
+    },
+    eventsContainer: {
+        flex: 1,
+        maxHeight: screenHeight - 222
+    },
+    eventItemDetail: {
+        paddingHorizontal: 20
+    },
+    eventItemLeague: {
+        fontSize: 11,
+        color: '#ddd'
+    },
+    eventItemDate: {
+        fontSize: 10,
+        color: '#999'
+    },
+    eventItemTeams: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    eventItemTeamName: {
+        fontSize: 13,
+        color: '#FFF'
+    },
+    teamLogoImage: {
+        width: 16,
+        height: 16,
+        resizeMode: 'contain',
+        marginHorizontal: 10,
+        marginVertical: 8,
     },
     buttonsContainer: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
         marginTop: 15,
+        marginHorizontal: 20
     },
     buttonStyle: {
-        paddingVertical: 8,
-        paddingHorizontal: 20,
+        paddingVertical: 4,
+        paddingHorizontal: 16,
         borderRadius: 4
     },
     buttonText: {
         color: '#FFF',
-        fontSize: 16
+        fontSize: 12
     },
     buttonOK: {
         backgroundColor: '#E10032',
@@ -335,27 +281,4 @@ const styles = StyleSheet.create({
         backgroundColor: '#333',
         marginLeft: 10
     },
-    autocompleteItem: {
-        color: '#FFF',
-        backgroundColor: '#000'
-    },
-    autocompleteEventContainer: {
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    teamLogoImage: {
-        width: 16,
-        height: 16,
-        marginLeft: 10
-    },
-    autocompleteEventText: {
-        fontSize: 16,
-        marginLeft: 10,
-        color: '#FFF'
-    },
-    eventTimeText: {
-        fontSize: 12,
-        marginLeft: 10,
-        color: '#999'
-    }
 })

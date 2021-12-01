@@ -50,7 +50,7 @@ export default class SelectPointComponent extends PureComponent {
                         showBorder={true}
                         editable={true}
                         textColor="#FFF"
-                        fontSize={20}
+                        fontSize={16}
                         selectionColor="#999"
                         inputStyle={{ borderColor: 'white' }}
                         buttonStyle={{ backgroundColor: 'black', borderColor: '#FFF', borderWidth: 1 }}
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10
     },
     titleText: {
-        fontSize: 20,
+        fontSize: 16,
     },
     inputContainer: {
         borderColor: '#222',

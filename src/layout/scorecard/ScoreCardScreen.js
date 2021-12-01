@@ -228,8 +228,11 @@ class ScoreCardScreen extends PureComponent {
                 <Modalize
                     ref={this.addModalRef}
                     HeaderComponent={this.renderModalHeader}
-                    scrollViewProps={{ showsVerticalScrollIndicator: true }}
-                    adjustToContentHeight={true}>
+                    disableScrollIfPossible
+                    // scrollViewProps={{ showsVerticalScrollIndicator: true }}
+                    // adjustToContentHeight
+                    modalStyle={{ backgroundColor: '#111' }}
+                >
                     <AddScoreModalContent
                         event={event}
                         team={team}
@@ -279,7 +282,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: 20,
-        paddingVertical: 10
+        paddingVertical: 10,
+        height: 42
     },
     modalHeaderAction: {
         color: '#E10032',

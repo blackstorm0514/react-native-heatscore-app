@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10
     },
     titleText: {
-        fontSize: 20,
+        fontSize: 16,
     },
     radioContainer: {
         borderColor: '#222',
