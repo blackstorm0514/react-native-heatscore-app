@@ -1,4 +1,4 @@
-import React, { useState, useEffect, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import {
     StyleSheet,
     TouchableOpacity,
@@ -7,11 +7,9 @@ import {
     BackHandler,
     FlatList
 } from 'react-native';
-import { Button, List, Text } from '@ui-kitten/components';
+import { Button, Text } from '@ui-kitten/components';
 import { ImageOverlay } from '../../components/image-overlay.component';
-import OrientationLoadingOverlay from 'react-native-orientation-loading-overlay';
 import { PlusOutlineIcon } from '../../libs/icons';
-import OverlayImage from '../../assets/images/image-splash.png';
 import { getNews } from '../../redux/services';
 import { LoadingIndicator } from '../scores/components/LoadingIndicator';
 
@@ -207,7 +205,7 @@ const styles = StyleSheet.create({
     item: {
         marginBottom: 4,
         flexDirection: 'row',
-        height: 100,
+        minHeight: 100,
         backgroundColor: '#111',
         marginHorizontal: 2,
         padding: 10,
@@ -227,7 +225,8 @@ const styles = StyleSheet.create({
     },
     itemSource: {
         alignSelf: 'baseline',
-        fontSize: 12
+        fontSize: 12,
+        marginTop: 10,
     },
     iconButton: {
         paddingHorizontal: 0,

@@ -1,4 +1,4 @@
-import React, { PureComponent, useEffect } from 'react';
+import React, { PureComponent } from 'react';
 import { StyleSheet, BackHandler } from 'react-native';
 import { Layout } from '@ui-kitten/components';
 import { WebView } from 'react-native-webview';
