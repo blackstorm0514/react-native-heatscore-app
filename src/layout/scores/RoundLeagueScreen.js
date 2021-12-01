@@ -10,6 +10,7 @@ import { TabView, TabBar } from 'react-native-tab-view';
 import RenderLeagueRoundComponent from './components/RenderLeagueRoundComponent';
 import RenderLeagueTopComponent from './components/RenderLeagueTopComponent';
 import { getLeagueRound } from '../../redux/services';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 class RoundLeagueScreen extends Component {
     constructor(props) {
@@ -81,13 +82,52 @@ class RoundLeagueScreen extends Component {
             <TabBar
                 {...props}
                 scrollEnabled
-                style={{ backgroundColor: 'black', justifyContent: 'center', }}
-                contentContainerStyle={{ justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}
-                tabStyle={{ width: 'auto' }}
-                labelStyle={{ fontWeight: 'bold' }}
+                style={{
+                    backgroundColor: 'black',
+                    paddingVertical: 0
+                }}
+                indicatorStyle={{
+                    backgroundColor: 'yellow',
+                    height: 1,
+                    marginVertical: 0,
+                }}
+                tabStyle={{
+                    width: 'auto',
+                    paddingVertical: 0,
+                    paddingHorizontal: 4,
+                    marginVertical: 0,
+                    minHeight: 30,
+                    flexDirection: 'row'
+                }}
+                labelStyle={{
+                    fontWeight: 'bold',
+                    fontSize: 13,
+                    marginVertical: 0,
+                    paddingVertical: 0,
+                }}
+                renderIcon={this.renderIcons}
             />
         </View>
     )
+
+    renderIcons = ({ route }) => {
+        switch (route.key) {
+            case 'topscorer':
+                return (
+                    <MaterialIcons color='green'
+                        size={20}
+                        name='sports-soccer' />
+                );
+            case 'topassist':
+                return (
+                    <MaterialIcons color='green'
+                        size={20}
+                        name='assistant-photo' />
+                );
+            default:
+                return null;
+        }
+    }
 
     renderScene = ({ route }) => {
         const { loading, rounds, topassists, topgoals } = this.state;
@@ -137,7 +177,7 @@ const styles = StyleSheet.create({
         borderRadius: 0,
         borderColor: 0,
         backgroundColor: 'black',
-        fontSize: 20,
+        fontSize: 14,
         alignSelf: 'center',
         maxWidth: '70%',
         overflow: 'hidden'

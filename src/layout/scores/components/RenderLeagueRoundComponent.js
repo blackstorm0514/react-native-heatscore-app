@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     },
     leagueTitle: {
         backgroundColor: '#333',
-        paddingVertical: 5,
+        paddingVertical: 2,
         paddingHorizontal: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -151,11 +151,12 @@ const styles = StyleSheet.create({
     leagueTitleText: {
         color: 'white',
         fontWeight: 'bold',
-        paddingVertical: 10
+        paddingVertical: 4,
+        fontSize: 14
     },
     tableTitle: {
         backgroundColor: '#222',
-        paddingVertical: 7,
+        paddingVertical: 3,
         paddingHorizontal: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -165,6 +166,7 @@ const styles = StyleSheet.create({
     tableTitleText: {
         color: 'white',
         fontWeight: 'bold',
+        fontSize: 13
     },
     tableRow: {
         backgroundColor: '#000',
@@ -175,27 +177,29 @@ const styles = StyleSheet.create({
         borderBottomColor: '#333'
     },
     tableRowTeam: {
-        width: 240,
+        width: 200,
         flexDirection: 'row'
     },
     teamLogoImage: {
-        width: 26,
-        height: 26,
+        width: 20,
+        height: 20,
         resizeMode: 'contain',
     },
     tableRowPLD: {
         width: 40,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: 13
     },
     tableRowHeader: {
         borderBottomColor: '#ddd'
     },
     tableRowHeaderItem: {
         fontWeight: 'bold',
-        fontSize: 16
+        fontSize: 13
     },
     tableRowTeamName: {
         marginLeft: 10,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontSize: 13,
     }
 });

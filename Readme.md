@@ -1,5 +1,6 @@
 # Reference
 https://medium.com/geekculture/react-native-generate-apk-debug-and-release-apk-4e9981a2ea51
+https://medium.com/@pqkluan/how-to-implement-splash-screen-in-react-native-navigation-ee2184a1a96
 
 # Build
 react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res

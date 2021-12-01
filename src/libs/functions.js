@@ -126,12 +126,11 @@ export function getStatusString(time_status, timer) {
 
 export function getWinLoss(home_score, away_score, team, type, points) {
     let winner = '';
-    if (home_score == '' || away_score == '') {
+    if (typeof home_score == 'string' || typeof away_score == 'string') {
         return '';
     }
 
     switch (type) {
-
         case 'spread':
             if (team == 'home') home_score += points;
             if (team == 'away') away_score += points;

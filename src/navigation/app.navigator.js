@@ -9,7 +9,7 @@ import ScoreCardScreen from '../layout/scorecard/ScoreCardScreen';
 
 const BottomTab = createBottomTabNavigator();
 
-const initialTabRoute = 'Score Card';
+const initialTabRoute = 'Scores';
 
 const navigatorTheme = {
     ...DefaultTheme,
