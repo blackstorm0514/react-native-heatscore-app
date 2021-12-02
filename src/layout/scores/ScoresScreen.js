@@ -3,7 +3,9 @@ import {
     StyleSheet,
     View,
     Dimensions,
-    TouchableOpacity
+    TouchableOpacity,
+    BackHandler,
+    Alert
 } from 'react-native';
 import { Button, TopNavigationAction, TopNavigation, Text } from '@ui-kitten/components';
 import { ArrowDownwardIcon, ArrowIosBackIcon, CloseIcon } from '../../libs/icons';
@@ -48,11 +50,33 @@ class ScoresScreen extends Component {
 
     componentDidMount() {
         this._Mounted = true;
+        this.backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            this.backAction
+        );
     }
 
     componentWillUnmount() {
         this._Mounted = false;
+        this.backHandler.remove();
     }
+
+    backAction = () => {
+        Alert.alert(
+            "Close Heatscore",
+            "Are you sure you close HeatScore?",
+            [
+                {
+                    text: "Yes",
+                    onPress: () => {
+                        BackHandler.exitApp();
+                    },
+                },
+                { text: "No", },
+            ]
+        );
+        return true;
+    };
 
     renderScene = ({ route }) => {
         const { league } = this.state;
