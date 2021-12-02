@@ -9,7 +9,11 @@ export const getLeagueRound = (league) => {
 }
 
 export const getLeagueEvents = (date, league) => {
-    return ApiService.get('events/league', { params: { date, league } })
+    return ApiService.get('/events/league', { params: { date, league } })
+}
+
+export const getLeagueList = () => {
+    return ApiService.get('/events/leagues');
 }
 
 export const getProfile = () => {

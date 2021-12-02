@@ -82,11 +82,14 @@ class ScoresPerDayScreen extends Component {
     }
 
     renderLeagues = ({ item }) => {
-        const { setLeague, navigation } = this.props;
-        return <LeaguesListComponent
-            league={item}
-            setLeague={setLeague}
-            navigation={navigation} />
+        const { setLeague, navigation, filterdLeagues } = this.props;
+        const disabled = filterdLeagues.find(league => league == item.league_id);
+        return disabled ? null : (
+            <LeaguesListComponent
+                league={item}
+                setLeague={setLeague}
+                navigation={navigation} />
+        )
     }
 
     onFloatinActionClick = () => {
@@ -127,6 +130,7 @@ class ScoresPerDayScreen extends Component {
 };
 
 const mapStateToProps = (state) => ({
+    filterdLeagues: state.filterdLeagues
 });
 
 export default connect(mapStateToProps, null)(ScoresPerDayScreen);

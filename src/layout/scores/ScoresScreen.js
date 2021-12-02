@@ -1,15 +1,18 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import {
     StyleSheet,
     View,
-    Dimensions
+    Dimensions,
+    TouchableOpacity
 } from 'react-native';
 import { Button, TopNavigationAction, TopNavigation, Text } from '@ui-kitten/components';
-import { ArrowDownwardIcon, ArrowIosBackIcon } from '../../libs/icons';
+import { ArrowDownwardIcon, ArrowIosBackIcon, CloseIcon } from '../../libs/icons';
 import { TabView, TabBar } from 'react-native-tab-view';
 import ScoresPerDayScreen from './ScoresPerDayScreen';
 import ScoresLeagueScreen from './ScoresLeagueScreen';
 import { format, addDays, subDays } from 'date-fns';
+import { Modalize } from 'react-native-modalize';
+import FilterLeaguesModal from './components/FilterLeaguesModal';
 
 class ScoresScreen extends Component {
     constructor(props) {
@@ -40,6 +43,7 @@ class ScoresScreen extends Component {
             routes: tabs
         }
         this._Mounted = false;
+        this.filterModalRef = createRef();
     }
 
     componentDidMount() {
@@ -116,12 +120,34 @@ class ScoresScreen extends Component {
     renderTitle = () => {
         const { league } = this.state;
         return <Button style={styles.allScoresButton}
-            accessoryRight={ArrowDownwardIcon}
+            accessoryRight={league ? null : ArrowDownwardIcon}
+            onPress={league ? null : this.onFilterModalOpen}
             size="large">
             <Text numberOfLines={1}>
                 {league ? league.name : 'All Scores'}
             </Text>
         </Button>
+    }
+
+    onFilterModalOpen = () => {
+        this.filterModalRef.current?.open();
+    }
+
+    onCloseFilterModal = () => {
+        this.filterModalRef.current?.close();
+    }
+
+    renderModalHeader = () => {
+        return (
+            <View style={styles.header}>
+                <Text></Text>
+                <Text style={styles.titleText}>Select Leagues</Text>
+                <TouchableOpacity activeOpacity={0.8}
+                    onPress={this.onCloseFilterModal}>
+                    <CloseIcon style={styles.closeIcon} />
+                </TouchableOpacity>
+            </View>
+        )
     }
 
     render() {
@@ -142,6 +168,14 @@ class ScoresScreen extends Component {
                     onIndexChange={(index) => this._Mounted && this.setState({ index })}
                     initialLayout={{ width: Dimensions.get('window').width }}
                 />
+                <Modalize
+                    ref={this.filterModalRef}
+                    modalStyle={{ backgroundColor: '#000' }}
+                    rootStyle={{ borderRadius: 0 }}
+                    HeaderComponent={this.renderModalHeader}
+                >
+                    <FilterLeaguesModal />
+                </Modalize>
             </View>
         )
     }
@@ -162,5 +196,21 @@ const styles = StyleSheet.create({
         fontSize: 20,
         maxWidth: '70%',
         alignSelf: 'center',
-    }
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: 6,
+        backgroundColor: '#111'
+    },
+    titleText: {
+        fontSize: 18
+    },
+    closeIcon: {
+        height: 24,
+        width: 24,
+        marginHorizontal: 4,
+        tintColor: '#FFF',
+    },
 });

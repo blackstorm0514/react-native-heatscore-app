@@ -29,6 +29,7 @@
     "@ui-kitten/eva-icons": "5.1.1",
     "@ui-kitten/metro-config": "5.1.1",
     "@ui-kitten/moment": "^5.1.1",
+    "accordion-collapse-react-native": "^1.1.0",
     "axios": "^0.24.0",
     "date-fns": "^2.25.0",
     "install": "^0.13.0",

@@ -238,8 +238,6 @@ class ScoreCardScreen extends PureComponent {
                     ref={this.addModalRef}
                     HeaderComponent={this.renderModalHeader}
                     disableScrollIfPossible
-                    // scrollViewProps={{ showsVerticalScrollIndicator: true }}
-                    // adjustToContentHeight
                     modalStyle={{ backgroundColor: '#111' }}
                 >
                     <AddScoreModalContent

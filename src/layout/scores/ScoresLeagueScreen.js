@@ -37,7 +37,7 @@ class ScoresLeagueScreen extends Component {
         this._Mounted = false;
     }
 
-    getEventsData = () => {
+    getEventsData = (setLoading = true) => {
         const { date, league } = this.props;
         const { inplayTimeout } = this.state;
         if (inplayTimeout) clearTimeout(inplayTimeout);
