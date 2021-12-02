@@ -1,8 +1,17 @@
 import { put, takeLatest, select } from "redux-saga/effects";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { persistStore, persistReducer } from 'redux-persist';
+
+const persistConfig = {
+    key: 'root',
+    storage: AsyncStorage,
+    whitelist: ['filterdLeagues']
+};
 
 const INITIAL_STATE = {
     user: null,
     favorites: [],
+    filterdLeagues: [],
 };
 
 export const actionTypes = {
@@ -19,7 +28,7 @@ export const actions = {
     removeFavoritesAction: (favorite) => ({ type: actionTypes.removeFavoritesAction, favorite }),
 }
 
-export const rootReducer = (state = INITIAL_STATE, action) => {
+export const rootReducer = persistReducer(persistConfig, (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case actionTypes.setUserAction:
             return { ...state, user: action.user }
@@ -41,6 +50,6 @@ export const rootReducer = (state = INITIAL_STATE, action) => {
         default:
             return state;
     }
-};
+});
 
 export function* rootSaga() { }

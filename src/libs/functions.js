@@ -69,16 +69,16 @@ export function getPickName(home, away, team, type, points, timeline) {
     let pickName = '';
     switch (type) {
         case 'total':
-            pickName += team == 'home' ? 'Over' : 'Under';
+            pickName += (team == 'home' ? 'Over' : 'Under') + ' : Total';
             break;
         case 'spread':
-            pickName += (team == 'home' ? home.name : away.name) + ' ' + (points > 0 ? `+${points}` : points);
+            pickName += (team == 'home' ? home.name : away.name) + ' ' + (points > 0 ? `+${points}` : points) + ' : Spread';
             break;
         case 'moneyline':
-            pickName += team == 'home' ? home.name : away.name;
+            pickName += (team == 'home' ? home.name : away.name) + ' : Moneyline';
             break;
     }
-    pickName += ' : ' + getTimeLineName(timeline);
+    pickName += ' (' + getTimeLineName(timeline) + ')';
     return pickName;
 }
 

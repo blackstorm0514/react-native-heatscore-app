@@ -3,14 +3,16 @@ import { AppearanceProvider } from 'react-native-appearance';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+
 import AppLoading from './app-loading.component';
 import { appMappings, appThemes } from './app-theming';
 import { SplashImage } from '../components/splash-image.component';
 import { AppNavigator } from '../navigation/app.navigator';
 import { Theming } from '../services/theme.service';
 import { VectorIconsPack } from './vector-icons-pack';
-import { Provider } from 'react-redux';
-import { store } from '../redux/store';
+import { store, persistor } from '../redux/store';
 
 const defaultConfig = {
     userToken: null,
@@ -49,10 +51,12 @@ const Splash = ({ loading }) => (
 
 export default () => (
     <Provider store={store}>
-        <AppLoading
-            initialConfig={defaultConfig}
-            placeholder={Splash}>
-            {props => <App {...props} />}
-        </AppLoading>
+        <PersistGate loading={null} persistor={persistor}>
+            <AppLoading
+                initialConfig={defaultConfig}
+                placeholder={Splash}>
+                {props => <App {...props} />}
+            </AppLoading>
+        </PersistGate>
     </Provider>
 );
