@@ -12,7 +12,7 @@ import { LoadingIndicator } from './components/LoadingIndicator';
 import RenderFavoriteComponent from './components/RenderFavoriteComponent';
 import { getLeagueEvents } from '../../redux/services';
 
-const inPlayTime = 10 * 1000;
+const inPlayTime = 30 * 1000;
 
 class ScoresLeagueScreen extends Component {
     constructor(props) {

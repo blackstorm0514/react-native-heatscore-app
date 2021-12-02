@@ -14,8 +14,8 @@ export default class ScoreCardComponent extends PureComponent {
         const { event: { home, away, scores, timer, sport, time_status }, type, team, timeline, points, time } = card;
         const { home_score, away_score } = getMatchScore(sport, scores, timeline);
 
-        const time_str = getTimeString(sport, timer, time, time_status);
-        const { status_text } = getStatusString(time_status, timer);
+        const time_str = getTimeString(timer, time, time_status);
+        const { status_text } = getStatusString(time_status, timer, sport);
 
         const winLoss = getWinLoss(home_score, away_score, team, type, points);
         let winLossStyle = null;

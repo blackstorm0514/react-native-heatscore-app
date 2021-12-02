@@ -34,8 +34,16 @@ export function getTimeLineName(timeline) {
     return timelines[timeline];
 }
 
-export function getTimeString(sport, timer, time, time_status) {
+export function getTimeString(timer, time, time_status) {
     if (["2", "3"].includes(time_status)) return null;
+    if (time_status == "1") {
+        if (timer) {
+            let min = Number(timer.tm);
+            let sec = Number(timer.ts);
+            return `${min > 9 ? min : '0' + min}:${sec > 9 ? sec : '0' + sec}`
+        }
+        return null;
+    }
     const time_str = format(new Date(time), "hh:mm aa");
     return time_str;
 }
@@ -82,12 +90,29 @@ export function ordinal_suffix_of(i) {
     return i + "th";
 }
 
-export function getStatusString(time_status, timer) {
+export function getStatusString(time_status, timer, sport) {
     let status_text = null;
     let status_class = styles.eventItemStatusNotStarted;
     switch (time_status) {
         case "1":
-            status_text = timer ? ordinal_suffix_of(Number(timer.q ? timer.q : (timer.md ? timer.md + 1 : 0))) : 'In Play';
+            status_text = null;
+            switch (sport.name) {
+                case 'Soccer':
+                    status_text = timer ? ('H' + timer.md) : null;
+                    break;
+                case 'American Football':
+                    status_text = timer ? ('Q' + timer.q) : null;
+                    break;
+                case 'Basketball':
+                    status_text = timer ? ('Q' + timer.q) : null;
+                    break;
+                case 'Ice Hockey':
+                    status_text = timer ? ('P' + timer.q) : null;
+                    break;
+                case 'Baseball':
+                default:
+                    break;
+            }
             status_class = styles.eventItemStatusInPlay;
             break;
         case "2":

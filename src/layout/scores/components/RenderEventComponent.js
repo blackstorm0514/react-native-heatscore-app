@@ -20,9 +20,9 @@ export default class RenderEventComponent extends PureComponent {
         if (!event) return null;
 
         const { home, away, time, time_status, timer, sport, scores } = event;
-        const time_str = getTimeString(sport, timer, time, time_status);
+        const time_str = getTimeString(timer, time, time_status);
         const { home_score, away_score } = getMatchScore(sport, scores, 'game');
-        const { status_class, status_text } = getStatusString(time_status, timer);
+        const { status_class, status_text } = getStatusString(time_status, timer, sport);
 
         return (
             <TouchableOpacity
