@@ -14,6 +14,15 @@ export default class SelectTeamComponent extends PureComponent {
         this.state = {
             team: props.team ? props.team : null
         }
+        this._Mounted = false;
+    }
+
+    componentDidMount() {
+        this._Mounted = true;
+    }
+
+    componentWillUnmount() {
+        this._Mounted = false;
     }
 
     onBack = () => {
@@ -42,7 +51,7 @@ export default class SelectTeamComponent extends PureComponent {
                 {type != 'total' && <>
                     <TouchableOpacity style={styles.radioContainer}
                         activeOpacity={0.7}
-                        onPress={() => this.setState({ team: 'home' })}>
+                        onPress={() => this._Mounted && this.setState({ team: 'home' })}>
                         <FontAwesomeIcon color='white' size={20}
                             name={team == 'home' ? 'check-circle' : 'circle-thin'} />
                         <Image
@@ -53,7 +62,7 @@ export default class SelectTeamComponent extends PureComponent {
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.radioContainer}
                         activeOpacity={0.7}
-                        onPress={() => this.setState({ team: 'away' })}>
+                        onPress={() => this._Mounted && this.setState({ team: 'away' })}>
                         <FontAwesomeIcon color='white' size={20}
                             name={team == 'away' ? 'check-circle' : 'circle-thin'} />
                         <Image
@@ -66,14 +75,14 @@ export default class SelectTeamComponent extends PureComponent {
                 {type == 'total' && <>
                     <TouchableOpacity style={styles.radioContainer}
                         activeOpacity={0.7}
-                        onPress={() => this.setState({ team: 'home' })}>
+                        onPress={() => this._Mounted && this.setState({ team: 'home' })}>
                         <FontAwesomeIcon color='white' size={20}
                             name={team == 'home' ? 'check-circle' : 'circle-thin'} />
                         <Text style={[styles.selectItemTeamName, styles.selectItemOverUnder]} numberOfLines={1}>Over</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.radioContainer}
                         activeOpacity={0.7}
-                        onPress={() => this.setState({ team: 'away' })}>
+                        onPress={() => this._Mounted && this.setState({ team: 'away' })}>
                         <FontAwesomeIcon color='white' size={20}
                             name={team == 'away' ? 'check-circle' : 'circle-thin'} />
                         <Text style={[styles.selectItemTeamName, styles.selectItemOverUnder]} numberOfLines={1}>Under</Text>

@@ -23,17 +23,20 @@ export default class NewsListScreen extends PureComponent {
             headingNews: null,
             gotAll: false
         }
+        this._Mounted = false;
     }
     componentDidMount() {
-        this.onLoadNews(1);
         this.backHandler = BackHandler.addEventListener(
             "hardwareBackPress",
             this.backAction
         );
+        this._Mounted = true;
+        this.onLoadNews(1);
     }
 
     componentWillUnmount() {
         this.backHandler.remove();
+        this._Mounted = false;
     }
 
     backAction = () => {
@@ -44,10 +47,7 @@ export default class NewsListScreen extends PureComponent {
 
     onLoadNews = (page) => {
         const { listNews } = this.state;
-        this.setState({
-            loading: true,
-            page: page
-        });
+        this._Mounted && this.setState({ loading: true, page: page });
         getNews(page)
             .then(({ data }) => {
                 const { success, total, data: news, per_page } = data;
@@ -55,14 +55,14 @@ export default class NewsListScreen extends PureComponent {
                     if (news.length > 0) {
                         if (page == 1) {
                             const [headingNews, ...listNews] = news;
-                            this.setState({
+                            this._Mounted && this.setState({
                                 headingNews: headingNews,
                                 listNews: listNews,
                                 loading: false,
                                 total: page * per_page >= total
                             });
                         } else {
-                            this.setState({
+                            this._Mounted && this.setState({
                                 listNews: [...listNews, ...news],
                                 loading: false,
                                 total: page * per_page >= total
@@ -70,11 +70,11 @@ export default class NewsListScreen extends PureComponent {
                         }
                     }
                 } else {
-                    this.setState({ loading: false });
+                    this._Mounted && this.setState({ loading: false });
                 }
             })
             .catch(error => {
-                this.setState({ loading: false })
+                this._Mounted && this.setState({ loading: false })
             });
     }
 

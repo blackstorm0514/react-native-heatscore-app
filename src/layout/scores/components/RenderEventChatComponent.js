@@ -36,9 +36,11 @@ class RenderEventChatComponent extends Component {
 
         this.gifModalizeRef = createRef(null);
         this.reportModalizeRef = createRef(null);
+        this._Mounted = false;
     }
 
     componentDidMount() {
+        this._Mounted = true;
         const { event_id } = this.state;
         if (event_id) {
             firestore()
@@ -52,12 +54,12 @@ class RenderEventChatComponent extends Component {
                             .add({ event_id: event_id })
                             .then(res => {
                                 const room_id = res.id;
-                                this.setState({ room_id: room_id });
+                                this._Mounted && this.setState({ room_id: room_id });
                                 this.getChatLogs(room_id);
                             })
                     } else if (res.size > 0) {
                         const room_id = res.docs[0].id
-                        this.setState({ room_id: room_id });
+                        this._Mounted && this.setState({ room_id: room_id });
                         this.getChatLogs(room_id);
                     } else {
                         // console.log('Error,', res);
@@ -92,9 +94,9 @@ class RenderEventChatComponent extends Component {
                         }
                         newRecentChats.push(chats[i]);
                     }
-                    this.setState({ recentChats: [...newRecentChats, ...recentChats] });
+                    this._Mounted && this.setState({ recentChats: [...newRecentChats, ...recentChats] });
                 } else {
-                    this.setState({
+                    this._Mounted && this.setState({
                         recentChats: chats,
                         earlierChatsAvailable: chats.length >= MESSAGE_LIMIT,
                         lastVisible: querySnapshot.docs[chats.length - 1]
@@ -102,17 +104,17 @@ class RenderEventChatComponent extends Component {
                 }
             });
 
-        this.setState({ messagesListener: newMessagesListener });
+        this._Mounted && this.setState({ messagesListener: newMessagesListener });
     }
 
     onLoadEarlier = () => {
         const { earlierChatsAvailable, oldChats, recentChats, room_id, lastVisible } = this.state;
         if (!earlierChatsAvailable || !room_id) {
-            this.setState({ earlierChatsAvailable: false });
+            this._Mounted && this.setState({ earlierChatsAvailable: false });
             return;
         }
 
-        this.setState({ isLoadingEarlier: true });
+        this._Mounted && this.setState({ isLoadingEarlier: true });
         firestore()
             .collection('ROOMS')
             .doc(room_id)
@@ -126,9 +128,9 @@ class RenderEventChatComponent extends Component {
                     return snapshot.data()
                 });
                 if (chats.length === 0) {
-                    this.setState({ earlierChatsAvailable: false, isLoadingEarlier: false });
+                    this._Mounted && this.setState({ earlierChatsAvailable: false, isLoadingEarlier: false });
                 } else {
-                    this.setState({
+                    this._Mounted && this.setState({
                         oldChats: [...oldChats, ...chats],
                         isLoadingEarlier: false,
                         lastVisible: querySnapshot.docs[chats.length - 1]
@@ -137,7 +139,7 @@ class RenderEventChatComponent extends Component {
             })
             .catch(error => {
                 // console.warn(error);
-                this.setState({ isLoadingEarlier: false });
+                this._Mounted && this.setState({ isLoadingEarlier: false });
             });
     }
 
@@ -195,6 +197,7 @@ class RenderEventChatComponent extends Component {
     componentWillUnmount() {
         const { messagesListener } = this.state;
         if (messagesListener) messagesListener();
+        this._Mounted = false;
     }
 
     renderChatItem = ({ currentMessage }) => {
@@ -283,7 +286,7 @@ class RenderEventChatComponent extends Component {
 
     customClearIcon = () => {
         const { gifSearch } = this.state;
-        return gifSearch ? <TouchableOpacity activeOpacity={0.8} onPress={() => this.setState({ gifSearch: '' })}>
+        return gifSearch ? <TouchableOpacity activeOpacity={0.8} onPress={() => this._Mounted && this.setState({ gifSearch: '' })}>
             <CloseIcon style={styles.searchIcon} />
         </TouchableOpacity> : null
     }
@@ -297,7 +300,7 @@ class RenderEventChatComponent extends Component {
                     placeholder='Search ...'
                     placeholderTextColor="#888"
                     value={gifSearch}
-                    onChangeText={(search) => this.setState({ gifSearch: search })}
+                    onChangeText={(search) => this._Mounted && this.setState({ gifSearch: search })}
                     accessoryRight={this.customClearIcon}
                 />
                 <Button style={styles.searchButton}
@@ -308,12 +311,12 @@ class RenderEventChatComponent extends Component {
     }
 
     onSelectReport = async (chatReport) => {
-        await this.setState({ chatReport })
+        this._Mounted && await this.setState({ chatReport })
         this.reportModalizeRef.current?.open();
     }
 
     onCloseReport = async () => {
-        await this.setState({ chatReport: null })
+        this._Mounted && await this.setState({ chatReport: null })
         this.reportModalizeRef.current?.close();
     }
 

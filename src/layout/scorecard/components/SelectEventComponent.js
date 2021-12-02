@@ -28,6 +28,15 @@ export default class SelectEventComponent extends PureComponent {
             selectedEvent: null,
             searchTimeout: null
         }
+        this._Mounted = false;
+    }
+
+    componentDidMount() {
+        this._Mounted = true;
+    }
+
+    componentWillUnmount() {
+        this._Mounted = false;
     }
 
     handleOK = () => {
@@ -41,32 +50,30 @@ export default class SelectEventComponent extends PureComponent {
     }
 
     onChangeText = (search) => {
-        this.setState({ search });
+        this._Mounted && this.setState({ search });
         if (search) {
             const { searchTimeout } = this.state;
             if (searchTimeout) clearTimeout(searchTimeout);
-            this.setState({
-                searchTimeout: setTimeout(this.searchEvents, 500)
-            })
+            this._Mounted && this.setState({ searchTimeout: setTimeout(this.searchEvents, 500) })
         }
     }
 
     searchEvents = () => {
         const { search } = this.state;
-        this.setState({ loading: true });
+        this._Mounted && this.setState({ loading: true });
         searchEventsForScoreCard(search)
             .then(({ data }) => {
                 const { success, events } = data;
                 if (success) {
-                    this.setState({ loading: false, events: events });
+                    this._Mounted && this.setState({ loading: false, events: events });
                 } else {
                     // Toast.show(error);
-                    this.setState({ loading: false, events: [] });
+                    this._Mounted && this.setState({ loading: false, events: [] });
                 }
             })
             .catch((error) => {
                 // Toast.show('Cannot get events. Please try again later.');
-                this.setState({ loading: false, events: [] });
+                this._Mounted && this.setState({ loading: false, events: [] });
             })
     }
 
@@ -76,7 +83,7 @@ export default class SelectEventComponent extends PureComponent {
 
     customClearIcon = () => {
         const { search } = this.state;
-        return search ? <TouchableOpacity activeOpacity={0.8} onPress={() => this.setState({ search: '' })}>
+        return search ? <TouchableOpacity activeOpacity={0.8} onPress={() => this._Mounted && this.setState({ search: '' })}>
             <CloseIcon style={styles.searchIcon} />
         </TouchableOpacity> : null
     }
@@ -106,7 +113,7 @@ export default class SelectEventComponent extends PureComponent {
                             <TouchableOpacity
                                 style={styles.eventItemDetail}
                                 activeOpacity={selected ? 1 : 0.8}
-                                onPress={() => this.setState({ selectedEvent: event })}>
+                                onPress={() => this._Mounted && this.setState({ selectedEvent: event })}>
                                 <Text style={styles.eventItemLeague}>{event.league.name}</Text>
                                 <View style={styles.eventItemTeams}>
                                     <Image
@@ -128,7 +135,7 @@ export default class SelectEventComponent extends PureComponent {
                                     style={[styles.buttonStyle, styles.buttonOK]}>
                                     <Text style={styles.buttonText}>OK</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => this.setState({ selectedEvent: null })}
+                                <TouchableOpacity onPress={() => this._Mounted && this.setState({ selectedEvent: null })}
                                     activeOpacity={0.7}
                                     style={[styles.buttonStyle, styles.buttonCancel]}>
                                     <Text style={styles.buttonText}>Cancel</Text>

@@ -34,10 +34,19 @@ class ForgotPasswordForm extends PureComponent {
             error: errorOject,
             submitting: false,
         }
+        this._Mounted = false;
+    }
+
+    componentWillUnmount() {
+        this._Mounted = false;
+    }
+
+    componentDidMount() {
+        this._Mounted = true;
     }
 
     changeField = (field, value) => {
-        this.setState({ [field]: value });
+        this._Mounted && this.setState({ [field]: value });
     }
 
     onSignInButtonPressed = () => {
@@ -45,22 +54,22 @@ class ForgotPasswordForm extends PureComponent {
         const { setSuccess } = this.props;
         const result = ValidateFields({ email, password, passwordConfirm });
         if (result != true) {
-            this.setState({ error: { ...errorOject, ...result } });
+            this._Mounted && this.setState({ error: { ...errorOject, ...result } });
             return;
         }
-        this.setState({ error: errorOject, submitting: true });
+        this._Mounted && this.setState({ error: errorOject, submitting: true });
         changePassword(email, password)
             .then(({ data }) => {
                 const { success, error } = data;
                 if (success) {
-                    this.setState({ submitting: false });
+                    this._Mounted && this.setState({ submitting: false });
                     setSuccess();
                 } else {
-                    this.setState({ submitting: false, error: { ...errorOject, ...error } });
+                    this._Mounted && this.setState({ submitting: false, error: { ...errorOject, ...error } });
                 }
             })
             .catch((error) => {
-                this.setState({ submitting: false, error: { ...errorOject, server: 'Cannot post data. Please try again later.' } });
+                this._Mounted && this.setState({ submitting: false, error: { ...errorOject, server: 'Cannot post data. Please try again later.' } });
             });
     }
 
@@ -150,7 +159,7 @@ class ForgotPasswordScreen extends PureComponent {
         return (
             <View style={styles.container}>
                 <TopNavigationComponent navigation={navigation} backPosition="SignIn" />
-                {!success && <ForgotPasswordForm {...this.props} setSuccess={() => this.setState({ success: true })} />}
+                {!success && <ForgotPasswordForm {...this.props} setSuccess={() => this._Mounted && this.setState({ success: true })} />}
                 {success && <Layout level="1" style={styles.layoutContainer}>
                     <View style={styles.completeContainer}>
                         <Ionicons size={120} color='#E10032' name='checkmark-circle-outline' />

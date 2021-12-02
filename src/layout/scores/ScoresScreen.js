@@ -39,6 +39,15 @@ class ScoresScreen extends Component {
             league: null,
             routes: tabs
         }
+        this._Mounted = false;
+    }
+
+    componentDidMount() {
+        this._Mounted = true;
+    }
+
+    componentWillUnmount() {
+        this._Mounted = false;
     }
 
     renderScene = ({ route }) => {
@@ -57,7 +66,7 @@ class ScoresScreen extends Component {
             <ScoresPerDayScreen
                 date={route.date}
                 keyDate={route.key}
-                setLeague={(league) => this.setState({ league: league })}
+                setLeague={(league) => this._Mounted && this.setState({ league: league })}
                 navigation={navigation} />
         )
     }
@@ -97,7 +106,7 @@ class ScoresScreen extends Component {
             return (
                 <TopNavigationAction
                     icon={ArrowIosBackIcon}
-                    onPress={() => this.setState({ league: null })}
+                    onPress={() => this._Mounted && this.setState({ league: null })}
                 />
             )
         }
@@ -130,7 +139,7 @@ class ScoresScreen extends Component {
                     renderTabBar={this.renderTabBar}
                     navigationState={{ index, routes }}
                     renderScene={this.renderScene}
-                    onIndexChange={(index) => this.setState({ index })}
+                    onIndexChange={(index) => this._Mounted && this.setState({ index })}
                     initialLayout={{ width: Dimensions.get('window').width }}
                 />
             </View>

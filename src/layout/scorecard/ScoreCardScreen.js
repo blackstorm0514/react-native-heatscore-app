@@ -59,6 +59,15 @@ class ScoreCardScreen extends PureComponent {
         }
 
         this.addModalRef = createRef();
+        this._Mounted = false;
+    }
+
+    componentDidMount() {
+        this._Mounted = true;
+    }
+
+    componentWillUnmount() {
+        this._Mounted = false;
     }
 
     renderScene = ({ route }) => {
@@ -69,7 +78,7 @@ class ScoreCardScreen extends PureComponent {
                 date={route.date}
                 keyDate={route.key}
                 newlyAdded={newlyAdded}
-                setLeague={(league) => this.setState({ league: league })}
+                setLeague={(league) => this._Mounted && this.setState({ league: league })}
                 navigation={navigation} />
         )
     }
@@ -171,7 +180,7 @@ class ScoreCardScreen extends PureComponent {
         if (!points && ['spread', 'total'].includes(type)) {
             return Toast.show('Please select points for spread or total.');
         }
-        this.setState({ submitting: true });
+        this._Mounted && this.setState({ submitting: true });
         addScoreCard({
             event_id: event.event_id, team, type, timeline, points,
             allowAlerts, alert_gameStart, alert_gameEnd, alert_gameScoring
@@ -180,7 +189,7 @@ class ScoreCardScreen extends PureComponent {
                 const { success, time, error } = data;
                 if (success) {
                     this.addModalRef.current?.close();
-                    this.setState({
+                    this._Mounted && this.setState({
                         event: null,
                         team: null,
                         type: null,
@@ -196,12 +205,12 @@ class ScoreCardScreen extends PureComponent {
                     })
                 } else {
                     Toast.show(error);
-                    this.setState({ submitting: false });
+                    this._Mounted && this.setState({ submitting: false });
                 }
             })
             .catch(error => {
                 Toast.show('Cannot add a score card. Please try again later.');
-                this.setState({ submitting: false });
+                this._Mounted && this.setState({ submitting: false });
             })
     }
 
@@ -222,7 +231,7 @@ class ScoreCardScreen extends PureComponent {
                     renderTabBar={this.renderTabBar}
                     navigationState={{ index, routes }}
                     renderScene={this.renderScene}
-                    onIndexChange={(index) => this.setState({ index })}
+                    onIndexChange={(index) => this._Mounted && this.setState({ index })}
                     initialLayout={{ width: screenWidth }}
                 />
                 <Modalize
@@ -243,7 +252,7 @@ class ScoreCardScreen extends PureComponent {
                         alert_gameStart={alert_gameStart}
                         alert_gameEnd={alert_gameEnd}
                         alert_gameScoring={alert_gameScoring}
-                        updateEvent={(obj) => this.setState(obj)}
+                        updateEvent={(obj) => this._Mounted && this.setState(obj)}
                     />
                 </Modalize>
             </View>

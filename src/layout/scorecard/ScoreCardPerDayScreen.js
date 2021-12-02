@@ -17,28 +17,34 @@ class ScoreCardPerDayScreen extends PureComponent {
             loading: false,
             data: [],
         }
+        this._Mounted = false;
     }
 
     componentDidMount() {
+        this._Mounted = true;
         this.getEventsData();
+    }
+
+    componentWillUnmount() {
+        this._Mounted = false;
     }
 
     getEventsData = () => {
         const { date } = this.props;
         const { loading } = this.state;
         if (loading) return;
-        this.setState({ loading: true });
+        this._Mounted && this.setState({ loading: true });
         getScoreCards(date)
             .then(({ data: result }) => {
                 const { success, data: score_cards, error } = result;
                 if (success) {
-                    this.setState({ data: score_cards, loading: false });
+                    this._Mounted && this.setState({ data: score_cards, loading: false });
                 } else {
-                    this.setState({ data: [], loading: false });
+                    this._Mounted && this.setState({ data: [], loading: false });
                 }
             })
             .catch(() => {
-                this.setState({ loading: false, data: [] });
+                this._Mounted && this.setState({ loading: false, data: [] });
             });
     }
 

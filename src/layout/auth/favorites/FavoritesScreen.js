@@ -16,25 +16,27 @@ class FavoritesScreen extends PureComponent {
         this.state = {
             loading: false,
         }
+        this._Mounted = false;
     }
 
     componentDidMount() {
+        this._Mounted = true;
         const { setFavoritesAction, navigation } = this.props;
-        this.setState({ loading: true });
+        this._Mounted && this.setState({ loading: true });
         getFavorites()
             .then(({ data }) => {
                 const { success, favorites, error } = data;
                 if (success) {
                     setFavoritesAction(favorites);
-                    this.setState({ loading: false });
+                    this._Mounted && this.setState({ loading: false });
                 } else {
-                    this.setState({ loading: false });
+                    this._Mounted && this.setState({ loading: false });
                     Toast.show(error);
                 }
             })
             .catch((error) => {
                 // console.warn(error);
-                this.setState({ loading: false });
+                this._Mounted && this.setState({ loading: false });
                 Toast.show('Cannot get favorite teams.');
             });
 
@@ -46,6 +48,7 @@ class FavoritesScreen extends PureComponent {
 
     componentWillUnmount() {
         this.backHandler.remove();
+        this._Mounted = false;
     }
 
     onRemoveFavorites = (sport, team) => {

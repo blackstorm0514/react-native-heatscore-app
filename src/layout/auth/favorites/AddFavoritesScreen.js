@@ -21,6 +21,7 @@ class AddFavoritesScreen extends PureComponent {
             items: [],
             loading: false,
         }
+        this._Mounted = false;
     }
 
     componentDidMount() {
@@ -29,10 +30,12 @@ class AddFavoritesScreen extends PureComponent {
             "hardwareBackPress",
             () => { navigation.navigate('Favorites'); return true; }
         );
+        this._Mounted = true;
     }
 
     componentWillUnmount() {
         this.backHandler.remove();
+        this._Mounted = false;
     }
 
     onAddFavorite = (sport, team, favorite) => {
@@ -87,7 +90,7 @@ class AddFavoritesScreen extends PureComponent {
 
     customClearIcon = () => {
         const { search } = this.state;
-        return search ? <TouchableOpacity activeOpacity={0.8} onPress={() => this.setState({ search: '' })}>
+        return search ? <TouchableOpacity activeOpacity={0.8} onPress={() => this._Mounted && this.setState({ search: '' })}>
             <CloseIcon style={styles.searchIcon} />
         </TouchableOpacity> : null
     }
@@ -101,7 +104,7 @@ class AddFavoritesScreen extends PureComponent {
                     placeholder='Search Team'
                     placeholderTextColor="#888"
                     value={search}
-                    onChangeText={(search) => this.setState({ search })}
+                    onChangeText={(search) => this._Mounted && this.setState({ search })}
                     accessoryLeft={this.customSearchIcon}
                     accessoryRight={this.customClearIcon}
                 />
@@ -116,17 +119,17 @@ class AddFavoritesScreen extends PureComponent {
         const { search, loading } = this.state;
         if (loading) return;
         if (search) {
-            this.setState({ loading: true, items: [] });
+            this._Mounted && this.setState({ loading: true, items: [] });
             searchTeams(search)
                 .then(({ data }) => {
-                    this.setState({ loading: false, items: data });
+                    this._Mounted && this.setState({ loading: false, items: data });
                 })
                 .catch(error => {
                     // console.warn(error);
-                    this.setState({ loading: false, items: [] });
+                    this._Mounted && this.setState({ loading: false, items: [] });
                 })
         } else {
-            this.setState({ items: [] });
+            this._Mounted && this.setState({ items: [] });
         }
     }
 

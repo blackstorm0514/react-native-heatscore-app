@@ -14,6 +14,15 @@ export default class SelectTypeComponent extends PureComponent {
         this.state = {
             type: props.type ? props.type : null
         }
+        this._Mounted = false;
+    }
+
+    componentDidMount() {
+        this._Mounted = true;
+    }
+
+    componentWillUnmount() {
+        this._Mounted = false;
     }
 
     onBack = () => {
@@ -40,7 +49,7 @@ export default class SelectTypeComponent extends PureComponent {
                 </View>
                 <TouchableOpacity style={styles.radioContainer}
                     activeOpacity={0.7}
-                    onPress={() => this.setState({ type: 'moneyline' })}>
+                    onPress={() => this._Mounted && this.setState({ type: 'moneyline' })}>
                     <FontAwesomeIcon color='white' size={20}
                         name={type == 'moneyline' ? 'check-circle' : 'circle-thin'} />
 
@@ -48,14 +57,14 @@ export default class SelectTypeComponent extends PureComponent {
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.radioContainer}
                     activeOpacity={0.7}
-                    onPress={() => this.setState({ type: 'spread' })}>
+                    onPress={() => this._Mounted && this.setState({ type: 'spread' })}>
                     <FontAwesomeIcon color='white' size={20}
                         name={type == 'spread' ? 'check-circle' : 'circle-thin'} />
                     <Text style={styles.selectItemType} numberOfLines={1}>Spread</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.radioContainer}
                     activeOpacity={0.7}
-                    onPress={() => this.setState({ type: 'total' })}>
+                    onPress={() => this._Mounted && this.setState({ type: 'total' })}>
                     <FontAwesomeIcon color='white' size={20}
                         name={type == 'total' ? 'check-circle' : 'circle-thin'} />
                     <Text style={styles.selectItemType} numberOfLines={1}>Total</Text>

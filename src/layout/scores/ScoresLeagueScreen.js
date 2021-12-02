@@ -12,6 +12,8 @@ import { LoadingIndicator } from './components/LoadingIndicator';
 import RenderFavoriteComponent from './components/RenderFavoriteComponent';
 import { getLeagueEvents } from '../../redux/services';
 
+const inPlayTime = 10 * 1000;
+
 class ScoresLeagueScreen extends Component {
     constructor(props) {
         super(props);
@@ -19,28 +21,50 @@ class ScoresLeagueScreen extends Component {
             loading: false,
             favorites: null,
             data: null,
+            inplayTimeout: null,
         }
+        this._Mounted = false;
     }
 
     componentDidMount() {
+        this._Mounted = true;
         this.getEventsData();
+    }
+
+    componentWillUnmount() {
+        const { inplayTimeout } = this.state;
+        if (inplayTimeout) clearTimeout(inplayTimeout);
+        this._Mounted = false;
     }
 
     getEventsData = () => {
         const { date, league } = this.props;
-        this.setState({ loading: true });
+        const { inplayTimeout } = this.state;
+        if (inplayTimeout) clearTimeout(inplayTimeout);
+        this._Mounted && this.setState({ loading: setLoading, inplayTimeout: null });
         getLeagueEvents(date, league.id)
             .then(({ data }) => {
                 const { favorites, data: leagueData } = data;
-                this.setState({
+                let hasInplay = false;
+
+                if (leagueData && leagueData.length) {
+                    for (const event of leagueData) {
+                        if (event.time_status == '1') {
+                            hasInplay = true;
+                            break;
+                        }
+                    }
+                }
+
+                this._Mounted && this.setState({
                     loading: false,
                     favorites: favorites && favorites.length ? favorites : null,
-                    data: leagueData
+                    data: leagueData,
+                    inplayTimeout: hasInplay ? setTimeout(() => this.getEventsData(false), inPlayTime) : null
                 });
             })
             .catch(() => {
-                // console.log(error);
-                this.setState({
+                this._Mounted && this.setState({
                     loading: false,
                     favorites: null,
                     data: []

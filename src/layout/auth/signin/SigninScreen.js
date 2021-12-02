@@ -32,10 +32,19 @@ class SignInForm extends PureComponent {
             error: errorOject,
             submitting: false,
         }
+        this._Mounted = false;
+    }
+
+    componentDidMount() {
+        this._Mounted = true;
+    }
+
+    componentWillUnmount() {
+        this._Mounted = false;
     }
 
     changeField = (field, value) => {
-        this.setState({ [field]: value });
+        this._Mounted && this.setState({ [field]: value });
     }
 
     onSignInButtonPressed = () => {
@@ -43,30 +52,30 @@ class SignInForm extends PureComponent {
         const { navigation, setUserAction } = this.props;
         const result = ValidateFields({ email });
         if (result != true) {
-            this.setState({ error: { ...errorOject, ...result } });
+            this._Mounted && this.setState({ error: { ...errorOject, ...result } });
             return;
         }
-        this.setState({ error: errorOject, submitting: true });
+        this._Mounted && this.setState({ error: errorOject, submitting: true });
         signIn(email, password)
             .then(({ data }) => {
                 const { success, error, user, accessToken } = data;
                 if (success) {
-                    this.setState({ submitting: false });
+                    this._Mounted && this.setState({ submitting: false });
                     setUserAction(user);
                     AppStorage.setToken(accessToken).then(() => navigation.navigate('Profile'));
                 } else {
-                    this.setState({ submitting: false, error: { ...errorOject, ...error } });
+                    this._Mounted && this.setState({ submitting: false, error: { ...errorOject, ...error } });
                 }
             })
             .catch((error) => {
                 // console.warn(error);
-                this.setState({ submitting: false, error: { ...errorOject, server: 'Cannot post data. Please try again later.' } });
+                this._Mounted && this.setState({ submitting: false, error: { ...errorOject, server: 'Cannot post data. Please try again later.' } });
             });
     }
 
     onGoogleSignIn = async () => {
         const { setUserAction, navigation } = this.props;
-        this.setState({ submitting: true });
+        this._Mounted && this.setState({ submitting: true });
 
         GoogleSignin.configure(GoogleConfigure);
         try {
@@ -78,16 +87,16 @@ class SignInForm extends PureComponent {
                 .then(({ data }) => {
                     const { success, error, user, accessToken } = data;
                     if (success) {
-                        this.setState({ submitting: false });
+                        this._Mounted && this.setState({ submitting: false });
                         setUserAction(user);
                         AppStorage.setToken(accessToken).then(() => navigation.navigate('Profile'));
                     } else {
-                        this.setState({ submitting: false, error: { ...errorOject, ...error } });
+                        this._Mounted && this.setState({ submitting: false, error: { ...errorOject, ...error } });
                     }
                 })
                 .catch((error) => {
                     // console.warn(error);
-                    this.setState({ submitting: false, error: { ...errorOject, server: 'Cannot post data. Please try again later.' } });
+                    this._Mounted && this.setState({ submitting: false, error: { ...errorOject, server: 'Cannot post data. Please try again later.' } });
                 });
         } catch (error) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -99,7 +108,7 @@ class SignInForm extends PureComponent {
             } else {
                 alert("Something unknown went wrong with Google sign in. " + error.message);
             }
-            this.setState({ submitting: false });
+            this._Mounted && this.setState({ submitting: false });
         }
     }
 

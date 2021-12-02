@@ -22,9 +22,11 @@ export default class GifScroller extends Component {
             loading: false,
             selectedImage: null
         }
+        this._Mounted = false;
     }
 
     componentDidMount = () => {
+        this._Mounted = true;
         if (this.props.inputText === '') {
             this.buildUrl('trending');
         } else {
@@ -33,8 +35,12 @@ export default class GifScroller extends Component {
         }
     }
 
+    componentWillUnmount() {
+        this._Mounted = false;
+    }
+
     UNSAFE_componentWillReceiveProps = (nextProps) => {
-        this.setState({ gifs: [], offset: 0 });
+        this._Mounted && this.setState({ gifs: [], offset: 0 });
         if (nextProps.inputText === '') {
             this.buildUrl('trending');
         } else {
@@ -70,7 +76,7 @@ export default class GifScroller extends Component {
 
     fetchAndRenderGifs = async (url, query, newly = false) => {
         const { offset, gifs } = this.state;
-        this.setState({ loading: true });
+        this._Mounted && this.setState({ loading: true });
         await axios.get(url, { params: query })
             .then(({ data }) => {
                 const { results } = data;
@@ -78,13 +84,13 @@ export default class GifScroller extends Component {
                     return result.media[0].gif.url
                 });
                 if (newly) {
-                    this.setState({
+                    this._Mounted && this.setState({
                         gifs: [...gifs, ...gifsUrls],
                         offset: offset + GIPHY_LIMIT,
                         loading: false,
                     });
                 } else {
-                    this.setState({
+                    this._Mounted && this.setState({
                         gifs: gifsUrls,
                         offset: 0,
                         loading: false
@@ -93,7 +99,7 @@ export default class GifScroller extends Component {
             })
             .catch((error) => {
                 // console.warn(error);
-                this.setState({ loading: false });
+                this._Mounted && this.setState({ loading: false });
             })
     };
 
@@ -114,7 +120,7 @@ export default class GifScroller extends Component {
             }
         }
         return (
-            <TouchableOpacity onPress={() => this.setState({ selectedImage: item })}>
+            <TouchableOpacity onPress={() => this._Mounted && this.setState({ selectedImage: item })}>
                 <ImageBackground
                     style={styles.postItem}
                     source={{ uri: item }}

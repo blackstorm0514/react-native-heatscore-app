@@ -50,6 +50,15 @@ export default class SelectTimeLineComponent extends PureComponent {
         this.state = {
             timeline: props.timeline ? props.timeline : null
         }
+        this._Mounted = false;
+    }
+
+    componentDidMount() {
+        this._Mounted = true;
+    }
+
+    componentWillUnmount() {
+        this._Mounted = false;
     }
 
     onBack = () => {
@@ -79,7 +88,7 @@ export default class SelectTimeLineComponent extends PureComponent {
                     <TouchableOpacity key={peorid.value}
                         style={styles.radioContainer}
                         activeOpacity={0.7}
-                        onPress={() => this.setState({ 'timeline': peorid.value })}>
+                        onPress={() => this._Mounted && this.setState({ 'timeline': peorid.value })}>
                         <FontAwesomeIcon color='white' size={20}
                             name={timeline == peorid.value ? 'check-circle' : 'circle-thin'} />
                         <Text style={styles.selectItemType} numberOfLines={1}>{peorid.name}</Text>

@@ -24,6 +24,7 @@ class SignupWithPhoneForm extends PureComponent {
             submitting: false,
             verify_code: ''
         };
+        this._Mounted = false;
     }
 
     componentDidMount() {
@@ -32,10 +33,12 @@ class SignupWithPhoneForm extends PureComponent {
             "hardwareBackPress",
             () => { navigation.navigate('SignupHome'); return true; }
         );
+        this._Mounted = true;
     }
 
     componentWillUnmount() {
         this.backHandler.remove();
+        this._Mounted = false;
     }
 
     onSendVerificationCode = () => {
@@ -44,22 +47,22 @@ class SignupWithPhoneForm extends PureComponent {
 
         const isValid = isValidNumber(formattedPhoneNumber);
         if (!isValid) {
-            this.setState({ error: "Phone number is not valid. Please input again." });
+            this._Mounted && this.setState({ error: "Phone number is not valid. Please input again." });
             return;
         }
-        this.setState({ error: null, submitting: true });
+        this._Mounted && this.setState({ error: null, submitting: true });
         phoneVerify({ phone: formattedPhoneNumber, step: 1 })
             .then(({ data }) => {
                 const { success, error } = data;
                 if (success) {
-                    this.setState({ sentCode: true, submitting: false });
+                    this._Mounted && this.setState({ sentCode: true, submitting: false });
                 } else {
-                    this.setState({ error: error, submitting: false });
+                    this._Mounted && this.setState({ error: error, submitting: false });
                 }
             })
             .catch((error) => {
                 // console.warn(error);
-                this.setState({ error: "Cannot send verification code. Please try again later.", submitting: false });
+                this._Mounted && this.setState({ error: "Cannot send verification code. Please try again later.", submitting: false });
             })
     }
 
@@ -68,24 +71,23 @@ class SignupWithPhoneForm extends PureComponent {
         const { submitting, verify_code, formattedPhoneNumber } = this.state;
         if (submitting) return;
         if (!verify_code) {
-            this.setState({ error: 'Please input 6 digit verification code.' });
+            this._Mounted && this.setState({ error: 'Please input 6 digit verification code.' });
             return;
         }
-        this.setState({ error: null, submitting: true });
+        this._Mounted && this.setState({ error: null, submitting: true });
         phoneVerify({ verify_code: verify_code, step: 2, phone: formattedPhoneNumber })
             .then(({ data }) => {
                 const { success, error } = data;
                 if (success) {
-
-                    this.setState({ submitting: false });
+                    this._Mounted && this.setState({ submitting: false });
                     navigation.navigate("SignupDetail", { phone: formattedPhoneNumber });
                 } else {
-                    this.setState({ error: error, submitting: false });
+                    this._Mounted && this.setState({ error: error, submitting: false });
                 }
             })
             .catch((error) => {
                 // console.warn(error);
-                this.setState({ error: "Cannot verify code. Please try again later.", submitting: false });
+                this._Mounted && this.setState({ error: "Cannot verify code. Please try again later.", submitting: false });
             })
     }
 
@@ -113,8 +115,8 @@ class SignupWithPhoneForm extends PureComponent {
                                 value={phoneNumber}
                                 defaultCode="CA"
                                 layout="first"
-                                onChangeText={(text) => { this.setState({ phoneNumber: text }) }}
-                                onChangeFormattedText={(text) => { this.setState({ formattedPhoneNumber: text }) }}
+                                onChangeText={(text) => { this._Mounted && this.setState({ phoneNumber: text }) }}
+                                onChangeFormattedText={(text) => { this._Mounted && this.setState({ formattedPhoneNumber: text }) }}
                                 autoFocus
                                 withDarkTheme
                                 containerStyle={styles.phoneContainerStyle}
@@ -167,7 +169,7 @@ class SignupWithPhoneForm extends PureComponent {
                                 ignoreCase={true}
                                 inputPosition='center'
                                 size={50}
-                                onFulfill={(verify_code) => { this.setState({ verify_code }) }}
+                                onFulfill={(verify_code) => { this._Mounted && this.setState({ verify_code }) }}
                                 containerStyle={{ marginTop: 0 }}
                                 codeInputStyle={{ borderWidth: 1.5 }}
                             />

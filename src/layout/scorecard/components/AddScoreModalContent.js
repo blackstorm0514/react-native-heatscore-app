@@ -47,10 +47,19 @@ export default class AddScoreModalContent extends PureComponent {
             selectedIndex: 0,
             selectedTab: null,
         };
+        this._Mounted = false;
+    }
+
+    componentDidMount() {
+        this._Mounted = true;
+    }
+
+    componentWillUnmount() {
+        this._Mounted = false;
     }
 
     selectEventPressed = () => {
-        this.setState({ selectedIndex: 1, selectedTab: 'event' });
+        this._Mounted && this.setState({ selectedIndex: 1, selectedTab: 'event' });
     }
 
     selectItemPressed = (tab) => {
@@ -59,7 +68,7 @@ export default class AddScoreModalContent extends PureComponent {
             Toast.show('You should select an event to choose team.');
             return;
         }
-        this.setState({ selectedIndex: 1, selectedTab: tab });
+        this._Mounted && this.setState({ selectedIndex: 1, selectedTab: tab });
     }
 
     selectTeamPressed = () => {
@@ -70,7 +79,7 @@ export default class AddScoreModalContent extends PureComponent {
         if (!type) {
             return Toast.show('You should select a bet type to choose team.');
         }
-        this.setState({ selectedIndex: 1, selectedTab: 'team' });
+        this._Mounted && this.setState({ selectedIndex: 1, selectedTab: 'team' });
     }
 
     selectPointsPressed = () => {
@@ -83,12 +92,12 @@ export default class AddScoreModalContent extends PureComponent {
             Toast.show('Points are available in only Total and Spread type.');
             return;
         }
-        this.setState({ selectedIndex: 1, selectedTab: 'points' });
+        this._Mounted && this.setState({ selectedIndex: 1, selectedTab: 'points' });
     }
 
     onSelectEvent = (event) => {
         const { updateEvent } = this.props;
-        this.setState({
+        this._Mounted && this.setState({
             selectedTab: null,
             selectedIndex: 0,
         });
@@ -117,14 +126,14 @@ export default class AddScoreModalContent extends PureComponent {
             case 'event':
                 return (
                     <SelectEventComponent
-                        onBack={() => this.setState({ selectedTab: null, selectedIndex: 0 })}
+                        onBack={() => this._Mounted && this.setState({ selectedTab: null, selectedIndex: 0 })}
                         onSelect={this.onSelectEvent} />
                 );
             case 'type':
                 return (
                     <SelectTypeComponent
                         type={type}
-                        onBack={() => this.setState({ selectedTab: null, selectedIndex: 0 })}
+                        onBack={() => this._Mounted && this.setState({ selectedTab: null, selectedIndex: 0 })}
                         onSelect={(type) => this.onSelectItem('type', type)} />
                 );
             case 'team':
@@ -133,7 +142,7 @@ export default class AddScoreModalContent extends PureComponent {
                         event={event}
                         team={team}
                         type={type}
-                        onBack={() => this.setState({ selectedTab: null, selectedIndex: 0 })}
+                        onBack={() => this._Mounted && this.setState({ selectedTab: null, selectedIndex: 0 })}
                         onSelect={(team) => this.onSelectItem('team', team)} />
                 );
             case 'timeline':
@@ -141,14 +150,14 @@ export default class AddScoreModalContent extends PureComponent {
                     <SelectTimeLineComponent
                         event={event}
                         timeline={timeline}
-                        onBack={() => this.setState({ selectedTab: null, selectedIndex: 0 })}
+                        onBack={() => this._Mounted && this.setState({ selectedTab: null, selectedIndex: 0 })}
                         onSelect={(timeline) => this.onSelectItem('timeline', timeline)} />
                 );
             case 'points':
                 return (
                     <SelectPointComponent
                         points={points}
-                        onBack={() => this.setState({ selectedTab: null, selectedIndex: 0 })}
+                        onBack={() => this._Mounted && this.setState({ selectedTab: null, selectedIndex: 0 })}
                         onSelect={(points) => this.onSelectItem('points', points)} />
                 );
             default:

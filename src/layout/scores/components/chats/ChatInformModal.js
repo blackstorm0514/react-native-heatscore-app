@@ -12,17 +12,24 @@ export default class ChatInformModal extends PureComponent {
         this.state = {
             informModal: false
         }
+        this._Mounted = false;
     }
+
     componentDidMount() {
+        this._Mounted = true;
         AppStorage.getItem(CHAT_MODAL_KEY).then(val => {
             if (val != 'true') {
-                this.setState({ informModal: true });
+                this._Mounted && this.setState({ informModal: true });
             }
         })
     }
 
+    componentWillUnmount() {
+        this._Mounted = false;
+    }
+
     onCloseInformModal = () => {
-        this.setState({ informModal: false });
+        this._Mounted && this.setState({ informModal: false });
         AppStorage.setItem(CHAT_MODAL_KEY, 'true')
     }
 

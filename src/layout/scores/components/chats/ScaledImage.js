@@ -9,6 +9,15 @@ export default class ScaledImage extends Component {
             width: 0,
             height: 0,
         };
+        this._Mounted = false;
+    }
+
+    componentDidMount() {
+        this._Mounted = true;
+    }
+
+    componentWillUnmount() {
+        this._Mounted = false;
     }
 
     UNSAFE_componentWillMount() {
@@ -16,18 +25,18 @@ export default class ScaledImage extends Component {
         Image.getSize(uri, (width, height) => {
             if (propsWidth && !propsHeight) {
                 const realWidth = propsWidth > width ? width : propsWidth;
-                this.setState({
+                this._Mounted && this.setState({
                     width: realWidth,
                     height: height * (realWidth / width)
                 });
             } else if (!propsWidth && propsHeight) {
                 const realHeight = propsHeight > height ? height : propsHeight;
-                this.setState({
+                this._Mounted && this.setState({
                     width: width * (realHeight / height),
                     height: realHeight
                 });
             } else {
-                this.setState({ width: width, height: height });
+                this._Mounted && this.setState({ width: width, height: height });
             }
         });
     }

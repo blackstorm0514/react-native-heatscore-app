@@ -42,35 +42,44 @@ class SignupDetailForm extends PureComponent {
             editable: (facebookIdToken || googleIdToken) ? false : true,
             error: errorOject
         }
+        this._Mounted = false;
+    }
+
+    componentDidMount() {
+        this._Mounted = true;
+    }
+
+    componentWillUnmount() {
+        this._Mounted = false;
     }
 
     changeField = (field, value) => {
-        this.setState({ [field]: value });
+        this._Mounted && this.setState({ [field]: value });
     }
 
     onSubmit = () => {
         const { username, firstname, lastname, email, password, passwordConfirm, phone } = this.state;
         const result = ValidateFields({ username, firstname, lastname, email, password, passwordConfirm });
         if (result != true) {
-            this.setState({ error: { ...errorOject, ...result } });
+            this._Mounted && this.setState({ error: { ...errorOject, ...result } });
             return;
         }
-        this.setState({ error: errorOject, submitting: true });
+        this._Mounted && this.setState({ error: errorOject, submitting: true });
 
         signUp({ username, firstname, lastname, email, password, passwordConfirm, phone })
             .then(({ data }) => {
                 const { success, error } = data;
                 if (success) {
-                    this.setState({ submitting: false, success: true });
+                    this._Mounted && this.setState({ submitting: false, success: true });
 
                     GoogleLogOut();
                 } else {
-                    this.setState({ submitting: false, error: { ...errorOject, ...error } });
+                    this._Mounted && this.setState({ submitting: false, error: { ...errorOject, ...error } });
                 }
             })
             .catch((error) => {
                 // console.warn(error);
-                this.setState({ submitting: false, error: { ...errorOject, server: 'Cannot post data. Please try again later.' } });
+                this._Mounted && this.setState({ submitting: false, error: { ...errorOject, server: 'Cannot post data. Please try again later.' } });
             });
     }
 
@@ -104,7 +113,7 @@ class SignupDetailForm extends PureComponent {
                                     placeholder='John'
                                     placeholderTextColor="#888"
                                     value={firstname}
-                                    onChangeText={(text) => this.setState({ firstname: text })}
+                                    onChangeText={(text) => this._Mounted && this.setState({ firstname: text })}
                                 />
                                 {error && error.firstname && <Text style={styles.errorText}>{error.firstname}</Text>}
                             </Layout>
@@ -116,7 +125,7 @@ class SignupDetailForm extends PureComponent {
                                     placeholder='Doe'
                                     placeholderTextColor="#888"
                                     value={lastname}
-                                    onChangeText={(text) => this.setState({ lastname: text })}
+                                    onChangeText={(text) => this._Mounted && this.setState({ lastname: text })}
                                 />
                                 {error && error.lastname && <Text style={styles.errorText}>{error.lastname}</Text>}
                             </Layout>
@@ -129,7 +138,7 @@ class SignupDetailForm extends PureComponent {
                                 placeholder='jone.doe@gmail.com'
                                 placeholderTextColor="#888"
                                 value={email}
-                                onChangeText={(text) => this.setState({ email: text })}
+                                onChangeText={(text) => this._Mounted && this.setState({ email: text })}
                                 disabled={!editable}
                             />
                             {error && error.email && <Text style={styles.errorText}>{error.email}</Text>}
@@ -143,7 +152,7 @@ class SignupDetailForm extends PureComponent {
                                 placeholderTextColor="#888"
                                 value={password}
                                 secureTextEntry
-                                onChangeText={(text) => this.setState({ password: text })}
+                                onChangeText={(text) => this._Mounted && this.setState({ password: text })}
                             />
                             {error && error.password && <Text style={styles.errorText}>{error.password}</Text>}
                         </Layout>
@@ -156,7 +165,7 @@ class SignupDetailForm extends PureComponent {
                                 placeholderTextColor="#888"
                                 value={passwordConfirm}
                                 secureTextEntry
-                                onChangeText={(text) => this.setState({ passwordConfirm: text })}
+                                onChangeText={(text) => this._Mounted && this.setState({ passwordConfirm: text })}
                             />
                             {error && error.passwordConfirm && <Text style={styles.errorText}>{error.passwordConfirm}</Text>}
                         </Layout>

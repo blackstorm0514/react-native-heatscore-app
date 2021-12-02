@@ -26,6 +26,7 @@ class EventDetailScreen extends Component {
                 { key: 'matchup', title: 'MatchUp' },
             ]
         }
+        this._Mounted = false;
     }
 
     componentDidMount() {
@@ -33,6 +34,11 @@ class EventDetailScreen extends Component {
         if (!event) {
             navigation.navigate('AllScores');
         }
+        this._Mounted = true;
+    }
+
+    componentWillUnmount() {
+        this._Mounted = false;
     }
 
     goBackAction = () => {
@@ -130,7 +136,7 @@ class EventDetailScreen extends Component {
                     renderTabBar={this.renderTabBar}
                     navigationState={{ index, routes }}
                     renderScene={this.renderScene}
-                    onIndexChange={(index) => this.setState({ index })}
+                    onIndexChange={(index) => this._Mounted && this.setState({ index })}
                     initialLayout={{ width: Dimensions.get('window').width }}
                 />
             </View>

@@ -9,6 +9,8 @@ import { LoadingIndicator } from './components/LoadingIndicator';
 import RenderFavoriteComponent from './components/RenderFavoriteComponent';
 import { getEvent } from '../../redux/services';
 
+const inPlayTime = 30 * 1000;
+
 class ScoresPerDayScreen extends Component {
     constructor(props) {
         super(props);
@@ -17,27 +19,53 @@ class ScoresPerDayScreen extends Component {
             loading: false,
             data: null,
             favorites: null,
+            inplayTimeout: null,
         }
+        this._Mounted = false;
     }
 
     componentDidMount() {
+        this._Mounted = true;
         this.getEventsData();
     }
 
-    getEventsData = () => {
+    componentWillUnmount() {
+        const { inplayTimeout } = this.state;
+        if (inplayTimeout) clearTimeout(inplayTimeout);
+        this._Mounted = false;
+    }
+
+    getEventsData = (setLoading = true) => {
         const { date } = this.props;
-        this.setState({ loading: true });
+        const { inplayTimeout } = this.state;
+        if (inplayTimeout) clearTimeout(inplayTimeout);
+        this._Mounted && this.setState({ loading: setLoading, inplayTimeout: null });
         getEvent(date)
             .then(({ data: result }) => {
                 const { data, favorites } = result;
-                this.setState({
+                let hasInplay = false;
+                if (data && data.length) {
+                    for (const league of data) {
+                        if (league && league.events && league.events.length) {
+                            for (const event of league.events) {
+                                if (event.time_status == '1') {
+                                    hasInplay = true;
+                                    break;
+                                }
+                            }
+                            if (hasInplay) break;
+                        }
+                    }
+                }
+                this._Mounted && this.setState({
                     loading: false,
                     data: data,
-                    favorites: favorites && favorites.length ? favorites : null
+                    favorites: favorites && favorites.length ? favorites : null,
+                    inplayTimeout: hasInplay ? setTimeout(() => this.getEventsData(false), inPlayTime) : null
                 });
             })
             .catch(() => {
-                this.setState({ loading: false, data: null, favorites: null });
+                this._Mounted && this.setState({ loading: false, data: null, favorites: null });
             })
     }
 
@@ -72,7 +100,7 @@ class ScoresPerDayScreen extends Component {
     )
 
     render() {
-        const { data, loading, favorites } = this.state;
+        const { data, loading } = this.state;
 
         return (
             <View style={styles.container}>

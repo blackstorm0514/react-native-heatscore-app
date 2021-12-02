@@ -30,6 +30,7 @@ class RoundLeagueScreen extends Component {
             topgoals: null,
             topassists: null,
         }
+        this._Mounted = false;
     }
 
     componentDidMount() {
@@ -37,16 +38,21 @@ class RoundLeagueScreen extends Component {
         if (!league) {
             navigation.goBack();
         }
+        this._Mounted = true;
         this.loadRoundData();
+    }
+
+    componentWillUnmount() {
+        this._Mounted = false;
     }
 
     loadRoundData = () => {
         const { league } = this.state;
-        this.setState({ loading: true });
+        this._Mounted && this.setState({ loading: true });
         getLeagueRound(league.id)
             .then(({ data }) => {
                 const { rounds, topassists, topgoals } = data;
-                this.setState({
+                this._Mounted && this.setState({
                     loading: false,
                     rounds: rounds,
                     topgoals: topgoals,
@@ -54,7 +60,7 @@ class RoundLeagueScreen extends Component {
                 })
             })
             .catch(() => {
-                this.setState({ loading: false });
+                this._Mounted && this.setState({ loading: false });
             })
     }
 
@@ -157,7 +163,7 @@ class RoundLeagueScreen extends Component {
                     renderTabBar={this.renderTabBar}
                     navigationState={{ index, routes }}
                     renderScene={this.renderScene}
-                    onIndexChange={(index) => this.setState({ index })}
+                    onIndexChange={(index) => this._Mounted && this.setState({ index })}
                     initialLayout={{ width: Dimensions.get('window').width }}
                 />
             </View>

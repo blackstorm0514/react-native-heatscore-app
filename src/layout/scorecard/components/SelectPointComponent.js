@@ -14,6 +14,15 @@ export default class SelectPointComponent extends PureComponent {
         this.state = {
             points: props.points ? props.points : 0,
         }
+        this._Mounted = false;
+    }
+
+    componentDidMount() {
+        this._Mounted = true;
+    }
+
+    componentWillUnmount() {
+        this._Mounted = false;
     }
 
     onBack = () => {
@@ -54,7 +63,7 @@ export default class SelectPointComponent extends PureComponent {
                         selectionColor="#999"
                         inputStyle={{ borderColor: 'white' }}
                         buttonStyle={{ backgroundColor: 'black', borderColor: '#FFF', borderWidth: 1 }}
-                        onChange={(value) => this.setState({ points: value })}
+                        onChange={(value) => this._Mounted && this.setState({ points: value })}
                     />
                 </View>
             </View>
