@@ -4,14 +4,13 @@ import { Text } from '@ui-kitten/components';
 import { RefreshIcon } from '../../libs/icons';
 import LeaguesListComponent from './components/LeaguesListComponent';
 import { TouchableOpacity } from 'react-native';
-import { connect } from 'react-redux';
 import { LoadingIndicator } from './components/LoadingIndicator';
 import RenderFavoriteComponent from './components/RenderFavoriteComponent';
 import { getEvent } from '../../redux/services';
 
 const inPlayTime = 30 * 1000;
 
-class ScoresPerDayScreen extends Component {
+export default class ScoresPerDayScreen extends Component {
     constructor(props) {
         super(props);
 
@@ -82,9 +81,8 @@ class ScoresPerDayScreen extends Component {
     }
 
     renderLeagues = ({ item }) => {
-        const { setLeague, navigation, filterdLeagues } = this.props;
-        const disabled = filterdLeagues.find(league => league == item.league_id);
-        return disabled ? null : (
+        const { setLeague, navigation } = this.props;
+        return (
             <LeaguesListComponent
                 league={item}
                 setLeague={setLeague}
@@ -128,12 +126,6 @@ class ScoresPerDayScreen extends Component {
         )
     }
 };
-
-const mapStateToProps = (state) => ({
-    filterdLeagues: state.filterdLeagues
-});
-
-export default connect(mapStateToProps, null)(ScoresPerDayScreen);
 
 const styles = StyleSheet.create({
     container: {

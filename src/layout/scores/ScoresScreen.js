@@ -14,7 +14,8 @@ import ScoresPerDayScreen from './ScoresPerDayScreen';
 import ScoresLeagueScreen from './ScoresLeagueScreen';
 import { format, addDays, subDays } from 'date-fns';
 import { Modalize } from 'react-native-modalize';
-import FilterLeaguesModal from './components/FilterLeaguesModal';
+import SelectLeaguesModal from './components/SelectLeaguesModal';
+import { truncateString } from '../../libs/functions';
 
 class ScoresScreen extends Component {
     constructor(props) {
@@ -144,11 +145,11 @@ class ScoresScreen extends Component {
     renderTitle = () => {
         const { league } = this.state;
         return <Button style={styles.allScoresButton}
-            accessoryRight={league ? null : ArrowDownwardIcon}
-            onPress={league ? null : this.onFilterModalOpen}
+            accessoryRight={ArrowDownwardIcon}
+            onPress={this.onFilterModalOpen}
             size="large">
             <Text numberOfLines={1}>
-                {league ? league.name : 'All Scores'}
+                {league ? truncateString(league.name, 20) : 'All Scores'}
             </Text>
         </Button>
     }
@@ -172,6 +173,11 @@ class ScoresScreen extends Component {
                 </TouchableOpacity>
             </View>
         )
+    }
+
+    onSelectLeague = (league) => {
+        this._Mounted && this.setState({ league: league });
+        this.filterModalRef.current?.close();
     }
 
     render() {
@@ -198,7 +204,7 @@ class ScoresScreen extends Component {
                     rootStyle={{ borderRadius: 0 }}
                     HeaderComponent={this.renderModalHeader}
                 >
-                    <FilterLeaguesModal />
+                    <SelectLeaguesModal setLeague={this.onSelectLeague} />
                 </Modalize>
             </View>
         )

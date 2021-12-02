@@ -13,26 +13,24 @@ import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { actions } from '../../../redux/reducer';
 
-const screenWidth = Dimensions.get('window').width;
-
 const topLeagues = [
     {
-        "league_id": 459,
+        "id": 459,
         "name": "NFL",
         "sport": "American Football"
     },
     {
-        "league_id": 2274,
+        "id": 2274,
         "name": "NBA",
         "sport": "Basketball"
     },
     {
-        "league_id": 1926,
+        "id": 1926,
         "name": "NHL",
         "sport": "Ice Hockey"
     },
     {
-        "league_id": 225,
+        "id": 225,
         "name": "MLB",
         "sport": "Baseball"
     }
@@ -52,7 +50,7 @@ const getSportsIcon = (sport) => (
     />
 )
 
-class FilterLeaguesModal extends PureComponent {
+export default class SelectLeaguesModal extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -84,19 +82,15 @@ class FilterLeaguesModal extends PureComponent {
     }
 
     renderTopLeagueItem = (item, index) => {
-        const { filterdLeagues, toggleFilteredLeagueAction } = this.props;
-        let checked = true;
-        if (filterdLeagues.length > 0 && filterdLeagues.find(league_id => league_id == item.league_id)) {
-            checked = false;
-        }
+        const { setLeague } = this.props;
         return (
             <TouchableOpacity key={index} style={styles.topLeagueItem}
                 activeOpacity={0.8}
-                onPress={() => toggleFilteredLeagueAction(item.league_id)}>
+                onPress={() => setLeague(item)}>
                 {getSportsIcon(item.sport)}
                 <Text style={styles.topLeagueText}>{item.name}</Text>
-                <MaterialIcons name={checked ? "check-box" : "check-box-outline-blank"}
-                    size={14} color="white"
+                <MaterialIcons name="keyboard-arrow-right"
+                    size={18} color="white"
                     style={styles.leagueCheckboxIcon} />
             </TouchableOpacity>
         )
@@ -133,18 +127,14 @@ class FilterLeaguesModal extends PureComponent {
     }
 
     renderSportLeagueItem = (league, index) => {
-        const { filterdLeagues, toggleFilteredLeagueAction } = this.props;
-        let checked = true;
-        if (filterdLeagues.length > 0 && filterdLeagues.find(league_id => league_id == league.league_id)) {
-            checked = false;
-        }
+        const { setLeague } = this.props;
         return (
             <TouchableOpacity key={index} style={styles.leagueItem}
                 activeOpacity={0.8}
-                onPress={() => toggleFilteredLeagueAction(league.league_id)}>
+                onPress={() => setLeague(league)}>
                 <Text style={styles.topLeagueText}>{league.name}</Text>
-                <MaterialIcons name={checked ? "check-box" : "check-box-outline-blank"}
-                    size={14} color="white" style={styles.leagueCheckboxIcon} />
+                <MaterialIcons name="keyboard-arrow-right"
+                    size={18} color="white" style={styles.leagueCheckboxIcon} />
             </TouchableOpacity>
         )
     }
@@ -159,12 +149,6 @@ class FilterLeaguesModal extends PureComponent {
         )
     }
 }
-
-const mapStateToProps = (state) => ({
-    filterdLeagues: state.filterdLeagues
-});
-
-export default connect(mapStateToProps, { toggleFilteredLeagueAction: actions.toggleFilteredLeagueAction })(FilterLeaguesModal);
 
 const styles = StyleSheet.create({
     container: {

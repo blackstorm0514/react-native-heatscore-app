@@ -10,9 +10,9 @@ export function capitalizeString(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export function truncateString(text) {
-    if (text.length > 10) {
-        text = text.substring(0, 10) + "...";
+export function truncateString(text, length = 10) {
+    if (text.length > length) {
+        text = text.substring(0, length) + "...";
     }
     return text;
 }

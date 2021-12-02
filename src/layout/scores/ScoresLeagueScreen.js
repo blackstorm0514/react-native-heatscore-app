@@ -37,6 +37,16 @@ class ScoresLeagueScreen extends Component {
         this._Mounted = false;
     }
 
+    getSnapshotBeforeUpdate(prevProps) {
+        return { reloadRequired: prevProps.league.id !== this.props.league.id };
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshots) {
+        if (snapshots.reloadRequired) {
+            this.getEventsData();
+        }
+    }
+
     getEventsData = (setLoading = true) => {
         const { date, league } = this.props;
         const { inplayTimeout } = this.state;
