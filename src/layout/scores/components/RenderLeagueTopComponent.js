@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     noDataText: {
         color: 'white',
         marginTop: 30,
-        fontSize: 24,
+        fontSize: 20,
         alignSelf: 'center'
     },
     scrollViewContainer: {
