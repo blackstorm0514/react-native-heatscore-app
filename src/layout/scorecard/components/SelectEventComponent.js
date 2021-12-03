@@ -33,6 +33,7 @@ export default class SelectEventComponent extends PureComponent {
 
     componentDidMount() {
         this._Mounted = true;
+        this.searchEvents();
     }
 
     componentWillUnmount() {
@@ -51,11 +52,9 @@ export default class SelectEventComponent extends PureComponent {
 
     onChangeText = (search) => {
         this._Mounted && this.setState({ search });
-        if (search) {
-            const { searchTimeout } = this.state;
-            if (searchTimeout) clearTimeout(searchTimeout);
-            this._Mounted && this.setState({ searchTimeout: setTimeout(this.searchEvents, 500) })
-        }
+        const { searchTimeout } = this.state;
+        if (searchTimeout) clearTimeout(searchTimeout);
+        this._Mounted && this.setState({ searchTimeout: setTimeout(this.searchEvents, 500) })
     }
 
     searchEvents = () => {

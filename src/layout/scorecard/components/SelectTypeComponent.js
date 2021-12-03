@@ -67,7 +67,7 @@ export default class SelectTypeComponent extends PureComponent {
                     onPress={() => this._Mounted && this.setState({ type: 'total' })}>
                     <FontAwesomeIcon color='white' size={20}
                         name={type == 'total' ? 'check-circle' : 'circle-thin'} />
-                    <Text style={styles.selectItemType} numberOfLines={1}>Total</Text>
+                    <Text style={styles.selectItemType} numberOfLines={1}>Over / Under</Text>
                 </TouchableOpacity>
             </View>
         )
