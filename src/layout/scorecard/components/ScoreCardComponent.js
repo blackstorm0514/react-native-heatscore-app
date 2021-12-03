@@ -100,10 +100,12 @@ const styles = StyleSheet.create({
         borderLeftColor: '#FFF',
     },
     winContainer: {
-        borderLeftColor: 'green'
+        borderLeftColor: 'green',
+        backgroundColor: '#89FC991A',
     },
     loseContainer: {
-        borderLeftColor: 'red'
+        borderLeftColor: 'red',
+        backgroundColor: '#FFD7D726',
     },
     eventPickText: {
         color: 'white',
