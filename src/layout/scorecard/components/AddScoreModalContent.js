@@ -206,11 +206,11 @@ export default class AddScoreModalContent extends PureComponent {
                         isText={true}
                         value={timeline ? getTimeLineName(timeline) : 'Select'}
                         onPress={() => this.selectItemPressed('timeline')} />
-                    <ItemComponent
+                    {type != 'moneyline' && <ItemComponent
                         title="Points"
                         isText={true}
                         value={points ? points : 'Select'}
-                        onPress={this.selectPointsPressed} />
+                        onPress={this.selectPointsPressed} />}
 
                     <Text style={styles.partText}>Manage Alerts</Text>
                     <ItemComponent
