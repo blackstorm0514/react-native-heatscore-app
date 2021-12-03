@@ -69,7 +69,7 @@ export function getPickName(home, away, team, type, points, timeline) {
     let pickName = '';
     switch (type) {
         case 'total':
-            pickName += (team == 'home' ? 'Over' : 'Under') + ' : Total';
+            pickName += (team == 'home' ? 'Over' : 'Under') + ' ' + points + ' : Total';
             break;
         case 'spread':
             pickName += (team == 'home' ? home.name : away.name) + ' ' + (points > 0 ? `+${points}` : points) + ' : Spread';
@@ -171,7 +171,7 @@ export function getWinLoss(home_score, away_score, team, type, points) {
             return winner == team ? 'win' : 'lose';
         case 'total':
             if (home_score + away_score > points) winner = 'home';
-            else if (home_score + away_score < points) winner = 'under';
+            else if (home_score + away_score < points) winner = 'away';
             return winner == team ? 'win' : 'lose';
         case 'moneyline':
         default:

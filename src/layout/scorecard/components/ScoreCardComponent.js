@@ -34,6 +34,7 @@ export default class ScoreCardComponent extends PureComponent {
             away_score: away_score,
             time: time_str,
             status: status_text,
+            type: type,
         };
     }
 
@@ -42,9 +43,9 @@ export default class ScoreCardComponent extends PureComponent {
             home, away,
             home_image, away_image,
             home_score, away_score,
-            time, status, card_id
+            time, status, card_id, type
         } = this.state;
-        const { onDeleteCard } = this.props;
+        const { onDeleteCard, showMode } = this.props;
 
         return (
             <ScrollView
@@ -71,6 +72,11 @@ export default class ScoreCardComponent extends PureComponent {
                                 <Text style={styles.eventItemTeamName} numberOfLines={1}>{away}</Text>
                                 <Text style={styles.eventItemTeamScore}>{away_score}</Text>
                             </View>
+                            {type == 'total' && showMode == 'total' && <View style={styles.totalPointContainer}>
+                                <Text style={{ flex: 2 }} />
+                                <Text style={styles.totalPointTitle} numberOfLines={1}>Total Points</Text>
+                                <Text style={styles.totalPointScore}>{away_score ? away_score + home_score : ''}</Text>
+                            </View>}
                         </View>
                         <View style={styles.eventItemStatus}>
                             <Text style={styles.eventItemStatusText}>{time}</Text>
@@ -157,5 +163,24 @@ const styles = StyleSheet.create({
         marginVertical: 5,
         textAlign: 'right',
         overflow: 'hidden'
+    },
+    totalPointContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 2
+    },
+    totalPointTitle: {
+        flex: 5,
+        fontSize: 12,
+        fontWeight: 'bold',
+        color: '#E10032',
+        fontStyle: 'italic'
+    },
+    totalPointScore: {
+        flex: 1,
+        color: '#E10032',
+        fontSize: 12,
+        fontWeight: 'bold',
+        fontStyle: 'italic'
     },
 })

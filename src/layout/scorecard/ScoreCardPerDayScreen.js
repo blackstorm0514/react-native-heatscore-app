@@ -8,6 +8,8 @@ import { LoadingIndicator } from '../scores/components/LoadingIndicator';
 import ScoreCardComponent from './components/ScoreCardComponent';
 import { deleteScoreCard, getScoreCards } from '../../redux/services';
 import Toast from 'react-native-simple-toast';
+import EntypoIcon from 'react-native-vector-icons/Entypo';
+import { Menu, MenuItem, MenuDivider } from '../../components/menu';
 
 class ScoreCardPerDayScreen extends PureComponent {
     constructor(props) {
@@ -16,6 +18,8 @@ class ScoreCardPerDayScreen extends PureComponent {
         this.state = {
             loading: false,
             data: [],
+            showMenu: false,
+            showMode: 'basic',
         }
         this._Mounted = false;
     }
@@ -48,18 +52,51 @@ class ScoreCardPerDayScreen extends PureComponent {
             });
     }
 
+    onHideMenu = () => {
+        this._Mounted && this.setState({ showMenu: false });
+    }
+
+    onShowMenu = () => {
+        this._Mounted && this.setState({ showMenu: true });
+    }
+
+    onPressViewMode = (mode) => {
+        this._Mounted && this.setState({ showMenu: false, showMode: mode });
+    }
+
     renderHeader = (item) => {
+        const { showMenu } = this.state;
         return (
             <View style={styles.listHeader}>
                 <Text style={styles.listHeaderText}>{item}</Text>
+                {item == "In-play" &&
+                    <View>
+                        <Menu
+                            visible={showMenu}
+                            style={{ alignSelf: 'flex-end', backgroundColor: '#222' }}
+                            anchor={<TouchableOpacity activeOpacity={0.8}
+                                onPress={this.onShowMenu}>
+                                <EntypoIcon name="dots-three-vertical"
+                                    size={14} color="white" />
+                            </TouchableOpacity>}
+                            onRequestClose={this.onHideMenu}
+                        >
+                            <MenuItem disabled textStyle={styles.menuTitleTextStyle}>Actions</MenuItem>
+                            <MenuDivider color="#555" />
+                            <MenuItem onPress={() => this.onPressViewMode('basic')} textStyle={styles.menuTextStyle}>Basic View</MenuItem>
+                            <MenuItem onPress={() => this.onPressViewMode('total')} textStyle={styles.menuTextStyle}>Total View</MenuItem>
+                        </Menu>
+                    </View>}
             </View>
         );
     }
 
     renderScoreCard = ({ item }) => {
+        const { showMode } = this.state;
         return (
             <ScoreCardComponent
                 card={item}
+                showMode={showMode}
                 onDeleteCard={this.onDeleteCard}
             />
         )
@@ -222,6 +259,9 @@ const styles = StyleSheet.create({
     listHeader: {
         marginVertical: 5,
         marginHorizontal: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
     },
     listHeaderText: {
         fontSize: 12,
@@ -247,4 +287,15 @@ const styles = StyleSheet.create({
         height: 20,
         tintColor: '#FFFFFF'
     },
+    menuTitleTextStyle: {
+        fontSize: 12,
+        color: '#888',
+        textAlign: 'center',
+        paddingVertical: 4
+    },
+    menuTextStyle: {
+        fontSize: 14,
+        color: 'white',
+        paddingVertical: 6
+    }
 });
