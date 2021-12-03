@@ -64,42 +64,38 @@ class ScoreCardPerDayScreen extends PureComponent {
         this._Mounted && this.setState({ showMenu: false, showMode: mode });
     }
 
-    renderHeader = (item) => {
+    renderHeader = (item, isTop = false) => {
         const { showMenu } = this.state;
         return (
             <View style={styles.listHeader}>
                 <Text style={styles.listHeaderText}>{item}</Text>
-                {item == "In-play" &&
-                    <View>
-                        <Menu
-                            visible={showMenu}
-                            style={{ alignSelf: 'flex-end', backgroundColor: '#222' }}
-                            anchor={<TouchableOpacity activeOpacity={0.8}
-                                onPress={this.onShowMenu}>
-                                <EntypoIcon name="dots-three-vertical"
-                                    size={14} color="white" />
-                            </TouchableOpacity>}
-                            onRequestClose={this.onHideMenu}
-                        >
-                            <MenuItem disabled textStyle={styles.menuTitleTextStyle}>Actions</MenuItem>
-                            <MenuDivider color="#555" />
-                            <MenuItem onPress={() => this.onPressViewMode('basic')} textStyle={styles.menuTextStyle}>Basic View</MenuItem>
-                            <MenuItem onPress={() => this.onPressViewMode('total')} textStyle={styles.menuTextStyle}>Total View</MenuItem>
-                        </Menu>
-                    </View>}
+                {isTop && <Menu
+                    visible={showMenu}
+                    style={{ alignSelf: 'flex-end', backgroundColor: '#222' }}
+                    anchor={<TouchableOpacity activeOpacity={0.8}
+                        onPress={this.onShowMenu}>
+                        <EntypoIcon name="dots-three-vertical"
+                            size={14} color="white" />
+                    </TouchableOpacity>}
+                    onRequestClose={this.onHideMenu}>
+                    <MenuItem disabled textStyle={styles.menuTitleTextStyle}>Actions</MenuItem>
+                    <MenuDivider color="#555" />
+                    <MenuItem onPress={() => this.onPressViewMode('basic')} textStyle={styles.menuTextStyle}>Basic View</MenuItem>
+                    <MenuItem onPress={() => this.onPressViewMode('total')} textStyle={styles.menuTextStyle}>Total View</MenuItem>
+                </Menu>}
             </View>
         );
     }
 
     renderScoreCard = ({ item }) => {
         const { showMode } = this.state;
-        return (
+        return showMode == 'basic' || showMode == item.type ? (
             <ScoreCardComponent
                 card={item}
                 showMode={showMode}
                 onDeleteCard={this.onDeleteCard}
             />
-        )
+        ) : null
     }
 
     renderScoreList = ({ item }) => {
@@ -132,7 +128,7 @@ class ScoreCardPerDayScreen extends PureComponent {
                     <FlatList
                         data={notStartedEvents}
                         renderItem={this.renderScoreCard}
-                        ListHeaderComponent={() => this.renderHeader(item)}
+                        ListHeaderComponent={() => this.renderHeader(item, true)}
                         keyExtractor={(item, index) => index.toString()}
                     />
                 )
@@ -141,7 +137,7 @@ class ScoreCardPerDayScreen extends PureComponent {
                     <FlatList
                         data={inPlayEvents}
                         renderItem={this.renderScoreCard}
-                        ListHeaderComponent={() => this.renderHeader(item)}
+                        ListHeaderComponent={() => this.renderHeader(item, notStartedEvents.length == 0)}
                         keyExtractor={(item, index) => index.toString()}
                     />
                 )
@@ -150,7 +146,7 @@ class ScoreCardPerDayScreen extends PureComponent {
                     <FlatList
                         data={endedEvents}
                         renderItem={this.renderScoreCard}
-                        ListHeaderComponent={() => this.renderHeader(item)}
+                        ListHeaderComponent={() => this.renderHeader(item, notStartedEvents.length == 0 && inPlayEvents.length == 0)}
                         keyExtractor={(item, index) => index.toString()}
                     />
                 )
@@ -159,7 +155,7 @@ class ScoreCardPerDayScreen extends PureComponent {
                     <FlatList
                         data={[]}
                         renderItem={this.renderScoreCard}
-                        ListHeaderComponent={() => this.renderHeader(item)}
+                        ListHeaderComponent={() => this.renderHeader(item, notStartedEvents.length == 0 && inPlayEvents.length == 0 && endedEvents.length == 0)}
                         keyExtractor={(item, index) => index.toString()}
                     />
                 )
