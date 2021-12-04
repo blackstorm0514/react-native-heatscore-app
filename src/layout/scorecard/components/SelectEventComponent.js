@@ -125,7 +125,7 @@ export default class SelectEventComponent extends PureComponent {
                                         source={{ uri: `https://assets.b365api.com/images/team/m/${event.away.image_id}.png` }}
                                     />
                                 </View>
-                                <Text style={styles.eventItemDate}>{format(new Date(event.time), "eee yyyy MMM dd, HH:mm aa")}</Text>
+                                <Text style={styles.eventItemDate}>{format(new Date(event.time), "eee MMM dd yyyy, HH:mm aa")}</Text>
                             </TouchableOpacity>
                             {selected && <View style={styles.buttonsContainer}>
                                 <TouchableOpacity
@@ -148,20 +148,13 @@ export default class SelectEventComponent extends PureComponent {
     }
 
     render() {
-        const { onBack } = this.props;
+        const { } = this.props;
         const { search } = this.state;
 
         return (
             <View style={styles.container}>
                 <View style={styles.titleContainer}>
-                    <TouchableOpacity activeOpacity={0.8}
-                        onPress={onBack}>
-                        <FontAwesomeIcon
-                            color='#fff'
-                            size={24} name='angle-left' />
-                    </TouchableOpacity>
                     <Text style={styles.titleText}>Select an event.</Text>
-                    <Text></Text>
                 </View>
                 <View style={styles.header}>
                     <Input
@@ -187,8 +180,7 @@ const styles = StyleSheet.create({
     titleContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: 20,
+        justifyContent: 'center',
         paddingTop: 10,
         paddingHorizontal: 10,
         height: 30,
@@ -199,6 +191,7 @@ const styles = StyleSheet.create({
     header: {
         paddingHorizontal: 16,
         paddingVertical: 2,
+        marginBottom: 6,
         backgroundColor: '#111',
     },
     searchInput: {
@@ -208,11 +201,6 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         flex: 1,
         tintColor: '#FFF'
-    },
-    searchButton: {
-        backgroundColor: '#111',
-        borderColor: '#111',
-        color: 'white',
     },
     searchIcon: {
         height: 20,
@@ -237,7 +225,7 @@ const styles = StyleSheet.create({
     },
     eventsContainer: {
         flex: 1,
-        maxHeight: screenHeight - 222
+        maxHeight: screenHeight - 208
     },
     eventItemDetail: {
         paddingHorizontal: 20
@@ -248,7 +236,7 @@ const styles = StyleSheet.create({
     },
     eventItemDate: {
         fontSize: 10,
-        color: '#999'
+        color: '#ccc'
     },
     eventItemTeams: {
         flexDirection: 'row',

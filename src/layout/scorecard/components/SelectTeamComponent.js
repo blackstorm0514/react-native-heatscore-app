@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import ModalAction from "./ModalAction";
 
 export default class SelectTeamComponent extends PureComponent {
     constructor(props) {
@@ -25,28 +26,16 @@ export default class SelectTeamComponent extends PureComponent {
         this._Mounted = false;
     }
 
-    onBack = () => {
-        const { onBack, onSelect } = this.props;
-        const { team } = this.state;
-        onSelect(team);
-        onBack();
-    }
-
     render() {
-        const { event, type } = this.props;
+        const { event, type, onNext, onBack } = this.props;
         const { team } = this.state;
+
+        if (!event) return null;
 
         return (
             <View style={styles.container}>
                 <View style={styles.titleContainer}>
-                    <TouchableOpacity activeOpacity={0.8}
-                        onPress={this.onBack}>
-                        <FontAwesomeIcon
-                            color='#fff'
-                            size={24} name='angle-left' />
-                    </TouchableOpacity>
                     <Text style={styles.titleText}>Select a team</Text>
-                    <Text></Text>
                 </View>
                 {type != 'total' && <>
                     <TouchableOpacity style={styles.radioContainer}
@@ -88,6 +77,10 @@ export default class SelectTeamComponent extends PureComponent {
                         <Text style={[styles.selectItemTeamName, styles.selectItemOverUnder]} numberOfLines={1}>Under</Text>
                     </TouchableOpacity>
                 </>}
+
+                <ModalAction
+                    onNext={() => onNext(team)}
+                    onBack={onBack} />
             </View>
         )
     }
@@ -97,9 +90,8 @@ const styles = StyleSheet.create({
     titleContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: 20,
-        paddingTop: 10,
+        justifyContent: 'center',
+        paddingVertical: 10,
         paddingHorizontal: 10
     },
     titleText: {

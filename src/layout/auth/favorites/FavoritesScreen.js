@@ -35,7 +35,6 @@ class FavoritesScreen extends PureComponent {
                 }
             })
             .catch((error) => {
-                // console.warn(error);
                 this._Mounted && this.setState({ loading: false });
                 Toast.show('Cannot get favorite teams.');
             });

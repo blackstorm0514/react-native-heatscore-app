@@ -62,11 +62,9 @@ class RenderEventChatComponent extends Component {
                         this._Mounted && this.setState({ room_id: room_id });
                         this.getChatLogs(room_id);
                     } else {
-                        // console.log('Error,', res);
                     }
                 })
                 .catch(error => {
-                    // console.warn(error);
                 })
 
         }
@@ -138,7 +136,6 @@ class RenderEventChatComponent extends Component {
                 }
             })
             .catch(error => {
-                // console.warn(error);
                 this._Mounted && this.setState({ isLoadingEarlier: false });
             });
     }

@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import ModalAction from "./ModalAction";
 
 const TIMELINES_PER_SPORTS = {
     "Soccer": [
@@ -61,28 +62,15 @@ export default class SelectTimeLineComponent extends PureComponent {
         this._Mounted = false;
     }
 
-    onBack = () => {
-        const { onBack, onSelect } = this.props;
-        const { timeline } = this.state;
-        onSelect(timeline);
-        onBack();
-    }
-
     render() {
-        const { event } = this.props;
+        const { event, onNext, onBack } = this.props;
         const { timeline } = this.state;
+        if (!event) return null;
 
         return (
             <View style={styles.container}>
                 <View style={styles.titleContainer}>
-                    <TouchableOpacity activeOpacity={0.8}
-                        onPress={this.onBack}>
-                        <FontAwesomeIcon
-                            color='#fff'
-                            size={24} name='angle-left' />
-                    </TouchableOpacity>
                     <Text style={styles.titleText}>Select a type</Text>
-                    <Text></Text>
                 </View>
                 {TIMELINES_PER_SPORTS[event.sport.name].map(peorid => (
                     <TouchableOpacity key={peorid.value}
@@ -94,6 +82,10 @@ export default class SelectTimeLineComponent extends PureComponent {
                         <Text style={styles.selectItemType} numberOfLines={1}>{peorid.name}</Text>
                     </TouchableOpacity>
                 ))}
+
+                <ModalAction
+                    onNext={() => onNext(timeline)}
+                    onBack={onBack} />
             </View>
         )
     }
@@ -103,9 +95,8 @@ const styles = StyleSheet.create({
     titleContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: 20,
-        paddingTop: 10,
+        justifyContent: 'center',
+        paddingVertical: 10,
         paddingHorizontal: 10
     },
     titleText: {

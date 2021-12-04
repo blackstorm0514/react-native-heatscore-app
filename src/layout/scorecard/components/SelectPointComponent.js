@@ -7,6 +7,7 @@ import {
 import { Text, Input } from '@ui-kitten/components';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import InputSpinner from "react-native-input-spinner";
+import ModalAction from "./ModalAction";
 
 export default class SelectPointComponent extends PureComponent {
     constructor(props) {
@@ -25,27 +26,14 @@ export default class SelectPointComponent extends PureComponent {
         this._Mounted = false;
     }
 
-    onBack = () => {
-        const { onBack, onSelect } = this.props;
-        const { points } = this.state;
-        onSelect(points);
-        onBack();
-    }
-
     render() {
         const { points } = this.state;
+        const { onNext, onBack } = this.props;
 
         return (
             <View style={styles.container}>
                 <View style={styles.titleContainer}>
-                    <TouchableOpacity activeOpacity={0.8}
-                        onPress={this.onBack}>
-                        <FontAwesomeIcon
-                            color='#fff'
-                            size={24} name='angle-left' />
-                    </TouchableOpacity>
                     <Text style={styles.titleText}>Input Points</Text>
-                    <Text></Text>
                 </View>
                 <View style={styles.inputContainer}>
                     <InputSpinner
@@ -66,6 +54,10 @@ export default class SelectPointComponent extends PureComponent {
                         onChange={(value) => this._Mounted && this.setState({ points: value })}
                     />
                 </View>
+
+                <ModalAction
+                    onBack={onBack}
+                    onNext={() => onNext(points)} />
             </View>
         )
     }
@@ -75,9 +67,8 @@ const styles = StyleSheet.create({
     titleContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: 20,
-        paddingTop: 10,
+        justifyContent: 'center',
+        paddingVertical: 10,
         paddingHorizontal: 10
     },
     titleText: {

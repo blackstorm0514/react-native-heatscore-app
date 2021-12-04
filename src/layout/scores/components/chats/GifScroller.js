@@ -98,7 +98,6 @@ export default class GifScroller extends Component {
                 }
             })
             .catch((error) => {
-                // console.warn(error);
                 this._Mounted && this.setState({ loading: false });
             })
     };

@@ -14,7 +14,6 @@ import { Modalize } from 'react-native-modalize';
 import AddScoreModalContent from './components/AddScoreModalContent';
 import { connect } from 'react-redux';
 import Toast from 'react-native-simple-toast';
-import { addScoreCard } from '../../redux/services';
 
 const screenWidth = Dimensions.get('window').width;
 class ScoreCardScreen extends PureComponent {
@@ -44,17 +43,6 @@ class ScoreCardScreen extends PureComponent {
             index: 7,
             routes: tabs,
 
-            event: null,
-            team: null,
-            type: null,
-            timeline: null,
-            points: null,
-            allowAlerts: true,
-            alert_gameStart: true,
-            alert_gameEnd: true,
-            alert_gameScoring: false,
-
-            submitting: false,
             newlyAdded: null,
         }
 
@@ -141,83 +129,27 @@ class ScoreCardScreen extends PureComponent {
     }
 
     renderModalHeader = () => {
-        const { submitting } = this.state;
         return (
             <View style={styles.addModalHeader}>
+                <Text></Text>
+                <Text style={styles.modalHeaderTitle}>Add Game</Text>
                 <TouchableOpacity activeOpacity={0.7}
                     onPress={() => this.addModalRef.current?.close()}>
                     <Text style={styles.modalHeaderAction}>Cancel</Text>
-                </TouchableOpacity>
-                <Text style={styles.modalHeaderTitle}>Add Game</Text>
-                <TouchableOpacity activeOpacity={0.7}
-                    onPress={this.onAddScoreCard}
-                    disabled={submitting}
-                >
-                    <Text style={styles.modalHeaderAction}>Save</Text>
                 </TouchableOpacity>
             </View>
         )
     }
 
-    onAddScoreCard = () => {
-        const {
-            event, team, type, timeline, points,
-            allowAlerts, alert_gameStart, alert_gameEnd, alert_gameScoring
-        } = this.state;
-
-        if (!event) {
-            return Toast.show('Please select an event.');
-        }
-        if (!team) {
-            return Toast.show('Please select a team.');
-        }
-        if (!type) {
-            return Toast.show('Please select a bet type.');
-        }
-        if (!timeline) {
-            return Toast.show('Please select a timeline.');
-        }
-        if (!points && ['spread', 'total'].includes(type)) {
-            return Toast.show('Please select points for spread or total.');
-        }
-        this._Mounted && this.setState({ submitting: true });
-        addScoreCard({
-            event_id: event.event_id, team, type, timeline, points,
-            allowAlerts, alert_gameStart, alert_gameEnd, alert_gameScoring
-        })
-            .then(({ data }) => {
-                const { success, time, error } = data;
-                if (success) {
-                    this.addModalRef.current?.close();
-                    this._Mounted && this.setState({
-                        event: null,
-                        team: null,
-                        type: null,
-                        timeline: null,
-                        points: null,
-                        allowAlerts: true,
-                        alert_gameStart: true,
-                        alert_gameEnd: true,
-                        alert_gameScoring: false,
-
-                        submitting: false,
-                        newlyAdded: time
-                    })
-                } else {
-                    Toast.show(error);
-                    this._Mounted && this.setState({ submitting: false });
-                }
-            })
-            .catch(error => {
-                Toast.show('Cannot add a score card. Please try again later.');
-                this._Mounted && this.setState({ submitting: false });
-            })
+    onAddScoreCard = (time) => {
+        this.addModalRef.current?.close();
+        this._Mounted && this.setState({
+            newlyAdded: time
+        });
     }
 
     render() {
-        const { index, routes, event, team, type, timeline, points,
-            allowAlerts, alert_gameStart, alert_gameEnd, alert_gameScoring,
-        } = this.state;
+        const { index, routes } = this.state;
 
         return (
             <View style={styles.container} >
@@ -240,18 +172,7 @@ class ScoreCardScreen extends PureComponent {
                     disableScrollIfPossible
                     modalStyle={{ backgroundColor: '#111' }}
                 >
-                    <AddScoreModalContent
-                        event={event}
-                        team={team}
-                        type={type}
-                        timeline={timeline}
-                        points={points}
-                        allowAlerts={allowAlerts}
-                        alert_gameStart={alert_gameStart}
-                        alert_gameEnd={alert_gameEnd}
-                        alert_gameScoring={alert_gameScoring}
-                        updateEvent={(obj) => this._Mounted && this.setState(obj)}
-                    />
+                    <AddScoreModalContent onAddScoreCard={this.onAddScoreCard} />
                 </Modalize>
             </View>
         )

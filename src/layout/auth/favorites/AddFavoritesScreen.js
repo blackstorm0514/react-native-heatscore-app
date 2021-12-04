@@ -54,7 +54,6 @@ class AddFavoritesScreen extends PureComponent {
                 }
             })
             .catch(error => {
-                // console.warn(error);
                 Toast.show('Cannot add your favorite, Please try again later.');
             });
     };
@@ -125,7 +124,6 @@ class AddFavoritesScreen extends PureComponent {
                     this._Mounted && this.setState({ loading: false, items: data });
                 })
                 .catch(error => {
-                    // console.warn(error);
                     this._Mounted && this.setState({ loading: false, items: [] });
                 })
         } else {

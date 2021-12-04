@@ -68,7 +68,6 @@ class SignInForm extends PureComponent {
                 }
             })
             .catch((error) => {
-                // console.warn(error);
                 this._Mounted && this.setState({ submitting: false, error: { ...errorOject, server: 'Cannot post data. Please try again later.' } });
             });
     }
@@ -95,7 +94,6 @@ class SignInForm extends PureComponent {
                     }
                 })
                 .catch((error) => {
-                    // console.warn(error);
                     this._Mounted && this.setState({ submitting: false, error: { ...errorOject, server: 'Cannot post data. Please try again later.' } });
                 });
         } catch (error) {

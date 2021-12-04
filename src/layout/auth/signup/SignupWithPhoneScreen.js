@@ -61,7 +61,6 @@ class SignupWithPhoneForm extends PureComponent {
                 }
             })
             .catch((error) => {
-                // console.warn(error);
                 this._Mounted && this.setState({ error: "Cannot send verification code. Please try again later.", submitting: false });
             })
     }
@@ -86,7 +85,6 @@ class SignupWithPhoneForm extends PureComponent {
                 }
             })
             .catch((error) => {
-                // console.warn(error);
                 this._Mounted && this.setState({ error: "Cannot verify code. Please try again later.", submitting: false });
             })
     }

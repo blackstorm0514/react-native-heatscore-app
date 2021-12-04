@@ -26,16 +26,13 @@ const AppLoading = ({ initialConfig, children, placeholder, setUserAction }) => 
                 .then(() => { })
                 .catch(error => {
                     if (error.code === 'auth/operation-not-allowed') {
-                        // console.log('Enable anonymous in your firebase console.');
                     }
-                    // console.warn(error);
                 });
 
             const { data: { success, user } } = await getProfile();
             success && setUserAction(user);
             return Promise.resolve();
         } catch (error) {
-            // console.warn(error);
             return Promise.resolve();
         }
     };
