@@ -49,7 +49,7 @@ class ForgotPasswordForm extends PureComponent {
         this._Mounted && this.setState({ [field]: value });
     }
 
-    onSignInButtonPressed = () => {
+    onSubmitButtonPressed = () => {
         const { email, password, passwordConfirm } = this.state;
         const { setSuccess } = this.props;
         const result = ValidateFields({ email, password, passwordConfirm });
@@ -58,7 +58,7 @@ class ForgotPasswordForm extends PureComponent {
             return;
         }
         this._Mounted && this.setState({ error: errorOject, submitting: true });
-        changePassword(email, password)
+        changePassword({ email, password })
             .then(({ data }) => {
                 const { success, error } = data;
                 if (success) {
@@ -123,7 +123,7 @@ class ForgotPasswordForm extends PureComponent {
                         style={styles.submitButton}
                         size='small'
                         accessoryLeft={submitting ? LoadingIndicator : null}
-                        onPress={this.onSignInButtonPressed}>
+                        onPress={this.onSubmitButtonPressed}>
                         {submitting ? null : () => <Text style={styles.submitButtonText}>S U B M I T</Text>}
                     </Button>
                 </Layout>
@@ -138,9 +138,11 @@ class ForgotPasswordScreen extends PureComponent {
         this.state = {
             success: false,
         }
+        this._Mounted = false;
     }
 
     componentDidMount() {
+        this._Mounted = true;
         const { navigation } = this.props;
         this.backHandler = BackHandler.addEventListener(
             "hardwareBackPress",
@@ -149,6 +151,7 @@ class ForgotPasswordScreen extends PureComponent {
     }
 
     componentWillUnmount() {
+        this._Mounted = false;
         this.backHandler.remove();
     }
 
