@@ -5,12 +5,13 @@ import { persistReducer } from 'redux-persist';
 const persistConfig = {
     key: 'root',
     storage: AsyncStorage,
-    whitelist: []
+    whitelist: ['collapsedLeagues']
 };
 
 const INITIAL_STATE = {
     user: null,
     favorites: [],
+    collapsedLeagues: [],
 };
 
 export const actionTypes = {
@@ -18,6 +19,7 @@ export const actionTypes = {
     setFavoritesAction: 'SET_FAVORITES_ACTION',
     addFavoritesAction: 'ADD_FAVORITES_ACTION',
     removeFavoritesAction: 'REMOVE_FAVORITES_ACTION',
+    toggleCollapseLeagueAction: 'TOGGLE_COLLAPSE_LEAGUE_ACTION',
 }
 
 export const actions = {
@@ -25,6 +27,7 @@ export const actions = {
     setFavoritesAction: (favorites) => ({ type: actionTypes.setFavoritesAction, favorites }),
     addFavoritesAction: (favorite) => ({ type: actionTypes.addFavoritesAction, favorite }),
     removeFavoritesAction: (favorite) => ({ type: actionTypes.removeFavoritesAction, favorite }),
+    toggleCollapseLeagueAction: (league) => ({ type: actionTypes.toggleCollapseLeagueAction, league }),
 }
 
 export const rootReducer = persistReducer(persistConfig, (state = INITIAL_STATE, action) => {
@@ -45,6 +48,14 @@ export const rootReducer = persistReducer(persistConfig, (state = INITIAL_STATE,
                     favorite.sport != action.favorite.sport ||
                     favorite.team.name != action.favorite.team.name)
             };
+
+        case actionTypes.toggleCollapseLeagueAction:
+            const collapsed = state.collapsedLeagues.find(league => league == action.league);
+            return {
+                ...state,
+                collapsedLeagues: collapsed ? state.collapsedLeagues.filter(league => league != action.league) : [...state.collapsedLeagues, action.league]
+            };
+
         default:
             return state;
     }

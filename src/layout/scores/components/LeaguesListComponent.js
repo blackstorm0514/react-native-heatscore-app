@@ -3,6 +3,8 @@ import { StyleSheet, View, Dimensions, TouchableOpacity, FlatList } from 'react-
 import { Text } from '@ui-kitten/components';
 import RenderEventComponent from './RenderEventComponent';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { connect } from 'react-redux';
+import { actions } from '../../../redux/reducer';
 
 const screenWidth = Dimensions.get('window').width;
 const iconName = {
@@ -11,6 +13,8 @@ const iconName = {
     "Ice Hockey": "sports-hockey",
     "Baseball": "sports-baseball",
     "Soccer": "sports-soccer",
+    "hide": "keyboard-arrow-down",
+    "show": "keyboard-arrow-up"
 }
 
 const getSportsIcon = (sport) => (
@@ -19,20 +23,24 @@ const getSportsIcon = (sport) => (
     />
 )
 
-export default class LeaguesListComponent extends PureComponent {
+class LeaguesListComponent extends PureComponent {
     renderLeagueHeader = () => {
-        const { league, seeRounds } = this.props;
+        const { league, seeRounds, toggleCollapseLeagueAction } = this.props;
+        const collapsed = this.isCollapsed();
 
         return (
             <View style={styles.leagueTitle}>
                 {getSportsIcon(league.sport.name)}<Text style={styles.leagueTitleText} numberOfLines={1}> {league.name}</Text>
-                {seeRounds &&
-                    <TouchableOpacity activeOpacity={0.8}
-                        onPress={() => seeRounds()}
-                        style={styles.seeRoundBotton}>
-                        <Text style={styles.seeRoundText}>SEE ROUNDS</Text>
-                    </TouchableOpacity>
-                }
+                {seeRounds && <TouchableOpacity activeOpacity={0.8}
+                    onPress={() => seeRounds()}
+                    style={styles.seeRoundButton}>
+                    <Text style={styles.seeRoundText}>SEE ROUNDS</Text>
+                </TouchableOpacity>}
+                <TouchableOpacity activeOpacity={0.8}
+                    onPress={() => toggleCollapseLeagueAction(league.league_id)}
+                    style={styles.collapseButtn}>
+                    {getSportsIcon(collapsed ? 'show' : 'hide')}
+                </TouchableOpacity>
             </View>
         )
     }
@@ -45,19 +53,28 @@ export default class LeaguesListComponent extends PureComponent {
         )
     }
 
-    renderEmptyList = () => (
-        <View style={{ flex: 1, alignItems: 'center', paddingHorizontal: 10 }}>
-            <Text style={{ fontSize: 16, marginTop: 20 }}>There are no events.</Text>
-        </View>
-    )
+    renderEmptyList = () => {
+        const collapsed = this.isCollapsed();
+        return !collapsed && (
+            <View style={{ flex: 1, alignItems: 'center', paddingHorizontal: 10 }}>
+                <Text style={{ fontSize: 16, marginTop: 20 }}>There are no events.</Text>
+            </View>
+        )
+    }
+
+    isCollapsed = () => {
+        const { league, collapsedLeagues } = this.props;
+        const collapsed = collapsedLeagues.find(collapsed => collapsed == league.league_id);
+        return collapsed ? true : false;
+    }
 
     render() {
         const { league } = this.props;
-
+        const collapsed = this.isCollapsed();
         return (
             <FlatList
                 style={styles.leagueContainer}
-                data={league.events ? league.events : []}
+                data={!collapsed && league.events ? league.events : []}
                 renderItem={this.renderEvent}
                 keyExtractor={(item) => item.event_id.toString()}
                 ListHeaderComponent={this.renderLeagueHeader}
@@ -66,6 +83,12 @@ export default class LeaguesListComponent extends PureComponent {
         )
     }
 }
+
+const mapStateToProps = (state) => ({
+    collapsedLeagues: state.collapsedLeagues,
+});
+
+export default connect(mapStateToProps, { toggleCollapseLeagueAction: actions.toggleCollapseLeagueAction })(LeaguesListComponent)
 
 const styles = StyleSheet.create({
     leagueContainer: {
@@ -88,7 +111,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginLeft: 5
     },
-    seeRoundBotton: {
+    seeRoundButton: {
         marginLeft: 'auto'
     },
     seeRoundText: {
@@ -97,4 +120,8 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontWeight: 'bold',
     },
+    collapseButtn: {
+        marginLeft: 10,
+        paddingHorizontal: 5
+    }
 });

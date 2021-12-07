@@ -1,11 +1,5 @@
 import React, { Component, createRef } from 'react';
-import {
-    StyleSheet,
-    View,
-    Dimensions,
-    BackHandler,
-    Alert
-} from 'react-native';
+import { StyleSheet, View, Dimensions, BackHandler, Alert } from 'react-native';
 import { TopNavigation, Text } from '@ui-kitten/components';
 import { TabView, TabBar } from 'react-native-tab-view';
 import ScoresPerSportScreen from './ScoresPerSportScreen';

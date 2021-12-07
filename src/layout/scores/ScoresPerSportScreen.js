@@ -1,9 +1,5 @@
 import React, { Component, createRef } from 'react';
-import {
-    StyleSheet,
-    View,
-    Dimensions,
-} from 'react-native';
+import { StyleSheet, View, Dimensions, } from 'react-native';
 import { TabView, TabBar } from 'react-native-tab-view';
 import ScoresPerDayScreen from './ScoresPerDayScreen';
 import { format, addDays, subDays } from 'date-fns';
