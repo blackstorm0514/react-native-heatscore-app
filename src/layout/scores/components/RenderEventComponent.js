@@ -91,13 +91,13 @@ const styles = StyleSheet.create({
     },
     eventItemTeamName: {
         flex: 5,
-        fontSize: 14,
+        fontSize: 15,
         fontWeight: 'bold',
         marginLeft: 10
     },
     eventItemTeamScore: {
         flex: 1,
-        fontSize: 14,
+        fontSize: 15,
         fontWeight: 'bold'
     }
 });

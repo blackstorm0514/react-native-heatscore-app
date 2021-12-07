@@ -194,7 +194,7 @@ class ScoreCardPerDayScreen extends PureComponent {
 
     renderEmptyList = () => (
         <View style={{ flex: 1, alignItems: 'center', paddingHorizontal: 10 }}>
-            <Text style={{ fontSize: 16, marginTop: 20, textAlign: 'center' }}>Please Click + to add a game to your score card.</Text>
+            <Text style={{ fontSize: 16, marginTop: 20, textAlign: 'center' }}>The Score Card lets you track the progress of your bet. Add a game to your score card below.</Text>
         </View>
     )
 

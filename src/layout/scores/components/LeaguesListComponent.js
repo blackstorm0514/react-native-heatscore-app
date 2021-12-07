@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     seeRoundText: {
         textTransform: 'uppercase',
         color: 'white',
-        fontSize: 12,
+        fontSize: 13,
         fontWeight: 'bold',
     },
     collapseButtn: {
