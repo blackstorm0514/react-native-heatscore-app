@@ -2,16 +2,13 @@ import React, { PureComponent } from 'react';
 import {
     StyleSheet,
     View,
-    Dimensions,
     TouchableOpacity
 } from 'react-native';
-import { connect } from 'react-redux';
 import { Text } from '@ui-kitten/components'
 import { LoadingIndicator } from './LoadingIndicator';
 import { getLeagueList } from '../../../redux/services';
 import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react-native";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { actions } from '../../../redux/reducer';
 
 const topLeagues = [
     {

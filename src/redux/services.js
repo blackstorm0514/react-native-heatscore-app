@@ -1,7 +1,7 @@
 import { ApiService } from "../services/api.service";
 
-export const getEvent = (date) => {
-    return ApiService.get('/events', { params: { date } });
+export const getEvent = (date, sport) => {
+    return ApiService.get('/events', { params: { date, sport } });
 }
 
 export const getLeagueRound = (league) => {

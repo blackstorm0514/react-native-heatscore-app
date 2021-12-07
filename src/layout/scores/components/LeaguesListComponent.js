@@ -1,33 +1,36 @@
 import React, { PureComponent } from 'react';
-import {
-    StyleSheet,
-    View,
-    Dimensions,
-    TouchableOpacity,
-    FlatList
-} from 'react-native';
-import { Button, Text, List } from '@ui-kitten/components';
+import { StyleSheet, View, Dimensions, TouchableOpacity, FlatList } from 'react-native';
+import { Text } from '@ui-kitten/components';
 import RenderEventComponent from './RenderEventComponent';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const screenWidth = Dimensions.get('window').width;
+const iconName = {
+    "American Football": "sports-football",
+    "Basketball": "sports-basketball",
+    "Ice Hockey": "sports-hockey",
+    "Baseball": "sports-baseball",
+    "Soccer": "sports-soccer",
+}
+
+const getSportsIcon = (sport) => (
+    <MaterialIcons name={iconName[sport]}
+        size={16} color="white"
+    />
+)
 
 export default class LeaguesListComponent extends PureComponent {
-
     renderLeagueHeader = () => {
-        const { setLeague, league, seeRounds } = this.props;
+        const { league, seeRounds } = this.props;
 
         return (
             <View style={styles.leagueTitle}>
-                <Text style={styles.leagueTitleText} numberOfLines={1}>{league.name} - {league.sport.name}</Text>
-                {setLeague &&
-                    <TouchableOpacity activeOpacity={0.8}
-                        onPress={() => setLeague({ name: league.name, id: league.league_id })}>
-                        <Text style={styles.seeAllLeagueButton}>SEE ALL</Text>
-                    </TouchableOpacity>
-                }
+                {getSportsIcon(league.sport.name)}<Text style={styles.leagueTitleText} numberOfLines={1}> {league.name}</Text>
                 {seeRounds &&
-                    <TouchableOpacity activeOpacity={0.8} onPress={() => seeRounds()}>
-                        <Text style={styles.seeAllLeagueButton}>SEE ROUNDS</Text>
+                    <TouchableOpacity activeOpacity={0.8}
+                        onPress={() => seeRounds()}
+                        style={styles.seeRoundBotton}>
+                        <Text style={styles.seeRoundText}>SEE ROUNDS</Text>
                     </TouchableOpacity>
                 }
             </View>
@@ -66,32 +69,32 @@ export default class LeaguesListComponent extends PureComponent {
 
 const styles = StyleSheet.create({
     leagueContainer: {
-        // paddingBottom: 15,
         backgroundColor: 'black'
     },
     leagueTitle: {
         backgroundColor: '#222',
-        paddingVertical: 2,
+        paddingVertical: 4,
         paddingHorizontal: 10,
         flexDirection: 'row',
         borderBottomColor: '#888',
         borderBottomWidth: 2,
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        width: screenWidth
+        width: screenWidth,
+        alignItems: 'center'
     },
     leagueTitleText: {
         color: 'white',
         fontWeight: 'bold',
-        paddingVertical: 2,
         maxWidth: '70%',
-        fontSize: 14
+        fontSize: 14,
+        marginLeft: 5
     },
-    seeAllLeagueButton: {
+    seeRoundBotton: {
+        marginLeft: 'auto'
+    },
+    seeRoundText: {
         textTransform: 'uppercase',
         color: 'white',
         fontSize: 12,
         fontWeight: 'bold',
-        alignSelf: 'flex-end'
     },
 });

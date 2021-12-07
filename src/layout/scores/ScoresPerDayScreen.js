@@ -35,11 +35,11 @@ export default class ScoresPerDayScreen extends Component {
     }
 
     getEventsData = (setLoading = true) => {
-        const { date } = this.props;
+        const { date, sport } = this.props;
         const { inplayTimeout } = this.state;
         if (inplayTimeout) clearTimeout(inplayTimeout);
         this._Mounted && this.setState({ loading: setLoading, inplayTimeout: null });
-        getEvent(date)
+        getEvent(date, sport)
             .then(({ data: result }) => {
                 const { data, favorites } = result;
                 let hasInplay = false;
@@ -81,11 +81,11 @@ export default class ScoresPerDayScreen extends Component {
     }
 
     renderLeagues = ({ item }) => {
-        const { setLeague, navigation } = this.props;
+        const { navigation } = this.props;
         return (
             <LeaguesListComponent
                 league={item}
-                setLeague={setLeague}
+                seeRounds={() => navigation.navigate('RoundLeague', { league: { name: item.name, id: item.league_id } })}
                 navigation={navigation} />
         )
     }
