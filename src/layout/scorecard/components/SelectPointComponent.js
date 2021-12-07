@@ -1,39 +1,17 @@
 import React, { PureComponent } from "react";
-import {
-    StyleSheet,
-    View,
-    TouchableOpacity,
-} from 'react-native';
-import { Text, Input } from '@ui-kitten/components';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import { StyleSheet, View } from 'react-native';
+import { Text } from '@ui-kitten/components';
 import InputSpinner from "react-native-input-spinner";
-import ModalAction from "./ModalAction";
 
 export default class SelectPointComponent extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            points: props.points ? props.points : 0,
-        }
-        this._Mounted = false;
-    }
-
-    componentDidMount() {
-        this._Mounted = true;
-    }
-
-    componentWillUnmount() {
-        this._Mounted = false;
-    }
-
     render() {
-        const { points } = this.state;
-        const { onNext, onBack } = this.props;
+        const { points, onSelect, type } = this.props;
+        if (!['total', 'spread'].includes(type)) return null;
 
         return (
             <View style={styles.container}>
                 <View style={styles.titleContainer}>
-                    <Text style={styles.titleText}>Input Points</Text>
+                    <Text style={styles.titleText}>{type == 'spread' ? 'Spread' : 'Total Points'}</Text>
                 </View>
                 <View style={styles.inputContainer}>
                     <InputSpinner
@@ -47,17 +25,14 @@ export default class SelectPointComponent extends PureComponent {
                         showBorder={true}
                         editable={true}
                         textColor="#FFF"
-                        fontSize={16}
+                        fontSize={14}
+                        height={30}
                         selectionColor="#999"
-                        inputStyle={{ borderColor: 'white' }}
+                        inputStyle={{ borderColor: 'white', paddingVertical: 4 }}
                         buttonStyle={{ backgroundColor: 'black', borderColor: '#FFF', borderWidth: 1 }}
-                        onChange={(value) => this._Mounted && this.setState({ points: value })}
+                        onChange={(value) => onSelect(value)}
                     />
                 </View>
-
-                <ModalAction
-                    onBack={onBack}
-                    onNext={() => onNext(points)} />
             </View>
         )
     }
@@ -66,21 +41,16 @@ export default class SelectPointComponent extends PureComponent {
 const styles = StyleSheet.create({
     titleContainer: {
         flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 10,
-        paddingHorizontal: 10
+        paddingVertical: 4,
     },
     titleText: {
-        fontSize: 16,
+        fontSize: 14,
     },
     inputContainer: {
         borderColor: '#222',
         borderBottomWidth: 1,
-        borderTopWidth: 1,
-        paddingVertical: 16,
-        paddingHorizontal: 20,
-        backgroundColor: '#000',
+        paddingVertical: 6,
+        paddingHorizontal: 10,
         flexDirection: 'row',
         alignItems: 'center'
     },

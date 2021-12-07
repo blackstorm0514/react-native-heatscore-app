@@ -182,14 +182,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         paddingTop: 10,
-        paddingHorizontal: 10,
         height: 30,
     },
     titleText: {
         fontSize: 16,
     },
     header: {
-        paddingHorizontal: 16,
         paddingVertical: 2,
         marginBottom: 6,
         backgroundColor: '#111',
@@ -225,10 +223,9 @@ const styles = StyleSheet.create({
     },
     eventsContainer: {
         flex: 1,
-        maxHeight: screenHeight - 208
+        maxHeight: screenHeight - 222
     },
     eventItemDetail: {
-        paddingHorizontal: 20
     },
     eventItemLeague: {
         fontSize: 11,

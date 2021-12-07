@@ -1,19 +1,13 @@
-import React, { PureComponent, createRef } from 'react';
-import {
-    StyleSheet,
-    View,
-    Dimensions,
-    TouchableOpacity
-} from 'react-native';
+import React, { PureComponent } from 'react';
+import { StyleSheet, View, Dimensions } from 'react-native';
 import { Button, TopNavigation, Text } from '@ui-kitten/components';
-import { TabView, TabBar, TabBarItem, TabBarIndicator } from 'react-native-tab-view';
+import { TabView, TabBar } from 'react-native-tab-view';
 import ScoreCardPerDayScreen from './ScoreCardPerDayScreen';
 import { format, addDays, subDays } from 'date-fns';
 import { PlusOutlineIcon } from '../../libs/icons';
-import { Modalize } from 'react-native-modalize';
-import AddScoreModalContent from './components/AddScoreModalContent';
 import { connect } from 'react-redux';
 import Toast from 'react-native-simple-toast';
+import AddScoreModal from './components/AddScoreModal';
 
 const screenWidth = Dimensions.get('window').width;
 class ScoreCardScreen extends PureComponent {
@@ -43,10 +37,10 @@ class ScoreCardScreen extends PureComponent {
             index: 7,
             routes: tabs,
 
+            modalOpen: false,
             newlyAdded: null,
         }
 
-        this.addModalRef = createRef();
         this._Mounted = false;
     }
 
@@ -111,10 +105,9 @@ class ScoreCardScreen extends PureComponent {
     onAddModalOpen = () => {
         const { user } = this.props;
         if (!user) {
-            Toast.show('Please login to add a Score Card.');
-            return;
+            return Toast.show('Please login to add a Score Card.');
         }
-        this.addModalRef.current?.open();
+        this.setState({ modalOpen: true });
     }
 
     addScoreCardActionButton = () => {
@@ -128,28 +121,21 @@ class ScoreCardScreen extends PureComponent {
         )
     }
 
-    renderModalHeader = () => {
-        return (
-            <View style={styles.addModalHeader}>
-                <Text></Text>
-                <Text style={styles.modalHeaderTitle}>Add Game</Text>
-                <TouchableOpacity activeOpacity={0.7}
-                    onPress={() => this.addModalRef.current?.close()}>
-                    <Text style={styles.modalHeaderAction}>Cancel</Text>
-                </TouchableOpacity>
-            </View>
-        )
-    }
-
     onAddScoreCard = (time) => {
-        this.addModalRef.current?.close();
-        this._Mounted && this.setState({
-            newlyAdded: time
-        });
+        if (time) {
+            this._Mounted && this.setState({
+                newlyAdded: time,
+                modalOpen: false,
+            });
+        } else {
+            this._Mounted && this.setState({
+                modalOpen: false,
+            });
+        }
     }
 
     render() {
-        const { index, routes } = this.state;
+        const { index, routes, modalOpen } = this.state;
 
         return (
             <View style={styles.container} >
@@ -166,14 +152,8 @@ class ScoreCardScreen extends PureComponent {
                     onIndexChange={(index) => this._Mounted && this.setState({ index })}
                     initialLayout={{ width: screenWidth }}
                 />
-                <Modalize
-                    ref={this.addModalRef}
-                    HeaderComponent={this.renderModalHeader}
-                    disableScrollIfPossible
-                    modalStyle={{ backgroundColor: '#111' }}
-                >
-                    <AddScoreModalContent onAddScoreCard={this.onAddScoreCard} />
-                </Modalize>
+                <AddScoreModal onAddScoreCard={this.onAddScoreCard}
+                    modalOpen={modalOpen} />
             </View>
         )
     }
