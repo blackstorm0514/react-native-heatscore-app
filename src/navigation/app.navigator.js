@@ -6,6 +6,7 @@ import { AuthNavigator } from './auth.navigator';
 import { NewsNavigator } from './news.navigator';
 import { ScoresNavigator } from './scores.navigator';
 import ScoreCardScreen from '../layout/scorecard/ScoreCardScreen';
+import FeedScreen from '../layout/feed/FeedScreen';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -39,6 +40,9 @@ export const AppNavigator = () => (
                 options={screenOption} />
             <BottomTab.Screen name='Score Card'
                 component={ScoreCardScreen}
+                options={screenOption} />
+            <BottomTab.Screen name='Feed'
+                component={FeedScreen}
                 options={screenOption} />
             <BottomTab.Screen name='Auth'
                 component={AuthNavigator}

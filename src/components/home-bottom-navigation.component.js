@@ -1,9 +1,9 @@
 import React from 'react';
 import { Animated } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BottomNavigationTab, Text, StyleService } from '@ui-kitten/components';
+import { BottomNavigationTab, Text, StyleService, Divider } from '@ui-kitten/components';
 import { BrandBottomNavigation } from './brand-bottom-navigation.component';
-import { UserIcon, NewsIcon, ClipboardIcon, FootballIcon } from '../libs/icons';
+import { UserIcon, NewsIcon, ClipboardIcon, FootballIcon, BellIcon } from '../libs/icons';
 
 const useVisibilityAnimation = (visible) => {
 
@@ -33,8 +33,8 @@ const useVisibilityAnimation = (visible) => {
 const renderTabIcons = (name, currentRoute, otherProps) => {
     const { style } = otherProps;
     const defaultStyle = {
-        height: style.height,
-        width: style.width,
+        height: 20,
+        width: 20,
         marginVertical: 2,
     }
     let active = false;
@@ -48,6 +48,9 @@ const renderTabIcons = (name, currentRoute, otherProps) => {
         case 'Score Card':
             active = currentRoute.name == 'Score Card';
             return <ClipboardIcon style={{ ...defaultStyle, tintColor: active ? '#FFF' : '#999' }} />
+        case 'Feed':
+            active = currentRoute.name == 'Feed';
+            return <BellIcon style={{ ...defaultStyle, tintColor: active ? '#FFF' : '#999' }} />
         case 'Account':
             active = currentRoute.name == 'Auth';
             return <UserIcon style={{ ...defaultStyle, tintColor: active ? '#FFF' : '#999' }} />
@@ -56,7 +59,7 @@ const renderTabIcons = (name, currentRoute, otherProps) => {
 
 const renderTabTitle = (name, currentRoute) => {
     let active = false;
-    const defaultStyle = { fontSize: 14 };
+    const defaultStyle = { fontSize: 13 };
     switch (name) {
         case 'Scores':
             active = currentRoute.name == 'Scores';
@@ -66,6 +69,9 @@ const renderTabTitle = (name, currentRoute) => {
             return <Text style={{ ...defaultStyle, color: active ? '#FFF' : '#999' }} >{name}</Text>
         case 'Score Card':
             active = currentRoute.name == 'Score Card';
+            return <Text style={{ ...defaultStyle, color: active ? '#FFF' : '#999' }} >{name}</Text>
+        case 'Feed':
+            active = currentRoute.name == 'Feed';
             return <Text style={{ ...defaultStyle, color: active ? '#FFF' : '#999' }} >{name}</Text>
         case 'Account':
             active = currentRoute.name == 'Auth';
@@ -87,6 +93,7 @@ export const HomeBottomNavigation = ({ navigation, state, descriptors }) => {
 
     return (
         <Animated.View style={[styles.container, transforms, { paddingBottom: tabBarVisible ? safeAreaInsets.bottom : 0 }]}>
+            <Divider />
             <BrandBottomNavigation
                 appearance='noIndicator'
                 selectedIndex={state.index}
@@ -104,6 +111,11 @@ export const HomeBottomNavigation = ({ navigation, state, descriptors }) => {
                 <BottomNavigationTab
                     title={() => renderTabTitle('Score Card', focusedRoute)}
                     icon={(props) => renderTabIcons('Score Card', focusedRoute, props)}
+                    style={styles.bottomTab}
+                />
+                <BottomNavigationTab
+                    title={() => renderTabTitle('Feed', focusedRoute)}
+                    icon={(props) => renderTabIcons('Feed', focusedRoute, props)}
                     style={styles.bottomTab}
                 />
                 <BottomNavigationTab

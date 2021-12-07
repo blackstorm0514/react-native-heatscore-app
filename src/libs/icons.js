@@ -86,6 +86,10 @@ export const FootballIcon = (style) => (
     <Icon {...style} pack="vector" name='football' />
 );
 
+export const BellIcon = (style) => (
+    <Icon {...style} pack="vector" name='bell' />
+);
+
 export const NewsIcon = (style) => (
     <Icon {...style} pack="vector" name='news' />
 );

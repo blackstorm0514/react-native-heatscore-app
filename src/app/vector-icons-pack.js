@@ -57,5 +57,6 @@ export const VectorIconsPack = {
         'clipboard': FeatherIconProvider('clipboard'),
         'user': FeatherIconProvider('user'),
         'refresh': IoniconProvider('refresh'),
+        'bell': FontAwesomeIconProvider('bell-o')
     },
 };

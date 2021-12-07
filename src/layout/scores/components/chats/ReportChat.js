@@ -11,7 +11,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 export default class ReportChat extends PureComponent {
     render() {
         const { chatReport, onCloseReport } = this.props;
-        return chatReport ? (
+        return chatReport && (
             <View style={styles.container}>
                 <View style={styles.headerCotnainer}>
                     <View style={styles.headerCotnainer}>
@@ -38,11 +38,18 @@ export default class ReportChat extends PureComponent {
                 </TouchableOpacity>}
                 <TouchableOpacity activeOpacity={0.8}
                     style={styles.pressItem}>
+                    <Text style={styles.pressItemText}>Reply</Text>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.8}
+                    style={styles.pressItem}>
+                    <Text style={styles.pressItemText}>Like</Text>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.8}
+                    style={styles.pressItem}>
                     <Text style={styles.pressItemText}>Report Abuse</Text>
                 </TouchableOpacity>
             </View>
         )
-            : null
     }
 }
 
