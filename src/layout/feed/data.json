@@ -1,0 +1,32 @@
+[
+    {
+        "user": "User A",
+        "type": "like"
+    },
+    {
+        "user": "User B",
+        "type": "like"
+    },
+    {
+        "user": "User B",
+        "type": "like"
+    },
+    {
+        "user": "User C",
+        "type": "reply",
+        "text": "Yes, I agree. Your text is really great. it is long text wrap test."
+    },
+    {
+        "user": "User B",
+        "type": "like"
+    },
+    {
+        "user": "User B",
+        "type": "like"
+    },
+    {
+        "user": "User C",
+        "type": "reply",
+        "text": "No, I disagree."
+    }
+]
