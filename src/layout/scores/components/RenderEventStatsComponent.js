@@ -3,10 +3,8 @@ import { StyleSheet, View, Image } from 'react-native';
 import { LoadingIndicator } from './LoadingIndicator';
 import { Text } from '@ui-kitten/components';
 import { getMatchScore, getStatusString } from '../../../libs/functions';
-import ScoreBoardComponent from './matchup/ScoreBoardComponent';
-import GameDetailComponent from './matchup/GameDetailComponent';
 
-export default class RenderEventMatchupComponent extends Component {
+export default class RenderEventStatsComponent extends Component {
     renderContent = () => {
         const { event, loading } = this.props;
         if (loading) {
@@ -43,15 +41,6 @@ export default class RenderEventMatchupComponent extends Component {
                         <Text style={styles.mainBoardScore}>{away_score}</Text>
                     </View>
                 </View>
-                {scores && <ScoreBoardComponent
-                    home={home}
-                    away={away}
-                    scores={scores}
-                    sport={sport} />}
-                {extra && <GameDetailComponent
-                    home={home}
-                    away={away}
-                    extra={extra} />}
             </View>
         )
 
@@ -86,6 +75,7 @@ const styles = StyleSheet.create({
         borderColor: '#4445'
     },
     statusText: {
+        marginLeft: 10,
         fontSize: 16,
         fontWeight: 'bold',
         marginBottom: 10
@@ -106,7 +96,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     mainBoardScore: {
-        fontSize: 30,
+        fontSize: 24,
         marginLeft: 'auto',
         fontWeight: 'bold'
     }

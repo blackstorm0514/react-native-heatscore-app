@@ -15,6 +15,10 @@ import RenderEventMatchupComponent from './components/RenderEventMatchupComponen
 import RenderEventChatComponent from './components/RenderEventChatComponent';
 import { truncateString } from '../../libs/functions';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { getEventDetail } from '../../redux/services';
+import RenderEventLineupComponent from './components/RenderEventLineupComponent';
+import RenderEventStatsComponent from './components/RenderEventStatsComponent';
+import RenderEventHistoryComponent from './components/RenderEventHistoryComponent';
 
 class EventDetailScreen extends Component {
     constructor(props) {
@@ -24,7 +28,12 @@ class EventDetailScreen extends Component {
             routes: [
                 { key: 'chat', title: 'Chat' },
                 { key: 'matchup', title: 'MatchUp' },
-            ]
+                { key: 'lineup', title: 'LineUp' },
+                { key: 'stats', title: 'Stats' },
+                { key: 'history', title: 'History' }
+            ],
+            event: null,
+            loading: false,
         }
         this._Mounted = false;
     }
@@ -35,6 +44,19 @@ class EventDetailScreen extends Component {
             navigation.navigate('AllScores');
         }
         this._Mounted = true;
+        this._Mounted && this.setState({ loading: true })
+        getEventDetail(event.event_id)
+            .then(({ data }) => {
+                const { success, event } = data;
+                if (success) {
+                    this._Mounted && this.setState({ event: event, loading: false });
+                } else {
+                    this._Mounted && this.setState({ event: null, loading: false });
+                }
+            })
+            .catch(() => {
+                this._Mounted && this.setState({ event: null, loading: false });
+            })
     }
 
     componentWillUnmount() {
@@ -97,7 +119,7 @@ class EventDetailScreen extends Component {
                 }}
                 labelStyle={{
                     fontWeight: 'bold',
-                    fontSize: 14,
+                    fontSize: 12,
                     marginVertical: 0,
                     paddingVertical: 0,
                 }}
@@ -110,7 +132,7 @@ class EventDetailScreen extends Component {
         if (route.key == 'chat') {
             return (
                 <Ionicons color='green'
-                    size={20}
+                    size={14}
                     name='chatbubble-ellipses-outline' />
             );
         }
@@ -118,10 +140,22 @@ class EventDetailScreen extends Component {
     }
 
     renderScene = ({ route }) => {
-        const { route: { params: { event } } } = this.props;
-        if (route.key == 'chat')
-            return <RenderEventChatComponent event={event} />
-        return <RenderEventMatchupComponent event={event} />
+        const { route: { params: { event: propsEvent } } } = this.props;
+        const { event, loading } = this.state;
+        switch (route.key) {
+            case 'chat':
+                return <RenderEventChatComponent event={propsEvent} />
+            case 'matchup':
+                return <RenderEventMatchupComponent event={event} loading={loading} />
+            case 'lineup':
+                return <RenderEventLineupComponent event={event} loading={loading} />
+            case 'stats':
+                return <RenderEventStatsComponent event={event} loading={loading} />
+            case 'history':
+                return <RenderEventHistoryComponent event={event} loading={loading} />
+            default:
+                return null
+        }
     }
 
     render() {
