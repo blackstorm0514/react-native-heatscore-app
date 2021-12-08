@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View, Image, ScrollView } from 'react-native';
 import { LoadingIndicator } from './LoadingIndicator';
 import { Text } from '@ui-kitten/components';
 import { getMatchScore, getStatusString } from '../../../libs/functions';
 import ScoreBoardComponent from './matchup/ScoreBoardComponent';
 import GameDetailComponent from './matchup/GameDetailComponent';
+import GameEventsComponent from './matchup/GameEventsComponent';
 
 export default class RenderEventMatchupComponent extends Component {
     renderContent = () => {
@@ -48,6 +49,11 @@ export default class RenderEventMatchupComponent extends Component {
                     away={away}
                     scores={scores}
                     sport={sport} />}
+                {events && events.length && <GameEventsComponent
+                    home={home}
+                    away={away}
+                    events={events}
+                    sport={sport} />}
                 {extra && <GameDetailComponent
                     home={home}
                     away={away}
@@ -58,9 +64,9 @@ export default class RenderEventMatchupComponent extends Component {
     }
     render() {
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
                 {this.renderContent()}
-            </View>
+            </ScrollView>
         )
     }
 }
