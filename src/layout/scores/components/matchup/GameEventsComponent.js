@@ -9,6 +9,6 @@ export default class GameEventsComponent extends Component {
                 <GameSoccerEventsComponent {...this.props} />
             );
         }
-        return null;
+        return (null);
     }
 }

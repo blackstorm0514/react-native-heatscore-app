@@ -50,12 +50,12 @@ export default class RenderEventMatchupComponent extends Component {
                     away={away}
                     scores={scores}
                     sport={sport} />}
-                {events && events.length && <GameEventsComponent
+                {events && events.length > 0 && <GameEventsComponent
                     home={home}
                     away={away}
                     events={events}
                     sport={sport} />}
-                {stats && <GameStatsComponent
+                {/*{stats && <GameStatsComponent
                     home={home}
                     away={away}
                     stats={stats}
@@ -63,7 +63,7 @@ export default class RenderEventMatchupComponent extends Component {
                 {extra && <GameDetailComponent
                     home={home}
                     away={away}
-                    extra={extra} />}
+                    extra={extra} />} */}
             </View>
         )
     }

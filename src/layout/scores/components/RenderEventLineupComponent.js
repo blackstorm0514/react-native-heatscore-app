@@ -1,10 +1,44 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View, Image, ScrollView } from 'react-native';
 import { LoadingIndicator } from './LoadingIndicator';
 import { Text } from '@ui-kitten/components';
-import { getMatchScore, getStatusString } from '../../../libs/functions';
 
 export default class RenderEventLineupComponent extends Component {
+    renderLineupTeam = (team, lineup, isAway = false) => {
+        const { formation, startinglineup, substitutes } = lineup;
+        return (
+            <View style={[styles.lineupTeamContainer, isAway ? styles.lineupAwayContainer : null]}>
+                <Image
+                    style={[styles.teamLogoImage, isAway ? styles.awayLogoImage : null]}
+                    source={{ uri: `https://assets.b365api.com/images/team/m/${team.image_id}.png` }}
+                />
+                {formation && <View style={styles.formationContainer}>
+                    <Text style={styles.formationTitle}>Formation</Text>
+                    <Text style={styles.formationValue}>{formation}</Text>
+                </View>}
+                {startinglineup && startinglineup.length && <View style={styles.startingLineupContainer}>
+                    <Text style={styles.startingLineupTitle}>Starting Lineup</Text>
+                    {startinglineup.map((lineup, index) => (
+                        <View key={index} style={styles.lineupRowContainer}>
+                            <Text style={[styles.shirtnumber, isAway ? styles.awayShirtNumber : null]}>{lineup.shirtnumber}</Text>
+                            <Text style={styles.playerName} numberOfLines={1}>{lineup.player.name}</Text>
+                            {lineup.pos && <Text style={styles.position}>{lineup.pos[0]}</Text>}
+                        </View>
+                    ))}
+                </View>}
+                {substitutes && substitutes.length && <View style={styles.startingLineupContainer}>
+                    <Text style={styles.startingLineupTitle}>Substitutes</Text>
+                    {substitutes.map((lineup, index) => (
+                        <View key={index} style={styles.lineupRowContainer}>
+                            <Text style={[styles.shirtnumber, isAway ? styles.awayShirtNumber : null]}>{lineup.shirtnumber}</Text>
+                            <Text style={styles.playerName} numberOfLines={1}>{lineup.player.name}</Text>
+                            {lineup.pos && <Text style={styles.position}>{lineup.pos[0]}</Text>}
+                        </View>
+                    ))}
+                </View>}
+            </View>
+        )
+    }
     renderContent = () => {
         const { event, loading } = this.props;
         if (loading) {
@@ -12,44 +46,25 @@ export default class RenderEventLineupComponent extends Component {
                 <LoadingIndicator style={styles.loadingIndicator} />
             );
         }
-        if (!event) {
+        if (!event || !event.lineup || !event.lineup.home || !event.lineup.away) {
             return (
                 <Text style={styles.noDataText}>No Data Availale.</Text>
             );
         }
-        const { home, away, extra, events, scores, time_status, sport, timer } = event;
-        const { status_text, status_class } = getStatusString(time_status, timer, sport);
-        const { home_score, away_score } = getMatchScore(sport, scores, 'game');
+        const { home, away, lineup } = event;
         return (
-            <View>
-                <View style={styles.mainBoard}>
-                    {status_text && <Text style={[styles.statusText, status_class]}>{status_text}</Text>}
-                    <View style={styles.mainBoardItem}>
-                        <Image
-                            style={styles.mainTeamLogoImage}
-                            source={{ uri: `https://assets.b365api.com/images/team/b/${home.image_id}.png` }}
-                        />
-                        <Text style={styles.mainBoardTeamName}>{home.name}</Text>
-                        <Text style={styles.mainBoardScore}>{home_score}</Text>
-                    </View>
-                    <View style={styles.mainBoardItem}>
-                        <Image
-                            style={styles.mainTeamLogoImage}
-                            source={{ uri: `https://assets.b365api.com/images/team/b/${away.image_id}.png` }}
-                        />
-                        <Text style={styles.mainBoardTeamName}>{away.name}</Text>
-                        <Text style={styles.mainBoardScore}>{away_score}</Text>
-                    </View>
-                </View>
+            <View style={styles.lineupContainer}>
+                {this.renderLineupTeam(home, lineup.home)}
+                {this.renderLineupTeam(away, lineup.away, true)}
             </View>
         )
 
     }
     render() {
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
                 {this.renderContent()}
-            </View>
+            </ScrollView>
         )
     }
 }
@@ -68,36 +83,81 @@ const styles = StyleSheet.create({
         marginTop: 20,
         textAlign: 'center'
     },
-    mainBoard: {
-        paddingHorizontal: 20,
-        paddingVertical: 5,
-        borderBottomWidth: 1,
-        borderColor: '#4445'
-    },
-    statusText: {
-        marginLeft: 10,
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginBottom: 10
-    },
-    mainBoardItem: {
+    lineupContainer: {
         flexDirection: 'row',
+        paddingTop: 16
+    },
+    lineupAwayContainer: {
+        borderLeftColor: '#666',
+        borderLeftWidth: 2
+    },
+    lineupTeamContainer: {
+        width: '50%',
+        paddingHorizontal: 5,
+        paddingBottom: 5
+    },
+    teamLogoImage: {
+        width: 24,
+        height: 24,
+    },
+    awayLogoImage: {
+        marginLeft: 'auto'
+    },
+    formationContainer: {
+        flexDirection: 'row',
+        marginTop: 10,
+        borderColor: '#222',
+        borderBottomWidth: 1,
+        paddingHorizontal: 5,
+    },
+    formationTitle: {
+        color: 'white',
+        fontSize: 12
+    },
+    formationValue: {
+        color: '#999',
+        fontSize: 13,
+        marginLeft: 'auto'
+    },
+    startingLineupTitle: {
+        color: '#aaa',
+        fontSize: 12,
+        marginBottom: 5
+    },
+    startingLineupContainer: {
+        paddingHorizontal: 5,
+        marginTop: 10,
+        borderColor: '#222',
+        borderBottomWidth: 1,
+        paddingBottom: 10
+    },
+    lineupRowContainer: {
+        flexDirection: 'row',
+        marginTop: 5,
+        alignItems: 'center'
+    },
+    shirtnumber: {
+        fontSize: 12,
+        backgroundColor: 'gold',
+        width: 18,
+        height: 18,
+        textAlign: 'center',
+        borderRadius: 9,
+        alignContent: 'center',
         alignItems: 'center',
-        marginVertical: 5
+        color: 'black'
     },
-    mainTeamLogoImage: {
-        width: 40,
-        height: 40,
-        resizeMode: 'contain',
+    awayShirtNumber: {
+        backgroundColor: '#00D',
+        color: 'white'
     },
-    mainBoardTeamName: {
-        fontSize: 16,
-        marginLeft: 14,
-        fontWeight: 'bold'
+    playerName: {
+        fontSize: 12,
+        marginLeft: 4
     },
-    mainBoardScore: {
-        fontSize: 24,
+    position: {
+        fontSize: 13,
         marginLeft: 'auto',
-        fontWeight: 'bold'
+        color: '#999'
     }
 });
