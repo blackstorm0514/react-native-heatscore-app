@@ -21,6 +21,23 @@ const sportStatsFields = {
         { field: 'offsides', title: 'Offsides' },
         { field: 'substitutions', title: 'Substitutions' },
         { field: 'saves', title: 'Saves' },
+    ],
+    "Ice Hockey": [
+        { field: 'goals_on_power_play', title: 'Goals On Power Play' },
+        { field: 'penalties', title: 'Penalties' },
+        { field: 'shots', title: 'Shots' },
+    ],
+    "Basketball": [
+        { field: 'possession', title: 'Possession (%)' },
+        { field: 'success_attempts', title: 'Success Attempts' },
+        { field: '2points', title: '2 Points' },
+        { field: '3points', title: '3 Points' },
+        { field: 'biggest_lead', title: 'Biggest Lead' },
+        { field: 'fouls', title: 'Fouls' },
+        { field: 'free_throws', title: 'Free Throws' },
+        { field: 'lead_changes', title: 'Lead Changes' },
+        { field: 'maxpoints_inarow', title: 'Max Points in a row' },
+        { field: 'time_outs', title: 'Time Outs' },
     ]
 }
 
@@ -28,6 +45,8 @@ export default class GameStatsComponent extends Component {
     renderStatsField = (statsField, index) => {
         const { stats } = this.props;
         if (!stats[statsField.field] || stats[statsField.field].length != 2) return null;
+        if (stats[statsField.field][0] == null || stats[statsField.field][1] == null) return null;
+
         const homeValue = parseInt(stats[statsField.field][0]);
         const awayValue = parseInt(stats[statsField.field][1]);
         const total = homeValue + awayValue;
@@ -54,6 +73,7 @@ export default class GameStatsComponent extends Component {
 
     render() {
         const { sport, stats, home, away } = this.props;
+        console.log(stats)
         const statsFields = sportStatsFields[sport.name];
         if (!statsFields) return null;
 
