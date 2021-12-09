@@ -73,7 +73,6 @@ export default class GameStatsComponent extends Component {
 
     render() {
         const { sport, stats, home, away } = this.props;
-        console.log(stats)
         const statsFields = sportStatsFields[sport.name];
         if (!statsFields) return null;
 
