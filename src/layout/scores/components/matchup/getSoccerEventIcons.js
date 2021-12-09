@@ -4,12 +4,13 @@ import RedCardIcon from '../../../../assets/images/eventicons/soccer-redcard.png
 import OffsideIcon from '../../../../assets/images/eventicons/soccer-offside.png';
 import GoalIcon from '../../../../assets/images/eventicons/soccer-goal.png';
 import SubstitutionIcon from '../../../../assets/images/eventicons/soccer-substitution.png';
+import ShotIcon from '../../../../assets/images/eventicons/soccer-shoot.png';
 
 export const getSoccerEventIcons = (text) => {
     text = text.toLowerCase();
-    if (text.search('corner') != -1) {
-        return CornerIcon;
-    }
+    // if (text.search('corner') != -1) {
+    //     return CornerIcon;
+    // }
     if (text.search('yellow card') != -1) {
         return YellowCardIcon;
     }
@@ -25,5 +26,8 @@ export const getSoccerEventIcons = (text) => {
     if (text.search('substitution') != -1) {
         return SubstitutionIcon;
     }
+    // if (text.search('shot') != -1) {
+    //     return ShotIcon;
+    // }
     return null;
 }

@@ -2,29 +2,59 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Image, FlatList } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import { getEventIcons } from './getEventIcons';
+import { removeTeamNameFromEvent } from '../../../../libs/functions';
+import Timeline from '../../../../components/Timeline';
 
 export default class GameEventsComponent extends Component {
-    renderEventItem = (event, index) => {
-        const { sport, home } = this.props;
-        const eventIcon = getEventIcons(sport, event.text);
-        const homeEvent = event.text.search(home.name) != -1;
+    renderDetail(rowData, sectionID, rowID) {
         return (
-            <View key={index.toString()} style={styles.eventItemContainer}>
-                <Text></Text>
-                {eventIcon && <Image source={eventIcon} style={styles.eventItemIcon} />}
-                <Text style={styles.eventItemText}>{event.text}</Text>
+            <View style={{ flex: 1 }}>
+                <Text style={[styles.eventText]}>{rowData.text}</Text>
             </View>
         )
     }
 
     render() {
-        const { events, home, away } = this.props;
+        const { events, home, away, sport } = this.props;
         const filteredEvents = events.filter(event => event.text.search(home.name) != -1 || event.text.search(away.name) != -1)
-
+        const data = filteredEvents.map(event => {
+            const homeEvent = event.text.search(home.name) != -1;
+            const eventIcon = getEventIcons(sport, event.text);
+            if (!eventIcon) return null;
+            const text = removeTeamNameFromEvent(event.text, homeEvent ? home.name : away.name);
+            return {
+                time: "3'",
+                text: text,
+                lineColor: '#444',
+                icon: eventIcon,
+                position: homeEvent ? 'left' : 'right',
+            }
+        }).filter(event => event);
         return (
             <View style={styles.container}>
                 <Text style={styles.titleText}>Events</Text>
-                {filteredEvents.map(this.renderEventItem)}
+                <View style={styles.teamLogos}>
+                    <Image
+                        style={styles.mainTeamLogoImage}
+                        source={{ uri: `https://assets.b365api.com/images/team/b/${home.image_id}.png` }}
+                    />
+                    <Text style={styles.timelineText}>Timeline</Text>
+                    <Image
+                        style={styles.mainTeamLogoImage}
+                        source={{ uri: `https://assets.b365api.com/images/team/b/${away.image_id}.png` }}
+                    />
+                </View>
+                <Timeline
+                    data={data}
+                    renderDetail={this.renderDetail}
+                    innerCircle="icon"
+                    columnFormat="two-column"
+                    circleSize={16}
+                    lineWidth={1}
+                    iconStyle={styles.iconStyle}
+                    circleStyle={styles.circleStyle}
+                    circleSize={24}
+                />
             </View>
         )
     }
@@ -36,13 +66,12 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         paddingLeft: 20,
         borderBottomWidth: 1,
-        borderColor: '#4445'
+        borderColor: '#4445',
     },
     eventItemContainer: {
         flexDirection: 'row',
         paddingVertical: 4,
-        alignItems: 'center',
-        flexWrap: 'wrap',
+        alignItems: 'flex-start',
     },
     titleText: {
         fontSize: 16,
@@ -51,14 +80,42 @@ const styles = StyleSheet.create({
     },
     eventItemText: {
         fontSize: 13,
-        marginLeft: 10,
+        marginLeft: 20,
         color: '#aaa',
-        marginLeft: 'auto'
+        flexWrap: 'wrap',
     },
     eventItemIcon: {
-        width: 14,
-        height: 14,
+        width: 16,
+        height: 16,
         resizeMode: 'contain',
-        marginLeft: 'auto'
+    },
+    eventText: {
+        color: '#ddd',
+        fontSize: 12
+    },
+    teamLogos: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 10
+    },
+    mainTeamLogoImage: {
+        width: 24,
+        height: 24,
+    },
+    timelineText: {
+        fontSize: 14,
+        color: 'white',
+        fontWeight: 'bold'
+    },
+    iconStyle: {
+        width: 16,
+        height: 16,
+    },
+    circleStyle: {
+        backgroundColor: '#222',
+        borderColor: '#666',
+        borderWidth: 1,
+        padding: 10,
+        borderRadius: 12
     }
 });

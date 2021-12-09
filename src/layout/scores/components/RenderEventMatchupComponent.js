@@ -60,7 +60,6 @@ export default class RenderEventMatchupComponent extends Component {
                     extra={extra} />}
             </View>
         )
-
     }
     render() {
         return (
@@ -77,7 +76,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#000'
     },
     loadingIndicator: {
-        flex: 1
+        marginTop: 40,
+        // flex: 1,
     },
     noDataText: {
         fontSize: 16,

@@ -182,6 +182,21 @@ export function getWinLoss(home_score, away_score, team, type, points) {
     }
 }
 
+export function removeTeamNameFromEvent(event, team) {
+    event = event.replace(` - ${team}`, '');
+    event = event.replace(` -  ${team}`, '');
+    event = event.replace(` ${team}`, '');
+
+    event = event.replace(` - (${team})]`, '');
+    event = event.replace(` -  (${team})]`, '');
+    event = event.replace(` (${team})]`, '');
+
+    event = event.replace(` - (${team})`, '');
+    event = event.replace(` -  (${team})`, '');
+    event = event.replace(` (${team})`, '');
+    return event;
+}
+
 const styles = StyleSheet.create({
     eventItemStatusInPlay: {
         color: 'red'
