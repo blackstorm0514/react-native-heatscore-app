@@ -332,7 +332,6 @@ export default class Timeline extends PureComponent {
                 innerCircle = (
                     <Image
                         source={iconSource}
-                        defaultSource={typeof iconDefault === "number" && iconDefault}
                         style={[iconStyle, this.props.iconStyle]}
                     />
                 );

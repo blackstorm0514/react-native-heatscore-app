@@ -4,7 +4,7 @@ import { Text } from '@ui-kitten/components';
 
 export default class GameDetailComponent extends Component {
     render() {
-        const { extra, home, away } = this.props;
+        const { extra } = this.props;
         const { away_manager, home_manager, referee, stadium_data } = extra;
         return (
             <View style={styles.container}>

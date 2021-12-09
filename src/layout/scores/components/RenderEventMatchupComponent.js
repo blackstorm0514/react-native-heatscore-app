@@ -6,6 +6,7 @@ import { getMatchScore, getStatusString } from '../../../libs/functions';
 import ScoreBoardComponent from './matchup/ScoreBoardComponent';
 import GameDetailComponent from './matchup/GameDetailComponent';
 import GameEventsComponent from './matchup/GameEventsComponent';
+import GameStatsComponent from './matchup/GameStatsComponent';
 
 export default class RenderEventMatchupComponent extends Component {
     renderContent = () => {
@@ -20,7 +21,7 @@ export default class RenderEventMatchupComponent extends Component {
                 <Text style={styles.noDataText}>No Data Availale.</Text>
             );
         }
-        const { home, away, extra, events, scores, time_status, sport, timer } = event;
+        const { home, away, extra, events, scores, time_status, sport, timer, stats } = event;
         const { status_text, status_class } = getStatusString(time_status, timer, sport);
         const { home_score, away_score } = getMatchScore(sport, scores, 'game');
         return (
@@ -53,6 +54,11 @@ export default class RenderEventMatchupComponent extends Component {
                     home={home}
                     away={away}
                     events={events}
+                    sport={sport} />}
+                {stats && <GameStatsComponent
+                    home={home}
+                    away={away}
+                    stats={stats}
                     sport={sport} />}
                 {extra && <GameDetailComponent
                     home={home}

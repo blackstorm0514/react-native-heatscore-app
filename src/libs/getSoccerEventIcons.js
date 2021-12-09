@@ -1,10 +1,10 @@
-import CornerIcon from '../../../../assets/images/eventicons/soccer-corner.png';
-import YellowCardIcon from '../../../../assets/images/eventicons/soccer-yellowcard.png';
-import RedCardIcon from '../../../../assets/images/eventicons/soccer-redcard.png';
-import OffsideIcon from '../../../../assets/images/eventicons/soccer-offside.png';
-import GoalIcon from '../../../../assets/images/eventicons/soccer-goal.png';
-import SubstitutionIcon from '../../../../assets/images/eventicons/soccer-substitution.png';
-import ShotIcon from '../../../../assets/images/eventicons/soccer-shoot.png';
+import CornerIcon from '../assets/images/eventicons/soccer-corner.png';
+import YellowCardIcon from '../assets/images/eventicons/soccer-yellowcard.png';
+import RedCardIcon from '../assets/images/eventicons/soccer-redcard.png';
+import OffsideIcon from '../assets/images/eventicons/soccer-offside.png';
+import GoalIcon from '../assets/images/eventicons/soccer-goal.png';
+import SubstitutionIcon from '../assets/images/eventicons/soccer-substitution.png';
+import ShotIcon from '../assets/images/eventicons/soccer-shoot.png';
 
 export const getSoccerEventIcons = (text) => {
     text = text.toLowerCase();

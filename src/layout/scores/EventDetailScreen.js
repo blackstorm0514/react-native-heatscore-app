@@ -17,7 +17,6 @@ import { truncateString } from '../../libs/functions';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { getEventDetail } from '../../redux/services';
 import RenderEventLineupComponent from './components/RenderEventLineupComponent';
-import RenderEventStatsComponent from './components/RenderEventStatsComponent';
 import RenderEventHistoryComponent from './components/RenderEventHistoryComponent';
 
 class EventDetailScreen extends Component {
@@ -29,7 +28,6 @@ class EventDetailScreen extends Component {
                 { key: 'chat', title: 'Chat' },
                 { key: 'matchup', title: 'MatchUp' },
                 { key: 'lineup', title: 'LineUp' },
-                { key: 'stats', title: 'Stats' },
                 { key: 'history', title: 'History' }
             ],
             event: null,
@@ -149,8 +147,6 @@ class EventDetailScreen extends Component {
                 return <RenderEventMatchupComponent event={event} loading={loading} />
             case 'lineup':
                 return <RenderEventLineupComponent event={event} loading={loading} />
-            case 'stats':
-                return <RenderEventStatsComponent event={event} loading={loading} />
             case 'history':
                 return <RenderEventHistoryComponent event={event} loading={loading} />
             default:

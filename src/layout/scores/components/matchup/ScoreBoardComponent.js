@@ -96,10 +96,10 @@ const styles = StyleSheet.create({
         paddingVertical: 4
     },
     scoreTitle: {
-        width: 260
+        width: 200
     },
     scoreItem: {
-        width: 40,
+        width: 24,
         fontSize: 14
     },
     scoreTitleText: {
