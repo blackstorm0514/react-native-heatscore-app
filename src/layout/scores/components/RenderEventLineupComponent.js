@@ -2,16 +2,20 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Image, ScrollView } from 'react-native';
 import { LoadingIndicator } from './LoadingIndicator';
 import { Text } from '@ui-kitten/components';
+import { truncateString } from '../../../libs/functions';
 
 export default class RenderEventLineupComponent extends Component {
     renderLineupTeam = (team, lineup, isAway = false) => {
         const { formation, startinglineup, substitutes } = lineup;
         return (
             <View style={[styles.lineupTeamContainer, isAway ? styles.lineupAwayContainer : null]}>
-                <Image
-                    style={[styles.teamLogoImage, isAway ? styles.awayLogoImage : null]}
-                    source={{ uri: `https://assets.b365api.com/images/team/m/${team.image_id}.png` }}
-                />
+                <View style={[styles.teamHeaderContainer, isAway ? styles.teamAwayHeader : null]}>
+                    <Image
+                        style={styles.teamLogoImage}
+                        source={{ uri: `https://assets.b365api.com/images/team/m/${team.image_id}.png` }}
+                    />
+                    <Text style={styles.teamNames}>{truncateString(team.name)}</Text>
+                </View>
                 {formation && <View style={styles.formationContainer}>
                     <Text style={styles.formationTitle}>Formation</Text>
                     <Text style={styles.formationValue}>{formation}</Text>
@@ -100,8 +104,17 @@ const styles = StyleSheet.create({
         width: 24,
         height: 24,
     },
-    awayLogoImage: {
-        marginLeft: 'auto'
+    teamHeaderContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 5,
+    },
+    teamAwayHeader: {
+        flexDirection: 'row-reverse',
+    },
+    teamNames: {
+        fontSize: 14,
+        marginHorizontal: 10
     },
     formationContainer: {
         flexDirection: 'row',
