@@ -25,15 +25,21 @@ class ScoresScreen extends Component {
         super(props);
 
         const tabs = [
-            { key: 1, title: 'Soccer' },
-            { key: 12, title: 'Football' },
-            { key: null, title: 'All' },
-            { key: 16, title: 'Baseball' },
-            { key: 17, title: 'Hockey' },
-            { key: 18, title: 'Basketball' },
+            { key: null, title: 'All', type: 'sport' },
+            { key: 2274, title: 'NBA', type: 'league' },
+            { key: 459, title: 'NFL', type: 'league' },
+            { key: 474, title: 'NCAAF', type: 'league' },
+            { key: 270, title: 'CFL', type: 'league' },
+            { key: 2638, title: 'NCAAB', type: 'league' },
+            { key: 1040, title: 'UEFA CL', type: 'league' },
+            { key: 1, title: 'Soccer', type: 'sport' },
+            { key: 12, title: 'Football', type: 'sport' },
+            { key: 18, title: 'Basketball', type: 'sport' },
+            { key: 17, title: 'Hockey', type: 'sport' },
+            { key: 16, title: 'Baseball', type: 'sport' },
         ];
         this.state = {
-            index: 2,
+            index: 0,
             routes: tabs
         }
         this._Mounted = false;
@@ -74,7 +80,8 @@ class ScoresScreen extends Component {
         const { navigation } = this.props;
         return (
             <ScoresPerSportScreen
-                sport={route.key}
+                sport={route.type == 'sport' ? route.key : null}
+                league={route.type == 'league' ? route.key : null}
                 navigation={navigation} />
         )
     }
@@ -89,7 +96,7 @@ class ScoresScreen extends Component {
                     paddingVertical: 0,
                 }}
                 indicatorStyle={{
-                    backgroundColor: 'white',
+                    backgroundColor: '#E10032',
                     height: 1,
                     marginVertical: 0,
                 }}
@@ -105,10 +112,11 @@ class ScoresScreen extends Component {
                     fontSize: 12,
                     marginVertical: 0,
                     paddingVertical: 0,
-                    textTransform: 'capitalize',
-                    marginBottom: 6
+                    marginBottom: 6,
+                    textTransform: 'none'
                 }}
-                renderIcon={this.renderIcon}
+                activeColor='#E10032'
+            // renderIcon={this.renderIcon}
             />
         </View>
     )

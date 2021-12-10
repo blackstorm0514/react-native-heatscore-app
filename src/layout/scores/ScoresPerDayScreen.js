@@ -35,11 +35,11 @@ export default class ScoresPerDayScreen extends Component {
     }
 
     getEventsData = (setLoading = true) => {
-        const { date, sport } = this.props;
+        const { date, sport, league } = this.props;
         const { inplayTimeout } = this.state;
         if (inplayTimeout) clearTimeout(inplayTimeout);
         this._Mounted && this.setState({ loading: setLoading, inplayTimeout: null });
-        getEvent(date, sport)
+        getEvent(date, sport, league)
             .then(({ data: result }) => {
                 const { data, favorites } = result;
                 let hasInplay = false;

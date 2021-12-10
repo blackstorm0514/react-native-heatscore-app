@@ -31,7 +31,8 @@ class ScoresPerSportScreen extends Component {
             index: 7,
             league: null,
             routes: tabs,
-            sport: props.sport
+            sport: props.sport,
+            league: props.league
         }
         this._Mounted = false;
         this.filterModalRef = createRef();
@@ -46,12 +47,13 @@ class ScoresPerSportScreen extends Component {
     }
 
     renderScene = ({ route }) => {
-        const { sport } = this.state;
+        const { sport, league } = this.state;
         const { navigation } = this.props;
         return (
             <ScoresPerDayScreen
                 date={route.date}
                 sport={sport}
+                league={league}
                 keyDate={route.key}
                 navigation={navigation} />
         )
@@ -66,7 +68,7 @@ class ScoresPerSportScreen extends Component {
                 paddingVertical: 0
             }}
             indicatorStyle={{
-                backgroundColor: 'white',
+                backgroundColor: '#E10032',
                 height: 1,
                 marginVertical: 0,
             }}
@@ -83,6 +85,7 @@ class ScoresPerSportScreen extends Component {
                 marginVertical: 0,
                 paddingVertical: 0
             }}
+            activeColor='#E10032'
         />
     )
 
