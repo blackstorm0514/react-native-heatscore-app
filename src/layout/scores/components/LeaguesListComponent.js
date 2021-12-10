@@ -19,7 +19,7 @@ const iconName = {
 
 const getSportsIcon = (sport) => (
     <MaterialIcons name={iconName[sport]}
-        size={16} color="white"
+        size={16} color="#E10032"
     />
 )
 
@@ -96,17 +96,17 @@ const styles = StyleSheet.create({
     },
     leagueTitle: {
         backgroundColor: '#222',
-        paddingVertical: 4,
+        paddingVertical: 6,
         paddingHorizontal: 10,
         flexDirection: 'row',
         borderBottomColor: '#888',
-        borderBottomWidth: 2,
+        borderBottomWidth: 1,
         width: screenWidth,
         alignItems: 'center'
     },
     leagueTitleText: {
-        color: 'white',
-        fontWeight: 'bold',
+        color: '#E10032',
+        fontWeight: '500',
         maxWidth: '70%',
         fontSize: 14,
         marginLeft: 5
@@ -116,9 +116,9 @@ const styles = StyleSheet.create({
     },
     seeRoundText: {
         textTransform: 'uppercase',
-        color: 'white',
+        color: '#E10032',
         fontSize: 13,
-        fontWeight: 'bold',
+        fontWeight: '400',
     },
     collapseButtn: {
         marginLeft: 10,

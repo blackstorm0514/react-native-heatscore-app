@@ -32,22 +32,26 @@ export default class ReportChat extends PureComponent {
                         />
                     </TouchableOpacity>
                 </View>
-                {chatReport.text && <TouchableOpacity activeOpacity={0.8}
-                    style={styles.pressItem}>
-                    <Text style={styles.pressItemText}>Translate to English</Text>
-                </TouchableOpacity>}
-                <TouchableOpacity activeOpacity={0.8}
-                    style={styles.pressItem}>
-                    <Text style={styles.pressItemText}>Reply</Text>
-                </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.8}
-                    style={styles.pressItem}>
-                    <Text style={styles.pressItemText}>Like</Text>
-                </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.8}
-                    style={styles.pressItem}>
-                    <Text style={styles.pressItemText}>Report Abuse</Text>
-                </TouchableOpacity>
+                <View style={styles.inLineButtons}>
+                    <TouchableOpacity activeOpacity={0.8}
+                        style={styles.pressItem}>
+                        <Text style={styles.pressItemText}>Like!</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity activeOpacity={0.8}
+                        style={styles.pressItem}>
+                        <Text style={styles.pressItemText}>Reply</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.inLineButtons}>
+                    <TouchableOpacity activeOpacity={0.8}
+                        style={styles.pressItem}>
+                        <Text style={styles.pressItemText}>Report Abuse</Text>
+                    </TouchableOpacity>
+                    {chatReport.text && <TouchableOpacity activeOpacity={0.8}
+                        style={styles.pressItem}>
+                        <Text style={styles.pressItemText}>Translate to English</Text>
+                    </TouchableOpacity>}
+                </View>
             </View>
         )
     }
@@ -76,10 +80,14 @@ const styles = StyleSheet.create({
     },
     pressItem: {
         paddingHorizontal: 20,
-        paddingTop: 10
+        paddingTop: 10,
+        flex: 1
     },
     pressItemText: {
         fontSize: 14,
-        color: '#ddd'
+        color: '#aaa'
+    },
+    inLineButtons: {
+        flexDirection: 'row'
     }
 })

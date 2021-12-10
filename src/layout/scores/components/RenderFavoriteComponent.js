@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     favoriteTitleText: {
         color: 'white',
         textTransform: 'uppercase',
-        fontWeight: 'bold',
+        fontWeight: '500',
         fontSize: 14
     },
     addFavoriteButton: {

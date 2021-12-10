@@ -32,7 +32,7 @@ export default class RenderChatItem extends PureComponent {
                         <Text style={styles.chatContent}>{user.username}</Text>
                         <ScaledImage
                             uri={image}
-                            width={win.width - 70}
+                            width={parseInt(win.width / 2)}
                         />
                     </View>
                 </TouchableOpacity>

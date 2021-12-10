@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     eventItemTeamName: {
         flex: 5,
         fontSize: 15,
-        fontWeight: 'bold',
+        fontWeight: '400',
         marginLeft: 10
     },
     eventItemTeamScore: {

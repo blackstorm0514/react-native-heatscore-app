@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
         color: 'red'
     },
     eventItemStatusToBeConfirmed: {
-        color: 'blue'
+        color: '#dda039'
     },
     eventItemStatusEnded: {
         color: 'green'

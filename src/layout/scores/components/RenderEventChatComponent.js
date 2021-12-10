@@ -257,11 +257,14 @@ class RenderEventChatComponent extends Component {
                     marginLeft: 4,
                     marginRight: 4,
                     marginBottom: 0,
+                    borderColor: '#ddd',
+                    borderWidth: 1,
+                    borderRadius: 6
                 }}
                 icon={() => (
                     <MaterialIcons
                         size={32}
-                        name="emoji-emotions"
+                        name="gif"
                         color="#ddd"
                     />
                 )}

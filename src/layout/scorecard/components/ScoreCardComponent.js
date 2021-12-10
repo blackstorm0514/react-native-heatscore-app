@@ -102,8 +102,9 @@ const styles = StyleSheet.create({
     },
     eventWrapper: {
         paddingTop: 2,
-        borderLeftWidth: 4,
+        borderLeftWidth: 6,
         borderLeftColor: '#FFF',
+        paddingBottom: 5
     },
     winContainer: {
         borderLeftColor: 'green',
@@ -117,6 +118,7 @@ const styles = StyleSheet.create({
         color: 'white',
         marginLeft: 15,
         fontSize: 12,
+        marginTop: 5
     },
     eventContainer: {
         width: screenWidth,
@@ -130,6 +132,7 @@ const styles = StyleSheet.create({
     },
     eventItemDetail: {
         flex: 5,
+        paddingLeft: 10
     },
     eventItemTeam: {
         flexDirection: 'row',
@@ -145,7 +148,7 @@ const styles = StyleSheet.create({
     eventItemTeamName: {
         flex: 6,
         fontSize: 14,
-        fontWeight: 'bold',
+        fontWeight: '400',
         marginLeft: 10
     },
     eventItemTeamScore: {
