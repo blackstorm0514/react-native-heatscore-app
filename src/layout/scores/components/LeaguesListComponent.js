@@ -92,7 +92,7 @@ export default connect(mapStateToProps, { toggleCollapseLeagueAction: actions.to
 
 const styles = StyleSheet.create({
     leagueContainer: {
-        backgroundColor: 'black'
+        backgroundColor: '#121212'
     },
     leagueTitle: {
         backgroundColor: '#222',

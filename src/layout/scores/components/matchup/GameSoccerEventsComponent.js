@@ -23,7 +23,7 @@ export default class GameSoccerEventsComponent extends Component {
             if (!eventIcon) return null;
             const text = removeTeamNameFromEvent(event.text, homeEvent ? home.name : away.name);
             return {
-                time: "3'",
+                time: "",
                 text: text,
                 lineColor: '#444',
                 icon: eventIcon,

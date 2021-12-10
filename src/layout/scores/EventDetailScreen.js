@@ -99,7 +99,7 @@ class EventDetailScreen extends Component {
                 {...props}
                 scrollEnabled
                 style={{
-                    backgroundColor: 'black',
+                    backgroundColor: '#121212',
                     paddingVertical: 0
                 }}
                 indicatorStyle={{
@@ -161,6 +161,7 @@ class EventDetailScreen extends Component {
                 <TopNavigation
                     accessoryLeft={this.goBackAction}
                     title={this.renderTitle}
+                    style={styles.headerStyle}
                 />
                 <TabView
                     renderTabBar={this.renderTabBar}
@@ -185,6 +186,9 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 14,
     },
+    headerStyle: {
+        backgroundColor: '#121212'
+    },
     logoContainer: {
         marginTop: 5,
         flexDirection: 'row',
@@ -198,5 +202,6 @@ const styles = StyleSheet.create({
     tabBarContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
+        backgroundColor: '#121212'
     }
 });

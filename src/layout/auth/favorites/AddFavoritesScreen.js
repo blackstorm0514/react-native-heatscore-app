@@ -168,14 +168,14 @@ export default connect(mapStateToProps, { addFavoritesAction: actions.addFavorit
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#000'
+        backgroundColor: '#121212'
     },
     titleText: {
         fontWeight: 'bold'
     },
     list: {
         flex: 1,
-        backgroundColor: '#000'
+        backgroundColor: '#121212'
     },
     header: {
         paddingHorizontal: 16,
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         borderBottomWidth: 1,
         borderBottomColor: '#222',
-        backgroundColor: '#000'
+        backgroundColor: '#080808'
     },
     loadingIndicator: {
         flex: 1,

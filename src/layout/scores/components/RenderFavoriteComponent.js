@@ -55,11 +55,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         borderBottomColor: '#888',
-        borderBottomWidth: 2,
-        alignItems: 'center'
+        borderBottomWidth: 1,
+        alignItems: 'center',
     },
     favoriteTitleText: {
-        color: 'white',
+        color: '#E10032',
         textTransform: 'uppercase',
         fontWeight: '500',
         fontSize: 14
@@ -68,6 +68,6 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end'
     },
     list: {
-        backgroundColor: 'black',
+        backgroundColor: '#121212',
     },
 });

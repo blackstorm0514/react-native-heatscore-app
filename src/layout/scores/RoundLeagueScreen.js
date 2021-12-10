@@ -77,7 +77,6 @@ class RoundLeagueScreen extends Component {
     renderTitle = () => {
         const { league } = this.state;
         return <Button style={styles.allScoresButton}
-            accessoryRight={ArrowDownwardIcon}
             size="large">
             <Text numberOfLines={1}>{league.name}</Text>
         </Button>
@@ -89,7 +88,7 @@ class RoundLeagueScreen extends Component {
                 {...props}
                 scrollEnabled
                 style={{
-                    backgroundColor: 'black',
+                    backgroundColor: '#121212',
                     paddingVertical: 0
                 }}
                 indicatorStyle={{
@@ -107,7 +106,7 @@ class RoundLeagueScreen extends Component {
                 }}
                 labelStyle={{
                     fontWeight: 'bold',
-                    fontSize: 13,
+                    fontSize: 12,
                     marginVertical: 0,
                     paddingVertical: 0,
                 }}
@@ -121,13 +120,13 @@ class RoundLeagueScreen extends Component {
             case 'topscorer':
                 return (
                     <MaterialIcons color='green'
-                        size={20}
+                        size={16}
                         name='sports-soccer' />
                 );
             case 'topassist':
                 return (
                     <MaterialIcons color='green'
-                        size={20}
+                        size={16}
                         name='assistant-photo' />
                 );
             default:
@@ -156,6 +155,7 @@ class RoundLeagueScreen extends Component {
         return (
             <View style={styles.container} >
                 <TopNavigation
+                    style={styles.headerStyle}
                     accessoryLeft={this.goBackAction}
                     title={this.renderTitle}
                 />
@@ -176,13 +176,13 @@ export default RoundLeagueScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'black'
+        backgroundColor: '#121212'
     },
     allScoresButton: {
         color: 'white',
         borderRadius: 0,
         borderColor: 0,
-        backgroundColor: 'black',
+        backgroundColor: '#121212',
         fontSize: 14,
         alignSelf: 'center',
         maxWidth: '70%',
@@ -191,5 +191,8 @@ const styles = StyleSheet.create({
     tabBarContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
+    },
+    headerStyle: {
+        backgroundColor: '#121212'
     }
 });

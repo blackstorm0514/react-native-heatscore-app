@@ -116,10 +116,10 @@ export default RenderLeagueRoundComponent;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'black'
+        backgroundColor: '#121212'
     },
     list: {
-        backgroundColor: 'black',
+        backgroundColor: '#121212',
         paddingBottom: 20,
         flex: 1,
         minWidth: screenWidth,
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
         fontSize: 13
     },
     tableRow: {
-        backgroundColor: '#000',
+        backgroundColor: '#121212',
         flexDirection: 'row',
         paddingHorizontal: 10,
         paddingVertical: 5,

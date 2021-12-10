@@ -145,8 +145,8 @@ class RenderEventChatComponent extends Component {
         if (!earlierChatsAvailable) return null;
         return (
             <LoadEarlier {...props}
-                containerStyle={{ backgroundColor: '#000' }}
-                wrapperStyle={{ borderRadius: 0, backgroundColor: '#000' }}
+                containerStyle={{ backgroundColor: '#121212' }}
+                wrapperStyle={{ borderRadius: 0, backgroundColor: '#121212' }}
             />
         )
     }
@@ -379,12 +379,13 @@ export default connect(mapStateToProps, null)(RenderEventChatComponent);
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#121212'
     },
     loadingIndicator: {
         flex: 1
     },
     list: {
-        backgroundColor: '#111',
+        backgroundColor: '#121212',
     },
     messageInput: {
         marginHorizontal: 0,

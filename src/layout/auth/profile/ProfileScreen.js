@@ -59,6 +59,7 @@ class ProfileScreen extends PureComponent {
             <ScrollView style={styles.container}>
                 <TopNavigation
                     title={this.renderTitle}
+                    style={styles.headerStyle}
                 />
                 {!user && <ProfileSettingComponent
                     style={[styles.profileSetting, styles.section]}
@@ -116,7 +117,10 @@ export default connect(mapStateToProps, { setUserAction: actions.setUserAction }
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#111',
+        backgroundColor: '#121212',
+    },
+    headerStyle: {
+        backgroundColor: '#121212',
     },
     titleText: {
         fontWeight: 'bold',
@@ -125,7 +129,7 @@ const styles = StyleSheet.create({
     profileSetting: {
         paddingVertical: 10,
         paddingHorizontal: 20,
-        backgroundColor: 'black',
+        backgroundColor: '#080808',
         borderColor: '#222',
         borderBottomWidth: 1,
     },

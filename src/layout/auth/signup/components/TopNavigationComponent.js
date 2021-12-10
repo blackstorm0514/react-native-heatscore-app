@@ -21,6 +21,7 @@ export const TopNavigationComponent = ({ navigation, backPosition }) => {
         <TopNavigation
             title={renderTitle}
             accessoryLeft={goBackAction}
+            style={styles.headerStyle}
         />
     )
 }
@@ -33,4 +34,7 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         width: screenWidth * 0.5
     },
+    headerStyle: {
+        backgroundColor: '#121212',
+    }
 });

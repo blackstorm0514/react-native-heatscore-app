@@ -95,6 +95,7 @@ export const HomeBottomNavigation = ({ navigation, state, descriptors }) => {
         <Animated.View style={[styles.container, transforms, { paddingBottom: tabBarVisible ? safeAreaInsets.bottom : 0 }]}>
             <Divider />
             <BrandBottomNavigation
+                style={styles.bottomNavigation}
                 appearance='noIndicator'
                 selectedIndex={state.index}
                 onSelect={onSelect}>
@@ -133,12 +134,16 @@ const styles = StyleService.create({
         left: 0,
         right: 0,
         bottom: 0,
+        backgroundColor: '#121212'
     },
     divider: {
         backgroundColor: 'white'
     },
+    bottomNavigation: {
+        backgroundColor: '#121212',
+    },
     bottomTab: {
-        backgroundColor: '#000',
+        backgroundColor: '#121212',
         tintColor: '#FFF',
         color: '#FFF'
     }

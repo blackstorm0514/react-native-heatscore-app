@@ -64,7 +64,7 @@ class ScoresPerSportScreen extends Component {
             {...props}
             scrollEnabled
             style={{
-                backgroundColor: 'black',
+                backgroundColor: '#121212',
                 paddingVertical: 0
             }}
             indicatorStyle={{

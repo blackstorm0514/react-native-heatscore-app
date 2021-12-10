@@ -130,14 +130,14 @@ export default class ScoresPerDayScreen extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'black',
-        paddingTop: 10
+        backgroundColor: '#121212',
+        paddingTop: 10,
     },
     loadingIndicator: {
         flex: 1
     },
     list: {
-        backgroundColor: 'black',
+        backgroundColor: '#121212',
         paddingBottom: 20
     },
     floatingActionButtonStyle: {

@@ -223,11 +223,11 @@ export default class SignupDetailScreen extends PureComponent {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#222',
+        backgroundColor: '#121212',
     },
     layoutContainer: {
         flex: 1,
-        backgroundColor: '#151515',
+        backgroundColor: '#121212',
         paddingHorizontal: 30,
         paddingTop: 30,
         justifyContent: 'space-between'
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     boxLayout: {
-        backgroundColor: '#151515',
+        backgroundColor: '#121212',
         color: 'white',
         paddingHorizontal: 10,
         marginTop: 15
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     },
     formInput: {
         marginTop: 6,
-        backgroundColor: '#151515',
+        backgroundColor: '#121212',
         borderWidth: 0,
         borderBottomWidth: 1,
         borderColor: '#999'

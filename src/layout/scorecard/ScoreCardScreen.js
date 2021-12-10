@@ -70,7 +70,7 @@ class ScoreCardScreen extends PureComponent {
             {...props}
             scrollEnabled
             style={{
-                backgroundColor: 'black',
+                backgroundColor: '#121212',
                 paddingVertical: 0
             }}
             indicatorStyle={{
@@ -142,6 +142,7 @@ class ScoreCardScreen extends PureComponent {
                 <TopNavigation
                     title={this.renderTitle}
                     accessoryRight={this.addScoreCardActionButton}
+                    style={styles.headerStyle}
                 />
                 <TabView
                     lazy
@@ -168,16 +169,19 @@ export default connect(mapStateToProps, null)(ScoreCardScreen);
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'black'
+        backgroundColor: '#121212'
     },
     allScoresButton: {
         color: 'white',
         borderRadius: 0,
         borderColor: 0,
-        backgroundColor: 'black',
+        backgroundColor: '#121212',
         fontSize: 20,
         maxWidth: '70%',
         alignSelf: 'center',
+    },
+    headerStyle: {
+        backgroundColor: '#121212'
     },
     addScoresButton: {
         width: 20,

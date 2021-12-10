@@ -146,7 +146,7 @@ export default class RenderEventHistoryComponent extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#000'
+        backgroundColor: '#121212'
     },
     loadingIndicator: {
         flex: 1
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
         marginBottom: 6,
     },
     eventContainer: {
-        backgroundColor: '#111',
+        backgroundColor: '#222',
         borderColor: '#555',
         borderBottomWidth: 1,
         paddingHorizontal: 10,

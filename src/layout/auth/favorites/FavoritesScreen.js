@@ -116,6 +116,7 @@ class FavoritesScreen extends PureComponent {
             <View style={styles.container}>
                 <TopNavigation
                     title={this.renderTitle}
+                    style={styles.headerStyle}
                     accessoryLeft={this.goBackAction}
                     accessoryRight={this.addFavoriteAction}
                 />
@@ -143,27 +144,30 @@ export default connect(mapStateToProps, {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#111'
+        backgroundColor: '#121212'
     },
     titleText: {
         fontWeight: 'bold'
     },
     list: {
         flex: 1,
-        backgroundColor: '#111'
+        backgroundColor: '#121212'
+    },
+    headerStyle: {
+        backgroundColor: '#121212',
     },
     header: {
         paddingHorizontal: 16,
         paddingTop: 16,
         paddingBottom: 8,
-        backgroundColor: '#111',
+        backgroundColor: '#121212',
         fontSize: 12,
     },
     item: {
         paddingVertical: 8,
         borderBottomWidth: 1,
         borderBottomColor: '#222',
-        backgroundColor: '#000'
+        backgroundColor: '#080808'
     },
     loadingIndicator: {
         flex: 1

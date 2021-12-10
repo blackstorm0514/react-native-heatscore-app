@@ -127,10 +127,10 @@ export default class SignupHomeScreen extends PureComponent {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#222',
+        backgroundColor: '#121212',
     },
     layoutContainer: {
-        backgroundColor: '#151515',
+        backgroundColor: '#121212',
         paddingHorizontal: 30,
         paddingTop: 20,
     },
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: '#000',
+        backgroundColor: '#080808',
         padding: 16,
         shadowColor: '#999',
         shadowOpacity: 0.8,

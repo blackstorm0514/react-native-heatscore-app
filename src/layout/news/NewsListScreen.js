@@ -167,10 +167,10 @@ export default class NewsListScreen extends PureComponent {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'black'
+        backgroundColor: '#121212'
     },
     list: {
-        backgroundColor: 'black'
+        backgroundColor: '#121212'
     },
     readButton: {
         width: '50%',
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
         marginBottom: 4,
         flexDirection: 'row',
         minHeight: 100,
-        backgroundColor: '#111',
+        backgroundColor: '#222',
         marginHorizontal: 2,
         padding: 10,
         borderRadius: 4,

@@ -129,10 +129,10 @@ const styles = StyleSheet.create({
         // flex: 1,
         // overflow: 'scroll',
         minHeight: '100%',
-        backgroundColor: 'black'
+        backgroundColor: '#121212'
     },
     list: {
-        backgroundColor: 'black',
+        backgroundColor: '#121212',
         paddingBottom: 20,
         minWidth: screenWidth,
         // display: "flex",
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     tableRow: {
-        backgroundColor: '#000',
+        backgroundColor: '#121212',
         flexDirection: 'row',
         paddingHorizontal: 10,
         paddingVertical: 5,

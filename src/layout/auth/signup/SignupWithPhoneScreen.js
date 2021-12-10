@@ -205,10 +205,10 @@ export default class SignupWithPhoneScreen extends PureComponent {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#000',
+        backgroundColor: '#121212',
     },
     layoutContainer: {
-        backgroundColor: '#151515',
+        backgroundColor: '#121212',
         paddingHorizontal: 20,
         flex: 1,
         justifyContent: 'space-between'
@@ -237,10 +237,10 @@ const styles = StyleSheet.create({
         width: '100%',
         padding: 0,
         margin: 0,
-        backgroundColor: '#202020'
+        backgroundColor: '#151515'
     },
     phoneTextContainerStyle: {
-        backgroundColor: '#202020',
+        backgroundColor: '#151515',
         margin: 0,
         padding: 0,
         color: 'white'

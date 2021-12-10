@@ -243,13 +243,13 @@ export default connect(mapStateToProps, null)(ScoreCardPerDayScreen);
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'black'
+        backgroundColor: '#121212'
     },
     loadingIndicator: {
         flex: 1
     },
     list: {
-        backgroundColor: 'black',
+        backgroundColor: '#121212',
         paddingBottom: 20
     },
     listHeader: {

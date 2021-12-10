@@ -92,7 +92,7 @@ class ScoresScreen extends Component {
                 {...props}
                 scrollEnabled
                 style={{
-                    backgroundColor: 'black',
+                    backgroundColor: '#121212',
                     paddingVertical: 0,
                 }}
                 indicatorStyle={{
@@ -113,7 +113,8 @@ class ScoresScreen extends Component {
                     marginVertical: 0,
                     paddingVertical: 0,
                     marginBottom: 6,
-                    textTransform: 'none'
+                    textTransform: 'none',
+                    backgroundColor: '#121212'
                 }}
                 activeColor='#E10032'
             // renderIcon={this.renderIcon}
@@ -162,18 +163,19 @@ export default ScoresScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'black'
+        backgroundColor: '#121212'
     },
     headerStyle: {
         paddingBottom: 10,
         paddingTop: 24,
-        minHeight: 0
+        minHeight: 0,
+        backgroundColor: '#121212'
     },
     headerTitle: {
         color: '#888',
         fontSize: 16,
         alignItems: 'center',
-        backgroundColor: '#000',
+        backgroundColor: '#121212',
         marginBottom: 10
     },
     closeIcon: {

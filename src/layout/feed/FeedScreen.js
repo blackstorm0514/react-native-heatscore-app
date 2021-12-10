@@ -50,7 +50,7 @@ class FeedScreen extends PureComponent {
     render() {
         return (
             <View style={styles.container} >
-                <TopNavigation title={this.renderTitle} />
+                <TopNavigation title={this.renderTitle} style={styles.headerStyle} />
                 <View style={styles.feedContainer}>
                     <Text style={styles.feedHeader}>This Week</Text>
                     <FlatList
@@ -82,7 +82,10 @@ export default connect(mapStateToProps, null)(FeedScreen);
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#111',
+        backgroundColor: '#121212',
+    },
+    headerStyle: {
+        backgroundColor: '#121212'
     },
     feedContainer: {
         padding: 10,
