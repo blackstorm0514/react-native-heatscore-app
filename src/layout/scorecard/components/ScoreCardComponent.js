@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
         marginTop: 5
     },
     eventContainer: {
-        width: screenWidth,
+        width: screenWidth - 6,
         flexDirection: 'row',
     },
     deleteButtonContainer: {

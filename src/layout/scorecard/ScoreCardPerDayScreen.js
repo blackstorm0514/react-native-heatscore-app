@@ -123,21 +123,21 @@ class ScoreCardPerDayScreen extends PureComponent {
             }
         }
         switch (item) {
-            case 'Not Started':
-                return (notStartedEvents.length > 0 &&
-                    <FlatList
-                        data={notStartedEvents}
-                        renderItem={this.renderScoreCard}
-                        ListHeaderComponent={() => this.renderHeader(item, true)}
-                        keyExtractor={(item, index) => index.toString()}
-                    />
-                )
             case 'In-play':
                 return (inPlayEvents.length > 0 &&
                     <FlatList
                         data={inPlayEvents}
                         renderItem={this.renderScoreCard}
-                        ListHeaderComponent={() => this.renderHeader(item, notStartedEvents.length == 0)}
+                        ListHeaderComponent={() => this.renderHeader(item, true)}
+                        keyExtractor={(item, index) => index.toString()}
+                    />
+                )
+            case 'Not Started':
+                return (notStartedEvents.length > 0 &&
+                    <FlatList
+                        data={notStartedEvents}
+                        renderItem={this.renderScoreCard}
+                        ListHeaderComponent={() => this.renderHeader(item, inPlayEvents.length == 0)}
                         keyExtractor={(item, index) => index.toString()}
                     />
                 )
@@ -194,7 +194,9 @@ class ScoreCardPerDayScreen extends PureComponent {
 
     renderEmptyList = () => (
         <View style={{ flex: 1, alignItems: 'center', paddingHorizontal: 10 }}>
-            <Text style={{ fontSize: 16, marginTop: 20, textAlign: 'center' }}>The Score Card lets you track the progress of your bet. Add a game to your score card below.</Text>
+            <Text style={{ fontSize: 16, marginTop: 20, textAlign: 'center' }}>The Score Card lets you track the</Text>
+            <Text style={{ fontSize: 16, textAlign: 'center' }}>progress of your bet. Click on +</Text>
+            <Text style={{ fontSize: 16, textAlign: 'center' }}>to add a game to your score card.</Text>
         </View>
     )
 
@@ -216,7 +218,7 @@ class ScoreCardPerDayScreen extends PureComponent {
                 {loading && <LoadingIndicator style={styles.loadingIndicator} />}
                 {!loading && <FlatList
                     style={styles.list}
-                    data={data && data.length ? ['Not Started', 'In-play', 'Ended', 'Others'] : []}
+                    data={data && data.length ? ['In-play', 'Not Started', 'Ended', 'Others'] : []}
                     renderItem={this.renderScoreList}
                     keyExtractor={(item, index) => index.toString()}
                     ListEmptyComponent={this.renderEmptyList}
