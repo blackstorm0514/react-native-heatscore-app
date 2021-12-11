@@ -74,7 +74,7 @@ class ScoreCardScreen extends PureComponent {
                 paddingVertical: 0
             }}
             indicatorStyle={{
-                backgroundColor: 'white',
+                backgroundColor: '#E10032',
                 height: 1,
                 marginVertical: 0,
             }}
@@ -91,6 +91,8 @@ class ScoreCardScreen extends PureComponent {
                 marginVertical: 0,
                 paddingVertical: 0
             }}
+            activeColor='#E10032'
+            inactiveColor='white'
         />
     )
 

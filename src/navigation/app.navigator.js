@@ -41,9 +41,9 @@ export const AppNavigator = () => (
             <BottomTab.Screen name='Score Card'
                 component={ScoreCardScreen}
                 options={screenOption} />
-            <BottomTab.Screen name='Feed'
+            {/* <BottomTab.Screen name='Feed'
                 component={FeedScreen}
-                options={screenOption} />
+                options={screenOption} /> */}
             <BottomTab.Screen name='Auth'
                 component={AuthNavigator}
                 options={screenOption} />

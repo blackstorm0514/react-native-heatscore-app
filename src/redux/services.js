@@ -79,3 +79,7 @@ export const deleteScoreCard = (card_id) => {
 export const getEventDetail = (event_id) => {
     return ApiService.get(`/events/${event_id}/detail`);
 }
+
+export const reportChat = (data) => {
+    return ApiService.get(`/chats/report`, data);
+}

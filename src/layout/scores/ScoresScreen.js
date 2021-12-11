@@ -117,6 +117,7 @@ class ScoresScreen extends Component {
                     backgroundColor: '#121212'
                 }}
                 activeColor='#E10032'
+                inactiveColor='white'
             // renderIcon={this.renderIcon}
             />
         </View>

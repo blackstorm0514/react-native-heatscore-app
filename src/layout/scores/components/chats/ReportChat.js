@@ -2,13 +2,42 @@ import React, { PureComponent } from 'react';
 import {
     StyleSheet,
     View,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import FeatherIcon from 'react-native-vector-icons/dist/Feather';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import { reportChat } from '../../../../redux/services';
+import Toast from 'react-native-simple-toast';
 
 export default class ReportChat extends PureComponent {
+    reportChat = () => {
+        const { chatReport, onCloseReport } = this.props;
+        const { text, image, user: { email } } = chatReport;
+        reportChat({ text, image, email })
+            .then(({ data }) => {
+                const { success, error } = data;
+                if (success) {
+                    Alert.alert(
+                        'Your report has been submitted.',
+                        'Thank you for keeping the community safe',
+                        [
+                            {
+                                text: "OK",
+                                onPress: onCloseReport,
+                            },
+                        ]
+                    )
+                } else {
+                    Toast.show(error);
+                }
+            })
+            .catch(error => {
+                Toast.show('Cannot report chat. Please try again later.');
+            })
+    }
+
     render() {
         const { chatReport, onCloseReport } = this.props;
         return chatReport && (
@@ -44,13 +73,14 @@ export default class ReportChat extends PureComponent {
                 </View>
                 <View style={styles.inLineButtons}>
                     <TouchableOpacity activeOpacity={0.8}
-                        style={styles.pressItem}>
+                        style={styles.pressItem}
+                        onPress={this.reportChat}>
                         <Text style={styles.pressItemText}>Report Abuse</Text>
                     </TouchableOpacity>
-                    {chatReport.text && <TouchableOpacity activeOpacity={0.8}
+                    {/* {chatReport.text && <TouchableOpacity activeOpacity={0.8}
                         style={styles.pressItem}>
                         <Text style={styles.pressItemText}>Translate to English</Text>
-                    </TouchableOpacity>}
+                    </TouchableOpacity>} */}
                 </View>
             </View>
         )
@@ -81,13 +111,13 @@ const styles = StyleSheet.create({
     pressItem: {
         paddingHorizontal: 20,
         paddingTop: 10,
-        flex: 1
     },
     pressItemText: {
         fontSize: 14,
         color: '#aaa'
     },
     inLineButtons: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     }
 })

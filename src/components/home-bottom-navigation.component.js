@@ -114,11 +114,11 @@ export const HomeBottomNavigation = ({ navigation, state, descriptors }) => {
                     icon={(props) => renderTabIcons('Score Card', focusedRoute, props)}
                     style={styles.bottomTab}
                 />
-                <BottomNavigationTab
+                {/* <BottomNavigationTab
                     title={() => renderTabTitle('Feed', focusedRoute)}
                     icon={(props) => renderTabIcons('Feed', focusedRoute, props)}
                     style={styles.bottomTab}
-                />
+                /> */}
                 <BottomNavigationTab
                     title={() => renderTabTitle('Account', focusedRoute)}
                     icon={(props) => renderTabIcons('Account', focusedRoute, props)}

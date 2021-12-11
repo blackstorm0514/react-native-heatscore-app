@@ -10,7 +10,7 @@ import {
     TopNavigation, Text
 } from '@ui-kitten/components';
 import { ArrowIosBackIcon } from '../../libs/icons';
-import { TabView, TabBar } from 'react-native-tab-view';
+import { TabView, TabBar, TabBarTop } from 'react-native-tab-view';
 import RenderEventMatchupComponent from './components/RenderEventMatchupComponent';
 import RenderEventChatComponent from './components/RenderEventChatComponent';
 import { truncateString } from '../../libs/functions';
@@ -19,6 +19,7 @@ import { getEventDetail } from '../../redux/services';
 import RenderEventLineupComponent from './components/RenderEventLineupComponent';
 import RenderEventHistoryComponent from './components/RenderEventHistoryComponent';
 
+const screenWidth = Dimensions.get('window').width;
 class EventDetailScreen extends Component {
     constructor(props) {
         super(props);
@@ -100,15 +101,16 @@ class EventDetailScreen extends Component {
                 scrollEnabled
                 style={{
                     backgroundColor: '#121212',
-                    paddingVertical: 0
+                    paddingVertical: 0,
+                    justifyContent: 'center',
                 }}
                 indicatorStyle={{
-                    backgroundColor: 'yellow',
+                    backgroundColor: '#E10032',
                     height: 1,
                     marginVertical: 0,
                 }}
                 tabStyle={{
-                    width: 'auto',
+                    width: 70,
                     paddingVertical: 0,
                     paddingHorizontal: 2,
                     marginVertical: 0,
@@ -121,6 +123,8 @@ class EventDetailScreen extends Component {
                     marginVertical: 0,
                     paddingVertical: 0,
                 }}
+                activeColor='#E10032'
+                inactiveColor='white'
                 renderIcon={this.renderIcon}
             />
         </View>
@@ -202,6 +206,8 @@ const styles = StyleSheet.create({
     tabBarContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
-        backgroundColor: '#121212'
+        backgroundColor: '#121212',
+        alignItems: 'center',
+        width: screenWidth
     }
 });

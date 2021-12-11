@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
 import { Button, Input } from '@ui-kitten/components';
 import { LoadingIndicator } from './LoadingIndicator';
 import firestore from '@react-native-firebase/firestore';
@@ -15,6 +15,8 @@ import { v4 as uuidv4 } from 'uuid';
 import ChatInformModal from './chats/ChatInformModal';
 import RenderChatItem from './chats/RenderChatItem';
 import ReportChat from './chats/ReportChat';
+import { actions } from '../../../redux/reducer';
+
 const MESSAGE_LIMIT = 20;
 
 class RenderEventChatComponent extends Component {
@@ -153,12 +155,21 @@ class RenderEventChatComponent extends Component {
 
     handleSend = (messages) => {
         const { room_id } = this.state;
-        const { user } = this.props;
+        const { user, addChatItemAction, suspendTillText } = this.props;
+        const date = new Date();
+        if (suspendTillText && date.getTime() < new Date(suspendTillText).getTime()) {
+            return Alert.alert(
+                'Timeout!',
+                'Try to slow down how often you\'re sending messages to make the chat a better experience.',
+                [{ text: 'ACCEPT' }]
+            )
+        }
         const message = messages[0];
         if (message && user == null) {
             Toast.show('Please login to send message.');
             return;
         }
+
         if (message && room_id) {
             firestore()
                 .collection('ROOMS')
@@ -166,16 +177,25 @@ class RenderEventChatComponent extends Component {
                 .collection('MESSAGES')
                 .add({
                     _id: message._id,
-                    createdAt: new Date(),
+                    createdAt: date,
                     text: message.text,
                     user: message.user
                 })
         }
+        addChatItemAction({ type: 'text' });
     }
 
     onGIFSelect = (url) => {
         const { room_id } = this.state;
-        const { user } = this.props;
+        const { user, addChatItemAction, suspendTillImage } = this.props;
+        const date = new Date();
+        if (suspendTillImage && date.getTime() < new Date(suspendTillImage).getTime()) {
+            return Alert.alert(
+                'Timeout!',
+                'You can post up to 2 GIFs every 5 minutes. Please try again later.',
+                [{ text: 'ACCEPT' }]
+            )
+        }
         if (url && room_id) {
             firestore()
                 .collection('ROOMS')
@@ -183,12 +203,13 @@ class RenderEventChatComponent extends Component {
                 .collection('MESSAGES')
                 .add({
                     _id: uuidv4(),
-                    createdAt: new Date(),
+                    createdAt: date,
                     image: url,
                     user: user
                 })
         }
         this.onCloseModal();
+        addChatItemAction({ type: 'image' });
     }
 
     componentWillUnmount() {
@@ -311,8 +332,8 @@ class RenderEventChatComponent extends Component {
     }
 
     onSelectReport = async (chatReport) => {
-        this._Mounted && await this.setState({ chatReport })
-        this.reportModalizeRef.current?.open();
+        // this._Mounted && await this.setState({ chatReport })
+        // this.reportModalizeRef.current?.open();
     }
 
     onCloseReport = async () => {
@@ -372,9 +393,11 @@ class RenderEventChatComponent extends Component {
 
 const mapStateToProps = (state) => ({
     user: state.user,
+    suspendTillText: state.suspendTillText,
+    suspendTillImage: state.suspendTillImage,
 });
 
-export default connect(mapStateToProps, null)(RenderEventChatComponent);
+export default connect(mapStateToProps, { addChatItemAction: actions.addChatItemAction })(RenderEventChatComponent);
 
 const styles = StyleSheet.create({
     container: {

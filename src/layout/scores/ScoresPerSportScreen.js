@@ -86,6 +86,7 @@ class ScoresPerSportScreen extends Component {
                 paddingVertical: 0
             }}
             activeColor='#E10032'
+            inactiveColor='white'
         />
     )
 
