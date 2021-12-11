@@ -3,6 +3,7 @@ import {
     StyleSheet,
     View,
     TouchableOpacity,
+    Dimensions
 } from 'react-native';
 import { Button, Text, ViewPager } from '@ui-kitten/components';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
@@ -15,6 +16,8 @@ import Toast from 'react-native-simple-toast';
 import { capitalizeString, getTimeLineName, truncateString } from "../../../libs/functions";
 import ManageAlertComponent from "./ManageAlertComponent";
 import { addScoreCard } from "../../../redux/services";
+
+const screenHeight = Dimensions.get('screen').height;
 
 export default class AddScoreModalContent extends PureComponent {
     constructor(props) {
@@ -159,7 +162,7 @@ export default class AddScoreModalContent extends PureComponent {
         return (
             <ViewPager selectedIndex={selectedIndex}
                 swipeEnabled={false}
-                style={{ backgroundColor: '#111', flex: 1 }}>
+                style={{ backgroundColor: '#121212', flex: 1 }}>
                 <View style={styles.container} key="1">
                     <TouchableOpacity style={styles.itemContainer}
                         activeOpacity={0.8}
@@ -198,10 +201,8 @@ export default class AddScoreModalContent extends PureComponent {
                         disabled={submitting}
                     />
                 </View>
-                <View style={styles.container} key="2">
-                    <SelectEventComponent
-                        onSelect={this.onSelectEvent} />
-                </View>
+                <SelectEventComponent key="2"
+                    onSelect={this.onSelectEvent} />
             </ViewPager>
         )
     }
@@ -211,7 +212,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: 20,
-        marginTop: 10
+        marginTop: 10,
+        minHeight: screenHeight - 140
     },
     itemContainer: {
         flexDirection: 'row',

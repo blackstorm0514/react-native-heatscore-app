@@ -12,6 +12,7 @@ export default class RenderEventHistoryComponent extends Component {
                 <Text style={styles.lastMatchesTitle}>{title}</Text>
                 {events.map(event => {
                     const { home, away, ss, time, id, league } = event;
+                    if (!ss) return null;
                     const scores = ss.split('-');
                     const homeScore = parseInt(scores[0]);
                     const awayScore = parseInt(scores[1]);

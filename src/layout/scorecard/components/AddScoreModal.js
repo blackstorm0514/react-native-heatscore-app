@@ -73,7 +73,9 @@ export default class AddScoreModal extends PureComponent {
                 ref={this.addModalRef}
                 HeaderComponent={this.renderModalHeader}
                 disableScrollIfPossible
-                modalStyle={{ backgroundColor: '#111' }}>
+                // rootStyle={{ flex: 1 }}
+                // childrenStyle={{ flex: 1 }}
+                modalStyle={{ backgroundColor: '#121212' }}>
                 <AddScoreModalContent submit={submit}
                     onAddScoreCard={this.onAddScoreCard} />
             </Modalize>
