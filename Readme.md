@@ -8,7 +8,7 @@ react-native bundle --platform android --dev false --entry-file index.js --bundl
 gradlew assembleDebug
 -- Release
 gradlew assembleRelease
-gradlow bundleRelease
+gradlew bundleRelease
 
 # Get SHA Key
 keytool -list -v -keystore heatscore.keystore -alias heatscore -storepass heatscore -keypass heatscore
