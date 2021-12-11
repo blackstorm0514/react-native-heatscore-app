@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react';
-import { StyleSheet, View, Dimensions, BackHandler, Alert } from 'react-native';
+import { StyleSheet, View, Dimensions, BackHandler, Alert, Image } from 'react-native';
 import { TopNavigation, Text } from '@ui-kitten/components';
 import { TabView, TabBar } from 'react-native-tab-view';
 import ScoresPerSportScreen from './ScoresPerSportScreen';
@@ -14,11 +14,31 @@ const iconName = {
     "Soccer": "sports-soccer",
 }
 
-const getSportsIcon = (sport, color) => (
-    <MaterialIcons name={iconName[sport]}
-        size={16} color={color ? color : "white"}
-    />
-)
+const logoImages = {
+    "NBA": require('../../assets/images/league_logos/nba.png'),
+    'NFL': require('../../assets/images/league_logos/nfl.png'),
+    'NCAAF': require('../../assets/images/league_logos/ncaaf.png'),
+    'CFL': require('../../assets/images/league_logos/cfl.png'),
+    'NCAAB': require('../../assets/images/league_logos/ncaab.png'),
+    'UEFA CL': require('../../assets/images/league_logos/uefa.png'),
+}
+
+const getSportsIcon = (sport, color) => {
+    if (iconName[sport]) {
+        return (
+            <MaterialIcons name={iconName[sport]}
+                size={20} color={color ? color : "white"}
+            />
+        )
+    }
+    if (logoImages[sport]) {
+        return (
+            <Image source={logoImages[sport]}
+                style={styles.leagueLogoImage}
+            />
+        )
+    }
+}
 
 class ScoresScreen extends Component {
     constructor(props) {
@@ -118,7 +138,7 @@ class ScoresScreen extends Component {
                 }}
                 activeColor='#E10032'
                 inactiveColor='white'
-            // renderIcon={this.renderIcon}
+                renderIcon={this.renderIcon}
             />
         </View>
     )
@@ -188,5 +208,10 @@ const styles = StyleSheet.create({
     tabBarContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
+    },
+    leagueLogoImage: {
+        width: 20,
+        height: 20,
+        resizeMode: 'contain'
     }
 });
