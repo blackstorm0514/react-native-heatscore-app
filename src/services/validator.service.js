@@ -13,7 +13,7 @@ function isEmail(options) {
 
 function min(options) {
     const number = options.number || 6;
-    return options.value.length >= number
+    return !options.value || options.value.length >= number
         || options.message
         || `${options.fieldName} should be at least ${number} characters`;
 }
@@ -66,7 +66,7 @@ const schema = {
     ],
     password: [
         { validator: isString },
-        { validator: required, options: { message: 'Password is required' } },
+        { validator: required, options: { message: 'Password is required' }, hasTag: 'register' },
         { validator: min, options: { number: 8, message: 'Password should be at least 8 characters' } },
         // { validator: involveLetterAndNumberAndSpecialCharacter },
     ],

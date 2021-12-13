@@ -6,6 +6,7 @@ import AddFavoritesScreen from '../layout/auth/favorites/AddFavoritesScreen';
 import { AuthSignupNavigator } from './auth.signup.navigator';
 import SigninScreen from '../layout/auth/signin/SigninScreen';
 import ForgotPasswordScreen from '../layout/auth/forgot/ForgotPasswordScreen';
+import AccountDetailScreen from '../layout/auth/account/AccountDetailScreen';
 
 const Stack = createStackNavigator();
 
@@ -19,6 +20,7 @@ export const AuthNavigator = ({ navigation }) => {
             <Stack.Screen name="SignUp" component={AuthSignupNavigator} options={{ headerShown: false }} />
             <Stack.Screen name="SignIn" component={SigninScreen} options={{ headerShown: false }} />
             <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="AccountDetail" component={AccountDetailScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
     )
 };

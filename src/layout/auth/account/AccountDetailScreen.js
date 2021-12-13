@@ -1,12 +1,13 @@
 import React, { PureComponent, useState } from 'react';
 import { Text, Layout, Button, Input, Spinner } from '@ui-kitten/components';
 import { StyleSheet, View, BackHandler, SafeAreaView } from 'react-native';
-import { TopNavigationComponent } from './components/TopNavigationComponent';
+import { TopNavigationComponent } from '../signup/components/TopNavigationComponent';
 import { KeyboardAvoidingView } from '../../../components/keyboard-avoiding-view';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { ValidateFields } from '../../../services/validator.service';
-import { GoogleLogOut } from '../../../services/google.service';
-import { signUp } from '../../../redux/services';
+import { updateProfile } from '../../../redux/services';
+import { connect } from 'react-redux';
+import { actions } from '../../../redux/reducer';
+import Toast from 'react-native-simple-toast';
 
 const LoadingIndicator = (props) => (
     <View style={[props.style, styles.indicator]}>
@@ -18,28 +19,22 @@ const errorOject = {
     username: null,
     firstname: null,
     lastname: null,
-    email: null,
     password: null,
     passwordConfirm: null,
     server: null
 };
 
-class SignupDetailForm extends PureComponent {
+class AccountDetailForm extends PureComponent {
     constructor(props) {
         super(props);
-        const { route: { params } } = props;
-        const { phone, facebookIdToken, googleIdToken, email, firstname, lastname, username } = params;
+        const { user } = this.props;
         this.state = {
-            phone: phone,
-            username: username ? username : '',
-            firstname: firstname ? firstname : '',
-            lastname: lastname ? lastname : '',
-            email: email ? email : '',
+            username: user.username,
+            firstname: user.firstname,
+            lastname: user.lastname,
             password: '',
             passwordConfirm: '',
-            success: false,
             submitting: false,
-            editable: (facebookIdToken || googleIdToken) ? false : true,
             error: errorOject
         }
         this._Mounted = false;
@@ -58,21 +53,25 @@ class SignupDetailForm extends PureComponent {
     }
 
     onSubmit = () => {
-        const { username, firstname, lastname, email, password, passwordConfirm, phone } = this.state;
-        const result = ValidateFields({ username, firstname, lastname, email, password, passwordConfirm }, { tags: ['register'] });
+        const { username, firstname, lastname, password, passwordConfirm } = this.state;
+        const { user, setUserAction } = this.props;
+        const result = ValidateFields({ username, firstname, lastname, password, passwordConfirm });
         if (result != true) {
             this._Mounted && this.setState({ error: { ...errorOject, ...result } });
             return;
         }
         this._Mounted && this.setState({ error: errorOject, submitting: true });
-
-        signUp({ username, firstname, lastname, email, password, passwordConfirm, phone })
+        const profileObj = { username, firstname, lastname, password };
+        if (password) {
+            delete profileObj.password;
+        }
+        updateProfile(profileObj)
             .then(({ data }) => {
                 const { success, error } = data;
                 if (success) {
-                    this._Mounted && this.setState({ submitting: false, success: true });
-
-                    GoogleLogOut();
+                    this._Mounted && this.setState({ submitting: false });
+                    setUserAction({ ...user, ...profileObj });
+                    Toast.show('Profile successfully updated.');
                 } else {
                     this._Mounted && this.setState({ submitting: false, error: { ...errorOject, ...error } });
                 }
@@ -83,14 +82,12 @@ class SignupDetailForm extends PureComponent {
     }
 
     render() {
-        const { navigation } = this.props;
-        const { username, firstname, lastname, email, password, passwordConfirm, success, error, submitting, editable } = this.state;
+        const { username, firstname, lastname, password, passwordConfirm, error, submitting } = this.state;
         return (
             <KeyboardAvoidingView>
-                {!success && <Layout level="1" style={styles.layoutContainer}>
+                <Layout level="1" style={styles.layoutContainer}>
                     <View>
-                        <Text style={styles.titleText}>Few More Details</Text>
-                        <Text style={styles.offerText}>We just need a few more details to complete your account setup. Only your username will be displayed publicly.</Text>
+                        <Text style={styles.titleText}>Edit Account Details</Text>
                         <Layout style={styles.boxLayout}>
                             <Text style={styles.formLabel}>Username (min 6 characters)</Text>
                             <Input
@@ -130,19 +127,6 @@ class SignupDetailForm extends PureComponent {
                             </Layout>
                         </Layout>
                         <Layout style={styles.boxLayout}>
-                            <Text style={styles.formLabel}>Email</Text>
-                            <Input
-                                style={styles.formInput}
-                                status='control'
-                                placeholder='jone.doe@gmail.com'
-                                placeholderTextColor="#888"
-                                value={email}
-                                onChangeText={(text) => this._Mounted && this.setState({ email: text })}
-                                disabled={!editable}
-                            />
-                            {error && error.email && <Text style={styles.errorText}>{error.email}</Text>}
-                        </Layout>
-                        <Layout style={styles.boxLayout}>
                             <Text style={styles.formLabel}>Create a Password</Text>
                             <Input
                                 style={styles.formInput}
@@ -175,28 +159,15 @@ class SignupDetailForm extends PureComponent {
                         size='small'
                         accessoryLeft={submitting ? LoadingIndicator : null}
                         onPress={this.onSubmit}>
-                        {submitting ? null : () => <Text style={styles.nextButtonText}>N E X T</Text>}
+                        {submitting ? null : () => <Text style={styles.nextButtonText}>S U B M I T</Text>}
                     </Button>
-                </Layout>}
-                {success && <Layout level="1" style={styles.layoutContainer}>
-                    <View style={styles.completeContainer}>
-                        <Ionicons size={100} color='#E10032' name='checkmark-circle-outline' />
-                        <Text style={styles.youareInText}>You're in</Text>
-                        <Text style={styles.accountCompletedText}>Your account has been completed. You will receive a confirmation email</Text>
-                    </View>
-                    <Button
-                        style={styles.nextButton}
-                        size='large'
-                        onPress={() => navigation.navigate('Profile')}>
-                        C O N T I N U E
-                    </Button>
-                </Layout>}
+                </Layout>
             </KeyboardAvoidingView>
         );
     }
 };
 
-export default class SignupDetailScreen extends PureComponent {
+class AccountDetailScreen extends PureComponent {
     componentDidMount() {
         const { navigation } = this.props;
         this.backHandler = BackHandler.addEventListener(
@@ -210,17 +181,23 @@ export default class SignupDetailScreen extends PureComponent {
     }
 
     render() {
-        const { navigation } = this.props;
+        const { navigation, user, setUserAction } = this.props;
         return (
             <SafeAreaView style={styles.container}>
-                <TopNavigationComponent navigation={navigation}
-                    backPosition="Profile"
-                    isSignout />
-                <SignupDetailForm {...this.props} />
+                <TopNavigationComponent navigation={navigation} backPosition="Profile" />
+                <AccountDetailForm {...this.props}
+                    user={user}
+                    setUserAction={setUserAction} />
             </SafeAreaView>
         );
     }
 };
+
+const mapStateToProps = (state) => ({
+    user: state.user,
+});
+
+export default connect(mapStateToProps, { setUserAction: actions.setUserAction })(AccountDetailScreen);
 
 const styles = StyleSheet.create({
     container: {

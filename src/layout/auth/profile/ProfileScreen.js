@@ -79,7 +79,7 @@ class ProfileScreen extends PureComponent {
                 {user && <ProfileSettingComponent
                     style={styles.profileSetting}
                     title='Account Details'
-                    navigateAction={() => { }}
+                    navigateAction={() => navigation.navigate('AccountDetail')}
                 />}
                 <ProfileSettingComponent
                     style={[styles.profileSetting, styles.section]}
