@@ -80,8 +80,8 @@ class ScoreCardPerDayScreen extends PureComponent {
                     onRequestClose={this.onHideMenu}>
                     <MenuItem disabled textStyle={styles.menuTitleTextStyle}>Actions</MenuItem>
                     <MenuDivider color="#555" />
-                    <MenuItem onPress={() => this.onPressViewMode('basic')} textStyle={styles.menuTextStyle}>Basic View</MenuItem>
-                    <MenuItem onPress={() => this.onPressViewMode('total')} textStyle={styles.menuTextStyle}>Total View</MenuItem>
+                    <MenuItem onPress={() => this.onPressViewMode('basic')} textStyle={styles.menuTextStyle}>Reg View</MenuItem>
+                    <MenuItem onPress={() => this.onPressViewMode('total')} textStyle={styles.menuTextStyle}>O/U View</MenuItem>
                 </Menu>}
             </View>
         );
@@ -193,8 +193,8 @@ class ScoreCardPerDayScreen extends PureComponent {
     }
 
     renderEmptyList = () => (
-        <View style={{ flex: 1, alignItems: 'center', paddingHorizontal: 10 }}>
-            <Text style={{ fontSize: 16, marginTop: 20, textAlign: 'center' }}>The Score Card lets you track the</Text>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text style={{ fontSize: 16, textAlign: 'center' }}>The Score Card lets you track the</Text>
             <Text style={{ fontSize: 16, textAlign: 'center' }}>progress of your bet. Click on +</Text>
             <Text style={{ fontSize: 16, textAlign: 'center' }}>to add a game to your score card.</Text>
         </View>
@@ -216,12 +216,12 @@ class ScoreCardPerDayScreen extends PureComponent {
         return (
             <View style={styles.container}>
                 {loading && <LoadingIndicator style={styles.loadingIndicator} />}
-                {!loading && <FlatList
+                {!loading && (!data || !data.length) && this.renderEmptyList()}
+                {!loading && data && data.length > 0 && <FlatList
                     style={styles.list}
-                    data={data && data.length ? ['In-play', 'Not Started', 'Ended', 'Others'] : []}
+                    data={['In-play', 'Not Started', 'Ended', 'Others']}
                     renderItem={this.renderScoreList}
                     keyExtractor={(item, index) => index.toString()}
-                    ListEmptyComponent={this.renderEmptyList}
                 />}
                 <TouchableOpacity
                     activeOpacity={0.7}
@@ -252,7 +252,8 @@ const styles = StyleSheet.create({
     },
     list: {
         backgroundColor: '#121212',
-        paddingBottom: 20
+        paddingBottom: 20,
+        flex: 1,
     },
     listHeader: {
         marginVertical: 5,

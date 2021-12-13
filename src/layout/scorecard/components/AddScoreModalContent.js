@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
         alignContent: 'center'
     },
     itemContentText: {
-        fontSize: 12,
+        fontSize: 14,
         fontWeight: '100',
         color: '#999',
         alignItems: 'center',

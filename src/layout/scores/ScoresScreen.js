@@ -3,53 +3,19 @@ import { StyleSheet, View, Dimensions, BackHandler, Alert, Image } from 'react-n
 import { TopNavigation, Text } from '@ui-kitten/components';
 import { TabView, TabBar } from 'react-native-tab-view';
 import ScoresPerSportScreen from './ScoresPerSportScreen';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-
-const iconName = {
-    "All": "sports",
-    "Football": "sports-football",
-    "Basketball": "sports-basketball",
-    "Hockey": "sports-hockey",
-    "Baseball": "sports-baseball",
-    "Soccer": "sports-soccer",
-}
-
-const logoImages = {
-    "NBA": require('../../assets/images/league_logos/nba.png'),
-    'NFL': require('../../assets/images/league_logos/nfl.png'),
-    'NCAAF': require('../../assets/images/league_logos/ncaaf.png'),
-    'CFL': require('../../assets/images/league_logos/cfl.png'),
-    'NCAAB': require('../../assets/images/league_logos/ncaab.png'),
-    'UEFA CL': require('../../assets/images/league_logos/uefa.png'),
-}
-
-const getSportsIcon = (sport, color) => {
-    if (iconName[sport]) {
-        return (
-            <MaterialIcons name={iconName[sport]}
-                size={20} color={color ? color : "white"}
-            />
-        )
-    }
-    if (logoImages[sport]) {
-        return (
-            <Image source={logoImages[sport]}
-                style={styles.leagueLogoImage}
-            />
-        )
-    }
-}
+import { getSportsIcon } from '../../libs/functions';
 
 class ScoresScreen extends Component {
     constructor(props) {
         super(props);
 
         const tabs = [
-            { key: null, title: 'All', type: 'sport' },
             { key: 2274, title: 'NBA', type: 'league' },
             { key: 459, title: 'NFL', type: 'league' },
             { key: 474, title: 'NCAAF', type: 'league' },
+            { key: null, title: 'All', type: 'sport' },
             { key: 270, title: 'CFL', type: 'league' },
+            { key: 1926, title: 'NHL', type: 'league' },
             { key: 2638, title: 'NCAAB', type: 'league' },
             { key: 1040, title: 'UEFA CL', type: 'league' },
             { key: 1, title: 'Soccer', type: 'sport' },
@@ -59,7 +25,7 @@ class ScoresScreen extends Component {
             { key: 16, title: 'Baseball', type: 'sport' },
         ];
         this.state = {
-            index: 0,
+            index: 3,
             routes: tabs
         }
         this._Mounted = false;
@@ -116,7 +82,7 @@ class ScoresScreen extends Component {
                     paddingVertical: 0,
                 }}
                 indicatorStyle={{
-                    backgroundColor: '#E10032',
+                    backgroundColor: '#B90000',
                     height: 1,
                     marginVertical: 0,
                 }}
@@ -136,7 +102,7 @@ class ScoresScreen extends Component {
                     textTransform: 'none',
                     backgroundColor: '#121212'
                 }}
-                activeColor='#E10032'
+                activeColor='#B90000'
                 inactiveColor='white'
                 renderIcon={this.renderIcon}
             />
@@ -144,7 +110,7 @@ class ScoresScreen extends Component {
     )
 
     renderIcon = ({ route, color }) => {
-        return getSportsIcon(route.title, color);
+        return getSportsIcon(route.title, color, 20);
     }
 
     renderTitle = () => {
@@ -209,9 +175,4 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
     },
-    leagueLogoImage: {
-        width: 20,
-        height: 20,
-        resizeMode: 'contain'
-    }
 });

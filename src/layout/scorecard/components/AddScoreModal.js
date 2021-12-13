@@ -48,7 +48,7 @@ export default class AddScoreModal extends PureComponent {
                     onPress={this.onCloseModal}>
                     <Text style={styles.modalHeaderAction}>Cancel</Text>
                 </TouchableOpacity>
-                <Text style={styles.modalHeaderTitle}>Add Game</Text>
+                <Text style={styles.modalHeaderTitle}>Add Your Bet</Text>
                 <TouchableOpacity activeOpacity={0.7}
                     disabled={submit}
                     onPress={() => this._Mounted && this.setState({ submit: true })}>

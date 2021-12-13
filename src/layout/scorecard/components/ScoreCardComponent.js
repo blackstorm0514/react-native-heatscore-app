@@ -98,13 +98,13 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         marginTop: 1,
-        backgroundColor: '#101010',
     },
     eventWrapper: {
         paddingTop: 2,
         borderLeftWidth: 6,
         borderLeftColor: '#FFF',
-        paddingBottom: 5
+        paddingBottom: 5,
+        backgroundColor: '#202020',
     },
     winContainer: {
         borderLeftColor: 'green',
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     eventItemStatus: {
         flex: 2,
         justifyContent: 'center',
-        paddingRight: 8,
+        paddingRight: 10,
     },
     eventItemStatusText: {
         fontSize: 13,

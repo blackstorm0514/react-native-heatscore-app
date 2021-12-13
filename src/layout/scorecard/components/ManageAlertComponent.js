@@ -69,6 +69,7 @@ export default class ManageAlertComponent extends PureComponent {
 
 const styles = StyleSheet.create({
     container: {
+        marginTop: 20,
     },
     titleContainer: {
         flexDirection: 'row',
@@ -80,14 +81,14 @@ const styles = StyleSheet.create({
         color: '#999'
     },
     toggleCircleStyle: {
-        width: 14,
-        height: 14,
-        borderRadius: 7,
+        width: 16,
+        height: 16,
+        borderRadius: 8,
     },
     toggleContainerStyle: {
-        width: 30,
-        height: 16,
-        borderRadius: 10,
+        width: 36,
+        height: 20,
+        borderRadius: 18,
         padding: 2,
     },
     toggleItemContainer: {
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
     },
     toggleItemTitle: {
-        fontSize: 13,
+        fontSize: 14,
         fontWeight: '600',
         color: 'white'
     },

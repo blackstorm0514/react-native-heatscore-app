@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Image, ScrollView } from 'react-native';
 import { LoadingIndicator } from './LoadingIndicator';
 import { Text } from '@ui-kitten/components';
-import { getMatchScore, getStatusString } from '../../../libs/functions';
+import { formatDateStr, getMatchScore, getStatusString } from '../../../libs/functions';
 import ScoreBoardComponent from './matchup/ScoreBoardComponent';
 import GameDetailComponent from './matchup/GameDetailComponent';
 import GameEventsComponent from './matchup/GameEventsComponent';
@@ -21,20 +21,21 @@ export default class RenderEventMatchupComponent extends Component {
                 <Text style={styles.noDataText}>No Data Availale.</Text>
             );
         }
-        const { home, away, extra, events, scores, time_status, sport, timer, stats } = event;
+        const { home, away, extra, events, scores, time_status, sport, timer, stats, time } = event;
         const { status_text, status_class } = getStatusString(time_status, timer, sport);
         const { home_score, away_score } = getMatchScore(sport, scores, 'game');
         return (
             <View>
                 <View style={styles.mainBoard}>
                     {status_text && <Text style={[styles.statusText, status_class]}>{status_text}</Text>}
+                    {!status_text && <Text style={[styles.statusText, styles.upcomingEvent]}>{formatDateStr(time)}</Text>}
                     <View style={styles.mainBoardItem}>
                         <Image
                             style={styles.mainTeamLogoImage}
                             source={{ uri: `https://assets.b365api.com/images/team/b/${home.image_id}.png` }}
                         />
                         <Text style={styles.mainBoardTeamName}>{home.name}</Text>
-                        <Text style={styles.mainBoardScore}>{home_score}</Text>
+                        <Text style={styles.mainBoardScore}>{home_score ? home_score : '-'}</Text>
                     </View>
                     <View style={styles.mainBoardItem}>
                         <Image
@@ -42,7 +43,7 @@ export default class RenderEventMatchupComponent extends Component {
                             source={{ uri: `https://assets.b365api.com/images/team/b/${away.image_id}.png` }}
                         />
                         <Text style={styles.mainBoardTeamName}>{away.name}</Text>
-                        <Text style={styles.mainBoardScore}>{away_score}</Text>
+                        <Text style={styles.mainBoardScore}>{away_score ? away_score : '-'}</Text>
                     </View>
                 </View>
                 {scores && <ScoreBoardComponent
@@ -102,24 +103,28 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 10
     },
+    upcomingEvent: {
+        fontSize: 14,
+        color: "#999"
+    },
     mainBoardItem: {
         flexDirection: 'row',
         alignItems: 'center',
         marginVertical: 5
     },
     mainTeamLogoImage: {
-        width: 40,
-        height: 40,
+        width: 60,
+        height: 60,
         resizeMode: 'contain',
     },
     mainBoardTeamName: {
-        fontSize: 16,
+        fontSize: 20,
         marginLeft: 14,
-        fontWeight: 'bold'
+        fontWeight: '500'
     },
     mainBoardScore: {
         fontSize: 30,
         marginLeft: 'auto',
-        fontWeight: 'bold'
+        fontWeight: '800'
     }
 });

@@ -2,26 +2,11 @@ import React, { PureComponent } from 'react';
 import { StyleSheet, View, Dimensions, TouchableOpacity, FlatList } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import RenderEventComponent from './RenderEventComponent';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
 import { actions } from '../../../redux/reducer';
+import { getSportsIcon } from '../../../libs/functions';
 
 const screenWidth = Dimensions.get('window').width;
-const iconName = {
-    "American Football": "sports-football",
-    "Basketball": "sports-basketball",
-    "Ice Hockey": "sports-hockey",
-    "Baseball": "sports-baseball",
-    "Soccer": "sports-soccer",
-    "hide": "keyboard-arrow-down",
-    "show": "keyboard-arrow-up"
-}
-
-const getSportsIcon = (sport) => (
-    <MaterialIcons name={iconName[sport]}
-        size={16} color="#E10032"
-    />
-)
 
 class LeaguesListComponent extends PureComponent {
     renderLeagueHeader = () => {
@@ -30,7 +15,7 @@ class LeaguesListComponent extends PureComponent {
 
         return (
             <View style={styles.leagueTitle}>
-                {getSportsIcon(league.sport.name)}<Text style={styles.leagueTitleText} numberOfLines={1}> {league.name}</Text>
+                {getSportsIcon(league.sport.name, '#FFF', 16)}<Text style={styles.leagueTitleText} numberOfLines={1}> {league.name}</Text>
                 {seeRounds && <TouchableOpacity activeOpacity={0.8}
                     onPress={() => seeRounds()}
                     style={styles.seeRoundButton}>
@@ -39,7 +24,7 @@ class LeaguesListComponent extends PureComponent {
                 <TouchableOpacity activeOpacity={0.8}
                     onPress={() => toggleCollapseLeagueAction(league.league_id)}
                     style={styles.collapseButtn}>
-                    {getSportsIcon(collapsed ? 'show' : 'hide')}
+                    {getSportsIcon(collapsed ? 'show' : 'hide', '#FFF', 16)}
                 </TouchableOpacity>
             </View>
         )
@@ -105,7 +90,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     leagueTitleText: {
-        color: '#E10032',
+        color: '#FFF',
         fontWeight: '500',
         maxWidth: '70%',
         fontSize: 14,
@@ -116,7 +101,7 @@ const styles = StyleSheet.create({
     },
     seeRoundText: {
         textTransform: 'uppercase',
-        color: '#E10032',
+        color: '#FFF',
         fontSize: 13,
         fontWeight: '400',
     },

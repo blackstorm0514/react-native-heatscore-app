@@ -80,7 +80,7 @@ class EventDetailScreen extends Component {
         const { home, away } = event;
         return <View style={{ paddingTop: 2 }}>
             <Text style={styles.titleText}>{truncateString(event.home.name)} vs {truncateString(event.away.name)}</Text>
-            <View style={styles.logoContainer}>
+            {/* <View style={styles.logoContainer}>
                 <Image
                     style={styles.teamLogoImage}
                     source={{ uri: `https://assets.b365api.com/images/team/m/${home.image_id}.png` }}
@@ -90,7 +90,7 @@ class EventDetailScreen extends Component {
                     style={styles.teamLogoImage}
                     source={{ uri: `https://assets.b365api.com/images/team/m/${away.image_id}.png` }}
                 />
-            </View>
+            </View> */}
         </View>
     }
 
@@ -105,7 +105,7 @@ class EventDetailScreen extends Component {
                     justifyContent: 'center',
                 }}
                 indicatorStyle={{
-                    backgroundColor: '#E10032',
+                    backgroundColor: '#B90000',
                     height: 1,
                     marginVertical: 0,
                 }}
@@ -123,7 +123,7 @@ class EventDetailScreen extends Component {
                     marginVertical: 0,
                     paddingVertical: 0,
                 }}
-                activeColor='#E10032'
+                activeColor='#B90000'
                 inactiveColor='white'
                 renderIcon={this.renderIcon}
             />

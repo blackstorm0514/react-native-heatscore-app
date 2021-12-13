@@ -1,10 +1,12 @@
-import { StyleSheet } from 'react-native';
+import React from 'react';
+import { StyleSheet, Image } from 'react-native';
 import { getBaseballMatchScore } from './getBaseballMatchScore';
 import { getBasketballMatchScore } from './getBasketballMatchScore';
 import { getFootballMatchScore } from './getFootballMatchScore';
 import { getIceHockeyMatchScore } from './getIceHockeyScore';
 import { getSoccerMatchScore } from './getSoccerMatchScore';
 import { format } from 'date-fns';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 export function capitalizeString(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -116,7 +118,7 @@ export function getStatusString(time_status, timer, sport) {
             status_class = styles.eventItemStatusInPlay;
             break;
         case "2":
-            status_text = 'Not Confirmed';
+            status_text = 'TBA';
             status_class = styles.eventItemStatusToBeConfirmed;
             break;
         case "3":
@@ -197,20 +199,66 @@ export function removeTeamNameFromEvent(event, team) {
     return event;
 }
 
+export function formatDateStr(time) {
+    return format(new Date(time), "eee MMM dd yyyy, HH:mm aa");
+}
+
+const iconName = {
+    "All": "sports",
+    "Football": "sports-football",
+    "Basketball": "sports-basketball",
+    "Hockey": "sports-hockey",
+    "Baseball": "sports-baseball",
+    "Soccer": "sports-soccer",
+    "hide": "keyboard-arrow-down",
+    "show": "keyboard-arrow-up",
+}
+
+const logoImages = {
+    "NBA": require('../assets/images/league_logos/nba.png'),
+    'NFL': require('../assets/images/league_logos/nfl.png'),
+    'NCAAF': require('../assets/images/league_logos/ncaaf.png'),
+    'CFL': require('../assets/images/league_logos/cfl.png'),
+    'NCAAB': require('../assets/images/league_logos/ncaab.png'),
+    'UEFA CL': require('../assets/images/league_logos/uefa.png'),
+    'NHL': require('../assets/images/league_logos/nhl.png')
+}
+
+export function getSportsIcon(title, color, size) {
+    if (iconName[title]) {
+        return (
+            <MaterialIcons name={iconName[title]}
+                size={size} color={color ? color : "white"}
+            />
+        )
+    }
+    if (logoImages[title]) {
+        return (
+            <Image source={logoImages[title]}
+                style={[styles.leagueLogoImage, { width: size, height: size }]}
+            />
+        )
+    }
+    return null;
+}
+
 const styles = StyleSheet.create({
     eventItemStatusInPlay: {
-        color: 'red'
+        color: '#F00'
     },
     eventItemStatusToBeConfirmed: {
         color: '#dda039'
     },
     eventItemStatusEnded: {
-        color: 'green'
+        color: '#FFF'
     },
     eventItemStatusOther: {
-        color: 'yellow'
+        color: '#FF0'
     },
     eventItemStatusNotStarted: {
-        color: 'white'
+        color: '#FFF'
     },
+    leagueLogoImage: {
+        resizeMode: 'contain'
+    }
 })

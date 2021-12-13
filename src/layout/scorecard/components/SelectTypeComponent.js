@@ -43,6 +43,7 @@ export default class SelectTypeComponent extends PureComponent {
 
 const styles = StyleSheet.create({
     container: {
+        marginTop: 10,
         paddingVertical: 6,
         borderBottomColor: '#222',
         borderBottomWidth: 1,
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     selectItemType: {
-        fontSize: 12,
+        fontSize: 14,
         marginLeft: 5
     },
     typeContainer: {

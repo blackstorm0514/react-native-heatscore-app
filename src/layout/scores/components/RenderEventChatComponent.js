@@ -16,6 +16,7 @@ import ChatInformModal from './chats/ChatInformModal';
 import RenderChatItem from './chats/RenderChatItem';
 import ReportChat from './chats/ReportChat';
 import { actions } from '../../../redux/reducer';
+import { KeyboardAvoidingView } from '../../../components/keyboard-avoiding-view';
 
 const MESSAGE_LIMIT = 20;
 
@@ -229,6 +230,7 @@ class RenderEventChatComponent extends Component {
             containerStyle={{
                 backgroundColor: '#111',
                 paddingTop: 6,
+                marginBottom: 4,
             }}
             primaryStyle={{ alignItems: 'center' }}
         />
@@ -271,12 +273,10 @@ class RenderEventChatComponent extends Component {
             <Actions
                 {...props}
                 containerStyle={{
-                    width: 40,
-                    height: 40,
+                    width: 30,
+                    height: 30,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginLeft: 4,
-                    marginRight: 4,
                     marginBottom: 0,
                     borderColor: '#ddd',
                     borderWidth: 1,
@@ -284,7 +284,7 @@ class RenderEventChatComponent extends Component {
                 }}
                 icon={() => (
                     <MaterialIcons
-                        size={32}
+                        size={24}
                         name="gif"
                         color="#ddd"
                     />
@@ -346,47 +346,49 @@ class RenderEventChatComponent extends Component {
         const { user } = this.props;
 
         return (
-            <View style={styles.container}>
-                <ChatInformModal />
-                <GiftedChat
-                    messages={[...recentChats, ...oldChats]}
-                    onSend={message => this.handleSend(message)}
-                    alwaysShowSend
-                    user={user ? user : { username: 'Anonymous' }}
-                    placeholder="Send a message..."
-                    scrollToBottom={true}
-                    renderDay={this.renderChatDay}
-                    renderMessage={this.renderChatItem}
-                    renderSend={this.renderSendButton}
-                    renderComposer={this.renderComposer}
-                    renderInputToolbar={this.renderInputToolbar}
-                    renderLoading={() => <LoadingIndicator style={styles.loadingIndicator} />}
-                    isLoadingEarlier={loadingEarlier}
-                    loadEarlier
-                    onLoadEarlier={this.onLoadEarlier}
-                    renderLoadEarlier={this.renderLoadEarlier}
-                    renderActions={this.renderActions}
-                    bottomOffset={10}
-                />
-                <Modalize
-                    ref={this.gifModalizeRef}
-                    HeaderComponent={this.renderModalHeader}
-                    scrollViewProps={{ showsVerticalScrollIndicator: true }}
-                    adjustToContentHeight={true}>
-                    <GifScroller
-                        inputText={gifSearch}
-                        handleGifSelect={this.onGIFSelect}
-                        onSelectReport={this.onSelectReport}
+            <KeyboardAvoidingView>
+                <View style={styles.container}>
+                    <ChatInformModal />
+                    <GiftedChat
+                        messages={[...recentChats, ...oldChats]}
+                        onSend={message => this.handleSend(message)}
+                        alwaysShowSend
+                        user={user ? user : { username: 'Anonymous' }}
+                        placeholder="Send a message..."
+                        scrollToBottom={true}
+                        renderDay={this.renderChatDay}
+                        renderMessage={this.renderChatItem}
+                        renderSend={this.renderSendButton}
+                        renderComposer={this.renderComposer}
+                        renderInputToolbar={this.renderInputToolbar}
+                        renderLoading={() => <LoadingIndicator style={styles.loadingIndicator} />}
+                        isLoadingEarlier={loadingEarlier}
+                        loadEarlier
+                        onLoadEarlier={this.onLoadEarlier}
+                        renderLoadEarlier={this.renderLoadEarlier}
+                        renderActions={this.renderActions}
+                        bottomOffset={10}
                     />
-                </Modalize>
-                <Modalize
-                    ref={this.reportModalizeRef}
-                    scrollViewProps={{ showsVerticalScrollIndicator: true }}
-                    adjustToContentHeight={true}>
-                    <ReportChat chatReport={chatReport}
-                        onCloseReport={this.onCloseReport} />
-                </Modalize>
-            </View>
+                    <Modalize
+                        ref={this.gifModalizeRef}
+                        HeaderComponent={this.renderModalHeader}
+                        scrollViewProps={{ showsVerticalScrollIndicator: true }}
+                        adjustToContentHeight={true}>
+                        <GifScroller
+                            inputText={gifSearch}
+                            handleGifSelect={this.onGIFSelect}
+                            onSelectReport={this.onSelectReport}
+                        />
+                    </Modalize>
+                    <Modalize
+                        ref={this.reportModalizeRef}
+                        scrollViewProps={{ showsVerticalScrollIndicator: true }}
+                        adjustToContentHeight={true}>
+                        <ReportChat chatReport={chatReport}
+                            onCloseReport={this.onCloseReport} />
+                    </Modalize>
+                </View>
+            </KeyboardAvoidingView>
         )
     }
 }

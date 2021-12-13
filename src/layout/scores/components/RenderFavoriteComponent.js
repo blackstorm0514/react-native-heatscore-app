@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     favoriteTitleText: {
-        color: '#E10032',
+        color: '#B90000',
         textTransform: 'uppercase',
         fontWeight: '500',
         fontSize: 14

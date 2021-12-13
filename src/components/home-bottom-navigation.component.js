@@ -41,19 +41,19 @@ const renderTabIcons = (name, currentRoute, otherProps) => {
     switch (name) {
         case 'Scores':
             active = currentRoute.name == 'Scores';
-            return <FootballIcon style={{ ...defaultStyle, tintColor: active ? '#E10032' : '#999' }} />
+            return <FootballIcon style={{ ...defaultStyle, tintColor: active ? '#B90000' : '#999' }} />
         case 'News':
             active = currentRoute.name == 'News';
-            return <NewsIcon style={{ ...defaultStyle, tintColor: active ? '#E10032' : '#999' }} />
+            return <NewsIcon style={{ ...defaultStyle, tintColor: active ? '#B90000' : '#999' }} />
         case 'Score Card':
             active = currentRoute.name == 'Score Card';
-            return <ClipboardIcon style={{ ...defaultStyle, tintColor: active ? '#E10032' : '#999' }} />
+            return <ClipboardIcon style={{ ...defaultStyle, tintColor: active ? '#B90000' : '#999' }} />
         case 'Feed':
             active = currentRoute.name == 'Feed';
-            return <BellIcon style={{ ...defaultStyle, tintColor: active ? '#E10032' : '#999' }} />
+            return <BellIcon style={{ ...defaultStyle, tintColor: active ? '#B90000' : '#999' }} />
         case 'Account':
             active = currentRoute.name == 'Auth';
-            return <UserIcon style={{ ...defaultStyle, tintColor: active ? '#E10032' : '#999' }} />
+            return <UserIcon style={{ ...defaultStyle, tintColor: active ? '#B90000' : '#999' }} />
     }
 }
 
@@ -63,19 +63,19 @@ const renderTabTitle = (name, currentRoute) => {
     switch (name) {
         case 'Scores':
             active = currentRoute.name == 'Scores';
-            return <Text style={{ ...defaultStyle, color: active ? '#E10032' : '#999' }} >{name}</Text>
+            return <Text style={{ ...defaultStyle, color: active ? '#B90000' : '#999' }} >{name}</Text>
         case 'News':
             active = currentRoute.name == 'News';
-            return <Text style={{ ...defaultStyle, color: active ? '#E10032' : '#999' }} >{name}</Text>
+            return <Text style={{ ...defaultStyle, color: active ? '#B90000' : '#999' }} >{name}</Text>
         case 'Score Card':
             active = currentRoute.name == 'Score Card';
-            return <Text style={{ ...defaultStyle, color: active ? '#E10032' : '#999' }} >{name}</Text>
+            return <Text style={{ ...defaultStyle, color: active ? '#B90000' : '#999' }} >{name}</Text>
         case 'Feed':
             active = currentRoute.name == 'Feed';
-            return <Text style={{ ...defaultStyle, color: active ? '#E10032' : '#999' }} >{name}</Text>
+            return <Text style={{ ...defaultStyle, color: active ? '#B90000' : '#999' }} >{name}</Text>
         case 'Account':
             active = currentRoute.name == 'Auth';
-            return <Text style={{ ...defaultStyle, color: active ? '#E10032' : '#999' }} >{name}</Text>
+            return <Text style={{ ...defaultStyle, color: active ? '#B90000' : '#999' }} >{name}</Text>
     }
 }
 

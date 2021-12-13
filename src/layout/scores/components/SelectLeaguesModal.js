@@ -9,6 +9,7 @@ import { LoadingIndicator } from './LoadingIndicator';
 import { getLeagueList } from '../../../redux/services';
 import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react-native";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { getSportsIcon } from '../../../libs/functions';
 
 const topLeagues = [
     {
@@ -32,20 +33,6 @@ const topLeagues = [
         "sport": "Baseball"
     }
 ];
-
-const iconName = {
-    "American Football": "sports-football",
-    "Basketball": "sports-basketball",
-    "Ice Hockey": "sports-hockey",
-    "Baseball": "sports-baseball",
-    "Soccer": "sports-soccer",
-}
-
-const getSportsIcon = (sport) => (
-    <MaterialIcons name={iconName[sport]}
-        size={14} color="white"
-    />
-)
 
 export default class SelectLeaguesModal extends PureComponent {
     constructor(props) {
@@ -84,7 +71,7 @@ export default class SelectLeaguesModal extends PureComponent {
             <TouchableOpacity key={index} style={styles.topLeagueItem}
                 activeOpacity={0.8}
                 onPress={() => setLeague(item)}>
-                {getSportsIcon(item.sport)}
+                {getSportsIcon(item.sport, '#FFF', 14)}
                 <Text style={styles.topLeagueText}>{item.name}</Text>
                 <MaterialIcons name="keyboard-arrow-right"
                     size={18} color="white"
@@ -113,7 +100,7 @@ export default class SelectLeaguesModal extends PureComponent {
         return (
             <Collapse key={index}>
                 <CollapseHeader style={styles.topLeagueItem}>
-                    {getSportsIcon(sport._id)}
+                    {getSportsIcon(sport._id, '#FFF', 14)}
                     <Text style={styles.topLeagueText}>{sport._id}</Text>
                 </CollapseHeader>
                 <CollapseBody>

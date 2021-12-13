@@ -10,36 +10,36 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 const TIMELINES_PER_SPORTS = {
     "Soccer": [
-        { name: 'Game', value: 'game' },
-        { name: 'H1', value: '1st_half' },
-        { name: 'H2', value: '2nd_half' },
+        { name: 'Full Game', value: 'game' },
+        { name: '1H', value: '1st_half' },
+        { name: '2H', value: '2nd_half' },
     ],
     "American Football": [
-        { name: 'Game', value: 'game' },
-        { name: 'H1', value: '1st_half' },
-        { name: 'H2', value: '2nd_half' },
+        { name: 'Full Game', value: 'game' },
+        { name: '1H', value: '1st_half' },
+        { name: '2H', value: '2nd_half' },
         { name: 'Q1', value: '1st_quarter' },
         { name: 'Q2', value: '2nd_quarter' },
         { name: 'Q3', value: '3rd_quarter' },
         { name: 'Q4', value: '4th_quarter' },
     ],
     "Basketball": [
-        { name: 'Game', value: 'game' },
-        { name: 'H1', value: '1st_half' },
-        { name: 'H2', value: '2nd_half' },
+        { name: 'Full Game', value: 'game' },
+        { name: '1H', value: '1st_half' },
+        { name: '2H', value: '2nd_half' },
         { name: 'Q1', value: '1st_quarter' },
         { name: 'Q2', value: '2nd_quarter' },
         { name: 'Q3', value: '3rd_quarter' },
         { name: 'Q4', value: '4th_quarter' },
     ],
     "Ice Hockey": [
-        { name: 'Game', value: 'game' },
+        { name: 'Full Game', value: 'game' },
         { name: 'P1', value: '1st_peorid' },
         { name: 'P2', value: '2nd_peorid' },
         { name: 'P3', value: '3rd_peorid' },
     ],
     "Baseball": [
-        { name: 'Game', value: 'game' },
+        { name: 'Full Game', value: 'game' },
         { name: 'I5', value: '5th_innings' },
     ],
 }
@@ -53,7 +53,7 @@ export default class SelectTimeLineComponent extends PureComponent {
         return (
             <View style={styles.container}>
                 <View style={styles.titleContainer}>
-                    <Text style={styles.titleText}>TYPE</Text>
+                    <Text style={styles.titleText}>TIME</Text>
                 </View>
                 <View style={styles.timelineContainer}>
                     {TIMELINES_PER_SPORTS[event.sport.name].map(peorid => (
@@ -74,6 +74,7 @@ export default class SelectTimeLineComponent extends PureComponent {
 
 const styles = StyleSheet.create({
     container: {
+        marginTop: 10,
         paddingVertical: 6,
         borderBottomColor: '#222',
         borderBottomWidth: 1,
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
         marginLeft: 10
     },
     selectItemType: {
-        fontSize: 12,
+        fontSize: 14,
         fontWeight: 'bold',
         marginLeft: 5
     },

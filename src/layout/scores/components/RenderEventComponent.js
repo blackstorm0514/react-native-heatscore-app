@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden'
     },
     eventItemDetail: {
-        flex: 5,
+        flex: 7,
     },
     eventItemTeam: {
         flexDirection: 'row',
@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     eventItemTeamScore: {
         flex: 1,
         fontSize: 15,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        textAlign: 'right'
     }
 });

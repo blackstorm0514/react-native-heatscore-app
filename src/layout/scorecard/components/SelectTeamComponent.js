@@ -65,6 +65,7 @@ export default class SelectTeamComponent extends PureComponent {
 
 const styles = StyleSheet.create({
     container: {
+        marginTop: 10,
         paddingVertical: 6,
         borderBottomColor: '#222',
         borderBottomWidth: 1,
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
         marginLeft: 5
     },
     selectItemTeamName: {
-        fontSize: 12,
+        fontSize: 14,
         fontWeight: 'bold',
         marginLeft: 5
     },
