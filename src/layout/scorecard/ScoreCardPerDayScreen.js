@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Alert, FlatList, StyleSheet, View, } from 'react-native';
+import { Alert, FlatList, StyleSheet, View, RefreshControl, ScrollView } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import { RefreshIcon } from '../../libs/icons';
 import { TouchableOpacity } from 'react-native';
@@ -11,12 +11,26 @@ import Toast from 'react-native-simple-toast';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import { Menu, MenuItem, MenuDivider } from '../../components/menu';
 
+class ScoreCardList extends PureComponent {
+    render() {
+        const { data, renderItem, ListHeaderComponent } = this.props;
+
+        return (
+            <View>
+                <ListHeaderComponent />
+                {data.map(renderItem)}
+            </View>
+        );
+    }
+}
+
 class ScoreCardPerDayScreen extends PureComponent {
     constructor(props) {
         super(props);
 
         this.state = {
             loading: false,
+            refreshing: false,
             data: [],
             showMenu: false,
             showMode: 'basic',
@@ -33,22 +47,20 @@ class ScoreCardPerDayScreen extends PureComponent {
         this._Mounted = false;
     }
 
-    getEventsData = () => {
+    getEventsData = (refreshing = false) => {
         const { date } = this.props;
-        const { loading } = this.state;
-        if (loading) return;
-        this._Mounted && this.setState({ loading: true });
+        this._Mounted && this.setState({ [refreshing ? 'refreshing' : 'loading']: true });
         getScoreCards(date)
             .then(({ data: result }) => {
                 const { success, data: score_cards, error } = result;
                 if (success) {
-                    this._Mounted && this.setState({ data: score_cards, loading: false });
+                    this._Mounted && this.setState({ data: score_cards, [refreshing ? 'refreshing' : 'loading']: false });
                 } else {
-                    this._Mounted && this.setState({ data: [], loading: false });
+                    this._Mounted && this.setState({ data: [], [refreshing ? 'refreshing' : 'loading']: false });
                 }
             })
             .catch(() => {
-                this._Mounted && this.setState({ loading: false, data: [] });
+                this._Mounted && this.setState({ [refreshing ? 'refreshing' : 'loading']: false, data: [] });
             });
     }
 
@@ -87,18 +99,19 @@ class ScoreCardPerDayScreen extends PureComponent {
         );
     }
 
-    renderScoreCard = ({ item }) => {
+    renderScoreCard = (item, index) => {
         const { showMode } = this.state;
         return showMode == 'basic' || showMode == item.type ? (
             <ScoreCardComponent
                 card={item}
                 showMode={showMode}
                 onDeleteCard={this.onDeleteCard}
+                key={index}
             />
         ) : null
     }
 
-    renderScoreList = ({ item }) => {
+    renderScoreList = (item, index) => {
         const { data } = this.state;
         const notStartedEvents = [];
         const inPlayEvents = [];
@@ -125,38 +138,38 @@ class ScoreCardPerDayScreen extends PureComponent {
         switch (item) {
             case 'In-play':
                 return (inPlayEvents.length > 0 &&
-                    <FlatList
+                    <ScoreCardList
                         data={inPlayEvents}
                         renderItem={this.renderScoreCard}
                         ListHeaderComponent={() => this.renderHeader(item, true)}
-                        keyExtractor={(item, index) => index.toString()}
+                        key={index}
                     />
                 )
             case 'Not Started':
                 return (notStartedEvents.length > 0 &&
-                    <FlatList
+                    <ScoreCardList
                         data={notStartedEvents}
                         renderItem={this.renderScoreCard}
                         ListHeaderComponent={() => this.renderHeader(item, inPlayEvents.length == 0)}
-                        keyExtractor={(item, index) => index.toString()}
+                        key={index}
                     />
                 )
             case 'Ended':
                 return (endedEvents.length > 0 &&
-                    <FlatList
+                    <ScoreCardList
                         data={endedEvents}
                         renderItem={this.renderScoreCard}
                         ListHeaderComponent={() => this.renderHeader(item, notStartedEvents.length == 0 && inPlayEvents.length == 0)}
-                        keyExtractor={(item, index) => index.toString()}
+                        key={index}
                     />
                 )
             case 'Others':
                 return (otherEvents.length > 0 &&
-                    <FlatList
+                    <ScoreCardList
                         data={[]}
                         renderItem={this.renderScoreCard}
                         ListHeaderComponent={() => this.renderHeader(item, notStartedEvents.length == 0 && inPlayEvents.length == 0 && endedEvents.length == 0)}
-                        keyExtractor={(item, index) => index.toString()}
+                        key={index}
                     />
                 )
             default:
@@ -210,28 +223,25 @@ class ScoreCardPerDayScreen extends PureComponent {
         }
     }
 
+    onRefresh = () => {
+        this.getEventsData(true);
+    }
+
     render() {
-        const { data, loading } = this.state;
+        const { data, loading, refreshing } = this.state;
 
         return (
-            <View style={styles.container}>
+            <ScrollView style={styles.container}
+                contentContainerStyle={styles.contentContainer}
+                refreshControl={<RefreshControl
+                    colors={['#000']}
+                    progressBackgroundColor="#FFF"
+                    refreshing={refreshing}
+                    onRefresh={this.onRefresh} />}>
                 {loading && <LoadingIndicator style={styles.loadingIndicator} />}
                 {!loading && (!data || !data.length) && this.renderEmptyList()}
-                {!loading && data && data.length > 0 && <FlatList
-                    style={styles.list}
-                    data={['In-play', 'Not Started', 'Ended', 'Others']}
-                    renderItem={this.renderScoreList}
-                    keyExtractor={(item, index) => index.toString()}
-                />}
-                <TouchableOpacity
-                    activeOpacity={0.7}
-                    onPress={this.getEventsData}
-                    style={styles.floatingActionButtonStyle}>
-                    <RefreshIcon
-                        style={styles.floatingActionButtonIconStyle}
-                    />
-                </TouchableOpacity>
-            </View>
+                {!loading && data && data.length > 0 && ['In-play', 'Not Started', 'Ended', 'Others'].map(this.renderScoreList)}
+            </ScrollView>
         )
     }
 };
@@ -245,10 +255,13 @@ export default connect(mapStateToProps, null)(ScoreCardPerDayScreen);
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#121212'
+        backgroundColor: '#121212',
+    },
+    contentContainer: {
+        flexGrow: 1
     },
     loadingIndicator: {
-        flex: 1
+        flex: 1,
     },
     list: {
         backgroundColor: '#121212',

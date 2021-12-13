@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, ScrollView } from 'react-native';
+import { StyleSheet, View, Image, ScrollView, RefreshControl } from 'react-native';
 import { LoadingIndicator } from './LoadingIndicator';
 import { Text } from '@ui-kitten/components';
 import { formatDateStr, getMatchScore, getStatusString } from '../../../libs/functions';
@@ -10,7 +10,7 @@ import GameStatsComponent from './matchup/GameStatsComponent';
 
 export default class RenderEventMatchupComponent extends Component {
     renderContent = () => {
-        const { event, loading } = this.props;
+        const { event, loading, } = this.props;
         if (loading) {
             return (
                 <LoadingIndicator style={styles.loadingIndicator} />
@@ -69,8 +69,16 @@ export default class RenderEventMatchupComponent extends Component {
         )
     }
     render() {
+        const { refreshing, onRefresh } = this.props;
+
         return (
-            <ScrollView style={styles.container}>
+            <ScrollView style={styles.container}
+                contentContainerStyle={{ flexGrow: 1 }}
+                refreshControl={<RefreshControl
+                    colors={['#000']}
+                    progressBackgroundColor="#FFF"
+                    refreshing={refreshing}
+                    onRefresh={onRefresh} />}>
                 {this.renderContent()}
             </ScrollView>
         )
@@ -83,8 +91,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#121212'
     },
     loadingIndicator: {
-        marginTop: 40,
-        // flex: 1,
+        flex: 1,
     },
     noDataText: {
         fontSize: 16,

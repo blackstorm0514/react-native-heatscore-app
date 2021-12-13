@@ -33,6 +33,7 @@ class EventDetailScreen extends Component {
             ],
             event: null,
             loading: false,
+            refreshing: false,
         }
         this._Mounted = false;
     }
@@ -43,18 +44,23 @@ class EventDetailScreen extends Component {
             navigation.navigate('AllScores');
         }
         this._Mounted = true;
-        this._Mounted && this.setState({ loading: true })
+        this.getEventData();
+    }
+
+    getEventData = (refreshing = false) => {
+        const { route: { params: { event } } } = this.props;
+        this._Mounted && this.setState({ [refreshing ? 'refreshing' : 'loading']: true });
         getEventDetail(event.event_id)
             .then(({ data }) => {
                 const { success, event } = data;
                 if (success) {
-                    this._Mounted && this.setState({ event: event, loading: false });
+                    this._Mounted && this.setState({ event: event, [refreshing ? 'refreshing' : 'loading']: false });
                 } else {
-                    this._Mounted && this.setState({ event: null, loading: false });
+                    this._Mounted && this.setState({ event: null, [refreshing ? 'refreshing' : 'loading']: false });
                 }
             })
             .catch(() => {
-                this._Mounted && this.setState({ event: null, loading: false });
+                this._Mounted && this.setState({ event: null, [refreshing ? 'refreshing' : 'loading']: false });
             })
     }
 
@@ -70,6 +76,10 @@ class EventDetailScreen extends Component {
                 onPress={() => navigation.goBack()}
             />
         )
+    }
+
+    onRefresh = () => {
+        this.getEventData(true);
     }
 
     renderTitle = () => {
@@ -143,12 +153,12 @@ class EventDetailScreen extends Component {
 
     renderScene = ({ route }) => {
         const { route: { params: { event: propsEvent } } } = this.props;
-        const { event, loading } = this.state;
+        const { event, loading, refreshing } = this.state;
         switch (route.key) {
             case 'chat':
                 return <RenderEventChatComponent event={propsEvent} />
             case 'matchup':
-                return <RenderEventMatchupComponent event={event} loading={loading} />
+                return <RenderEventMatchupComponent event={event} loading={loading} refreshing={refreshing} onRefresh={this.onRefresh} />
             case 'lineup':
                 return <RenderEventLineupComponent event={event} loading={loading} />
             case 'history':

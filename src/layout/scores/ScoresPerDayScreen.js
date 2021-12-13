@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { FlatList, StyleSheet, View, } from 'react-native';
+import { FlatList, StyleSheet, View, RefreshControl } from 'react-native';
 import { Text } from '@ui-kitten/components';
-import { RefreshIcon } from '../../libs/icons';
 import LeaguesListComponent from './components/LeaguesListComponent';
-import { TouchableOpacity } from 'react-native';
 import { LoadingIndicator } from './components/LoadingIndicator';
 import RenderFavoriteComponent from './components/RenderFavoriteComponent';
 import { getEvent } from '../../redux/services';
@@ -16,9 +14,9 @@ export default class ScoresPerDayScreen extends Component {
 
         this.state = {
             loading: false,
+            refreshing: false,
             data: null,
             favorites: null,
-            inplayTimeout: null,
         }
         this._Mounted = false;
     }
@@ -29,42 +27,23 @@ export default class ScoresPerDayScreen extends Component {
     }
 
     componentWillUnmount() {
-        const { inplayTimeout } = this.state;
-        if (inplayTimeout) clearTimeout(inplayTimeout);
         this._Mounted = false;
     }
 
-    getEventsData = (setLoading = true) => {
+    getEventsData = (refreshing = false) => {
         const { date, sport, league } = this.props;
-        const { inplayTimeout } = this.state;
-        if (inplayTimeout) clearTimeout(inplayTimeout);
-        this._Mounted && this.setState({ loading: setLoading, inplayTimeout: null });
+        this._Mounted && this.setState({ [refreshing ? 'refreshing' : 'loading']: true });
         getEvent(date, sport, league)
             .then(({ data: result }) => {
                 const { data, favorites } = result;
-                let hasInplay = false;
-                if (data && data.length) {
-                    for (const league of data) {
-                        if (league && league.events && league.events.length) {
-                            for (const event of league.events) {
-                                if (event.time_status == '1') {
-                                    hasInplay = true;
-                                    break;
-                                }
-                            }
-                            if (hasInplay) break;
-                        }
-                    }
-                }
                 this._Mounted && this.setState({
-                    loading: false,
+                    [refreshing ? 'refreshing' : 'loading']: false,
                     data: data,
                     favorites: favorites && favorites.length ? favorites : null,
-                    inplayTimeout: hasInplay ? setTimeout(() => this.getEventsData(false), inPlayTime) : null
                 });
             })
             .catch(() => {
-                this._Mounted && this.setState({ loading: false, data: null, favorites: null });
+                this._Mounted && this.setState({ [refreshing ? 'refreshing' : 'loading']: false, data: null, favorites: null });
             })
     }
 
@@ -90,38 +69,40 @@ export default class ScoresPerDayScreen extends Component {
         )
     }
 
-    onFloatinActionClick = () => {
-        this.getEventsData();
-    };
+    renderEmptyList = () => {
+        const { loading } = this.state;
+        return loading ? null : (
+            <View style={{ flex: 1, alignItems: 'center', paddingHorizontal: 10 }}>
+                <Text style={{ fontSize: 16, marginTop: 20 }}>There are no events.</Text>
+            </View>
+        )
+    }
 
-    renderEmptyList = () => (
-        <View style={{ flex: 1, alignItems: 'center', paddingHorizontal: 10 }}>
-            <Text style={{ fontSize: 16, marginTop: 20 }}>There are no events.</Text>
-        </View>
-    )
+    onRefresh = () => {
+        this.getEventsData(true);
+    }
 
     render() {
-        const { data, loading } = this.state;
+        const { data, loading, refreshing } = this.state;
 
         return (
             <View style={styles.container}>
                 {loading && <LoadingIndicator style={styles.loadingIndicator} />}
                 {!loading && <FlatList
+                    onScroll={this._handleScroll}
+                    onScrollAnimationEnd={this._handleScroll}
                     style={styles.list}
                     data={data ? data : []}
                     renderItem={this.renderLeagues}
                     keyExtractor={(item, index) => index.toString()}
                     ListHeaderComponent={this.renderFavorite}
                     ListEmptyComponent={this.renderEmptyList}
+                    refreshControl={<RefreshControl
+                        colors={['#000']}
+                        progressBackgroundColor="#FFF"
+                        refreshing={refreshing}
+                        onRefresh={this.onRefresh} />}
                 />}
-                <TouchableOpacity
-                    activeOpacity={0.7}
-                    onPress={this.onFloatinActionClick}
-                    style={styles.floatingActionButtonStyle}>
-                    <RefreshIcon
-                        style={styles.floatingActionButtonIconStyle}
-                    />
-                </TouchableOpacity>
             </View>
         )
     }
@@ -138,25 +119,7 @@ const styles = StyleSheet.create({
     },
     list: {
         backgroundColor: '#121212',
-        paddingBottom: 20
-    },
-    floatingActionButtonStyle: {
-        position: 'absolute',
-        width: 30,
-        height: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
-        right: 10,
-        bottom: 10,
-        backgroundColor: '#666',
-        shadowColor: 'white',
-        shadowOpacity: 0.6,
-        shadowOffset: { width: 5, height: 5 },
-        borderRadius: 200 / 2
-    },
-    floatingActionButtonIconStyle: {
-        width: 20,
-        height: 20,
-        tintColor: '#FFFFFF'
+        paddingBottom: 20,
+        flex: 1,
     },
 });
