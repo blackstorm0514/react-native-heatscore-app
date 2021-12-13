@@ -3,8 +3,9 @@ import { TopNavigation, TopNavigationAction } from '@ui-kitten/components';
 import { StyleSheet, Image, Dimensions } from 'react-native'
 import { ArrowIosBackIcon } from '../../../../libs/icons';
 import logoScreen from '../../../../assets/images/hs-white-256.png';
+import { GoogleLogOut } from '../../../../services/google.service';
 
-export const TopNavigationComponent = ({ navigation, backPosition }) => {
+export const TopNavigationComponent = ({ navigation, backPosition, isSignout = false }) => {
     const renderTitle = () => (
         <Image source={logoScreen} style={styles.titleImage} />
     )
@@ -13,7 +14,12 @@ export const TopNavigationComponent = ({ navigation, backPosition }) => {
         return (
             <TopNavigationAction
                 icon={ArrowIosBackIcon}
-                onPress={() => navigation.navigate(backPosition ? backPosition : 'Profile')}
+                onPress={() => {
+                    if (isSignout) {
+                        GoogleLogOut()
+                    }
+                    navigation.navigate(backPosition ? backPosition : 'Profile');
+                }}
             />
         )
     }

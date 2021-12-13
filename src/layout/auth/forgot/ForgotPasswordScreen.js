@@ -4,9 +4,6 @@ import { StyleSheet, View, TouchableOpacity, BackHandler } from 'react-native';
 import { TopNavigationComponent } from '../signup/components/TopNavigationComponent';
 import { KeyboardAvoidingView } from '../../../components/keyboard-avoiding-view';
 import { ValidateFields } from '../../../services/validator.service';
-import { AppStorage } from '../../../services/app-storage.service';
-import { actions } from '../../../redux/reducer';
-import { connect } from 'react-redux';
 import { changePassword } from '../../../redux/services';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -18,8 +15,6 @@ const LoadingIndicator = (props) => (
 
 const errorOject = {
     email: null,
-    password: null,
-    passwordConfirm: null,
     server: null
 }
 
@@ -29,8 +24,6 @@ class ForgotPasswordForm extends PureComponent {
 
         this.state = {
             email: '',
-            password: '',
-            passwordConfirm: '',
             error: errorOject,
             submitting: false,
         }
@@ -50,15 +43,15 @@ class ForgotPasswordForm extends PureComponent {
     }
 
     onSubmitButtonPressed = () => {
-        const { email, password, passwordConfirm } = this.state;
+        const { email } = this.state;
         const { setSuccess } = this.props;
-        const result = ValidateFields({ email, password, passwordConfirm });
+        const result = ValidateFields({ email });
         if (result != true) {
             this._Mounted && this.setState({ error: { ...errorOject, ...result } });
             return;
         }
         this._Mounted && this.setState({ error: errorOject, submitting: true });
-        changePassword({ email, password })
+        changePassword({ email })
             .then(({ data }) => {
                 const { success, error } = data;
                 if (success) {
@@ -74,7 +67,7 @@ class ForgotPasswordForm extends PureComponent {
     }
 
     render() {
-        const { email, password, passwordConfirm, error, submitting } = this.state;
+        const { email, error, submitting } = this.state;
 
         return (
             <KeyboardAvoidingView>
@@ -91,31 +84,6 @@ class ForgotPasswordForm extends PureComponent {
                                 onChangeText={(text) => this.changeField('email', text)}
                             />
                             {error && error.email && <Text style={styles.errorText}>{error.email}</Text>}
-                        </Layout>
-                        <Layout style={styles.boxLayout}>
-                            <Text style={styles.formLabel}>Password</Text>
-                            <Input
-                                style={styles.formInput}
-                                placeholder='Password'
-                                placeholderTextColor="#888"
-                                value={password}
-                                secureTextEntry
-                                onChangeText={(text) => this.changeField('password', text)}
-                            />
-                            {error && error.password && <Text style={styles.errorText}>{error.password}</Text>}
-                        </Layout>
-                        <Layout style={styles.boxLayout}>
-                            <Text style={styles.formLabel}>Confirm Password</Text>
-                            <Input
-                                style={styles.formInput}
-                                status='control'
-                                placeholder='Confirm Password'
-                                placeholderTextColor="#888"
-                                value={passwordConfirm}
-                                secureTextEntry
-                                onChangeText={(text) => this.changeField('passwordConfirm', text)}
-                            />
-                            {error && error.passwordConfirm && <Text style={styles.errorText}>{error.passwordConfirm}</Text>}
                         </Layout>
                         {error && error.server && <Text style={styles.errorText}>{error.server}</Text>}
                     </View>
@@ -166,7 +134,7 @@ class ForgotPasswordScreen extends PureComponent {
                 {success && <Layout level="1" style={styles.layoutContainer}>
                     <View style={styles.completeContainer}>
                         <Ionicons size={120} color='#E10032' name='checkmark-circle-outline' />
-                        <Text style={styles.accountCompletedText}>Your request has been submitted. You will receive a confirmation email</Text>
+                        <Text style={styles.accountCompletedText}>Your request has been submitted. You will receive a new password email</Text>
                     </View>
                     <Button
                         style={styles.submitButton}
