@@ -406,7 +406,10 @@ class RenderEventChatComponent extends Component {
                     loadEarlier
                     onLoadEarlier={this.onLoadEarlier}
                     renderLoadEarlier={this.renderLoadEarlier}
-                    listViewProps={{ style: { marginBottom: 10 } }}
+                    listViewProps={{
+                        style: { marginBottom: 10 },
+                        showsVerticalScrollIndicator: false
+                    }}
                 />
                 <Modalize
                     ref={this.gifModalizeRef}

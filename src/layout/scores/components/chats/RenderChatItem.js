@@ -33,8 +33,8 @@ export default class RenderChatItem extends PureComponent {
             <View style={styles.replyContainer}>
                 {image && <>
                     <ScaledImage
-                        // uri={image}
-                        uri="https://placeimg.com/320/240/any"
+                        uri={image}
+                        // uri="https://placeimg.com/320/240/any"
                         width={parseInt(screenWidth / 3)}
                     />
                 </>}
@@ -66,8 +66,8 @@ export default class RenderChatItem extends PureComponent {
                         {image && <>
                             <Text style={styles.chatContent}>{user.username}</Text>
                             <ScaledImage
-                                // uri={image}
-                                uri="https://placeimg.com/320/240/any"
+                                uri={image}
+                                // uri="https://placeimg.com/320/240/any"
                                 width={parseInt(screenWidth / 2)}
                             />
                         </>}
@@ -75,9 +75,11 @@ export default class RenderChatItem extends PureComponent {
                     </View>
                 </View>
                 <View style={styles.replyButtonContainer}>
-                    <FontAwesomeIcon size={16}
-                        name='reply'
-                        color="#FFF" />
+                    <View style={styles.replyButtonWrapper}>
+                        <FontAwesomeIcon size={16}
+                            name='reply'
+                            color="#FFF" />
+                    </View>
                 </View>
             </ScrollView>
         );
@@ -110,7 +112,11 @@ const styles = StyleSheet.create({
     replyButtonContainer: {
         justifyContent: 'center',
         paddingHorizontal: 15,
-        backgroundColor: '#333'
+    },
+    replyButtonWrapper: {
+        backgroundColor: '#333',
+        padding: 10,
+        borderRadius: 20
     },
     replyContainer: {
         backgroundColor: '#222',
