@@ -1,6 +1,6 @@
 import React, { Component, createRef } from 'react';
 import { StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
-import { Button, Input } from '@ui-kitten/components';
+import { Button, Input, Text } from '@ui-kitten/components';
 import { LoadingIndicator } from './LoadingIndicator';
 import firestore from '@react-native-firebase/firestore';
 import { connect } from 'react-redux';
@@ -16,6 +16,7 @@ import ChatInformModal from './chats/ChatInformModal';
 import RenderChatItem from './chats/RenderChatItem';
 import ReportChat from './chats/ReportChat';
 import { actions } from '../../../redux/reducer';
+import CustomInputToolbar from './chats/CustomInputToolbar';
 
 const MESSAGE_LIMIT = 20;
 
@@ -34,11 +35,13 @@ class RenderEventChatComponent extends Component {
             lastVisible: null,
             gifSearch: '',
             chatReport: null,
+            chatReply: null,
         }
 
         this.gifModalizeRef = createRef(null);
         this.reportModalizeRef = createRef(null);
         this.giftedChatRef = createRef(null);
+        this.replyModalRef = createRef(null);
         this._Mounted = false;
     }
 
@@ -158,10 +161,11 @@ class RenderEventChatComponent extends Component {
     }
 
     handleSend = (messages) => {
-        const { room_id } = this.state;
+        const { room_id, chatReply } = this.state;
         const { user, addChatItemAction, suspendTillText } = this.props;
         const date = new Date();
         if (suspendTillText && date.getTime() < new Date(suspendTillText).getTime()) {
+            this.setState({ chatReply: null });
             return Alert.alert(
                 'Timeout!',
                 'Try to slow down how often you\'re sending messages to make the chat a better experience.',
@@ -170,6 +174,7 @@ class RenderEventChatComponent extends Component {
         }
         const message = messages[0];
         if (message && user == null) {
+            this.setState({ chatReply: null });
             Toast.show('Please login to send message.');
             return;
         }
@@ -183,9 +188,12 @@ class RenderEventChatComponent extends Component {
                     _id: message._id,
                     createdAt: date,
                     text: message.text,
-                    user: message.user
-                })
+                    user: message.user,
+                    chatReply: chatReply ? chatReply : null,
+                });
+            this.setState({ chatReply: null });
         }
+        this.setState({ chatReply: null });
         addChatItemAction({ type: 'text' });
     }
 
@@ -224,18 +232,21 @@ class RenderEventChatComponent extends Component {
 
     renderChatItem = ({ currentMessage }) => {
         return <RenderChatItem chat={currentMessage}
+            onSelectReply={this.onSelectReply}
             onSelectReport={this.onSelectReport} />
     }
 
     renderInputToolbar = (props) => (
-        <InputToolbar
+        <CustomInputToolbar
             {...props}
             containerStyle={{
                 backgroundColor: '#111',
-                paddingTop: 6,
-                marginBottom: 4,
             }}
-            primaryStyle={{ alignItems: 'center' }}
+            primaryStyle={{
+                alignItems: 'center',
+                marginBottom: 4,
+                paddingTop: 4
+            }}
         />
     );
 
@@ -339,13 +350,37 @@ class RenderEventChatComponent extends Component {
         // this.reportModalizeRef.current?.open();
     }
 
+    onSelectReply = (chatReply) => {
+        this._Mounted && this.setState({ chatReply });
+    }
+
+    renderAccessory = () => {
+        const { chatReply } = this.state;
+        if (!chatReply) return null;
+        const { user, text, image } = chatReply;
+        return (
+            <View style={{ flexDirection: 'row' }}>
+                <View style={{ width: 5, backgroundColor: 'green' }}></View>
+                <View style={{ flexDirection: 'column' }}>
+                    <Text style={{ color: 'green', paddingLeft: 10, paddingTop: 2, fontSize: 12 }}>{user.username}</Text>
+                    <Text style={{ color: 'gray', paddingLeft: 10, paddingTop: 2, fontSize: 12 }} numberOfLines={1}>{text ? text : (image ? 'image' : '')}</Text>
+                </View>
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end', paddingRight: 10 }}>
+                    <TouchableOpacity onPress={() => this.setState({ chatReply: null })}>
+                        <Ionicons name='close' color="white" size={20} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
+    }
+
     onCloseReport = async () => {
         this._Mounted && await this.setState({ chatReport: null })
         this.reportModalizeRef.current?.close();
     }
 
     render() {
-        const { recentChats, oldChats, loadingEarlier, gifSearch, chatReport } = this.state;
+        const { recentChats, oldChats, loadingEarlier, gifSearch, chatReply, chatReport } = this.state;
         const { user } = this.props;
 
         return (
@@ -364,12 +399,13 @@ class RenderEventChatComponent extends Component {
                     renderSend={this.renderSendButton}
                     renderComposer={this.renderComposer}
                     renderInputToolbar={this.renderInputToolbar}
+                    renderActions={this.renderActions}
+                    renderAccessory={chatReply ? this.renderAccessory : null}
                     renderLoading={() => <LoadingIndicator style={styles.loadingIndicator} />}
                     isLoadingEarlier={loadingEarlier}
                     loadEarlier
                     onLoadEarlier={this.onLoadEarlier}
                     renderLoadEarlier={this.renderLoadEarlier}
-                    renderActions={this.renderActions}
                     listViewProps={{ style: { marginBottom: 10 } }}
                 />
                 <Modalize

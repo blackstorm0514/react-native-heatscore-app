@@ -35,7 +35,7 @@ export default class RenderEventMatchupComponent extends Component {
                             source={{ uri: `https://assets.b365api.com/images/team/b/${home.image_id}.png` }}
                         />
                         <Text style={styles.mainBoardTeamName}>{home.name}</Text>
-                        <Text style={styles.mainBoardScore}>{home_score ? home_score : '-'}</Text>
+                        <Text style={styles.mainBoardScore}>{home_score !== '' ? home_score : '-'}</Text>
                     </View>
                     <View style={styles.mainBoardItem}>
                         <Image
@@ -43,7 +43,7 @@ export default class RenderEventMatchupComponent extends Component {
                             source={{ uri: `https://assets.b365api.com/images/team/b/${away.image_id}.png` }}
                         />
                         <Text style={styles.mainBoardTeamName}>{away.name}</Text>
-                        <Text style={styles.mainBoardScore}>{away_score ? away_score : '-'}</Text>
+                        <Text style={styles.mainBoardScore}>{away_score !== '' ? away_score : '-'}</Text>
                     </View>
                 </View>
                 {scores && <ScoreBoardComponent
