@@ -210,6 +210,8 @@ const iconName = {
     "Hockey": "sports-hockey",
     "Baseball": "sports-baseball",
     "Soccer": "sports-soccer",
+    "Tennis": "sports-tennis",
+    "Boxing": "sports-mma",
     "hide": "keyboard-arrow-down",
     "show": "keyboard-arrow-up",
 }
