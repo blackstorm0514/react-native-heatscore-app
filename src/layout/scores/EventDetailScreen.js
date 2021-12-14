@@ -1,23 +1,17 @@
 import React, { Component, useState } from 'react';
-import {
-    StyleSheet,
-    View,
-    Image,
-    Dimensions
-} from 'react-native';
-import {
-    TopNavigationAction,
-    TopNavigation, Text
-} from '@ui-kitten/components';
+import { StyleSheet, View, TouchableOpacity, Dimensions } from 'react-native';
+import { TopNavigationAction, TopNavigation, Text } from '@ui-kitten/components';
 import { ArrowIosBackIcon } from '../../libs/icons';
 import { TabView, TabBar, TabBarTop } from 'react-native-tab-view';
 import RenderEventMatchupComponent from './components/RenderEventMatchupComponent';
 import RenderEventChatComponent from './components/RenderEventChatComponent';
 import { truncateString } from '../../libs/functions';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { getEventDetail } from '../../redux/services';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { getEventDetail, toggleFavoriteEvent } from '../../redux/services';
 import RenderEventLineupComponent from './components/RenderEventLineupComponent';
 import RenderEventHistoryComponent from './components/RenderEventHistoryComponent';
+import Toast from 'react-native-simple-toast';
 
 const screenWidth = Dimensions.get('window').width;
 class EventDetailScreen extends Component {
@@ -32,6 +26,7 @@ class EventDetailScreen extends Component {
                 { key: 'history', title: 'History' }
             ],
             event: null,
+            isFav: false,
             loading: false,
             refreshing: false,
         }
@@ -52,15 +47,15 @@ class EventDetailScreen extends Component {
         this._Mounted && this.setState({ [refreshing ? 'refreshing' : 'loading']: true });
         getEventDetail(event.event_id)
             .then(({ data }) => {
-                const { success, event } = data;
+                const { success, event, isFav } = data;
                 if (success) {
-                    this._Mounted && this.setState({ event: event, [refreshing ? 'refreshing' : 'loading']: false });
+                    this._Mounted && this.setState({ event: event, isFav: isFav, [refreshing ? 'refreshing' : 'loading']: false });
                 } else {
-                    this._Mounted && this.setState({ event: null, [refreshing ? 'refreshing' : 'loading']: false });
+                    this._Mounted && this.setState({ event: null, isFav: false, [refreshing ? 'refreshing' : 'loading']: false });
                 }
             })
             .catch(() => {
-                this._Mounted && this.setState({ event: null, [refreshing ? 'refreshing' : 'loading']: false });
+                this._Mounted && this.setState({ event: null, isFav: false, [refreshing ? 'refreshing' : 'loading']: false });
             })
     }
 
@@ -168,12 +163,66 @@ class EventDetailScreen extends Component {
         }
     }
 
+    favoriteIcon = () => {
+        return (
+            <TopNavigationAction
+                icon={this.renderFavoriteIcon}
+            />
+        )
+    }
+
+    renderFavoriteIcon = (style) => {
+        const { isFav } = this.state;
+        if (isFav) {
+            return (
+                <TouchableOpacity activeOpacity={0.8}>
+                    <MaterialIcons name="star-rate"
+                        onPress={this.toggleFavorite}
+                        color='#fdcb04'
+                        size={20} />
+                </TouchableOpacity>
+            );
+        } else {
+            return (
+                <TouchableOpacity activeOpacity={0.8}>
+                    <MaterialIcons name="star-outline"
+                        onPress={this.toggleFavorite}
+                        color='#888'
+                        size={20} />
+                </TouchableOpacity>
+            );
+        }
+    }
+
+    toggleFavorite = () => {
+        const { loading, refreshing, isFav } = this.state;
+        if (loading || refreshing) return;
+
+        const { route: { params: { event } } } = this.props;
+        this.setState({ refreshing: true });
+        toggleFavoriteEvent(event.event_id, { isFav })
+            .then(({ data }) => {
+                const { success, isFav, error } = data;
+                if (success) {
+                    this.setState({ isFav });
+                } else {
+                    Toast.show(error);
+                }
+                this.setState({ refreshing: false });
+            })
+            .catch(() => {
+                Toast.show('Cannot Add/Remove favorite event. Please try again later.');
+                this.setState({ refreshing: false });
+            })
+    }
+
     render() {
         const { index, routes } = this.state;
         return (
             <View style={styles.container} >
                 <TopNavigation
                     accessoryLeft={this.goBackAction}
+                    accessoryRight={this.favoriteIcon}
                     title={this.renderTitle}
                     style={styles.headerStyle}
                 />

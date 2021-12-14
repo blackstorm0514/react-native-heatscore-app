@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import { Text } from '@ui-kitten/components';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
 
 class FavoriteItemComponent extends PureComponent {
@@ -22,8 +22,8 @@ class FavoriteItemComponent extends PureComponent {
                 />
                 <Text style={styles.teamName} numberOfLines={1}>{team.name}</Text>
                 <TouchableOpacity activeOpacity={0.8} style={styles.toggleFavorite} onPress={() => onPress(sport, team, exist)}>
-                    {exist && <FontAwesomeIcon name="star" color='gold' size={16} style={styles.toggleFavoriteIcon} />}
-                    {!exist && <FontAwesomeIcon name="star-o" color='#888' size={16} style={styles.toggleFavoriteIcon} />}
+                    {exist && <MaterialIcons name="star-rate" color='#fdcb04' size={16} />}
+                    {!exist && <MaterialIcons name="star-outline" color='#888' size={16} />}
                 </TouchableOpacity>
             </View>
         );
@@ -58,9 +58,4 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         marginLeft: 'auto'
     },
-    toggleFavoriteIcon: {
-        shadowColor: 'yellow',
-        shadowRadius: 3,
-        shadowOpacity: 0.8
-    }
 });
