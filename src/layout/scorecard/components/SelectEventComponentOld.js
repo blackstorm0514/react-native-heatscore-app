@@ -15,6 +15,7 @@ import { CloseIcon, SearchIcon } from '../../../libs/icons';
 import { LoadingIndicator } from '../../scores/components/LoadingIndicator';
 import { searchEventsForScoreCard } from "../../../redux/services";
 import { truncateString } from "../../../libs/functions";
+import TeamLogoImage from "../../../components/team-logo-image";
 
 const screenHeight = Dimensions.get('screen').height;
 
@@ -115,15 +116,9 @@ export default class SelectEventComponent extends PureComponent {
                                 onPress={() => this._Mounted && this.setState({ selectedEvent: event })}>
                                 <Text style={styles.eventItemLeague}>{event.league.name}</Text>
                                 <View style={styles.eventItemTeams}>
-                                    <Image
-                                        style={styles.teamLogoImage}
-                                        source={{ uri: `https://assets.b365api.com/images/team/m/${event.home.image_id}.png` }}
-                                    />
+                                    <TeamLogoImage image_id={event.home.image_id} size={16} style={styles.teamLogoImage} />
                                     <Text style={styles.eventItemTeamName}>{truncateString(event.home.name)} VS {truncateString(event.away.name)}</Text>
-                                    <Image
-                                        style={styles.teamLogoImage}
-                                        source={{ uri: `https://assets.b365api.com/images/team/m/${event.away.image_id}.png` }}
-                                    />
+                                    <TeamLogoImage image_id={event.away.image_id} size={16} style={styles.teamLogoImage} />
                                 </View>
                                 <Text style={styles.eventItemDate}>{format(new Date(event.time), "eee MMM dd yyyy, HH:mm aa")}</Text>
                             </TouchableOpacity>
@@ -244,9 +239,6 @@ const styles = StyleSheet.create({
         color: '#FFF'
     },
     teamLogoImage: {
-        width: 16,
-        height: 16,
-        resizeMode: 'contain',
         marginHorizontal: 10,
         marginVertical: 8,
     },

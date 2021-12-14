@@ -4,6 +4,7 @@ import { LoadingIndicator } from './LoadingIndicator';
 import { Text } from '@ui-kitten/components';
 import { truncateString } from '../../../libs/functions';
 import { format } from 'date-fns';
+import TeamLogoImage from '../../../components/team-logo-image';
 
 export default class RenderEventHistoryComponent extends Component {
     renderLastMatches = (title, events, team = null) => {
@@ -42,20 +43,14 @@ export default class RenderEventHistoryComponent extends Component {
                             <Text style={styles.eventTimeText}>{timeStr}, {league.name}</Text>
                             <View style={styles.eventScoresContainer}>
                                 <View style={styles.eventHomeContainer}>
-                                    <Image
-                                        style={styles.eventTeamLogoImage}
-                                        source={{ uri: `https://assets.b365api.com/images/team/m/${home.image_id}.png` }}
-                                    />
+                                    <TeamLogoImage image_id={home.image_id} size={16} style={null} />
                                     <Text style={[styles.eventTeamName, team && home.id == team.id ? styles.fontWeightBold : null]} numberOfLines={1}>{home.name}</Text>
                                 </View>
                                 <View style={[styles.eventScores]}>
                                     <Text style={[styles.eventScoreText, scoreTextStyle]}>{homeScore} : {awayScore}</Text>
                                 </View>
                                 <View style={styles.eventAwayContainer}>
-                                    <Image
-                                        style={styles.eventTeamLogoImage}
-                                        source={{ uri: `https://assets.b365api.com/images/team/m/${away.image_id}.png` }}
-                                    />
+                                    <TeamLogoImage image_id={away.image_id} size={16} style={null} />
                                     <Text style={[styles.eventTeamName, team && away.id == team.id ? styles.fontWeightBold : null]} numberOfLines={1}>{away.name}</Text>
                                 </View>
                             </View>
@@ -81,50 +76,15 @@ export default class RenderEventHistoryComponent extends Component {
         const { history, home, away } = event;
         const { h2h, home: lastHome, away: lastAway } = history;
 
-        // const result = {
-        //     home: 0,
-        //     draw: 0,
-        //     away: 0
-        // }
-        // for (const event of h2h) {
-        //     const { ss, home: eventHome, away: eventAway } = event;
-        //     const scores = ss.split('-');
-        //     const homeScore = parseInt(scores[0]);
-        //     const awayScore = parseInt(scores[1]);
-        //     if (home.id == eventHome.id) {
-        //         if (homeScore > awayScore) {
-        //             result.home++;
-        //         } else if (homeScore < awayScore) {
-        //             result.away++;
-        //         } else {
-        //             result.draw++;
-        //         }
-        //     } else {
-        //         if (homeScore > awayScore) {
-        //             result.away++;
-        //         } else if (homeScore < awayScore) {
-        //             result.home++;
-        //         } else {
-        //             result.draw++;
-        //         }
-        //     }
-        // }
-
         return (
             <View>
                 <View style={styles.headerContainer}>
                     <View style={[styles.teamHeaderContainer]}>
-                        <Image
-                            style={styles.teamLogoImage}
-                            source={{ uri: `https://assets.b365api.com/images/team/m/${home.image_id}.png` }}
-                        />
+                        <TeamLogoImage image_id={home.image_id} size={24} style={styles.teamLogoImage} />
                         <Text style={styles.teamNames}>{truncateString(home.name)}</Text>
                     </View>
                     <View style={[styles.teamHeaderContainer, styles.teamAwayHeader]}>
-                        <Image
-                            style={styles.teamLogoImage}
-                            source={{ uri: `https://assets.b365api.com/images/team/m/${away.image_id}.png` }}
-                        />
+                        <TeamLogoImage image_id={away.image_id} size={24} style={styles.teamLogoImage} />
                         <Text style={styles.teamNames}>{truncateString(away.name)}</Text>
                     </View>
                 </View>
@@ -222,10 +182,6 @@ const styles = StyleSheet.create({
         flex: 3,
         alignItems: 'center',
         paddingHorizontal: 6
-    },
-    eventTeamLogoImage: {
-        width: 16,
-        height: 16
     },
     eventTeamName: {
         fontSize: 12,

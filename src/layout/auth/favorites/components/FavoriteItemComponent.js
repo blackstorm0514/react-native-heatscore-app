@@ -3,6 +3,7 @@ import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
+import TeamLogoImage from '../../../../components/team-logo-image';
 
 class FavoriteItemComponent extends PureComponent {
     constructor(props) {
@@ -16,10 +17,7 @@ class FavoriteItemComponent extends PureComponent {
         return (
             <View
                 style={[itemStyle, styles.itemContainer]}>
-                <Image
-                    style={styles.teamLogoImage}
-                    source={{ uri: `https://assets.b365api.com/images/team/m/${team.image_id}.png` }}
-                />
+                <TeamLogoImage image_id={team.image_id} size={20} style={styles.teamLogoImage} />
                 <Text style={styles.teamName} numberOfLines={1}>{team.name}</Text>
                 <TouchableOpacity activeOpacity={0.8} style={styles.toggleFavorite} onPress={() => onPress(sport, team, exist)}>
                     {exist && <MaterialIcons name="star-rate" color='#fdcb04' size={16} />}
@@ -44,10 +42,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     teamLogoImage: {
-        width: 20,
-        height: 20,
         marginRight: 10,
-        resizeMode: 'center',
     },
     teamName: {
         fontWeight: 'bold',

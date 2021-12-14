@@ -4,6 +4,7 @@ import { Text } from '@ui-kitten/components';
 import { LoadingIndicator } from '../../scores/components/LoadingIndicator';
 import { getEvent } from '../../../redux/services';
 import { getStatusString, getTimeString } from '../../../libs/functions';
+import TeamLogoImage from '../../../components/team-logo-image';
 
 export default class SelectEventPerDayComponent extends Component {
     constructor(props) {
@@ -77,17 +78,11 @@ export default class SelectEventPerDayComponent extends Component {
                                 onPress={() => onSelect(event)}>
                                 <View style={styles.eventItemDetail}>
                                     <View style={styles.eventItemTeam}>
-                                        {home.image_id && <Image
-                                            style={styles.teamLogoImage}
-                                            source={{ uri: `https://assets.b365api.com/images/team/m/${home.image_id}.png` }}
-                                        />}
+                                        <TeamLogoImage image_id={home.image_id} size={20} style={styles.teamLogoImage} />
                                         <Text style={styles.eventItemTeamName} numberOfLines={1}>{home.name}</Text>
                                     </View>
                                     <View style={styles.eventItemTeam}>
-                                        {away.image_id && <Image
-                                            style={styles.teamLogoImage}
-                                            source={{ uri: `https://assets.b365api.com/images/team/m/${away.image_id}.png` }}
-                                        />}
+                                        <TeamLogoImage image_id={away.image_id} size={20} style={styles.teamLogoImage} />
                                         <Text style={styles.eventItemTeamName} numberOfLines={1}>{away.name}</Text>
                                     </View>
                                 </View>
@@ -154,9 +149,6 @@ const styles = StyleSheet.create({
         marginVertical: 2
     },
     teamLogoImage: {
-        width: 20,
-        height: 20,
-        resizeMode: 'contain',
         flex: 1
     },
     eventItemTeamName: {

@@ -4,6 +4,7 @@ import { Text } from '@ui-kitten/components';
 import { getEventIcons } from '../../../../libs/getEventIcons';
 import { removeTeamNameFromEvent } from '../../../../libs/functions';
 import Timeline from '../../../../components/Timeline';
+import TeamLogoImage from '../../../../components/team-logo-image';
 
 export default class GameSoccerEventsComponent extends Component {
     renderDetail(rowData, sectionID, rowID) {
@@ -34,15 +35,9 @@ export default class GameSoccerEventsComponent extends Component {
             <View style={styles.container}>
                 <Text style={styles.titleText}>Events</Text>
                 <View style={styles.teamLogos}>
-                    <Image
-                        style={styles.mainTeamLogoImage}
-                        source={{ uri: `https://assets.b365api.com/images/team/b/${home.image_id}.png` }}
-                    />
+                    <TeamLogoImage image_id={home.image_id} size={24} style={null} />
                     <Text style={styles.timelineText}>Timeline</Text>
-                    <Image
-                        style={styles.mainTeamLogoImage}
-                        source={{ uri: `https://assets.b365api.com/images/team/b/${away.image_id}.png` }}
-                    />
+                    <TeamLogoImage image_id={away.image_id} size={24} style={null} />
                 </View>
                 <Timeline
                     data={data}
@@ -81,10 +76,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 16
-    },
-    mainTeamLogoImage: {
-        width: 24,
-        height: 24,
     },
     timelineText: {
         fontSize: 14,

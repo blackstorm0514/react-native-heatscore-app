@@ -7,6 +7,7 @@ import ScoreBoardComponent from './matchup/ScoreBoardComponent';
 import GameDetailComponent from './matchup/GameDetailComponent';
 import GameEventsComponent from './matchup/GameEventsComponent';
 import GameStatsComponent from './matchup/GameStatsComponent';
+import TeamLogoImage from '../../../components/team-logo-image';
 
 export default class RenderEventMatchupComponent extends Component {
     renderContent = () => {
@@ -30,18 +31,12 @@ export default class RenderEventMatchupComponent extends Component {
                     {status_text && <Text style={[styles.statusText, status_class]}>{status_text}</Text>}
                     {!status_text && <Text style={[styles.statusText, styles.upcomingEvent]}>{formatDateStr(time)}</Text>}
                     <View style={styles.mainBoardItem}>
-                        <Image
-                            style={styles.mainTeamLogoImage}
-                            source={{ uri: `https://assets.b365api.com/images/team/b/${home.image_id}.png` }}
-                        />
+                        <TeamLogoImage image_id={home.image_id} size={60} style={null} />
                         <Text style={styles.mainBoardTeamName}>{home.name}</Text>
                         <Text style={styles.mainBoardScore}>{home_score !== '' ? home_score : '-'}</Text>
                     </View>
                     <View style={styles.mainBoardItem}>
-                        <Image
-                            style={styles.mainTeamLogoImage}
-                            source={{ uri: `https://assets.b365api.com/images/team/b/${away.image_id}.png` }}
-                        />
+                        <TeamLogoImage image_id={away.image_id} size={60} style={null} />
                         <Text style={styles.mainBoardTeamName}>{away.name}</Text>
                         <Text style={styles.mainBoardScore}>{away_score !== '' ? away_score : '-'}</Text>
                     </View>
@@ -118,11 +113,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginVertical: 5
-    },
-    mainTeamLogoImage: {
-        width: 60,
-        height: 60,
-        resizeMode: 'contain',
     },
     mainBoardTeamName: {
         fontSize: 20,

@@ -8,6 +8,7 @@ import {
 import { Text } from '@ui-kitten/components';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import ModalAction from "./ModalAction";
+import TeamLogoImage from "../../../components/team-logo-image";
 
 export default class SelectTeamComponent extends PureComponent {
     render() {
@@ -24,10 +25,7 @@ export default class SelectTeamComponent extends PureComponent {
                         onPress={() => onSelect('home')}>
                         <FontAwesomeIcon color='white' size={14}
                             name={team == 'home' ? 'check-circle' : 'circle-thin'} />
-                        <Image
-                            style={styles.teamLogoImage}
-                            source={{ uri: `https://assets.b365api.com/images/team/m/${event.home.image_id}.png` }}
-                        />
+                        <TeamLogoImage image_id={event.home.image_id} size={14} style={styles.teamLogoImage} />
                         <Text style={styles.selectItemTeamName} numberOfLines={1}>{event.home.name}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.radioContainer}
@@ -35,10 +33,7 @@ export default class SelectTeamComponent extends PureComponent {
                         onPress={() => onSelect('away')}>
                         <FontAwesomeIcon color='white' size={14}
                             name={team == 'away' ? 'check-circle' : 'circle-thin'} />
-                        <Image
-                            style={styles.teamLogoImage}
-                            source={{ uri: `https://assets.b365api.com/images/team/m/${event.away.image_id}.png` }}
-                        />
+                        <TeamLogoImage image_id={event.away.image_id} size={14} style={styles.teamLogoImage} />
                         <Text style={styles.selectItemTeamName} numberOfLines={1}>{event.away.name}</Text>
                     </TouchableOpacity>
                 </>}
@@ -83,9 +78,6 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     teamLogoImage: {
-        width: 14,
-        height: 14,
-        resizeMode: 'contain',
         marginLeft: 5
     },
     selectItemTeamName: {

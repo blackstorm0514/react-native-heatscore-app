@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Button, Text, List } from '@ui-kitten/components';
 import { LoadingIndicator } from './LoadingIndicator';
+import TeamLogoImage from '../../../components/team-logo-image';
 
 const screenWidth = Dimensions.get('window').width;
 class RenderLeagueRoundComponent extends Component {
@@ -78,10 +79,7 @@ class RenderLeagueRoundComponent extends Component {
         return (
             <View style={styles.tableRow}>
                 <View style={styles.tableRowTeam}>
-                    <Image
-                        style={styles.teamLogoImage}
-                        source={{ uri: `https://assets.b365api.com/images/team/m/${item.team.image_id}.png` }}
-                    />
+                    <TeamLogoImage image_id={item.team.image_id} size={20} style={null} />
                     <Text style={styles.tableRowTeamName} numberOfLines={1}>
                         {item.team.name}
                     </Text>
@@ -179,11 +177,6 @@ const styles = StyleSheet.create({
     tableRowTeam: {
         width: 200,
         flexDirection: 'row'
-    },
-    teamLogoImage: {
-        width: 20,
-        height: 20,
-        resizeMode: 'contain',
     },
     tableRowPLD: {
         width: 40,

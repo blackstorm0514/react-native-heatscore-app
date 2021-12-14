@@ -85,17 +85,6 @@ class EventDetailScreen extends Component {
         const { home, away } = event;
         return <View style={{ paddingTop: 2 }}>
             <Text style={styles.titleText}>{truncateString(event.home.name)} vs {truncateString(event.away.name)}</Text>
-            {/* <View style={styles.logoContainer}>
-                <Image
-                    style={styles.teamLogoImage}
-                    source={{ uri: `https://assets.b365api.com/images/team/m/${home.image_id}.png` }}
-                />
-                <Text style={styles.titleText}>-</Text>
-                <Image
-                    style={styles.teamLogoImage}
-                    source={{ uri: `https://assets.b365api.com/images/team/m/${away.image_id}.png` }}
-                />
-            </View> */}
         </View>
     }
 

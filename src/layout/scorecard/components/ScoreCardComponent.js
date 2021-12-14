@@ -4,6 +4,7 @@ import { Text } from '@ui-kitten/components';
 import { TouchableOpacity } from 'react-native';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { getMatchScore, getPickName, getStatusString, getTimeString, getWinLoss } from '../../../libs/functions';
+import TeamLogoImage from '../../../components/team-logo-image';
 
 const screenWidth = Dimensions.get('screen').width;
 
@@ -57,18 +58,12 @@ export default class ScoreCardComponent extends PureComponent {
                     <View style={styles.eventContainer}>
                         <View style={styles.eventItemDetail}>
                             <View style={styles.eventItemTeam}>
-                                <Image
-                                    style={styles.teamLogoImage}
-                                    source={{ uri: `https://assets.b365api.com/images/team/m/${home_image}.png` }}
-                                />
+                                <TeamLogoImage image_id={home_image} size={16} style={styles.teamLogoImage} />
                                 <Text style={styles.eventItemTeamName} numberOfLines={1}>{home}</Text>
                                 <Text style={styles.eventItemTeamScore}>{home_score}</Text>
                             </View>
                             <View style={styles.eventItemTeam}>
-                                <Image
-                                    style={styles.teamLogoImage}
-                                    source={{ uri: `https://assets.b365api.com/images/team/m/${away_image}.png` }}
-                                />
+                                <TeamLogoImage image_id={away_image} size={16} style={styles.teamLogoImage} />
                                 <Text style={styles.eventItemTeamName} numberOfLines={1}>{away}</Text>
                                 <Text style={styles.eventItemTeamScore}>{away_score}</Text>
                             </View>
@@ -140,9 +135,6 @@ const styles = StyleSheet.create({
         marginVertical: 4
     },
     teamLogoImage: {
-        width: 16,
-        height: 16,
-        resizeMode: 'contain',
         flex: 1
     },
     eventItemTeamName: {

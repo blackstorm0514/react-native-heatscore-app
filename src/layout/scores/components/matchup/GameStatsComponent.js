@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import { Text } from '@ui-kitten/components';
+import TeamLogoImage from '../../../../components/team-logo-image';
 
 const sportStatsFields = {
     'Soccer': [
@@ -79,15 +80,9 @@ export default class GameStatsComponent extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.teamLogos}>
-                    <Image
-                        style={styles.mainTeamLogoImage}
-                        source={{ uri: `https://assets.b365api.com/images/team/b/${home.image_id}.png` }}
-                    />
+                    <TeamLogoImage image_id={home.image_id} size={24} style={null} />
                     <Text style={styles.timelineText}>Team Stats</Text>
-                    <Image
-                        style={styles.mainTeamLogoImage}
-                        source={{ uri: `https://assets.b365api.com/images/team/b/${away.image_id}.png` }}
-                    />
+                    <TeamLogoImage image_id={away.image_id} size={24} style={null} />
                 </View>
                 {statsFields.map(this.renderStatsField)}
             </View>
@@ -107,10 +102,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 16
-    },
-    mainTeamLogoImage: {
-        width: 24,
-        height: 24,
     },
     timelineText: {
         fontSize: 14,

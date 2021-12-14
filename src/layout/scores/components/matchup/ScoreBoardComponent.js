@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Image, ScrollView } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import { getMatchScore } from '../../../../libs/functions';
+import TeamLogoImage from '../../../../components/team-logo-image';
 
 const peoridPerSports = {
     "Soccer": [
@@ -59,20 +60,14 @@ export default class ScoreBoardComponent extends Component {
                     </View>
                     <View style={styles.rowContainer}>
                         <View style={[styles.scoreTitle, styles.teamTitle]}>
-                            <Image
-                                style={styles.teamLogoImage}
-                                source={{ uri: `https://assets.b365api.com/images/team/s/${home.image_id}.png` }}
-                            />
+                            <TeamLogoImage image_id={home.image_id} size={16} style={null} />
                             <Text numberOfLines={1} style={styles.teamName}>{home.name}</Text>
                         </View>
                         {peorids.map(item => (<Text key={item.value} style={[styles.scoreItem]}>{item.home_score}</Text>))}
                     </View>
                     <View style={styles.rowContainer}>
                         <View style={[styles.scoreTitle, styles.teamTitle]}>
-                            <Image
-                                style={styles.teamLogoImage}
-                                source={{ uri: `https://assets.b365api.com/images/team/s/${away.image_id}.png` }}
-                            />
+                            <TeamLogoImage image_id={away.image_id} size={16} style={null} />
                             <Text numberOfLines={1} style={styles.teamName}>{away.name}</Text>
                         </View>
                         {peorids.map(item => (<Text key={item.value} style={[styles.scoreItem]}>{item.away_score}</Text>))}
@@ -109,11 +104,6 @@ const styles = StyleSheet.create({
     teamTitle: {
         flexDirection: 'row',
         alignItems: 'center'
-    },
-    teamLogoImage: {
-        width: 16,
-        height: 16,
-        resizeMode: 'contain',
     },
     teamName: {
         fontSize: 14,

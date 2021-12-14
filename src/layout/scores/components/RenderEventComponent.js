@@ -1,12 +1,8 @@
 import React, { PureComponent } from 'react';
-import {
-    StyleSheet,
-    View,
-    TouchableOpacity,
-    Image
-} from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import { getMatchScore, getStatusString, getTimeString, ordinal_suffix_of } from '../../../libs/functions';
+import TeamLogoImage from '../../../components/team-logo-image';
 
 export default class RenderEventComponent extends PureComponent {
     onItemPress = () => {
@@ -31,18 +27,12 @@ export default class RenderEventComponent extends PureComponent {
                 onPress={() => this.onItemPress()}>
                 <View style={styles.eventItemDetail}>
                     <View style={styles.eventItemTeam}>
-                        {home.image_id && <Image
-                            style={styles.teamLogoImage}
-                            source={{ uri: `https://assets.b365api.com/images/team/m/${home.image_id}.png` }}
-                        />}
+                        <TeamLogoImage image_id={home.image_id} size={20} style={styles.teamLogoImage} />
                         <Text style={styles.eventItemTeamName} numberOfLines={1}>{home.name}</Text>
                         <Text style={styles.eventItemTeamScore}>{home_score}</Text>
                     </View>
                     <View style={styles.eventItemTeam}>
-                        {away.image_id && <Image
-                            style={styles.teamLogoImage}
-                            source={{ uri: `https://assets.b365api.com/images/team/m/${away.image_id}.png` }}
-                        />}
+                        <TeamLogoImage image_id={away.image_id} size={20} style={styles.teamLogoImage} />
                         <Text style={styles.eventItemTeamName} numberOfLines={1}>{away.name}</Text>
                         <Text style={styles.eventItemTeamScore}>{away_score}</Text>
                     </View>
@@ -84,9 +74,6 @@ const styles = StyleSheet.create({
         marginVertical: 2
     },
     teamLogoImage: {
-        width: 20,
-        height: 20,
-        resizeMode: 'contain',
         flex: 1
     },
     eventItemTeamName: {

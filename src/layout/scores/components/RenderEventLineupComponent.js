@@ -3,6 +3,7 @@ import { StyleSheet, View, Image, ScrollView } from 'react-native';
 import { LoadingIndicator } from './LoadingIndicator';
 import { Text } from '@ui-kitten/components';
 import { truncateString } from '../../../libs/functions';
+import TeamLogoImage from '../../../components/team-logo-image';
 
 export default class RenderEventLineupComponent extends Component {
     renderLineupTeam = (team, lineup, isAway = false) => {
@@ -10,10 +11,7 @@ export default class RenderEventLineupComponent extends Component {
         return (
             <View style={[styles.lineupTeamContainer, isAway ? styles.lineupAwayContainer : null]}>
                 <View style={[styles.teamHeaderContainer, isAway ? styles.teamAwayHeader : null]}>
-                    <Image
-                        style={styles.teamLogoImage}
-                        source={{ uri: `https://assets.b365api.com/images/team/m/${team.image_id}.png` }}
-                    />
+                    <TeamLogoImage image_id={team.image_id} size={24} style={null} />
                     <Text style={styles.teamNames}>{truncateString(team.name)}</Text>
                 </View>
                 {formation && <View style={styles.formationContainer}>
@@ -99,10 +97,6 @@ const styles = StyleSheet.create({
         width: '50%',
         paddingHorizontal: 5,
         paddingBottom: 5
-    },
-    teamLogoImage: {
-        width: 24,
-        height: 24,
     },
     teamHeaderContainer: {
         flexDirection: 'row',
