@@ -32,12 +32,12 @@ export default class RenderEventMatchupComponent extends Component {
                     {!status_text && <Text style={[styles.statusText, styles.upcomingEvent]}>{formatDateStr(time)}</Text>}
                     <View style={styles.mainBoardItem}>
                         <TeamLogoImage image_id={home.image_id} size={60} style={null} />
-                        <Text style={styles.mainBoardTeamName}>{home.name}</Text>
+                        <Text style={styles.mainBoardTeamName} numberOfLines={1}>{home.name}</Text>
                         <Text style={styles.mainBoardScore}>{home_score !== '' ? home_score : '-'}</Text>
                     </View>
                     <View style={styles.mainBoardItem}>
                         <TeamLogoImage image_id={away.image_id} size={60} style={null} />
-                        <Text style={styles.mainBoardTeamName}>{away.name}</Text>
+                        <Text style={styles.mainBoardTeamName} numberOfLines={1}>{away.name}</Text>
                         <Text style={styles.mainBoardScore}>{away_score !== '' ? away_score : '-'}</Text>
                     </View>
                 </View>
