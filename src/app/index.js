@@ -28,17 +28,16 @@ const App = ({ userToken }) => {
 
     const sendFcmToken = async () => {
         try {
-            // await messaging().registerDeviceForRemoteMessages();
-            // const token = await messaging().getToken();
+            const authStatus = await messaging().requestPermission();
+            const enabled =
+                authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+                authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+            if (enabled) {
+                await messaging().registerDeviceForRemoteMessages();
+                const token = await messaging().getToken();
 
-            // await ApiService.post('/notifications/register', { token });
-
-            // messaging().onMessage((message) => {
-            //     console.log(message);
-            // })
-            // messaging().setBackgroundMessageHandler(async (message) => {
-            //     console.log(message);
-            // })
+                await ApiService.post('/notifications/register', { token });
+            }
         } catch (err) {
             console.log(err.response.data);
             return;
