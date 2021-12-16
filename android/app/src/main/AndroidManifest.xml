@@ -15,9 +15,9 @@
           android:name="com.google.firebase.messaging.default_notification_icon"
           android:resource="@mipmap/ic_notification" />
       <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming notification message. -->
-      <!-- <meta-data
+      <meta-data
           android:name="com.google.firebase.messaging.default_notification_color"
-          android:resource="@color/colorAccent" /> -->
+          android:resource="@color/notification_background" />
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
