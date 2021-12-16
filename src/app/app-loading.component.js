@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { actions } from '../redux/reducer';
 import { getProfile } from '../redux/services';
-import auth from '@react-native-firebase/auth';
+import { auth } from 'react-native-firebase';
 
 const AppLoading = ({ initialConfig, children, placeholder, setUserAction }) => {
 

@@ -5,7 +5,7 @@ import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import messaging from '@react-native-firebase/messaging';
+import { messaging } from 'react-native-firebase';
 
 import AppLoading from './app-loading.component';
 import { appMappings, appThemes } from './app-theming';
