@@ -191,6 +191,9 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-firebase')
+
+    
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
@@ -200,6 +203,12 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:29.0.0')
 
     implementation 'com.google.firebase:firebase-analytics'
+    implementation "com.google.android.gms:play-services-base:17.0.0"
+    implementation "com.google.android.gms:play-services-gcm:17.0.0"
+    implementation 'com.google.firebase:firebase-core:17.0.0'
+    implementation 'com.google.firebase:firebase-messaging:20.1.0'
+    implementation "com.google.firebase:firebase-iid"
+    // implementation 'com.google.firebase:firebase-notifications'
 
     implementation 'com.facebook.fresco:fresco:2.0.0'
     implementation 'com.facebook.fresco:animated-gif:2.0.0'

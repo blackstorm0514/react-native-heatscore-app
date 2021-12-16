@@ -18,6 +18,8 @@ target 'HeatScore' do
 
   pod 'react-native-simple-toast', :path => '../node_modules/react-native-simple-toast'
 
+  pod 'RNFirebase', :path => '../node_modules/react-native-firebase'
+
   target 'HeatScoreTests' do
     inherit! :complete
     # Pods for testing
