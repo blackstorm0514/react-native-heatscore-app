@@ -4,7 +4,7 @@ import { Text } from '@ui-kitten/components';
 import { format } from 'date-fns';
 import FeatherIcon from 'react-native-vector-icons/dist/Feather';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import ScaledImage from './ScaledImage';
+import ScaledImage from '../../../../components/ScaledImage';
 
 const screenWidth = Dimensions.get('window').width;
 

@@ -5,14 +5,18 @@ import {
     View,
     Image,
     BackHandler,
-    FlatList
+    FlatList,
+    Dimensions
 } from 'react-native';
-import { Button, Text } from '@ui-kitten/components';
-import { ImageOverlay } from '../../components/image-overlay.component';
+import { Button, Text, Input } from '@ui-kitten/components';
 import { PlusOutlineIcon } from '../../libs/icons';
 import { getNews } from '../../redux/services';
 import { LoadingIndicator } from '../scores/components/LoadingIndicator';
+import ScaledImage from '../../components/ScaledImage';
+import { CloseIcon, SearchIcon } from '../../libs/icons';
+import format from 'date-fns/format';
 
+const screenWidth = Dimensions.get('window').width;
 export default class NewsListScreen extends PureComponent {
     constructor(props) {
         super(props);
@@ -20,8 +24,8 @@ export default class NewsListScreen extends PureComponent {
             loading: false,
             page: 1,
             listNews: [],
-            headingNews: null,
-            gotAll: false
+            gotAll: false,
+            search: ''
         }
         this._Mounted = false;
     }
@@ -54,10 +58,8 @@ export default class NewsListScreen extends PureComponent {
                 if (success) {
                     if (news.length > 0) {
                         if (page == 1) {
-                            const [headingNews, ...listNews] = news;
                             this._Mounted && this.setState({
-                                headingNews: headingNews,
-                                listNews: listNews,
+                                listNews: news,
                                 loading: false,
                                 total: page * per_page >= total
                             });
@@ -83,45 +85,25 @@ export default class NewsListScreen extends PureComponent {
         navigation && navigation.navigate('NewsDetail', { uri: newsItem.url });
     };
 
-    renderHeadingItem = () => {
-        const { headingNews } = this.state;
-        return (
-            <ImageOverlay
-                style={styles.headingNewsContainer}
-                source={{ uri: headingNews.urlToImage }}>
-                <Text style={styles.headingNewsTitle}>
-                    {headingNews.title}
-                </Text>
-                <Text style={styles.headingNewsDescription}>
-                    {headingNews.description}
-                </Text>
-                {headingNews.source && headingNews.source.name && <Text
-                    style={styles.headingNewsSource}>
-                    {headingNews.source.name}
-                </Text>}
-                <Button style={styles.readButton}
-                    status='control'
-                    size='small'
-                    onPress={() => this.goToItemDetail(headingNews)}>
-                    {() => <Text style={styles.readButtonText}>R E A D</Text>}
-                </Button>
-            </ImageOverlay>
-        )
-    };
 
     renderFooterItem = () => {
         const { loading, gotAll, page } = this.state;
+        if (loading) {
+            return (
+                <LoadingIndicator style={styles.loadingIndicator} />
+            )
+        }
+        if (gotAll) return null;
         return (
-            loading || gotAll ? null :
-                <Button
-                    style={styles.loadButton}
-                    size='small'
-                    accessoryRight={PlusOutlineIcon}
-                    onPress={() => this.onLoadNews(page + 1)}>
-                    <Text style={styles.loadButtonText}>
-                        LOAD MORE
-                    </Text>
-                </Button>
+            <Button
+                style={styles.loadButton}
+                size='small'
+                accessoryRight={PlusOutlineIcon}
+                onPress={() => this.onLoadNews(page + 1)}>
+                <Text style={styles.loadButtonText}>
+                    LOAD MORE
+                </Text>
+            </Button>
         )
     }
 
@@ -134,31 +116,61 @@ export default class NewsListScreen extends PureComponent {
                 <Text style={styles.itemTitle}>
                     {info.item.title}
                 </Text>
+            </View>
+            <ScaledImage
+                uri={info.item.urlToImage}
+                width={screenWidth - 28}
+            />
+            <View style={styles.itemFooter}>
+                <Text style={styles.itemPublishedTime}>{this.formatDate(info.item.publishedAt)}</Text>
                 {info.item.source && info.item.source.name && <Text
                     style={styles.itemSource}>
                     {info.item.source.name}
                 </Text>}
             </View>
-            <Image
-                style={styles.itemImageSection}
-                source={{ uri: info.item.urlToImage }}
-            />
         </TouchableOpacity>
     );
 
+    formatDate = (date) => {
+        return format(new Date(date), "eee, MMM dd yyyy");
+    }
+
+    customSearchIcon = () => {
+        return <SearchIcon style={styles.searchIcon} />
+    }
+
+    customClearIcon = () => {
+        const { search } = this.state;
+        return search ? <TouchableOpacity activeOpacity={0.8} onPress={() => this._Mounted && this.setState({ search: '' })}>
+            <CloseIcon style={styles.searchIcon} />
+        </TouchableOpacity> : null
+    }
+
     render() {
-        const { headingNews, listNews, loading } = this.state;
+        const { listNews, loading, search } = this.state;
         return (
             <View style={styles.container}>
-                {headingNews && <FlatList
+                <View style={styles.header}>
+                    <Input
+                        style={styles.searchInput}
+                        placeholder='Search ...'
+                        placeholderTextColor="#888"
+                        value={search}
+                        onChangeText={(search) => this._Mounted && this.setState({ search })}
+                        accessoryLeft={this.customSearchIcon}
+                        accessoryRight={this.customClearIcon}
+                    />
+                    <Button style={styles.searchButton}
+                        onPress={() => { }}
+                        size='medium'>Search</Button>
+                </View>
+                <FlatList
                     style={styles.list}
                     data={listNews}
                     renderItem={this.renderNewsItem}
-                    ListHeaderComponent={this.renderHeadingItem}
                     ListFooterComponent={this.renderFooterItem}
                     keyExtractor={(item, index) => index.toString()}
-                />}
-                {loading && <LoadingIndicator style={styles.loadingIndicator} />}
+                />
             </View>
         );
     };
@@ -170,7 +182,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#121212'
     },
     list: {
-        backgroundColor: '#121212'
+        backgroundColor: '#121212',
+        flex: 1
     },
     readButton: {
         width: '50%',
@@ -182,51 +195,37 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'bold',
     },
-    headingNewsContainer: {
-        justifyContent: 'center',
-        paddingHorizontal: 15,
-        minHeight: 200,
-        marginBottom: 4,
-    },
-    headingNewsTitle: {
-        zIndex: 1,
-        textAlign: 'center',
-        fontSize: 18
-    },
-    headingNewsDescription: {
-        zIndex: 1,
-        marginTop: 10,
-        fontSize: 14
-    },
-    headingNewsSource: {
-        marginTop: 10,
-        fontSize: 12
-    },
     item: {
-        marginBottom: 4,
-        flexDirection: 'row',
-        minHeight: 100,
+        marginVertical: 4,
         backgroundColor: '#222',
-        marginHorizontal: 2,
+        marginHorizontal: 4,
         padding: 10,
         borderRadius: 4,
-    },
-    itemSection: {
-        flex: 2,
-        padding: 2,
     },
     itemImageSection: {
         flex: 1,
         padding: 0,
+        width: '100%',
+        resizeMode: 'contain',
+        height: 'auto'
     },
     itemTitle: {
         flex: 1,
-        fontSize: 14
+        fontSize: 14,
+        fontWeight: 'bold'
     },
     itemSource: {
-        alignSelf: 'baseline',
-        fontSize: 12,
-        marginTop: 10,
+        fontSize: 13,
+        fontWeight: 'bold',
+        marginLeft: 10,
+    },
+    itemFooter: {
+        flexDirection: 'row',
+        alignItems: 'baseline'
+    },
+    itemPublishedTime: {
+        color: '#888',
+        fontSize: 12
     },
     iconButton: {
         paddingHorizontal: 0,
@@ -244,5 +243,30 @@ const styles = StyleSheet.create({
     loadingIndicator: {
         height: 100,
         justifyContent: 'center'
+    },
+    header: {
+        paddingHorizontal: 16,
+        paddingVertical: 2,
+        backgroundColor: '#111',
+        flexDirection: 'row'
+    },
+    searchInput: {
+        marginTop: 6,
+        backgroundColor: '#000',
+        borderWidth: 0,
+        borderRadius: 6,
+        flex: 1,
+        tintColor: '#FFF'
+    },
+    searchButton: {
+        backgroundColor: '#111',
+        borderColor: '#111',
+        color: 'white',
+    },
+    searchIcon: {
+        height: 20,
+        width: 20,
+        marginHorizontal: 4,
+        tintColor: '#FFF'
     },
 });

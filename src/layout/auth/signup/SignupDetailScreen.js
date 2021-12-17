@@ -151,6 +151,7 @@ class SignupDetailForm extends PureComponent {
                                 placeholderTextColor="#888"
                                 value={password}
                                 secureTextEntry
+                                autoCapitalize="none"
                                 onChangeText={(text) => this._Mounted && this.setState({ password: text })}
                             />
                             {error && error.password && <Text style={styles.errorText}>{error.password}</Text>}
@@ -164,6 +165,7 @@ class SignupDetailForm extends PureComponent {
                                 placeholderTextColor="#888"
                                 value={passwordConfirm}
                                 secureTextEntry
+                                autoCapitalize="none"
                                 onChangeText={(text) => this._Mounted && this.setState({ passwordConfirm: text })}
                             />
                             {error && error.passwordConfirm && <Text style={styles.errorText}>{error.passwordConfirm}</Text>}

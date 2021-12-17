@@ -54,9 +54,11 @@ const App = ({ userToken }) => {
         // })
 
         notifications().onNotification((notification) => {
-            console.log(notification)
-            // notification.android.setChannelId(notification.data.channelId);
-            // notifications().displayNotification(notification);
+            // console.log(notification)
+            notification.android.setChannelId("HeatScore");
+            notification.android.setSmallIcon("ic_notification");
+            notification.android.setColor("#b90000")
+            notifications().displayNotification(notification);
         });
 
         // get notification data when notification is clicked when app is in foreground

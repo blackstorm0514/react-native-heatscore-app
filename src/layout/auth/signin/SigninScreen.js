@@ -138,6 +138,7 @@ class SignInForm extends PureComponent {
                                 placeholderTextColor="#888"
                                 value={password}
                                 secureTextEntry
+                                autoCapitalize="none"
                                 onChangeText={(text) => this.changeField('password', text)}
                             />
                         </Layout>
