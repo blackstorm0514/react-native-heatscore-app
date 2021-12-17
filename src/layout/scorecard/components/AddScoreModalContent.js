@@ -5,7 +5,7 @@ import {
     TouchableOpacity,
     Dimensions
 } from 'react-native';
-import { Button, Text, ViewPager } from '@ui-kitten/components';
+import { Text, ViewPager } from '@ui-kitten/components';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import SelectTeamComponent from './SelectTeamComponent';
 import SelectTypeComponent from './SelectTypeComponent';
@@ -50,7 +50,7 @@ export default class AddScoreModalContent extends PureComponent {
 
     onSelectEvent = (event) => {
         this._Mounted && this.setState({
-            selectedIndex: 0,
+            selectedIndex: 1,
             event: event,
             team: null,
             type: null,
@@ -163,6 +163,8 @@ export default class AddScoreModalContent extends PureComponent {
             <ViewPager selectedIndex={selectedIndex}
                 swipeEnabled={false}
                 style={{ backgroundColor: '#121212', flex: 1 }}>
+                <SelectEventComponent key="2"
+                    onSelect={this.onSelectEvent} />
                 <View style={styles.container} key="1">
                     <TouchableOpacity style={styles.itemContainer}
                         activeOpacity={0.8}
@@ -201,8 +203,6 @@ export default class AddScoreModalContent extends PureComponent {
                         disabled={submitting}
                     />
                 </View>
-                <SelectEventComponent key="2"
-                    onSelect={this.onSelectEvent} />
             </ViewPager>
         )
     }

@@ -48,7 +48,7 @@ export default class AddScoreModal extends PureComponent {
                     onPress={this.onCloseModal}>
                     <Text style={styles.modalHeaderAction}>Cancel</Text>
                 </TouchableOpacity>
-                <Text style={styles.modalHeaderTitle}>Add Your Bet</Text>
+                <Text style={styles.modalHeaderTitle}>Choose a Game</Text>
                 <TouchableOpacity activeOpacity={0.7}
                     disabled={submit}
                     onPress={() => this._Mounted && this.setState({ submit: true })}>
@@ -73,8 +73,6 @@ export default class AddScoreModal extends PureComponent {
                 ref={this.addModalRef}
                 HeaderComponent={this.renderModalHeader}
                 disableScrollIfPossible
-                // rootStyle={{ flex: 1 }}
-                // childrenStyle={{ flex: 1 }}
                 modalStyle={{ backgroundColor: '#121212' }}>
                 <AddScoreModalContent submit={submit}
                     onAddScoreCard={this.onAddScoreCard} />
