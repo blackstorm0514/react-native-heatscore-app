@@ -206,6 +206,7 @@ export function formatDateStr(time) {
 const iconName = {
     "All": "sports",
     "Football": "sports-football",
+    "American Football": "sports-football",
     "Basketball": "sports-basketball",
     "Hockey": "sports-hockey",
     "Baseball": "sports-baseball",
@@ -217,8 +218,9 @@ const iconName = {
 }
 
 const logoImages = {
-    "NBA": require('../assets/images/league_logos/nba.png'),
     'NFL': require('../assets/images/league_logos/nfl.png'),
+    'NFL Preseason': require('../assets/images/league_logos/nfl.png'),
+    "NBA": require('../assets/images/league_logos/nba.png'),
     'NCAAF': require('../assets/images/league_logos/ncaaf.png'),
     'CFL': require('../assets/images/league_logos/cfl.png'),
     'NCAAB': require('../assets/images/league_logos/ncaab.png'),

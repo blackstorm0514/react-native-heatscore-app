@@ -6,8 +6,6 @@ import { LoadingIndicator } from './components/LoadingIndicator';
 import RenderFavoriteComponent from './components/RenderFavoriteComponent';
 import { getEvent } from '../../redux/services';
 
-const inPlayTime = 30 * 1000;
-
 export default class ScoresPerDayScreen extends Component {
     constructor(props) {
         super(props);
@@ -22,16 +20,25 @@ export default class ScoresPerDayScreen extends Component {
     }
 
     componentDidMount() {
+        const { navigation } = this.props;
         this._Mounted = true;
         this.getEventsData();
+        this.willFocusSubscription = navigation.addListener('focus', this.getEventsData);
     }
 
     componentWillUnmount() {
         this._Mounted = false;
+        if (this.willFocusSubscription) {
+            this.willFocusSubscription();
+        }
     }
 
     getEventsData = (refreshing = false) => {
         const { date, sport, league } = this.props;
+        const { refreshing: refreshingState, loading } = this.state;
+
+        if (refreshingState || loading) return;
+
         this._Mounted && this.setState({ [refreshing ? 'refreshing' : 'loading']: true });
         getEvent(date, sport, league)
             .then(({ data: result }) => {

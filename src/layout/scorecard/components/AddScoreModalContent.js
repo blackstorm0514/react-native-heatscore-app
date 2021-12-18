@@ -13,7 +13,7 @@ import SelectTimeLineComponent from './SelectTimeLineComponent';
 import SelectPointComponent from './SelectPointComponent';
 import SelectEventComponent from './SelectEventComponent';
 import Toast from 'react-native-simple-toast';
-import { capitalizeString, getTimeLineName, truncateString } from "../../../libs/functions";
+import { truncateString } from "../../../libs/functions";
 import ManageAlertComponent from "./ManageAlertComponent";
 import { addScoreCard } from "../../../redux/services";
 

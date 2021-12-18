@@ -1,14 +1,38 @@
 import React, { PureComponent, createRef } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { Text } from '@ui-kitten/components';
+import { StyleSheet, View, TouchableOpacity, Dimensions } from 'react-native';
 import { Modalize } from 'react-native-modalize';
-import AddScoreModalContent from './AddScoreModalContent';
+import { Text, ViewPager } from '@ui-kitten/components';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import SelectTeamComponent from './SelectTeamComponent';
+import SelectTypeComponent from './SelectTypeComponent';
+import SelectTimeLineComponent from './SelectTimeLineComponent';
+import SelectPointComponent from './SelectPointComponent';
+import SelectEventComponent from './SelectEventComponent';
+import Toast from 'react-native-simple-toast';
+import { truncateString } from "../../../libs/functions";
+import ManageAlertComponent from "./ManageAlertComponent";
+import { addScoreCard } from "../../../redux/services";
+import { ArrowIosBackIcon } from '../../../libs/icons';
+
+const screenHeight = Dimensions.get('screen').height;
 
 export default class AddScoreModal extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            submit: false,
+            selectedIndex: 0,
+
+            event: null,
+            team: null,
+            type: null,
+            timeline: null,
+            points: null,
+            allowAlerts: true,
+            alert_gameStart: true,
+            alert_gameEnd: true,
+            alert_gameScoring: false,
+
+            submitting: false,
         }
 
         this._Mounted = false;
@@ -35,38 +59,151 @@ export default class AddScoreModal extends PureComponent {
 
     onCloseModal = () => {
         const { onAddScoreCard } = this.props;
+        this.setState({
+            event: null,
+            team: null,
+            type: null,
+            timeline: null,
+            points: null,
+            allowAlerts: true,
+            alert_gameStart: true,
+            alert_gameEnd: true,
+            alert_gameScoring: false,
+        })
         this.addModalRef.current?.close();
         onAddScoreCard(null);
     }
 
     renderModalHeader = () => {
-        const { submit } = this.state;
+        const { submitting, selectedIndex } = this.state;
         return (
             <View style={styles.addModalHeader}>
                 <TouchableOpacity activeOpacity={0.7}
-                    disabled={submit}
-                    onPress={this.onCloseModal}>
-                    <Text style={styles.modalHeaderAction}>Cancel</Text>
+                    disabled={submitting}
+                    onPress={selectedIndex == 0 ? () => this.onChangeIndex(1) : this.onCloseModal}
+                    style={{ marginRight: 'auto' }}>
+                    {selectedIndex == 1 && <Text style={styles.modalHeaderAction}>Cancel</Text>}
+                    {selectedIndex == 0 && <ArrowIosBackIcon style={styles.modalBackIcon} />}
                 </TouchableOpacity>
-                <Text style={styles.modalHeaderTitle}>Choose a Game</Text>
+                <Text style={styles.modalHeaderTitle}>{selectedIndex == 0 ? 'Choose a Game' : 'Add Your Bet'}</Text>
                 <TouchableOpacity activeOpacity={0.7}
-                    disabled={submit}
-                    onPress={() => this._Mounted && this.setState({ submit: true })}>
+                    disabled={submitting}
+                    onPress={this.onSubmit}
+                    style={{ marginLeft: 'auto' }}>
                     <Text style={styles.modalHeaderAction}>Save</Text>
                 </TouchableOpacity>
             </View>
         )
     }
 
+    onChangeIndex = (index = 1) => {
+        this._Mounted && this.setState({ selectedIndex: index })
+    }
+
     onAddScoreCard = (time) => {
         const { onAddScoreCard } = this.props;
-        this._Mounted && this.setState({ submit: false });
         time && this.addModalRef.current?.close();
         time && onAddScoreCard(time);
     }
 
+    onSelectEvent = (event) => {
+        this._Mounted && this.setState({
+            selectedIndex: 1,
+            event: event,
+            team: null,
+            type: null,
+            timeline: null,
+            points: null,
+        });
+    }
+
+    onSelectType = (type) => {
+        if (!type) { return Toast.show('Please select bet type.'); }
+        this.setState({ type: type })
+    }
+
+    onSelectTeam = (team) => {
+        if (!team) { return Toast.show('Please select a team.'); }
+        this.setState({ team: team })
+    }
+
+    onSelectTimeline = (timeline) => {
+        if (!timeline) { return Toast.show('Please select timeline.'); }
+        this.setState({ timeline: timeline })
+    }
+
+    onSelectPoints = (points) => {
+        this.setState({ points: points })
+    }
+
+    onChangeAlerts = (key, value) => {
+        this.setState({ [key]: value });
+    }
+
+    onSubmit = async () => {
+        const {
+            event,
+            team,
+            type,
+            timeline,
+            points,
+            allowAlerts,
+            alert_gameStart,
+            alert_gameEnd,
+            alert_gameScoring
+        } = this.state;
+
+        if (!event) {
+            this.onAddScoreCard(null);
+            return Toast.show('Please select a game.');
+        }
+        if (!type) {
+            this.onAddScoreCard(null);
+            return Toast.show('Please select bet type.');
+        }
+        if (!team) {
+            this.onAddScoreCard(null);
+            return Toast.show('Please select a team.');
+        }
+        if (!timeline) {
+            this.onAddScoreCard(null);
+            return Toast.show('Please select timeline.');
+        }
+        if (!points && ['total', 'spread'].includes(type)) {
+            this.onAddScoreCard(null);
+            return Toast.show('Please select points.');
+        }
+
+        this._Mounted && this.setState({ submitting: true });
+        addScoreCard({
+            event_id: event.event_id, team, type, timeline, points,
+            allowAlerts,
+            alert_gameStart,
+            alert_gameEnd,
+            alert_gameScoring
+        })
+            .then(({ data }) => {
+                const { success, time, error } = data;
+                if (success) {
+                    this.onAddScoreCard(time);
+                } else {
+                    Toast.show(error);
+                    this.onAddScoreCard(null);
+                }
+                this._Mounted && this.setState({ submitting: false });
+            })
+            .catch(error => {
+                Toast.show('Cannot add a score card. Please try again later.');
+                this._Mounted && this.setState({ submitting: false });
+                this.onAddScoreCard(null);
+            })
+    }
+
     render() {
-        const { submit } = this.state;
+        const { event, team, type, timeline, points,
+            allowAlerts, alert_gameStart, alert_gameEnd, alert_gameScoring,
+            submitting, selectedIndex
+        } = this.state;
 
         return (
             <Modalize
@@ -74,8 +211,50 @@ export default class AddScoreModal extends PureComponent {
                 HeaderComponent={this.renderModalHeader}
                 disableScrollIfPossible
                 modalStyle={{ backgroundColor: '#121212' }}>
-                <AddScoreModalContent submit={submit}
-                    onAddScoreCard={this.onAddScoreCard} />
+                <ViewPager selectedIndex={selectedIndex}
+                    swipeEnabled={false}
+                    style={{ backgroundColor: '#121212', flex: 1 }}>
+                    <SelectEventComponent key="2"
+                        onSelect={this.onSelectEvent} />
+                    <View style={styles.container} key="1">
+                        <TouchableOpacity style={styles.itemContainer}
+                            activeOpacity={0.8}
+                            onPress={() => this.onChangeIndex(0)}>
+                            <Text style={styles.itemTitleText}>GAME</Text>
+                            <View style={styles.itemContent}>
+                                <Text style={styles.itemContentText}>{event ? `${truncateString(event.home.name)} VS ${truncateString(event.away.name)}` : 'Select'}</Text>
+                                <FontAwesomeIcon style={styles.itemContentIcon} color='#999' size={18} name='angle-right' />
+                            </View>
+                        </TouchableOpacity>
+                        <SelectTypeComponent
+                            type={type}
+                            onSelect={this.onSelectType} />
+                        <SelectTeamComponent
+                            event={event}
+                            team={team}
+                            type={type}
+                            onSelect={this.onSelectTeam}
+                        />
+                        <SelectTimeLineComponent
+                            event={event}
+                            timeline={timeline}
+                            onSelect={this.onSelectTimeline}
+                        />
+                        <SelectPointComponent
+                            points={points}
+                            type={type}
+                            onSelect={this.onSelectPoints}
+                        />
+                        <ManageAlertComponent
+                            allowAlerts={allowAlerts}
+                            alert_gameStart={alert_gameStart}
+                            alert_gameEnd={alert_gameEnd}
+                            alert_gameScoring={alert_gameScoring}
+                            onSelect={this.onChangeAlerts}
+                            disabled={submitting}
+                        />
+                    </View>
+                </ViewPager>
             </Modalize>
         )
     }
@@ -85,11 +264,16 @@ const styles = StyleSheet.create({
     addModalHeader: {
         flexDirection: 'row',
         backgroundColor: '#222',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: 20,
         paddingVertical: 10,
         height: 42
+    },
+    modalBackIcon: {
+        height: 20,
+        width: 20,
+        tintColor: '#E10032'
     },
     modalHeaderAction: {
         color: '#E10032',
@@ -99,5 +283,39 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         fontSize: 16
+    },
+    container: {
+        flex: 1,
+        paddingHorizontal: 20,
+        marginTop: 10,
+        minHeight: screenHeight - 140
+    },
+    itemContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingVertical: 6,
+        alignItems: 'center',
+        borderBottomColor: '#222',
+        borderBottomWidth: 1,
+    },
+    itemTitleText: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: 'white'
+    },
+    itemContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignContent: 'center'
+    },
+    itemContentText: {
+        fontSize: 14,
+        fontWeight: '100',
+        color: '#999',
+        alignItems: 'center',
+        alignContent: 'center'
+    },
+    itemContentIcon: {
+        marginLeft: 8
     },
 });
