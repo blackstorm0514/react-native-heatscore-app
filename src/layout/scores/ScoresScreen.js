@@ -1,9 +1,11 @@
 import React, { Component, createRef } from 'react';
-import { StyleSheet, View, Dimensions, BackHandler, Alert, Image } from 'react-native';
+import { StyleSheet, View, Dimensions, BackHandler, Alert, Image, TouchableOpacity } from 'react-native';
 import { TopNavigation, Text } from '@ui-kitten/components';
 import { TabView, TabBar } from 'react-native-tab-view';
 import ScoresPerSportScreen from './ScoresPerSportScreen';
 import { getSportsIcon } from '../../libs/functions';
+import smallAppIcon from '../../assets/images/hs-app-icon-72.png';
+import { SearchIcon } from '../../libs/icons';
 
 class ScoresScreen extends Component {
     constructor(props) {
@@ -128,10 +130,21 @@ class ScoresScreen extends Component {
 
     render() {
         const { index, routes } = this.state;
+        const { navigation } = this.props;
 
         return (
             <View style={styles.container} >
                 <TopNavigation title={this.renderTitle} style={styles.headerStyle} />
+                <TouchableOpacity style={styles.searchHeader}
+                    activeOpacity={0.9}
+                    onPress={() => navigation.navigate('Search')}>
+                    <View style={styles.searchHeaderMain}>
+                        <SearchIcon style={styles.searchIcon} />
+                        <Text style={styles.searchHeaderText}>Teams, Events</Text>
+                    </View>
+                    <Image style={styles.searchHeaderIcon}
+                        source={smallAppIcon} />
+                </TouchableOpacity>
                 <TabView
                     lazy
                     renderTabBar={this.renderTabBar}
@@ -156,14 +169,17 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         paddingTop: 24,
         minHeight: 0,
-        backgroundColor: '#121212'
+        backgroundColor: '#121212',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     headerTitle: {
         color: '#888',
         fontSize: 16,
         alignItems: 'center',
         backgroundColor: '#121212',
-        marginBottom: 10
+        marginBottom: 10,
+        justifyContent: 'center'
     },
     closeIcon: {
         height: 24,
@@ -175,4 +191,35 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
     },
+    searchHeader: {
+        paddingHorizontal: 16,
+        paddingBottom: 4,
+        backgroundColor: '#111',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    searchHeaderIcon: {
+        width: 20,
+        height: 20,
+        resizeMode: 'contain',
+    },
+    searchHeaderMain: {
+        flexDirection: 'row',
+        backgroundColor: '#222',
+        flex: 1,
+        marginRight: 10,
+        borderRadius: 4,
+        alignItems: 'center',
+        padding: 8
+    },
+    searchIcon: {
+        height: 16,
+        width: 16,
+        tintColor: '#888'
+    },
+    searchHeaderText: {
+        fontSize: 14,
+        color: '#888',
+        marginLeft: 10,
+    }
 });

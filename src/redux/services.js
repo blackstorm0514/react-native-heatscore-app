@@ -92,3 +92,7 @@ export const reportChat = (data) => {
 export const toggleFavoriteEvent = (event_id, data) => {
     return ApiService.post(`/events/${event_id}/favorite`, data);
 }
+
+export const searchEvents = (search) => {
+    return ApiService.get(`/events/teams/search`, { params: { search } });
+}
