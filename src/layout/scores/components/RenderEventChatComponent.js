@@ -63,6 +63,9 @@ class RenderEventChatComponent extends Component {
                                 this._Mounted && this.setState({ room_id: room_id });
                                 this.getChatLogs(room_id);
                             })
+                            .catch(error => {
+                                console.warn('rooms', error)
+                            })
                     } else if (res.size > 0) {
                         const room_id = res.docs[0].id
                         this._Mounted && this.setState({ room_id: room_id });
@@ -71,6 +74,7 @@ class RenderEventChatComponent extends Component {
                     }
                 })
                 .catch(error => {
+                    console.warn('room id', error)
                 })
 
         }

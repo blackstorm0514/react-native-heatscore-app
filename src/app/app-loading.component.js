@@ -21,14 +21,12 @@ const AppLoading = ({ initialConfig, children, placeholder, setUserAction }) => 
 
     const startTasks = async () => {
         try {
-            auth()
-                .signInAnonymously()
-                .then(() => { })
-                .catch(error => {
-                    if (error.code === 'auth/operation-not-allowed') {
-                    }
-                });
-
+            try {
+                await auth().signInAnonymously();
+                // console.log('Firebase user signed in.', value);
+            } catch (error) {
+                console.warn('Firebase signin error', error);
+            }
             const { data: { success, user } } = await getProfile();
             success && setUserAction(user);
             return Promise.resolve();
