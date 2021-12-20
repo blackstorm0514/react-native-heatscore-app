@@ -1,16 +1,13 @@
 import React, { PureComponent } from 'react';
-import { Text, Input, TopNavigationAction, TopNavigation } from '@ui-kitten/components';
-import { StyleSheet, View, Dimensions, BackHandler, FlatList, TouchableOpacity, RefreshControl } from 'react-native'
+import { Text, TopNavigationAction, TopNavigation } from '@ui-kitten/components';
+import { StyleSheet, View, BackHandler, FlatList, TouchableOpacity, RefreshControl } from 'react-native'
 import { ArrowIosBackIcon } from '../../libs/icons';
 import { LoadingIndicator } from './components/LoadingIndicator';
-import { addFavorite, removeFavorite, searchEventsForTeam, searchTeamsForEvents } from '../../redux/services';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { addFavorite, removeFavorite, searchEventsForTeam } from '../../redux/services';
 import TeamLogoImage from '../../components/team-logo-image';
 import Toast from 'react-native-simple-toast';
 import { connect } from 'react-redux';
 import RenderEventComponentOnTeam from './components/RenderEventComponentOnTeam';
-
-const screenWidth = Dimensions.get('window').width;
 
 class SearchEventForTeamScreen extends PureComponent {
     constructor(props) {

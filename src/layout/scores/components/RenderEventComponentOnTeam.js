@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import { Text } from '@ui-kitten/components';
-import { getMatchScore, getStatusString, getTimeString, ordinal_suffix_of } from '../../../libs/functions';
+import { formatDateStr, getMatchScore, getStatusString, getTimeString, ordinal_suffix_of } from '../../../libs/functions';
 import TeamLogoImage from '../../../components/team-logo-image';
 
 export default class RenderEventComponentOnTeam extends PureComponent {
@@ -15,33 +15,26 @@ export default class RenderEventComponentOnTeam extends PureComponent {
         const { event } = this.props;
         if (!event) return null;
 
-        const { home, away, time, time_status, timer, sport, scores } = event;
-        const time_str = getTimeString(timer, time, time_status);
-        const { home_score, away_score } = getMatchScore(sport, scores, 'game');
-        const { status_class, status_text } = getStatusString(time_status, timer, sport);
+        const { home, away, time, league } = event;
+        const time_str = formatDateStr(time);
 
         return (
             <TouchableOpacity
                 style={styles.eventItem}
                 activeOpacity={0.6}
                 onPress={() => this.onItemPress()}>
+                <Text style={styles.eventLeagueName}>{league.name}</Text>
                 <View style={styles.eventItemDetail}>
                     <View style={styles.eventItemTeam}>
                         <TeamLogoImage image_id={home.image_id} size={20} style={styles.teamLogoImage} />
                         <Text style={styles.eventItemTeamName} numberOfLines={1}>{home.name}</Text>
-                        <Text style={styles.eventItemTeamScore}>{home_score}</Text>
                     </View>
                     <View style={styles.eventItemTeam}>
                         <TeamLogoImage image_id={away.image_id} size={20} style={styles.teamLogoImage} />
                         <Text style={styles.eventItemTeamName} numberOfLines={1}>{away.name}</Text>
-                        <Text style={styles.eventItemTeamScore}>{away_score}</Text>
                     </View>
                 </View>
-                <View style={styles.eventItemStatus}>
-                    {time_str && <Text style={[status_class, styles.eventItemStatusText]}>{time_str}</Text>}
-                    {status_text &&
-                        <Text style={[status_class, styles.eventItemStatusText]} numberOfLines={1}>{status_text}</Text>}
-                </View>
+                <Text style={styles.eventItemStatusText}>{time_str}</Text>
             </TouchableOpacity>
         )
     }
@@ -49,43 +42,39 @@ export default class RenderEventComponentOnTeam extends PureComponent {
 
 const styles = StyleSheet.create({
     eventItem: {
-        flexDirection: 'row',
         marginHorizontal: 10,
-        borderBottomColor: '#222',
+        borderColor: '#222',
         borderBottomWidth: 1,
+        borderTopWidth: 1,
         paddingVertical: 4
-    },
-    eventItemStatus: {
-        flex: 2,
-        justifyContent: 'center'
     },
     eventItemStatusText: {
         fontSize: 12,
         marginVertical: 3,
-        textAlign: 'right',
-        overflow: 'hidden'
+        color: '#999',
+        marginLeft: 10
+    },
+    eventLeagueName: {
+        fontSize: 12,
+        marginVertical: 3,
+        color: '#FFF',
     },
     eventItemDetail: {
-        flex: 7,
+        flexDirection: 'row'
     },
     eventItemTeam: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginVertical: 2
+        marginVertical: 2,
+        flex: 1
     },
     teamLogoImage: {
         flex: 1
     },
     eventItemTeamName: {
         flex: 5,
-        fontSize: 15,
+        fontSize: 14,
         fontWeight: '400',
         marginLeft: 10
     },
-    eventItemTeamScore: {
-        flex: 1,
-        fontSize: 15,
-        fontWeight: 'bold',
-        textAlign: 'right'
-    }
 });

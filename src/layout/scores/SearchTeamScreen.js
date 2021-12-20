@@ -49,7 +49,7 @@ class SearchScreen extends PureComponent {
         </TouchableOpacity> : null
     }
 
-    searchEvents = (isRefresh = false) => {
+    searchTeams = (isRefresh = false) => {
         const { search, loading, refreshing } = this.state;
         if (loading || refreshing) return;
         this._Mounted && this.setState({ [isRefresh ? 'refreshing' : 'loading']: true });
@@ -82,7 +82,7 @@ class SearchScreen extends PureComponent {
                     size="small"
                 />
                 <Button style={styles.searchButton}
-                    onPress={() => this.searchEvents()}
+                    onPress={() => this.searchTeams()}
                     size='medium'>Search</Button>
             </View>
         );
@@ -174,7 +174,7 @@ class SearchScreen extends PureComponent {
                         colors={['#000']}
                         progressBackgroundColor="#FFF"
                         refreshing={refreshing}
-                        onRefresh={() => this.searchEvents(true)}
+                        onRefresh={() => this.searchTeams(true)}
                     />} />
             </View>
         );
