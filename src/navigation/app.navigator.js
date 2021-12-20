@@ -2,6 +2,7 @@ import React from 'react';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeBottomNavigation } from '../components/home-bottom-navigation.component';
+import { navigationRef } from '../app';
 import { AuthNavigator } from './auth.navigator';
 import { NewsNavigator } from './news.navigator';
 import { ScoresNavigator } from './scores.navigator';
@@ -27,7 +28,7 @@ const TabBarVisibilityOptions = ({ route }) => {
 const screenOption = { headerShown: false, unmountOnBlur: true };
 
 export const AppNavigator = () => (
-    <NavigationContainer theme={navigatorTheme}>
+    <NavigationContainer theme={navigatorTheme} ref={navigationRef}>
         <BottomTab.Navigator
             screenOptions={TabBarVisibilityOptions}
             initialRouteName={initialTabRoute}

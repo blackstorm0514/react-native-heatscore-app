@@ -6,6 +6,7 @@ import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { notifications } from 'react-native-firebase';
+import { createNavigationContainerRef } from '@react-navigation/native';
 
 import AppLoading from './app-loading.component';
 import { appMappings, appThemes } from './app-theming';
@@ -17,6 +18,7 @@ import { store, persistor } from '../redux/store';
 import { ApiService } from '../services/api.service';
 import { CheckPermissionAndReturnFcmToken } from '../libs/fcm_utils';
 
+export const navigationRef = createNavigationContainerRef();
 
 const defaultConfig = {
     userToken: null,
@@ -40,18 +42,11 @@ const App = ({ userToken }) => {
         };
     }
 
-    const foregroundNotificationsListener = () => {
-        // to process message broadcasted from onMessageReceived method
-        // const messageListener = messaging().onMessage((message) => {
-        //     console.log("onMessage", message);
-        //     PushNotification.localNotification({
-        //         message: remoteMessage.notification.body,
-        //         title: remoteMessage.notification.title,
-        //         bigPictureUrl: remoteMessage.notification.android.imageUrl,
-        //         smallIcon: remoteMessage.notification.android.imageUrl,
-        //     });
-        // })
+    const navigate = (name, params = null) => {
+        navigationRef.current?.navigate(name, params);
+    }
 
+    const foregroundNotificationsListener = () => {
         notifications().onNotification((notification) => {
             // console.log(notification)
             notification.android.setChannelId("HeatScore");
@@ -62,13 +57,28 @@ const App = ({ userToken }) => {
 
         // get notification data when notification is clicked when app is in foreground
         const notificationOpenedListener = notifications().onNotificationOpened((notificationData) => {
-            console.log("onNotificationOpened", notificationData);
+            const data = notificationData.notification.data;
+            switch (data.type) {
+                case 'game_start':
+                case 'game_end':
+                    navigate('Scores', { screen: 'EventDetail', params: { event: JSON.parse(data.event) } })
+                    break;
+                default:
+            }
         });
 
         // get notification data when notification is clicked to open app when app is in background
         notifications().getInitialNotification()
             .then((notificationData) => {
-                console.log("getInitialNotification", notificationData);
+                const data = notificationData.notification.data;
+                switch (data.type) {
+                    case 'game_start':
+                    case 'game_end':
+                        setTimeout(() => navigate('Scores', { screen: 'EventDetail', params: { event: JSON.parse(data.event) } }),
+                            2000);
+                        break;
+                    default:
+                }
             });
 
         return () => {

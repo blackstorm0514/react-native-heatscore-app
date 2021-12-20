@@ -84,7 +84,7 @@ class EventDetailScreen extends Component {
         }
         const { home, away } = event;
         return <View style={{ paddingTop: 2 }}>
-            <Text style={styles.titleText}>{truncateString(event.home.name)} vs {truncateString(event.away.name)}</Text>
+            <Text style={styles.titleText}>{truncateString(home.name)} vs {truncateString(away.name)}</Text>
         </View>
     }
 
