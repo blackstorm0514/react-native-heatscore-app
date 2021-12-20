@@ -8,6 +8,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import TeamLogoImage from '../../components/team-logo-image';
 import Toast from 'react-native-simple-toast';
 import { connect } from 'react-redux';
+import RenderEventComponentOnTeam from './components/RenderEventComponentOnTeam';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -133,22 +134,12 @@ class SearchEventForTeamScreen extends PureComponent {
     }
 
     renderItem = ({ item }) => {
+        const { navigation } = this.props;
         return (
-            null
-            // <TouchableOpacity style={[styles.item, styles.itemContainer]}
-            //     activeOpacity={0.8}
-            //     onPress={() => this.setTeamName(item)}>
-            //     <TeamLogoImage image_id={item.image_id}
-            //         size={30}
-            //         style={styles.teamLogoImage} />
-            //     <Text style={styles.teamName} numberOfLines={1}>{item.name}</Text>
-            //     <TouchableOpacity activeOpacity={0.8}
-            //         style={styles.toggleFavorite}
-            //         onPress={() => this.toggleFavorite(item)}>
-            //         {item.favorite && <MaterialIcons name="star-rate" color='#fdcb04' size={18} />}
-            //         {!item.favorite && <MaterialIcons name="star-outline" color='#888' size={18} />}
-            //     </TouchableOpacity>
-            // </TouchableOpacity >
+            <RenderEventComponentOnTeam
+                navigation={navigation}
+                event={item}
+            />
         );
     }
 
