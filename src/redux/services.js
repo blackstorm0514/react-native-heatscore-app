@@ -45,8 +45,8 @@ export const phoneVerify = (data) => {
     return ApiService.post('/auth/phone-verify', data);
 }
 
-export const getNews = (page) => {
-    return ApiService.get('/news', { params: { page } });
+export const getNews = (page, search) => {
+    return ApiService.get('/news', { params: { page, search } });
 }
 
 export const searchTeams = (search) => {

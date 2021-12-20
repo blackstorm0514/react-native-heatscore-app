@@ -50,9 +50,11 @@ export default class NewsListScreen extends PureComponent {
     };
 
     onLoadNews = (page) => {
-        const { listNews } = this.state;
+        const { listNews, search, loading } = this.state;
+        if (loading) return;
+        console.log(page)
         this._Mounted && this.setState({ loading: true, page: page });
-        getNews(page)
+        getNews(page, search)
             .then(({ data }) => {
                 const { success, total, data: news, per_page } = data;
                 if (success) {
@@ -146,8 +148,13 @@ export default class NewsListScreen extends PureComponent {
         </TouchableOpacity> : null
     }
 
+    onSearchPress = async () => {
+        await this.setState({ listNews: [] });
+        this.onLoadNews(1);
+    }
+
     render() {
-        const { listNews, loading, search } = this.state;
+        const { listNews, search } = this.state;
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
@@ -161,7 +168,7 @@ export default class NewsListScreen extends PureComponent {
                         accessoryRight={this.customClearIcon}
                     />
                     <Button style={styles.searchButton}
-                        onPress={() => { }}
+                        onPress={this.onSearchPress}
                         size='medium'>Search</Button>
                 </View>
                 <FlatList
@@ -247,7 +254,7 @@ const styles = StyleSheet.create({
     header: {
         paddingHorizontal: 16,
         paddingVertical: 2,
-        backgroundColor: '#111',
+        backgroundColor: '#121212',
         flexDirection: 'row'
     },
     searchInput: {
@@ -259,8 +266,8 @@ const styles = StyleSheet.create({
         tintColor: '#FFF'
     },
     searchButton: {
-        backgroundColor: '#111',
-        borderColor: '#111',
+        backgroundColor: '#121212',
+        borderColor: '#121212',
         color: 'white',
     },
     searchIcon: {
