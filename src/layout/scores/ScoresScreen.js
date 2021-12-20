@@ -137,7 +137,7 @@ class ScoresScreen extends Component {
                 <TopNavigation title={this.renderTitle} style={styles.headerStyle} />
                 <TouchableOpacity style={styles.searchHeader}
                     activeOpacity={0.9}
-                    onPress={() => navigation.navigate('Search')}>
+                    onPress={() => navigation.navigate('SearchTeam')}>
                     <View style={styles.searchHeaderMain}>
                         <SearchIcon style={styles.searchIcon} />
                         <Text style={styles.searchHeaderText}>Teams, Events</Text>

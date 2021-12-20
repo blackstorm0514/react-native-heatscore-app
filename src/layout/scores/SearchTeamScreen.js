@@ -1,16 +1,17 @@
 import React, { PureComponent } from 'react';
 import { Text, Input, Button } from '@ui-kitten/components';
-import { StyleSheet, View, Dimensions, BackHandler, FlatList } from 'react-native'
+import { StyleSheet, View, Dimensions, BackHandler, FlatList, TouchableOpacity, RefreshControl } from 'react-native'
 import { CloseIcon, SearchIcon } from '../../libs/icons';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { LoadingIndicator } from './components/LoadingIndicator';
-import { searchEvents } from '../../redux/services';
+import { addFavorite, removeFavorite, searchTeamsForEvents } from '../../redux/services';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import TeamLogoImage from '../../components/team-logo-image';
+import Toast from 'react-native-simple-toast';
+import { connect } from 'react-redux';
 
 const screenWidth = Dimensions.get('window').width;
 
-export default class SearchScreen extends PureComponent {
+class SearchScreen extends PureComponent {
     constructor(props) {
         super(props);
 
@@ -18,9 +19,7 @@ export default class SearchScreen extends PureComponent {
             search: '',
             items: [],
             loading: false,
-            team: null,
-            events: [],
-            loadingEvents: false,
+            refreshing: false,
         }
         this._Mounted = false;
     }
@@ -50,21 +49,21 @@ export default class SearchScreen extends PureComponent {
         </TouchableOpacity> : null
     }
 
-    searchEvents = () => {
-        const { search, loading } = this.state;
-        if (loading) return;
-        this._Mounted && this.setState({ loading: true });
-        searchEvents(search)
+    searchEvents = (isRefresh = false) => {
+        const { search, loading, refreshing } = this.state;
+        if (loading || refreshing) return;
+        this._Mounted && this.setState({ [isRefresh ? 'refreshing' : 'loading']: true });
+        searchTeamsForEvents(search)
             .then(({ data }) => {
                 const { success, result } = data;
                 if (success) {
-                    this._Mounted && this.setState({ loading: false, items: result });
+                    this._Mounted && this.setState({ [isRefresh ? 'refreshing' : 'loading']: false, items: result });
                 } else {
-                    this._Mounted && this.setState({ loading: false, items: [] });
+                    this._Mounted && this.setState({ [isRefresh ? 'refreshing' : 'loading']: false, items: [] });
                 }
             })
             .catch((error) => {
-                this._Mounted && this.setState({ loading: false, items: [] });
+                this._Mounted && this.setState({ [isRefresh ? 'refreshing' : 'loading']: false, items: [] });
             })
     }
 
@@ -80,9 +79,10 @@ export default class SearchScreen extends PureComponent {
                     onChangeText={(search) => this._Mounted && this.setState({ search })}
                     accessoryLeft={this.customSearchIcon}
                     accessoryRight={this.customClearIcon}
+                    size="small"
                 />
                 <Button style={styles.searchButton}
-                    onPress={this.searchEvents}
+                    onPress={() => this.searchEvents()}
                     size='medium'>Search</Button>
             </View>
         );
@@ -98,64 +98,94 @@ export default class SearchScreen extends PureComponent {
         )
     }
 
-    renderEventsEmpty = () => {
-        const { loadingEvents } = this.state;
-        return (
-            loadingEvents ? <LoadingIndicator style={styles.loadingIndicator} /> :
-                <View style={styles.item}>
-                    <Text style={styles.noResultText}>No Events.</Text>
-                </View>
-        )
+    setTeamName = (team) => {
+        const { navigation } = this.props;
+        navigation.navigate('SearchEventsForTeam', { team });
     }
 
-    setTeamName = (team) => {
-        this._Mounted && this.setState({ team: team, loadingEvents: true });
+    toggleFavorite = (team) => {
+        const { user } = this.props;
+        if (!user) {
+            return Toast.show('Please log in to add favorite.');
+        }
+        const { items } = this.state;
+        const favFunction = team.favorite ? removeFavorite : addFavorite;
+        this.setState({ refreshing: true });
+        favFunction(team.sport.name, { id: team.id, name: team.name, image_id: team.image_id })
+            .then(({ data }) => {
+                const { success, error } = data;
+                if (success) {
+                    this.setState({
+                        items: items.map(item => {
+                            if (item.id == team.id) {
+                                return {
+                                    ...team,
+                                    favorite: !team.favorite
+                                }
+                            }
+                            return item;
+                        }),
+                        refreshing: false
+                    })
+                } else {
+                    Toast.show(error);
+                    this.setState({ refreshing: false });
+                }
+            })
+            .catch((error) => {
+                Toast.show('Cannot add/remove favorite. Please try again later.');
+                this.setState({ refreshing: false });
+            })
     }
 
     renderItem = ({ item }) => {
-        if (item.type == 'team') {
-            return (
-                <TouchableOpacity style={[styles.item, styles.itemContainer]}
-                    activeOpacity={0.8}
-                    onPress={() => this.setTeamName(item)}>
-                    <TeamLogoImage image_id={item.image_id}
-                        size={30}
-                        style={styles.teamLogoImage} />
-                    <Text style={styles.teamName} numberOfLines={1}>{item.name}</Text>
-                    <TouchableOpacity activeOpacity={0.8}
-                        style={styles.toggleFavorite}
-                        onPress={null}>
-                        {item.favorite && <MaterialIcons name="star-rate" color='#fdcb04' size={18} />}
-                        {!item.favorite && <MaterialIcons name="star-outline" color='#888' size={18} />}
-                    </TouchableOpacity>
+        return (
+            <TouchableOpacity style={[styles.item, styles.itemContainer]}
+                activeOpacity={0.8}
+                onPress={() => this.setTeamName(item)}>
+                <TeamLogoImage image_id={item.image_id}
+                    size={30}
+                    style={styles.teamLogoImage} />
+                <Text style={styles.teamName} numberOfLines={1}>{item.name}</Text>
+                <TouchableOpacity activeOpacity={0.8}
+                    style={styles.toggleFavorite}
+                    onPress={() => this.toggleFavorite(item)}>
+                    {item.favorite && <MaterialIcons name="star-rate" color='#fdcb04' size={18} />}
+                    {!item.favorite && <MaterialIcons name="star-outline" color='#888' size={18} />}
                 </TouchableOpacity>
-            );
-        }
-        return null;
+            </TouchableOpacity >
+        );
     }
 
     render() {
-        const { items, events, team } = this.state;
+        const { items, refreshing } = this.state;
 
         return (
             <View style={styles.container}>
                 {this.renderHeader()}
-                {!team && <FlatList
+                <FlatList
                     showsVerticalScrollIndicator={false}
                     keyExtractor={(item, key) => key.toString()}
                     data={items}
                     renderItem={this.renderItem}
-                    ListEmptyComponent={this.renderEmpty} />}
-                {team && <FlatList
-                    showsVerticalScrollIndicator={false}
-                    keyExtractor={(item, key) => key.toString()}
-                    data={events}
-                    renderItem={this.renderItem}
-                    ListEmptyComponent={this.renderEventsEmpty} />}
+                    ListEmptyComponent={this.renderEmpty}
+                    refreshing={refreshing}
+                    refreshControl={<RefreshControl
+                        colors={['#000']}
+                        progressBackgroundColor="#FFF"
+                        refreshing={refreshing}
+                        onRefresh={() => this.searchEvents(true)}
+                    />} />
             </View>
         );
     }
 };
+
+const mapStateToProps = (state) => ({
+    user: state.user,
+});
+
+export default connect(mapStateToProps, null)(SearchScreen);
 
 const styles = StyleSheet.create({
     container: {
@@ -184,7 +214,9 @@ const styles = StyleSheet.create({
         borderWidth: 0,
         borderRadius: 6,
         flex: 1,
-        tintColor: '#FFF'
+        tintColor: '#FFF',
+        padding: 0,
+        fontSize: 14
     },
     searchButton: {
         backgroundColor: '#111',
@@ -192,8 +224,8 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     searchIcon: {
-        height: 20,
-        width: 20,
+        height: 16,
+        width: 16,
         marginHorizontal: 4,
         tintColor: '#FFF'
     },
@@ -201,24 +233,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         textAlign: 'center',
         fontSize: 14
-    },
-    sportsTitle: {
-        backgroundColor: '#222',
-        paddingVertical: 2,
-        paddingHorizontal: 10,
-        flexDirection: 'row',
-        borderBottomColor: '#888',
-        borderBottomWidth: 1,
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        width: screenWidth
-    },
-    sportsTitleText: {
-        color: 'white',
-        fontWeight: 'bold',
-        paddingVertical: 2,
-        maxWidth: '100%',
-        fontSize: 14,
     },
     itemContainer: {
         flexDirection: 'row',
@@ -230,7 +244,6 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     teamName: {
-        // fontWeight: 'bold',
         maxWidth: '70%',
         fontSize: 18,
         marginRight: 'auto'
