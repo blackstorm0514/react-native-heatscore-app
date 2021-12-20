@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     leagueTitleText: {
-        color: '#E10032',
+        color: '#FFF',
         fontWeight: '500',
         maxWidth: '70%',
         fontSize: 12,

@@ -15,6 +15,7 @@ export default class ScoresPerDayScreen extends Component {
             refreshing: false,
             data: null,
             favorites: null,
+            scorecards: null,
         }
         this._Mounted = false;
     }
@@ -42,11 +43,12 @@ export default class ScoresPerDayScreen extends Component {
         this._Mounted && this.setState({ [refreshing ? 'refreshing' : 'loading']: true });
         getEvent(date, sport, league)
             .then(({ data: result }) => {
-                const { data, favorites } = result;
+                const { data, favorites, scorecards } = result;
                 this._Mounted && this.setState({
                     [refreshing ? 'refreshing' : 'loading']: false,
                     data: data,
                     favorites: favorites && favorites.length ? favorites : null,
+                    scorecards: scorecards && scorecards.length ? scorecards : null,
                 });
             })
             .catch(() => {
@@ -56,10 +58,11 @@ export default class ScoresPerDayScreen extends Component {
 
     renderFavorite = () => {
         const { navigation } = this.props;
-        const { favorites } = this.state;
-        if (favorites) {
+        const { favorites, scorecards } = this.state;
+        if (favorites || scorecards) {
             return (
                 <RenderFavoriteComponent favorites={favorites}
+                    scorecards={scorecards}
                     navigation={navigation} />
             )
         }
