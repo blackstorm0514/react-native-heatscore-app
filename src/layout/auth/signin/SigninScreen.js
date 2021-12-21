@@ -74,8 +74,9 @@ class SignInForm extends PureComponent {
 
     onGoogleSignIn = async () => {
         const { setUserAction, navigation } = this.props;
-        this._Mounted && this.setState({ submitting: true });
-
+        const { submitting } = this.state;
+        this._Mounted && await this.setState({ submitting: true });
+        if (submitting) return;
         try {
             await GoogleSigninConfigured.hasPlayServices();
             const userInfo = await GoogleSigninConfigured.signIn();
@@ -162,7 +163,7 @@ class SignInForm extends PureComponent {
                             <GoogleSigninButton
                                 size={GoogleSigninButton.Size.Wide}
                                 color={GoogleSigninButton.Color.Light}
-                                onPress={() => this.onGoogleSignIn()}
+                                onPress={this.onGoogleSignIn}
                                 disabled={submitting} />
                         </View>
                     </View>

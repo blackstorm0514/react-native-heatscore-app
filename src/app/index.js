@@ -70,14 +70,16 @@ const App = ({ userToken }) => {
         // get notification data when notification is clicked to open app when app is in background
         notifications().getInitialNotification()
             .then((notificationData) => {
-                const data = notificationData.notification.data;
-                switch (data.type) {
-                    case 'game_start':
-                    case 'game_end':
-                        setTimeout(() => navigate('Scores', { screen: 'EventDetail', params: { event: JSON.parse(data.event) } }),
-                            2000);
-                        break;
-                    default:
+                if(notificationData) {
+                    const data = notificationData.notification.data;
+                    switch (data.type) {
+                        case 'game_start':
+                        case 'game_end':
+                            setTimeout(() => navigate('Scores', { screen: 'EventDetail', params: { event: JSON.parse(data.event) } }),
+                                2000);
+                            break;
+                        default:
+                    }
                 }
             });
 
