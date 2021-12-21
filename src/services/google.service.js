@@ -1,5 +1,7 @@
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
+GoogleSignin.configure(GoogleConfigure);
+
 export const googleClientID = {
     android: '893401532366-1vg223i13gku5088khe3ipa6ikalpsue.apps.googleusercontent.com',
     ios: '',
@@ -20,3 +22,5 @@ export const GoogleLogOut = () => {
         }
     }).catch(() => { });
 }
+
+export const GoogleSigninConfigured = GoogleSignin;

@@ -3,8 +3,8 @@ import { Text, Layout, List } from '@ui-kitten/components';
 import { StyleSheet, BackHandler, TouchableOpacity, SafeAreaView, View } from 'react-native';
 import { TopNavigationComponent } from './components/TopNavigationComponent';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
-import { GoogleConfigure } from '../../../services/google.service';
+import { statusCodes } from '@react-native-google-signin/google-signin';
+import { GoogleSigninConfigured } from '../../../services/google.service';
 
 export default class SignupHomeScreen extends PureComponent {
     componentDidMount() {
@@ -86,11 +86,10 @@ export default class SignupHomeScreen extends PureComponent {
 
     configureGoogleSignUp = async () => {
         const { navigation } = this.props;
-        GoogleSignin.configure(GoogleConfigure);
 
         try {
-            await GoogleSignin.hasPlayServices();
-            const userInfo = await GoogleSignin.signIn();
+            await GoogleSigninConfigured.hasPlayServices();
+            const userInfo = await GoogleSigninConfigured.signIn();
             const { idToken, user: { email, familyName: lastname, givenName: firstname, name: username } } = userInfo;
 
             navigation.navigate('SignupDetail', { googleIdToken: idToken, email, firstname, lastname, username });

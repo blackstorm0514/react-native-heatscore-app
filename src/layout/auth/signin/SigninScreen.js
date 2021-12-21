@@ -7,8 +7,8 @@ import { ValidateFields } from '../../../services/validator.service';
 import { AppStorage } from '../../../services/app-storage.service';
 import { actions } from '../../../redux/reducer';
 import { connect } from 'react-redux';
-import { GoogleSignin, statusCodes, GoogleSigninButton } from '@react-native-google-signin/google-signin';
-import { GoogleConfigure } from '../../../services/google.service';
+import { statusCodes, GoogleSigninButton } from '@react-native-google-signin/google-signin';
+import { GoogleSigninConfigured } from '../../../services/google.service';
 import { signIn, signInGoogle } from '../../../redux/services';
 
 const LoadingIndicator = (props) => (
@@ -76,10 +76,9 @@ class SignInForm extends PureComponent {
         const { setUserAction, navigation } = this.props;
         this._Mounted && this.setState({ submitting: true });
 
-        GoogleSignin.configure(GoogleConfigure);
         try {
-            await GoogleSignin.hasPlayServices();
-            const userInfo = await GoogleSignin.signIn();
+            await GoogleSigninConfigured.hasPlayServices();
+            const userInfo = await GoogleSigninConfigured.signIn();
             const { idToken } = userInfo;
 
             signInGoogle(idToken)
@@ -160,17 +159,11 @@ class SignInForm extends PureComponent {
                     <View style={styles.socialAuthContainer}>
                         <Text style={styles.socialAuthHintText}>OR</Text>
                         <View style={styles.socialAuthButtonsContainer}>
-                            <TouchableOpacity activeOpacity={0.8}>
-                                <GoogleSigninButton
-                                    // style={{ width: 200, height: 50 }}
-                                    size={GoogleSigninButton.Size.Wide}
-                                    color={GoogleSigninButton.Color.Light}
-                                    onPress={() => this.onGoogleSignIn()}
-                                    disabled={submitting} />
-                            </TouchableOpacity>
-                            {/* <TouchableOpacity activeOpacity={0.8}>
-                                <FontAwesome color='red' name='google-plus-official' size={50} />
-                            </TouchableOpacity> */}
+                            <GoogleSigninButton
+                                size={GoogleSigninButton.Size.Wide}
+                                color={GoogleSigninButton.Color.Light}
+                                onPress={() => this.onGoogleSignIn()}
+                                disabled={submitting} />
                         </View>
                     </View>
                 </Layout>
