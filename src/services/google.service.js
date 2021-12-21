@@ -1,7 +1,5 @@
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
-GoogleSignin.configure(GoogleConfigure);
-
 export const googleClientID = {
     android: '893401532366-1vg223i13gku5088khe3ipa6ikalpsue.apps.googleusercontent.com',
     ios: '',
@@ -13,6 +11,8 @@ export const GoogleConfigure = {
     webClientId: googleClientID.web,
     offlineAccess: true,
 }
+
+GoogleSignin.configure(GoogleConfigure);
 
 export const GoogleLogOut = () => {
     GoogleSignin.isSignedIn().then((signedIn) => {
