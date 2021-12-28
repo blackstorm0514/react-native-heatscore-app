@@ -109,7 +109,7 @@ class AccountDetailForm extends PureComponent {
                                     placeholder='John'
                                     placeholderTextColor="#888"
                                     value={firstname}
-                                    onChangeText={(text) => this._Mounted && this.setState({ firstname: text })}
+                                    onChangeText={(text) => this.changeField('firstname', text)}
                                 />
                                 {error && error.firstname && <Text style={styles.errorText}>{error.firstname}</Text>}
                             </Layout>
@@ -121,7 +121,7 @@ class AccountDetailForm extends PureComponent {
                                     placeholder='Doe'
                                     placeholderTextColor="#888"
                                     value={lastname}
-                                    onChangeText={(text) => this._Mounted && this.setState({ lastname: text })}
+                                    onChangeText={(text) => this.changeField('lastname', text)}
                                 />
                                 {error && error.lastname && <Text style={styles.errorText}>{error.lastname}</Text>}
                             </Layout>
@@ -135,7 +135,7 @@ class AccountDetailForm extends PureComponent {
                                 placeholderTextColor="#888"
                                 value={password}
                                 secureTextEntry
-                                onChangeText={(text) => this._Mounted && this.setState({ password: text })}
+                                onChangeText={(text) => this.changeField('password', text.replace(/\s/g, ''))}
                             />
                             {error && error.password && <Text style={styles.errorText}>{error.password}</Text>}
                         </Layout>
@@ -148,7 +148,7 @@ class AccountDetailForm extends PureComponent {
                                 placeholderTextColor="#888"
                                 value={passwordConfirm}
                                 secureTextEntry
-                                onChangeText={(text) => this._Mounted && this.setState({ passwordConfirm: text })}
+                                onChangeText={(text) => this.changeField('passwordConfirm', text.replace(/\s/g, ''))}
                             />
                             {error && error.passwordConfirm && <Text style={styles.errorText}>{error.passwordConfirm}</Text>}
                         </Layout>

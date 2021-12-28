@@ -44,7 +44,7 @@ class SignInForm extends PureComponent {
     }
 
     changeField = (field, value) => {
-        this._Mounted && this.setState({ [field]: value });
+        this._Mounted && this.setState({ [field]: value.replace(/\s/g, '') });
     }
 
     onSignInButtonPressed = () => {
