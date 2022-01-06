@@ -21,7 +21,7 @@ class ScoreCardScreen extends PureComponent {
         const day = today.getDate();
         today = new Date(year, month, day);
 
-        for (let i = 7; i > 0; i--) {
+        for (let i = 1; i > 0; i--) {
             const date = subDays(today, i);
             const tab = format(date, "MMM dd");
             tabs.push({ key: tab, title: tab, date: date });
@@ -34,7 +34,7 @@ class ScoreCardScreen extends PureComponent {
         }
 
         this.state = {
-            index: 7,
+            index: 1,
             routes: tabs,
 
             modalOpen: false,

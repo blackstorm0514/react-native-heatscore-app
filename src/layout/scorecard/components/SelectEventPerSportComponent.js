@@ -15,11 +15,6 @@ class SelectEventPerSportComponent extends Component {
         const day = today.getDate();
         today = new Date(year, month, day);
 
-        for (let i = 7; i > 0; i--) {
-            const date = subDays(today, i);
-            const tab = format(date, "MMM dd");
-            tabs.push({ key: tab, title: tab, date: date });
-        }
         tabs.push({ key: 'Today', title: 'Today', date: today });
         for (let i = 1; i < 8; i++) {
             const date = addDays(today, i);
@@ -28,7 +23,7 @@ class SelectEventPerSportComponent extends Component {
         }
 
         this.state = {
-            index: 7,
+            index: 0,
             league: null,
             routes: tabs,
             sport: props.sport,
