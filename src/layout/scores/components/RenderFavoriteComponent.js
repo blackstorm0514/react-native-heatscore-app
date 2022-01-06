@@ -25,7 +25,6 @@ export default class RenderFavoriteComponent extends Component {
 
     render() {
         const { favorites, scorecards } = this.props;
-
         return (
             <View style={styles.favoriteContainer}>
                 {scorecards && scorecards.length > 0 && <View>
