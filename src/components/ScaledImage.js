@@ -1,57 +1,39 @@
-import React, { Component, PropTypes } from "react";
+import React, { useEffect, useState } from "react";
 import { Image } from "react-native";
 
-export default class ScaledImage extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            source: { uri: this.props.uri },
-            width: 0,
-            height: 0,
-        };
-        this._Mounted = false;
-    }
+const ScaledImage = ({ uri, width: propsWidth, height: propsHeight }) => {
+    if (!uri) return null;
 
-    componentDidMount() {
-        this._Mounted = true;
-    }
+    const [width, setWidth] = useState(0);
+    const [height, setHeight] = useState(0);
 
-    componentWillUnmount() {
-        this._Mounted = false;
-    }
-
-    UNSAFE_componentWillMount() {
-        const { uri, width: propsWidth, height: propsHeight } = this.props;
+    useEffect(() => {
         Image.getSize(uri, (width, height) => {
             if (propsWidth && !propsHeight) {
                 const realWidth = propsWidth > width ? width : propsWidth;
-                this._Mounted && this.setState({
-                    width: realWidth,
-                    height: height * (realWidth / width)
-                });
+                setWidth(realWidth);
+                setHeight(height * (realWidth / width));
             } else if (!propsWidth && propsHeight) {
                 const realHeight = propsHeight > height ? height : propsHeight;
-                this._Mounted && this.setState({
-                    width: width * (realHeight / height),
-                    height: realHeight
-                });
+                setWidth(width * (realHeight / height));
+                setHeight(realHeight);
             } else {
-                this._Mounted && this.setState({ width: width, height: height });
+                setWidth(width);
+                setHeight(height);
             }
         });
-    }
+    }, [uri]);
 
-    render() {
-        const { source, width, height } = this.state;
-        return (
-            <Image
-                source={source}
-                style={{
-                    height: height,
-                    width: width,
-                    marginVertical: 4
-                }}
-            />
-        );
-    }
+    return (
+        <Image
+            source={{ uri }}
+            style={{
+                height: height,
+                width: width,
+                marginVertical: 4
+            }}
+        />
+    );
 }
+
+export default ScaledImage
