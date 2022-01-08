@@ -12,6 +12,7 @@ import { getEventDetail, toggleFavoriteEvent } from '../../redux/services';
 import RenderEventLineupComponent from './components/RenderEventLineupComponent';
 import RenderEventHistoryComponent from './components/RenderEventHistoryComponent';
 import Toast from 'react-native-simple-toast';
+import { connect } from 'react-redux';
 
 const screenWidth = Dimensions.get('window').width;
 class EventDetailScreen extends Component {
@@ -185,6 +186,11 @@ class EventDetailScreen extends Component {
 
     toggleFavorite = () => {
         const { loading, refreshing, isFav } = this.state;
+        const { user } = this.props;
+        if(!user) {
+            Toast.show('Please login to access your favorites.');
+            return;
+        }
         if (loading || refreshing) return;
 
         const { route: { params: { event } } } = this.props;
@@ -227,7 +233,11 @@ class EventDetailScreen extends Component {
     }
 };
 
-export default EventDetailScreen;
+const mapStateToProps = (state) => ({
+    user: state.user,
+});
+
+export default connect(mapStateToProps, null)(EventDetailScreen);
 
 const styles = StyleSheet.create({
     container: {
