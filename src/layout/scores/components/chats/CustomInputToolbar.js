@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Keyboard, } from 'react-native';
 import { Actions, Composer, Send, } from 'react-native-gifted-chat';
 
@@ -19,83 +19,87 @@ const styles = StyleSheet.create({
         height: 44,
     },
 });
-export default class CustomInputToolbar extends React.Component {
-    constructor() {
-        super(...arguments);
-        this.state = {
-            position: 'absolute',
-        };
-        this.keyboardWillShowListener = undefined;
-        this.keyboardWillHideListener = undefined;
-        this.keyboardWillShow = () => {
-            if (this.state.position !== 'relative') {
-                this.setState({
-                    position: 'relative',
-                });
+
+const CustomInputToolbar = (props) => {
+    const [position, setPosition] = useState('absolute');
+    const [keyboardWillShowListener, setKeyboardWillShowListener] = useState(null);
+    const [keyboardWillHideListener, setKeyboardWillHideListener] = useState(null);
+
+    const keyboardWillShow = () => {
+        if (position !== 'relative') {
+            setPosition('relative');
+        }
+    };
+    const keyboardWillHide = () => {
+        if (position !== 'absolute') {
+            setPosition('absolute');
+        }
+    };
+
+    useEffect(() => {
+        setKeyboardWillShowListener(Keyboard.addListener('keyboardWillShow', keyboardWillShow));
+        setKeyboardWillHideListener(Keyboard.addListener('keyboardWillHide', keyboardWillHide));
+
+        return () => {
+            if (keyboardWillShowListener) {
+                keyboardWillShowListener.remove();
             }
-        };
-        this.keyboardWillHide = () => {
-            if (this.state.position !== 'absolute') {
-                this.setState({
-                    position: 'absolute',
-                });
+            if (keyboardWillHideListener) {
+                keyboardWillHideListener.remove();
             }
-        };
-    }
-    componentDidMount() {
-        this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', this.keyboardWillShow);
-        this.keyboardWillHideListener = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide);
-    }
-    componentWillUnmount() {
-        if (this.keyboardWillShowListener) {
-            this.keyboardWillShowListener.remove();
         }
-        if (this.keyboardWillHideListener) {
-            this.keyboardWillHideListener.remove();
+    }, []);
+
+    const renderActions = () => {
+        const { containerStyle, ...otherProps } = props;
+        if (props.renderActions) {
+            return props.renderActions(otherProps);
         }
-    }
-    renderActions() {
-        const { containerStyle, ...props } = this.props;
-        if (this.props.renderActions) {
-            return this.props.renderActions(props);
-        }
-        else if (this.props.onPressActionButton) {
+        else if (props.onPressActionButton) {
             return <Actions {...props} />;
         }
         return null;
     }
-    renderSend() {
-        if (this.props.renderSend) {
-            return this.props.renderSend(this.props);
+
+    const renderSend = () => {
+        if (props.renderSend) {
+            return props.renderSend(props);
         }
-        return <Send {...this.props} />;
+        return <Send {...props} />;
     }
-    renderComposer() {
-        if (this.props.renderComposer) {
-            return this.props.renderComposer(this.props);
+
+    const renderComposer = () => {
+        if (props.renderComposer) {
+            return props.renderComposer(props);
         }
-        return <Composer {...this.props} />;
+        return <Composer {...props} />;
     }
-    renderAccessory() {
-        if (this.props.renderAccessory) {
-            return (<View style={[styles.accessory, this.props.accessoryStyle]}>
-                {this.props.renderAccessory(this.props)}
-            </View>);
+
+    const renderAccessory = () => {
+        if (props.renderAccessory) {
+            return (
+                <View style={[styles.accessory, props.accessoryStyle]}>
+                    {props.renderAccessory(props)}
+                </View>
+            );
         }
         return null;
     }
-    render() {
-        return (<View style={[
+
+    return (
+        <View style={[
             styles.container,
-            { position: this.state.position },
-            this.props.containerStyle,
+            { position: position },
+            props.containerStyle,
         ]}>
-            {this.renderAccessory()}
-            <View style={[styles.primary, this.props.primaryStyle]}>
-                {this.renderActions()}
-                {this.renderComposer()}
-                {this.renderSend()}
+            {renderAccessory()}
+            <View style={[styles.primary, props.primaryStyle]}>
+                {renderActions()}
+                {renderComposer()}
+                {renderSend()}
             </View>
-        </View>);
-    }
+        </View>
+    );
 }
+
+export default CustomInputToolbar;

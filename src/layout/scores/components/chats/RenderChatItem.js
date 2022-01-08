@@ -1,4 +1,4 @@
-import React, { createRef, PureComponent } from 'react';
+import React, { useRef } from 'react';
 import { StyleSheet, View, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import { format } from 'date-fns';
@@ -8,16 +8,31 @@ import ScaledImage from '../../../../components/ScaledImage';
 
 const screenWidth = Dimensions.get('window').width;
 
-export default class RenderChatItem extends PureComponent {
-    constructor(props) {
-        super(props);
+const RenderChatReply = ({ chatReply }) => {
 
-        this.scrollRef = createRef(null);
-    }
-    onScroll = () => {
-        const { chat, onSelectReply } = this.props;
+    const { user, createdAt, text, image } = chatReply;
+    const time_str = format(new Date(createdAt.seconds * 1000), "MMM d, hh:mm aaa");
+    return (
+        <View style={styles.replyContainer}>
+            {image && <>
+                <ScaledImage
+                    uri={image}
+                    width={parseInt(screenWidth / 3)}
+                />
+            </>}
+            {text && <Text style={{ color: '#ddd', fontWeight: '100', fontSize: 12, fontStyle: 'italic' }}>{text}</Text>}
+            <Text style={styles.replyChatName}>{user.username}  <Text style={styles.replyChatTime}>{time_str}</Text> </Text>
+        </View>
+    )
+}
+
+const RenderChatItem = (props) => {
+    const scrollRef = useRef(null);
+
+    const onScroll = () => {
+        const { chat, onSelectReply } = props;
         const { user, createdAt, text, image } = chat;
-        this.scrollRef.current?.scrollTo({ x: 0, y: 0, animated: true });
+        scrollRef.current?.scrollTo({ x: 0, y: 0, animated: true });
         onSelectReply({
             user,
             createdAt,
@@ -26,65 +41,46 @@ export default class RenderChatItem extends PureComponent {
         });
     }
 
-    renderChatReply = (chatReply) => {
-        const { user, createdAt, text, image } = chatReply;
-        const time_str = format(new Date(createdAt.seconds * 1000), "MMM d, hh:mm aaa");
-        return (
-            <View style={styles.replyContainer}>
-                {image && <>
-                    <ScaledImage
-                        uri={image}
-                        // uri="https://placeimg.com/320/240/any"
-                        width={parseInt(screenWidth / 3)}
-                    />
-                </>}
-                {text && <Text style={{ color: '#ddd', fontWeight: '100', fontSize: 12, fontStyle: 'italic' }}>{text}</Text>}
-                <Text style={styles.replyChatName}>{user.username}  <Text style={styles.replyChatTime}>{time_str}</Text> </Text>
+    const { chat } = props;
+    const { user, createdAt, text, image, chatReply } = chat;
+    const time_str = format(new Date(createdAt.seconds * 1000), "MMM d, hh:mm aaa");
+    return (
+        <ScrollView horizontal
+            ref={scrollRef}
+            onScrollEndDrag={onScroll}
+            showsHorizontalScrollIndicator={false}
+        >
+            <View style={styles.chatItemContainer}>
+                <FeatherIcon
+                    size={20}
+                    color='#ddd'
+                    name='user'
+                />
+                <View style={styles.chatContentContainer}>
+                    {chatReply && <RenderChatReply chatReply={chatReply} />}
+                    <Text style={styles.chatTime}>{time_str}</Text>
+                    {image && <>
+                        <Text style={styles.chatContent}>{user.username}</Text>
+                        <ScaledImage
+                            uri={image}
+                            width={parseInt(screenWidth / 2)}
+                        />
+                    </>}
+                    {text && <Text style={styles.chatContent}>{user.username}: <Text style={{ color: 'white', fontWeight: '100', fontSize: 13 }}>{text}</Text></Text>}
+                </View>
             </View>
-        )
-    }
-
-    render() {
-        const { chat } = this.props;
-        const { user, createdAt, text, image, chatReply } = chat;
-        const time_str = format(new Date(createdAt.seconds * 1000), "MMM d, hh:mm aaa");
-        return (
-            <ScrollView horizontal
-                ref={this.scrollRef}
-                onScrollEndDrag={this.onScroll}
-                showsHorizontalScrollIndicator={false}
-            >
-                <View style={styles.chatItemContainer}>
-                    <FeatherIcon
-                        size={20}
-                        color='#ddd'
-                        name='user'
-                    />
-                    <View style={styles.chatContentContainer}>
-                        {chatReply && this.renderChatReply(chatReply)}
-                        <Text style={styles.chatTime}>{time_str}</Text>
-                        {image && <>
-                            <Text style={styles.chatContent}>{user.username}</Text>
-                            <ScaledImage
-                                uri={image}
-                                // uri="https://placeimg.com/320/240/any"
-                                width={parseInt(screenWidth / 2)}
-                            />
-                        </>}
-                        {text && <Text style={styles.chatContent}>{user.username}: <Text style={{ color: 'white', fontWeight: '100', fontSize: 13 }}>{text}</Text></Text>}
-                    </View>
+            <View style={styles.replyButtonContainer}>
+                <View style={styles.replyButtonWrapper}>
+                    <FontAwesomeIcon size={16}
+                        name='reply'
+                        color="#FFF" />
                 </View>
-                <View style={styles.replyButtonContainer}>
-                    <View style={styles.replyButtonWrapper}>
-                        <FontAwesomeIcon size={16}
-                            name='reply'
-                            color="#FFF" />
-                    </View>
-                </View>
-            </ScrollView>
-        );
-    }
+            </View>
+        </ScrollView>
+    );
 }
+
+export default RenderChatItem;
 
 const styles = StyleSheet.create({
     chatItemContainer: {
