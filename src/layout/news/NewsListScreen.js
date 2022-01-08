@@ -25,7 +25,8 @@ export default class NewsListScreen extends PureComponent {
             page: 1,
             listNews: [],
             gotAll: false,
-            search: ''
+            search: '',
+            searchTimeout: null,
         }
         this._Mounted = false;
     }
@@ -143,14 +144,20 @@ export default class NewsListScreen extends PureComponent {
 
     customClearIcon = () => {
         const { search } = this.state;
-        return search ? <TouchableOpacity activeOpacity={0.8} onPress={() => this._Mounted && this.setState({ search: '' })}>
+        return search ? <TouchableOpacity activeOpacity={0.8} onPress={() => this.onChangeSearch('')}>
             <CloseIcon style={styles.searchIcon} />
         </TouchableOpacity> : null
     }
 
-    onSearchPress = async () => {
+    onSearch = async () => {
         await this.setState({ listNews: [] });
         this.onLoadNews(1);
+    }
+
+    onChangeSearch = (search) => {
+        const { searchTimeout } = this.state;
+        if (searchTimeout) clearTimeout(searchTimeout);
+        this._Mounted && this.setState({ search, searchTimeout: setTimeout(this.onSearch, 500) })
     }
 
     render() {
@@ -163,13 +170,10 @@ export default class NewsListScreen extends PureComponent {
                         placeholder='Search ...'
                         placeholderTextColor="#888"
                         value={search}
-                        onChangeText={(search) => this._Mounted && this.setState({ search })}
+                        onChangeText={this.onChangeSearch}
                         accessoryLeft={this.customSearchIcon}
                         accessoryRight={this.customClearIcon}
                     />
-                    <Button style={styles.searchButton}
-                        onPress={this.onSearchPress}
-                        size='medium'>Search</Button>
                 </View>
                 <FlatList
                     style={styles.list}
@@ -252,10 +256,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     header: {
-        paddingHorizontal: 16,
+        paddingHorizontal: 8,
         paddingVertical: 2,
         backgroundColor: '#121212',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginBottom: 6,
     },
     searchInput: {
         marginTop: 6,

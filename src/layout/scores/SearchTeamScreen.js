@@ -20,6 +20,7 @@ class SearchScreen extends PureComponent {
             items: [],
             loading: false,
             refreshing: false,
+            searchTimeout: null,
         }
         this._Mounted = false;
     }
@@ -44,7 +45,7 @@ class SearchScreen extends PureComponent {
 
     customClearIcon = () => {
         const { search } = this.state;
-        return search ? <TouchableOpacity activeOpacity={0.8} onPress={() => this._Mounted && this.setState({ search: '' })}>
+        return search ? <TouchableOpacity activeOpacity={0.8} onPress={() => this.onChangeSearchTerm('')}>
             <CloseIcon style={styles.searchIcon} />
         </TouchableOpacity> : null
     }
@@ -67,6 +68,12 @@ class SearchScreen extends PureComponent {
             })
     }
 
+    onChangeSearchTerm = (search) => {
+        const { searchTimeout } = this.state;
+        if (searchTimeout) clearTimeout(searchTimeout);
+        this._Mounted && this.setState({ search, searchTimeout: setTimeout(() => this.searchTeams(), 500) })
+    }
+
     renderHeader = () => {
         const { search } = this.state;
         return (
@@ -76,25 +83,33 @@ class SearchScreen extends PureComponent {
                     placeholder='Search Team'
                     placeholderTextColor="#888"
                     value={search}
-                    onChangeText={(search) => this._Mounted && this.setState({ search })}
+                    onChangeText={this.onChangeSearchTerm}
                     accessoryLeft={this.customSearchIcon}
                     accessoryRight={this.customClearIcon}
                     size="small"
                 />
-                <Button style={styles.searchButton}
-                    onPress={() => this.searchTeams()}
-                    size='medium'>Search</Button>
             </View>
         );
     }
 
     renderEmpty = () => {
-        const { loading } = this.state;
-        return (
-            loading ? <LoadingIndicator style={styles.loadingIndicator} /> :
+        const { loading, search } = this.state;
+        if (loading) {
+            return (
+                <LoadingIndicator style={styles.loadingIndicator} />
+            );
+        }
+        if (search == '') {
+            return (
                 <View style={styles.item}>
-                    <Text style={styles.noResultText}>No Result. Please retry with another terms.</Text>
+                    <Text style={styles.noResultText}>Please search team you want to find.</Text>
                 </View>
+            )
+        }
+        return (
+            <View style={styles.item}>
+                <Text style={styles.noResultText}>No Result. Please retry with another terms.</Text>
+            </View>
         )
     }
 

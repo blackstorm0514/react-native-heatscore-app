@@ -20,6 +20,7 @@ class AddFavoritesScreen extends PureComponent {
             search: '',
             items: [],
             loading: false,
+            searchTimeout: null
         }
         this._Mounted = false;
     }
@@ -89,9 +90,15 @@ class AddFavoritesScreen extends PureComponent {
 
     customClearIcon = () => {
         const { search } = this.state;
-        return search ? <TouchableOpacity activeOpacity={0.8} onPress={() => this._Mounted && this.setState({ search: '' })}>
+        return search ? <TouchableOpacity activeOpacity={0.8} onPress={() => this.onChangeSearchTerm('')}>
             <CloseIcon style={styles.searchIcon} />
         </TouchableOpacity> : null
+    }
+
+    onChangeSearchTerm = (search) => {
+        const { searchTimeout } = this.state;
+        if (searchTimeout) clearTimeout(searchTimeout);
+        this._Mounted && this.setState({ search, searchTimeout: setTimeout(this.searchTeams, 500) })
     }
 
     renderHeader = () => {
@@ -103,13 +110,10 @@ class AddFavoritesScreen extends PureComponent {
                     placeholder='Search Team'
                     placeholderTextColor="#888"
                     value={search}
-                    onChangeText={(search) => this._Mounted && this.setState({ search })}
+                    onChangeText={this.onChangeSearchTerm}
                     accessoryLeft={this.customSearchIcon}
                     accessoryRight={this.customClearIcon}
                 />
-                <Button style={styles.searchButton}
-                    onPress={this.searchTeams}
-                    size='medium'>Search</Button>
             </View>
         );
     }
@@ -132,12 +136,23 @@ class AddFavoritesScreen extends PureComponent {
     }
 
     renderEmpty = () => {
-        const { loading } = this.state;
-        return (
-            loading ? <LoadingIndicator style={styles.loadingIndicator} /> :
-                <View style={styles.item}>
-                    <Text style={styles.noResultText}>No Result. Please retry with another terms.</Text>
+        const { loading, search } = this.state;
+        if (loading) {
+            return (
+                <LoadingIndicator style={styles.loadingIndicator} />
+            )
+        }
+        if (search == '') {
+            return (
+                <View style={styles.noResult}>
+                    <Text style={styles.noResultText}>Please type team name you want to find.</Text>
                 </View>
+            )
+        }
+        return (
+            <View style={styles.noResult}>
+                <Text style={styles.noResultText}>No Result. Please retry with another terms.</Text>
+            </View>
         )
     }
 
@@ -178,16 +193,21 @@ const styles = StyleSheet.create({
         backgroundColor: '#121212'
     },
     header: {
-        paddingHorizontal: 16,
+        paddingHorizontal: 8,
         paddingVertical: 2,
         backgroundColor: '#111',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginBottom: 10,
     },
     item: {
         paddingVertical: 8,
         borderBottomWidth: 1,
         borderBottomColor: '#222',
         backgroundColor: '#080808'
+    },
+    noResult: {
+        backgroundColor: '#121212',
+        paddingVertical: 10,
     },
     loadingIndicator: {
         flex: 1,
