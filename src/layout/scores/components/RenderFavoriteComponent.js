@@ -4,69 +4,65 @@ import { Text, List } from '@ui-kitten/components';
 import RenderEventComponent from './RenderEventComponent';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 
-export default class RenderFavoriteComponent extends Component {
-    renderEvent = ({ item }) => {
-        const { navigation } = this.props;
+const RenderFavoriteComponent = ({ navigation, favorites, scorecards }) => {
+    const renderEvent = ({ item }) => {
         return (
             <RenderEventComponent event={item}
                 navigation={navigation} />
         )
     }
 
-    goToAddFavorite = () => {
-        const { navigation } = this.props;
+    const goToAddFavorite = () => {
         navigation.navigate('Auth', { screen: 'AddFavorite' });
     }
 
-    goToScoreCard = () => {
-        const { navigation } = this.props;
+    const goToScoreCard = () => {
         navigation.navigate('Score Card');
     }
 
-    render() {
-        const { favorites, scorecards } = this.props;
-        return (
-            <View style={styles.favoriteContainer}>
-                {scorecards && scorecards.length > 0 && <View>
-                    <View style={styles.favoriteTitle}>
-                        <Text style={styles.favoriteTitleText}>Score Card</Text>
-                        <TouchableOpacity style={styles.addFavoriteButton}
-                            onPress={this.goToScoreCard}
-                            activeOpacity={0.8}>
-                            <FeatherIcon size={20}
-                                color='red'
-                                name='plus' />
-                        </TouchableOpacity>
-                    </View>
-                    <List
-                        listKey='scorecards'
-                        style={styles.list}
-                        data={scorecards}
-                        renderItem={this.renderEvent}
-                    />
-                </View>}
-                {favorites && favorites.length > 0 && <View>
-                    <View style={styles.favoriteTitle}>
-                        <Text style={styles.favoriteTitleText}>Favorite</Text>
-                        <TouchableOpacity style={styles.addFavoriteButton}
-                            onPress={this.goToAddFavorite}
-                            activeOpacity={0.8}>
-                            <FeatherIcon size={20}
-                                color='red'
-                                name='plus' />
-                        </TouchableOpacity>
-                    </View>
-                    <List
-                        listKey='favorites'
-                        style={styles.list}
-                        data={favorites}
-                        renderItem={this.renderEvent}
-                    />
-                </View>}
-            </View>
-        )
-    }
+    return (
+        <View style={styles.favoriteContainer}>
+            {scorecards && scorecards.length > 0 && <View>
+                <View style={styles.favoriteTitle}>
+                    <Text style={styles.favoriteTitleText}>Score Card</Text>
+                    <TouchableOpacity style={styles.addFavoriteButton}
+                        onPress={goToScoreCard}
+                        activeOpacity={0.8}>
+                        <FeatherIcon size={20}
+                            color='red'
+                            name='plus' />
+                    </TouchableOpacity>
+                </View>
+                <List
+                    listKey='scorecards'
+                    style={styles.list}
+                    data={scorecards}
+                    renderItem={renderEvent}
+                />
+            </View>}
+            {favorites && favorites.length > 0 && <View>
+                <View style={styles.favoriteTitle}>
+                    <Text style={styles.favoriteTitleText}>Favorite</Text>
+                    <TouchableOpacity style={styles.addFavoriteButton}
+                        onPress={goToAddFavorite}
+                        activeOpacity={0.8}>
+                        <FeatherIcon size={20}
+                            color='red'
+                            name='plus' />
+                    </TouchableOpacity>
+                </View>
+                <List
+                    listKey='favorites'
+                    style={styles.list}
+                    data={favorites}
+                    renderItem={renderEvent}
+                />
+            </View>}
+        </View>
+    )
 }
+
+export default RenderFavoriteComponent;
 
 
 const styles = StyleSheet.create({

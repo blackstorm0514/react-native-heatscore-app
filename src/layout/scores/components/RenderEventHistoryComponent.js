@@ -6,8 +6,8 @@ import { truncateString } from '../../../libs/functions';
 import { format } from 'date-fns';
 import TeamLogoImage from '../../../components/team-logo-image';
 
-export default class RenderEventHistoryComponent extends Component {
-    renderLastMatches = (title, events, team = null) => {
+const RenderEventHistoryComponent = ({ event, loading }) => {
+    const renderLastMatches = (title, events, team = null) => {
         return (
             <View style={styles.lastMatchesContainer}>
                 <Text style={styles.lastMatchesTitle}>{title}</Text>
@@ -61,8 +61,7 @@ export default class RenderEventHistoryComponent extends Component {
         )
     }
 
-    renderContent = () => {
-        const { event, loading } = this.props;
+    const renderContent = () => {
         if (loading) {
             return (
                 <LoadingIndicator style={styles.loadingIndicator} />
@@ -88,21 +87,21 @@ export default class RenderEventHistoryComponent extends Component {
                         <Text style={styles.teamNames}>{truncateString(away.name)}</Text>
                     </View>
                 </View>
-                {this.renderLastMatches('Last Direct Matches', h2h)}
-                {this.renderLastMatches(`Last Matches for ${home.name}`, lastHome, home)}
-                {this.renderLastMatches(`Last Matches for ${away.name}`, lastAway, away)}
+                {renderLastMatches('Last Direct Matches', h2h)}
+                {renderLastMatches(`Last Matches for ${home.name}`, lastHome, home)}
+                {renderLastMatches(`Last Matches for ${away.name}`, lastAway, away)}
             </View>
         )
 
     }
-    render() {
-        return (
-            <ScrollView style={styles.container}>
-                {this.renderContent()}
-            </ScrollView>
-        )
-    }
+    return (
+        <ScrollView style={styles.container}>
+            {renderContent()}
+        </ScrollView>
+    )
 }
+
+export default RenderEventHistoryComponent;
 
 const styles = StyleSheet.create({
     container: {

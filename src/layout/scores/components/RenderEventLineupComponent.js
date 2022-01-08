@@ -5,8 +5,8 @@ import { Text } from '@ui-kitten/components';
 import { truncateString } from '../../../libs/functions';
 import TeamLogoImage from '../../../components/team-logo-image';
 
-export default class RenderEventLineupComponent extends Component {
-    renderLineupTeam = (team, lineup, isAway = false) => {
+const RenderEventLineupComponent = ({ event, loading }) => {
+    const renderLineupTeam = (team, lineup, isAway = false) => {
         const { formation, startinglineup, substitutes } = lineup;
         return (
             <View style={[styles.lineupTeamContainer, isAway ? styles.lineupAwayContainer : null]}>
@@ -41,8 +41,8 @@ export default class RenderEventLineupComponent extends Component {
             </View>
         )
     }
-    renderContent = () => {
-        const { event, loading } = this.props;
+
+    const renderContent = () => {
         if (loading) {
             return (
                 <LoadingIndicator style={styles.loadingIndicator} />
@@ -56,20 +56,20 @@ export default class RenderEventLineupComponent extends Component {
         const { home, away, lineup } = event;
         return (
             <View style={styles.lineupContainer}>
-                {this.renderLineupTeam(home, lineup.home)}
-                {this.renderLineupTeam(away, lineup.away, true)}
+                {renderLineupTeam(home, lineup.home)}
+                {renderLineupTeam(away, lineup.away, true)}
             </View>
         )
+    }
 
-    }
-    render() {
-        return (
-            <ScrollView style={styles.container}>
-                {this.renderContent()}
-            </ScrollView>
-        )
-    }
+    return (
+        <ScrollView style={styles.container}>
+            {renderContent()}
+        </ScrollView>
+    )
 }
+
+export default RenderEventLineupComponent;
 
 const styles = StyleSheet.create({
     container: {

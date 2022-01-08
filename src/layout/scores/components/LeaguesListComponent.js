@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { StyleSheet, View, Dimensions, TouchableOpacity, FlatList } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import RenderEventComponent from './RenderEventComponent';
@@ -8,10 +8,9 @@ import { getSportsIcon } from '../../../libs/functions';
 
 const screenWidth = Dimensions.get('window').width;
 
-class LeaguesListComponent extends PureComponent {
-    renderLeagueHeader = () => {
-        const { league, seeRounds, toggleCollapseLeagueAction } = this.props;
-        const collapsed = this.isCollapsed();
+const LeaguesListComponent = ({ league, collapsedLeagues, seeRounds, toggleCollapseLeagueAction, navigation }) => {
+    const renderLeagueHeader = () => {
+        const collapsed = isCollapsed();
 
         return (
             <View style={styles.leagueTitle}>
@@ -30,16 +29,15 @@ class LeaguesListComponent extends PureComponent {
         )
     }
 
-    renderEvent = ({ item }) => {
-        const { navigation } = this.props;
+    const renderEvent = ({ item }) => {
         return (
             <RenderEventComponent event={item} key={item.event_id}
                 navigation={navigation} />
         )
     }
 
-    renderEmptyList = () => {
-        const collapsed = this.isCollapsed();
+    const renderEmptyList = () => {
+        const collapsed = isCollapsed();
         return !collapsed && (
             <View style={{ flex: 1, alignItems: 'center', paddingHorizontal: 10 }}>
                 <Text style={{ fontSize: 16, marginTop: 20 }}>There are no events.</Text>
@@ -47,26 +45,22 @@ class LeaguesListComponent extends PureComponent {
         )
     }
 
-    isCollapsed = () => {
-        const { league, collapsedLeagues } = this.props;
+    const isCollapsed = () => {
         const collapsed = collapsedLeagues.find(collapsed => collapsed == league.league_id);
         return collapsed ? true : false;
     }
 
-    render() {
-        const { league } = this.props;
-        const collapsed = this.isCollapsed();
-        return (
-            <FlatList
-                style={styles.leagueContainer}
-                data={!collapsed && league.events ? league.events : []}
-                renderItem={this.renderEvent}
-                keyExtractor={(item) => item.event_id.toString()}
-                ListHeaderComponent={this.renderLeagueHeader}
-                ListEmptyComponent={this.renderEmptyList}
-            />
-        )
-    }
+    const collapsed = isCollapsed();
+    return (
+        <FlatList
+            style={styles.leagueContainer}
+            data={!collapsed && league.events ? league.events : []}
+            renderItem={renderEvent}
+            keyExtractor={(item) => item.event_id.toString()}
+            ListHeaderComponent={renderLeagueHeader}
+            ListEmptyComponent={renderEmptyList}
+        />
+    )
 }
 
 const mapStateToProps = (state) => ({

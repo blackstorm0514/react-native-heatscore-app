@@ -1,20 +1,12 @@
 import React, { Component } from 'react';
-import {
-    StyleSheet,
-    View,
-    ScrollView,
-    SafeAreaView,
-    Dimensions,
-    Image
-} from 'react-native';
-import { Button, Text, List } from '@ui-kitten/components';
+import { StyleSheet, View, ScrollView, SafeAreaView, Dimensions, } from 'react-native';
+import { Text, List } from '@ui-kitten/components';
 import { LoadingIndicator } from './LoadingIndicator';
 import TeamLogoImage from '../../../components/team-logo-image';
 
 const screenWidth = Dimensions.get('window').width;
-class RenderLeagueRoundComponent extends Component {
-    renderRoundsTable = () => {
-        const { rounds } = this.props;
+const RenderLeagueRoundComponent = ({ loading, rounds }) => {
+    const renderRoundsTable = () => {
         const { tables } = rounds;
 
         return (
@@ -23,15 +15,14 @@ class RenderLeagueRoundComponent extends Component {
                 <List
                     style={styles.list}
                     data={tables ? tables : []}
-                    renderItem={this.renderTables}
-                    ListHeaderComponent={this.renderTitle}
+                    renderItem={renderTables}
+                    ListHeaderComponent={renderTitle}
                 />
             </ScrollView>
         )
     }
 
-    renderTitle = () => {
-        const { rounds } = this.props;
+    const renderTitle = () => {
         const { name } = rounds;
         return (
             <View style={styles.leagueTitle}>
@@ -40,17 +31,17 @@ class RenderLeagueRoundComponent extends Component {
         )
     }
 
-    renderTables = ({ item }) => {
+    const renderTables = ({ item }) => {
         return (
             <List
                 data={['title', ...item.rows]}
-                renderItem={this.renderTableRow}
-                ListHeaderComponent={() => this.renderTableTitle(item)}
+                renderItem={renderTableRow}
+                ListHeaderComponent={() => renderTableTitle(item)}
             />
         );
     }
 
-    renderTableTitle = (item) => {
+    const renderTableTitle = (item) => {
         const { name, maxrounds } = item;
         return (
             <View style={styles.tableTitle}>
@@ -59,7 +50,7 @@ class RenderLeagueRoundComponent extends Component {
         );
     }
 
-    renderTableRow = ({ item }) => {
+    const renderTableRow = ({ item }) => {
         if (item == 'title') {
             return (
                 <View style={[styles.tableRow, styles.tableRowHeader]}>
@@ -96,17 +87,13 @@ class RenderLeagueRoundComponent extends Component {
         )
     }
 
-    render() {
-        const { loading, rounds } = this.props;
-
-        return (
-            <SafeAreaView style={styles.container}>
-                {loading && <LoadingIndicator style={styles.loadingIndicator} />}
-                {!rounds && !loading && <Text style={styles.noDataText}>No Data Available.</Text>}
-                {rounds && this.renderRoundsTable()}
-            </SafeAreaView >
-        )
-    }
+    return (
+        <SafeAreaView style={styles.container}>
+            {loading && <LoadingIndicator style={styles.loadingIndicator} />}
+            {!rounds && !loading && <Text style={styles.noDataText}>No Data Available.</Text>}
+            {rounds && renderRoundsTable()}
+        </SafeAreaView >
+    )
 };
 
 export default RenderLeagueRoundComponent;

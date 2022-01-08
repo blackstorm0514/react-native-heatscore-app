@@ -1,20 +1,12 @@
 import React, { Component } from 'react';
-import {
-    StyleSheet,
-    View,
-    ScrollView,
-    SafeAreaView,
-    Dimensions,
-    Image
-} from 'react-native';
-import { Button, Text, List } from '@ui-kitten/components';
+import { StyleSheet, View, ScrollView, SafeAreaView, Dimensions } from 'react-native';
+import { Text, List } from '@ui-kitten/components';
 import { LoadingIndicator } from './LoadingIndicator';
 import TeamLogoImage from '../../../components/team-logo-image';
 
 const screenWidth = Dimensions.get('window').width;
-class RenderLeagueTopScorerComponent extends Component {
-    renderGoalsTable = () => {
-        const { topgoals } = this.props;
+const RenderLeagueTopScorerComponent = ({ loading, topgoals, topassists }) => {
+    const renderGoalsTable = () => {
 
         return (
             <ScrollView horizontal
@@ -22,14 +14,14 @@ class RenderLeagueTopScorerComponent extends Component {
                 <List
                     style={styles.list}
                     data={topgoals ? ['title', ...topgoals.slice(0, 20)] : []}
-                    renderItem={this.renderGoalsTableRow}
-                    ListHeaderComponent={() => this.renderTitle('Top Scorers')}
+                    renderItem={renderGoalsTableRow}
+                    ListHeaderComponent={() => renderTitle('Top Scorers')}
                 />
             </ScrollView>
         )
     }
 
-    renderGoalsTableRow = ({ item }) => {
+    const renderGoalsTableRow = ({ item }) => {
         if (item == 'title') {
             return (
                 <View style={[styles.tableRow, styles.tableRowHeader]}>
@@ -55,7 +47,7 @@ class RenderLeagueTopScorerComponent extends Component {
         );
     }
 
-    renderTitle = (title) => {
+    const renderTitle = (title) => {
         return (
             <View style={styles.leagueTitle}>
                 <Text style={styles.leagueTitleText}>{title}</Text>
@@ -63,8 +55,7 @@ class RenderLeagueTopScorerComponent extends Component {
         )
     }
 
-    renderAssistsTable = () => {
-        const { topassists } = this.props;
+    const renderAssistsTable = () => {
 
         return (
             <ScrollView horizontal
@@ -72,14 +63,14 @@ class RenderLeagueTopScorerComponent extends Component {
                 <List
                     style={styles.list}
                     data={topassists ? ['title', ...topassists.slice(0, 20)] : []}
-                    renderItem={this.renderAssistsTableRow}
-                    ListHeaderComponent={() => this.renderTitle('Top Assists')}
+                    renderItem={renderAssistsTableRow}
+                    ListHeaderComponent={() => renderTitle('Top Assists')}
                 />
             </ScrollView>
         )
     }
 
-    renderAssistsTableRow = ({ item }) => {
+    const renderAssistsTableRow = ({ item }) => {
         if (item == 'title') {
             return (
                 <View style={[styles.tableRow, styles.tableRowHeader]}>
@@ -103,18 +94,14 @@ class RenderLeagueTopScorerComponent extends Component {
         );
     }
 
-    render() {
-        const { loading, topgoals, topassists } = this.props;
-
-        return (
-            <SafeAreaView style={styles.container} >
-                {loading && <LoadingIndicator style={styles.loadingIndicator} />}
-                {!topgoals && !topassists && !loading && <Text style={styles.noDataText}>No Data Available.</Text>}
-                {topgoals && this.renderGoalsTable()}
-                {topassists && this.renderAssistsTable()}
-            </SafeAreaView>
-        )
-    }
+    return (
+        <SafeAreaView style={styles.container} >
+            {loading && <LoadingIndicator style={styles.loadingIndicator} />}
+            {!topgoals && !topassists && !loading && <Text style={styles.noDataText}>No Data Available.</Text>}
+            {topgoals && renderGoalsTable()}
+            {topassists && renderAssistsTable()}
+        </SafeAreaView>
+    )
 };
 
 export default RenderLeagueTopScorerComponent;

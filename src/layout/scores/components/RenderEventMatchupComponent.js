@@ -9,9 +9,8 @@ import GameEventsComponent from './matchup/GameEventsComponent';
 import GameStatsComponent from './matchup/GameStatsComponent';
 import TeamLogoImage from '../../../components/team-logo-image';
 
-export default class RenderEventMatchupComponent extends Component {
-    renderContent = () => {
-        const { event, loading, } = this.props;
+const RenderEventMatchupComponent = ({ event, loading, refreshing, onRefresh }) => {
+    const renderContent = () => {
         if (loading) {
             return (
                 <LoadingIndicator style={styles.loadingIndicator} />
@@ -63,22 +62,21 @@ export default class RenderEventMatchupComponent extends Component {
             </View>
         )
     }
-    render() {
-        const { refreshing, onRefresh } = this.props;
 
-        return (
-            <ScrollView style={styles.container}
-                contentContainerStyle={{ flexGrow: 1 }}
-                refreshControl={<RefreshControl
-                    colors={['#000']}
-                    progressBackgroundColor="#FFF"
-                    refreshing={refreshing}
-                    onRefresh={onRefresh} />}>
-                {this.renderContent()}
-            </ScrollView>
-        )
-    }
+    return (
+        <ScrollView style={styles.container}
+            contentContainerStyle={{ flexGrow: 1 }}
+            refreshControl={<RefreshControl
+                colors={['#000']}
+                progressBackgroundColor="#FFF"
+                refreshing={refreshing}
+                onRefresh={onRefresh} />}>
+            {renderContent()}
+        </ScrollView>
+    )
 }
+
+export default RenderEventMatchupComponent;
 
 const styles = StyleSheet.create({
     container: {
