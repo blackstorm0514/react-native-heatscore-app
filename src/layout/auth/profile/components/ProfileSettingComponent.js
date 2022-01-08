@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Button, Layout, Text } from '@ui-kitten/components';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
@@ -15,14 +15,14 @@ export default class ProfileSettingComponent extends PureComponent {
                         {...layoutProps}
                         style={[styles.container, style]}>
                         <Text category='s1'>{title}</Text>
-                        <Layout style={styles.rightContainer}>
+                        <View style={styles.rightContainer}>
                             {value && <Text category='s1'>{value}</Text>}
                             {navigateAction &&
                                 <FontAwesome5Icon
                                     style={styles.forwardButton}
                                     name="chevron-right"
                                     size={20} color='white' />}
-                        </Layout>
+                        </View>
                     </Layout>
                 </TouchableOpacity>
             </React.Fragment>
@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     rightContainer: {
-        backgroundColor: 'black',
         flexDirection: 'row',
     },
     forwardButton: {
