@@ -100,11 +100,7 @@ class SearchScreen extends PureComponent {
             );
         }
         if (search == '') {
-            return (
-                <View style={styles.item}>
-                    <Text style={styles.noResultText}>Please search team you want to find.</Text>
-                </View>
-            )
+            return null
         }
         return (
             <View style={styles.item}>

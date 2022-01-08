@@ -143,11 +143,7 @@ class AddFavoritesScreen extends PureComponent {
             )
         }
         if (search == '') {
-            return (
-                <View style={styles.noResult}>
-                    <Text style={styles.noResultText}>Please type team name you want to find.</Text>
-                </View>
-            )
+            return null;
         }
         return (
             <View style={styles.noResult}>
