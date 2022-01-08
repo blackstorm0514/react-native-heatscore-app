@@ -209,6 +209,7 @@ const iconName = {
     "American Football": "sports-football",
     "Basketball": "sports-basketball",
     "Hockey": "sports-hockey",
+    "Ice Hockey": "sports-hockey",
     "Baseball": "sports-baseball",
     "Soccer": "sports-soccer",
     "Tennis": "sports-tennis",
@@ -228,18 +229,27 @@ const logoImages = {
     'NHL': require('../assets/images/league_logos/nhl.png')
 }
 
-export function getSportsIcon(title, color, size) {
-    if (iconName[title]) {
+export function getSportsIcon(title, leagueTitle, color, size) {
+    if (leagueTitle && logoImages[leagueTitle]) {
         return (
-            <MaterialIcons name={iconName[title]}
-                size={size} color={color ? color : "white"}
+            <Image source={logoImages[leagueTitle]}
+                style={[styles.leagueLogoImage, { width: size, height: size }]}
             />
         )
     }
+
     if (logoImages[title]) {
         return (
             <Image source={logoImages[title]}
                 style={[styles.leagueLogoImage, { width: size, height: size }]}
+            />
+        )
+    }
+
+    if (iconName[title]) {
+        return (
+            <MaterialIcons name={iconName[title]}
+                size={size} color={color ? color : "white"}
             />
         )
     }

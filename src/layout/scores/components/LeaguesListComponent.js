@@ -15,7 +15,7 @@ class LeaguesListComponent extends PureComponent {
 
         return (
             <View style={styles.leagueTitle}>
-                {getSportsIcon(league.sport.name, '#FFF', 16)}<Text style={styles.leagueTitleText} numberOfLines={1}> {league.name}</Text>
+                {getSportsIcon(league.sport.name, league.name, '#FFF', 16)}<Text style={styles.leagueTitleText} numberOfLines={1}> {league.name}</Text>
                 {seeRounds && <TouchableOpacity activeOpacity={0.8}
                     onPress={() => seeRounds()}
                     style={styles.seeRoundButton}>
@@ -24,7 +24,7 @@ class LeaguesListComponent extends PureComponent {
                 <TouchableOpacity activeOpacity={0.8}
                     onPress={() => toggleCollapseLeagueAction(league.league_id)}
                     style={styles.collapseButtn}>
-                    {getSportsIcon(collapsed ? 'show' : 'hide', '#FFF', 16)}
+                    {getSportsIcon(collapsed ? 'show' : 'hide', null, '#FFF', 16)}
                 </TouchableOpacity>
             </View>
         )

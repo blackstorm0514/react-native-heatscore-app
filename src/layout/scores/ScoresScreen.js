@@ -112,7 +112,7 @@ class ScoresScreen extends Component {
     )
 
     renderIcon = ({ route, color }) => {
-        return getSportsIcon(route.title, color, 20);
+        return getSportsIcon(route.title, null, color, 20);
     }
 
     renderTitle = () => {

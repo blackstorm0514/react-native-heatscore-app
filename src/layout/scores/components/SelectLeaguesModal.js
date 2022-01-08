@@ -71,7 +71,7 @@ export default class SelectLeaguesModal extends PureComponent {
             <TouchableOpacity key={index} style={styles.topLeagueItem}
                 activeOpacity={0.8}
                 onPress={() => setLeague(item)}>
-                {getSportsIcon(item.sport, '#FFF', 14)}
+                {getSportsIcon(item.sport, null, '#FFF', 14)}
                 <Text style={styles.topLeagueText}>{item.name}</Text>
                 <MaterialIcons name="keyboard-arrow-right"
                     size={18} color="white"
@@ -100,7 +100,7 @@ export default class SelectLeaguesModal extends PureComponent {
         return (
             <Collapse key={index}>
                 <CollapseHeader style={styles.topLeagueItem}>
-                    {getSportsIcon(sport._id, '#FFF', 14)}
+                    {getSportsIcon(sport._id, null, '#FFF', 14)}
                     <Text style={styles.topLeagueText}>{sport._id}</Text>
                 </CollapseHeader>
                 <CollapseBody>
