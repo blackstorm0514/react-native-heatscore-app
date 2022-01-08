@@ -44,39 +44,39 @@ const peoridPerSports = {
     ]
 }
 
-export default class ScoreBoardComponent extends Component {
-    render() {
-        const { scores, home, away, sport } = this.props;
-        const peorids = peoridPerSports[sport.name].map(item => {
-            const score = getMatchScore(sport, scores, item.value);
-            return { ...item, ...score };
-        });
-        return (
-            <ScrollView horizontal style={styles.container}>
-                <View>
-                    <View style={styles.rowContainer}>
-                        <Text style={[styles.scoreTitle, styles.scoreTitleText]}>Scores</Text>
-                        {peorids.map(item => (<Text key={item.value} style={[styles.scoreItem]}>{item.title}</Text>))}
-                    </View>
-                    <View style={styles.rowContainer}>
-                        <View style={[styles.scoreTitle, styles.teamTitle]}>
-                            <TeamLogoImage image_id={home.image_id} size={16} style={null} />
-                            <Text numberOfLines={1} style={styles.teamName}>{home.name}</Text>
-                        </View>
-                        {peorids.map(item => (<Text key={item.value} style={[styles.scoreItem]}>{item.home_score}</Text>))}
-                    </View>
-                    <View style={styles.rowContainer}>
-                        <View style={[styles.scoreTitle, styles.teamTitle]}>
-                            <TeamLogoImage image_id={away.image_id} size={16} style={null} />
-                            <Text numberOfLines={1} style={styles.teamName}>{away.name}</Text>
-                        </View>
-                        {peorids.map(item => (<Text key={item.value} style={[styles.scoreItem]}>{item.away_score}</Text>))}
-                    </View>
+const ScoreBoardComponent = ({ scores, home, away, sport }) => {
+    const peorids = peoridPerSports[sport.name].map(item => {
+        const score = getMatchScore(sport, scores, item.value);
+        return { ...item, ...score };
+    });
+
+    return (
+        <ScrollView horizontal style={styles.container}>
+            <View>
+                <View style={styles.rowContainer}>
+                    <Text style={[styles.scoreTitle, styles.scoreTitleText]}>Scores</Text>
+                    {peorids.map(item => (<Text key={item.value} style={[styles.scoreItem]}>{item.title}</Text>))}
                 </View>
-            </ScrollView>
-        )
-    }
+                <View style={styles.rowContainer}>
+                    <View style={[styles.scoreTitle, styles.teamTitle]}>
+                        <TeamLogoImage image_id={home.image_id} size={16} style={null} />
+                        <Text numberOfLines={1} style={styles.teamName}>{home.name}</Text>
+                    </View>
+                    {peorids.map(item => (<Text key={item.value} style={[styles.scoreItem]}>{item.home_score}</Text>))}
+                </View>
+                <View style={styles.rowContainer}>
+                    <View style={[styles.scoreTitle, styles.teamTitle]}>
+                        <TeamLogoImage image_id={away.image_id} size={16} style={null} />
+                        <Text numberOfLines={1} style={styles.teamName}>{away.name}</Text>
+                    </View>
+                    {peorids.map(item => (<Text key={item.value} style={[styles.scoreItem]}>{item.away_score}</Text>))}
+                </View>
+            </View>
+        </ScrollView>
+    )
 }
+
+export default ScoreBoardComponent;
 
 const styles = StyleSheet.create({
     container: {

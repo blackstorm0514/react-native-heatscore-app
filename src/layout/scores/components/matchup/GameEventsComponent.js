@@ -1,14 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import GameSoccerEventsComponent from './GameSoccerEventsComponent';
 
-export default class GameEventsComponent extends Component {
-    render() {
-        const { sport } = this.props;
-        if (sport.name == 'Soccer') {
-            return (
-                <GameSoccerEventsComponent {...this.props} />
-            );
-        }
-        return (null);
+const GameEventsComponent = ({ sport, home, away, events }) => {
+    if (sport.name == 'Soccer') {
+        return (
+            <GameSoccerEventsComponent home={home}
+                away={away}
+                events={events}
+                sport={sport} />
+        );
     }
+    return null;
 }
+
+export default GameEventsComponent;

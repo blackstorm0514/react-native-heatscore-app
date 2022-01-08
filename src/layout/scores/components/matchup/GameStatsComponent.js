@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import TeamLogoImage from '../../../../components/team-logo-image';
 
@@ -42,9 +42,8 @@ const sportStatsFields = {
     ]
 }
 
-export default class GameStatsComponent extends Component {
-    renderStatsField = (statsField, index) => {
-        const { stats } = this.props;
+const GameStatsComponent = ({ sport, stats, home, away }) => {
+    const renderStatsField = (statsField, index) => {
         if (!stats[statsField.field] || stats[statsField.field].length != 2) return null;
         if (stats[statsField.field][0] == null || stats[statsField.field][1] == null) return null;
 
@@ -57,6 +56,7 @@ export default class GameStatsComponent extends Component {
             homePercent = parseInt(homeValue / total * 100);
             awayPercent = 100 - homePercent;
         }
+
         return (
             <View key={statsField.field} style={styles.statsItem}>
                 <View style={styles.statsTitleContainer}>
@@ -72,23 +72,22 @@ export default class GameStatsComponent extends Component {
         )
     }
 
-    render() {
-        const { sport, stats, home, away } = this.props;
-        const statsFields = sportStatsFields[sport.name];
-        if (!statsFields) return null;
+    const statsFields = sportStatsFields[sport.name];
+    if (!statsFields) return null;
 
-        return (
-            <View style={styles.container}>
-                <View style={styles.teamLogos}>
-                    <TeamLogoImage image_id={home.image_id} size={24} style={null} />
-                    <Text style={styles.timelineText}>Team Stats</Text>
-                    <TeamLogoImage image_id={away.image_id} size={24} style={null} />
-                </View>
-                {statsFields.map(this.renderStatsField)}
+    return (
+        <View style={styles.container}>
+            <View style={styles.teamLogos}>
+                <TeamLogoImage image_id={home.image_id} size={24} style={null} />
+                <Text style={styles.timelineText}>Team Stats</Text>
+                <TeamLogoImage image_id={away.image_id} size={24} style={null} />
             </View>
-        )
-    }
+            {statsFields.map(renderStatsField)}
+        </View>
+    )
 }
+
+export default GameStatsComponent;
 
 const styles = StyleSheet.create({
     container: {
