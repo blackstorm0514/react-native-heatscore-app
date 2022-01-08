@@ -128,9 +128,15 @@ export default class AddScoreModalContent extends PureComponent {
             return Toast.show('Please select points.');
         }
 
+        const numberPoints = Number(points);
+        if (isNaN(numberPoints)) {
+            onAddScoreCard(null);
+            return Toast.show('Please input valid points.');
+        }
+
         this._Mounted && this.setState({ submitting: true });
         addScoreCard({
-            event_id: event.event_id, team, type, timeline, points,
+            event_id: event.event_id, team, type, timeline, points: numberPoints,
             allowAlerts,
             alert_gameStart,
             alert_gameEnd,

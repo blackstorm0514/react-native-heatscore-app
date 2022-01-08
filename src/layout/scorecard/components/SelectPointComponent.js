@@ -1,36 +1,69 @@
 import React, { PureComponent } from "react";
-import { StyleSheet, View } from 'react-native';
-import { Text } from '@ui-kitten/components';
-import InputSpinner from "react-native-input-spinner";
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Text, Input } from '@ui-kitten/components';
+import Toast from 'react-native-simple-toast';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 export default class SelectPointComponent extends PureComponent {
-    render() {
-        const { points, onSelect, type } = this.props;
-        if (!['total', 'spread'].includes(type)) return null;
+    onChangeText = (points) => {
+        const { onSelect } = this.props;
+        const numberPoint = Number(points);
+        if (['-', ''].includes(points)) {
+            onSelect(points);
+        } else {
+            if (isNaN(numberPoint)) {
+                Toast.show('Please input valid number.');
+            } else {
+                onSelect(numberPoint);
+            }
+        }
+    }
 
+    changeNumber = (step) => {
+        const { points, onSelect } = this.props;
+        if (typeof points == 'string') {
+            return;
+        }
+        onSelect(points + step);
+    }
+
+    renderPlusIcon = () => {
+        return (
+            <TouchableOpacity activeOpacity={0.7}
+                style={styles.buttonStyle}
+                onPress={() => this.changeNumber(0.5)}>
+                <FontAwesomeIcon color={'#FFF'} size={16} name="plus" />
+            </TouchableOpacity>
+        )
+    }
+
+    renderMinusIcon = () => {
+        return (
+            <TouchableOpacity activeOpacity={0.7}
+                style={styles.buttonStyle}
+                onPress={() => this.changeNumber(-0.5)}>
+                <FontAwesomeIcon color={'#FFF'} size={16} name="minus" />
+            </TouchableOpacity>
+        )
+    }
+
+    render() {
+        const { points, type } = this.props;
+        if (!['total', 'spread'].includes(type)) return null;
         return (
             <View style={styles.container}>
                 <View style={styles.titleContainer}>
                     <Text style={styles.titleText}>{type == 'spread' ? 'Spread' : 'Total Points'}</Text>
                 </View>
                 <View style={styles.inputContainer}>
-                    <InputSpinner
-                        style={styles.spinner}
-                        min={null}
-                        value={points}
-                        step={0.5}
-                        precision={1}
-                        type='real'
-                        rounded={false}
-                        showBorder={true}
-                        editable={true}
-                        textColor="#FFF"
-                        fontSize={14}
-                        height={30}
-                        selectionColor="#999"
-                        inputStyle={{ borderColor: 'white', paddingVertical: 4 }}
-                        buttonStyle={{ backgroundColor: 'black', borderColor: '#FFF', borderWidth: 1 }}
-                        onChange={(value) => onSelect(value)}
+                    <Input
+                        style={styles.numberInput}
+                        value={(points == null ? 0 : points).toString()}
+                        textAlign="center"
+                        keyboardType="numeric"
+                        onChangeText={this.onChangeText}
+                        accessoryLeft={this.renderMinusIcon}
+                        accessoryRight={this.renderPlusIcon}
                     />
                 </View>
             </View>
@@ -52,6 +85,18 @@ const styles = StyleSheet.create({
         paddingVertical: 6,
         paddingHorizontal: 10,
         flexDirection: 'row',
+        alignItems: 'center'
+    },
+    numberInput: {
+        backgroundColor: '#040404',
+        borderWidth: 0,
+        borderRadius: 6,
+        flex: 1,
+        tintColor: '#FFF',
+        fontSize: 14,
+    },
+    buttonStyle: {
+        width: 20,
         alignItems: 'center'
     },
 })

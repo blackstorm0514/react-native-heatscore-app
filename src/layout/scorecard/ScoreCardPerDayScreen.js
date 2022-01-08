@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Alert, FlatList, StyleSheet, View, RefreshControl, ScrollView } from 'react-native';
+import { Alert, StyleSheet, View, RefreshControl, ScrollView } from 'react-native';
 import { Text } from '@ui-kitten/components';
-import { RefreshIcon } from '../../libs/icons';
 import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { LoadingIndicator } from '../scores/components/LoadingIndicator';
