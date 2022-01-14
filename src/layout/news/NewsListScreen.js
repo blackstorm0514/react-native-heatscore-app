@@ -53,7 +53,6 @@ export default class NewsListScreen extends PureComponent {
     onLoadNews = (page) => {
         const { listNews, search, loading } = this.state;
         if (loading) return;
-        console.log(page)
         this._Mounted && this.setState({ loading: true, page: page });
         getNews(page, search)
             .then(({ data }) => {
