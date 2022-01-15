@@ -92,7 +92,7 @@ class RoundLeagueScreen extends Component {
                     paddingVertical: 0
                 }}
                 indicatorStyle={{
-                    backgroundColor: 'yellow',
+                    backgroundColor: '#B90000',
                     height: 1,
                     marginVertical: 0,
                 }}

@@ -100,11 +100,11 @@ const EventDetailScreen = (props) => {
                     marginVertical: 0,
                 }}
                 tabStyle={{
-                    width: 70,
+                    width: 80,
                     paddingVertical: 0,
                     paddingHorizontal: 2,
                     marginVertical: 0,
-                    minHeight: 30,
+                    // minHeight: 30,
                     flexDirection: 'row'
                 }}
                 labelStyle={{

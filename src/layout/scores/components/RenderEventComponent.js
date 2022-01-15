@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import { getMatchScore, getStatusString, getTimeString, getWinLoss } from '../../../libs/functions';
@@ -72,7 +72,7 @@ const RenderEventComponent = ({ navigation, event }) => {
     );
 }
 
-export default RenderEventComponent;
+export default memo(RenderEventComponent);
 
 const styles = StyleSheet.create({
     eventItem: {
