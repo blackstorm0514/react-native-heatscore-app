@@ -16,21 +16,25 @@ import { ArrowIosBackIcon } from '../../../libs/icons';
 
 const screenHeight = Dimensions.get('screen').height;
 
+const defaultEventTemplate = {
+    event: null,
+    team: null,
+    type: null,
+    timeline: null,
+    points: null,
+    allowAlerts: true,
+    alert_gameStart: true,
+    alert_gameEnd: true,
+    alert_gameScoring: false,
+}
+
 export default class AddScoreModal extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
             selectedIndex: 0,
 
-            event: null,
-            team: null,
-            type: null,
-            timeline: null,
-            points: null,
-            allowAlerts: true,
-            alert_gameStart: true,
-            alert_gameEnd: true,
-            alert_gameScoring: false,
+            ...defaultEventTemplate,
 
             submitting: false,
         }
@@ -51,8 +55,18 @@ export default class AddScoreModal extends PureComponent {
         return { shouldOpen: !prevProps.modalOpen && this.props.modalOpen };
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    async componentDidUpdate(prevProps, parevState, snapshot) {
+        const { defaultEvent } = this.props;
         if (snapshot.shouldOpen) {
+            if (defaultEvent) {
+                this._Mounted && await this.setState({
+                    selectedIndex: 1,
+                    ...defaultEventTemplate,
+                    event: defaultEvent,
+                })
+            } else {
+                this._Mounted && await this.setState(defaultEventTemplate)
+            }
             this.addModalRef.current?.open();
         }
     }
@@ -100,10 +114,10 @@ export default class AddScoreModal extends PureComponent {
         this._Mounted && this.setState({ selectedIndex: index })
     }
 
-    onAddScoreCard = (time) => {
+    onAddScoreCard = (time, event = null) => {
         const { onAddScoreCard } = this.props;
         time && this.addModalRef.current?.close();
-        time && onAddScoreCard(time);
+        time && onAddScoreCard(time, event);
     }
 
     onSelectEvent = (event) => {
@@ -185,7 +199,7 @@ export default class AddScoreModal extends PureComponent {
             .then(({ data }) => {
                 const { success, time, error } = data;
                 if (success) {
-                    this.onAddScoreCard(time);
+                    this.onAddScoreCard(time, event);
                 } else {
                     Toast.show(error);
                     this.onAddScoreCard(null);

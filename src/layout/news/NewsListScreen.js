@@ -149,7 +149,7 @@ export default class NewsListScreen extends PureComponent {
     }
 
     onSearch = async () => {
-        await this.setState({ listNews: [] });
+        this._Mounted && await this.setState({ listNews: [] });
         this.onLoadNews(1);
     }
 

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet, View, Dimensions } from 'react-native';
+import { StyleSheet, View, Dimensions, Alert } from 'react-native';
 import { Button, TopNavigation, Text } from '@ui-kitten/components';
 import { TabView, TabBar } from 'react-native-tab-view';
 import ScoreCardPerDayScreen from './ScoreCardPerDayScreen';
@@ -38,6 +38,7 @@ class ScoreCardScreen extends PureComponent {
             routes: tabs,
 
             modalOpen: false,
+            defaultEvent: null,
             newlyAdded: null,
         }
 
@@ -123,21 +124,39 @@ class ScoreCardScreen extends PureComponent {
         )
     }
 
-    onAddScoreCard = (time) => {
+    onAddScoreCard = async (time, event) => {
         if (time) {
-            this._Mounted && this.setState({
+            this._Mounted && await this.setState({
                 newlyAdded: time,
                 modalOpen: false,
+                defaultEvent: null,
             });
+            Alert.alert(
+                "Add a Score Card",
+                "Do you want to make score card on the same game?",
+                [
+                    {
+                        text: "Yes",
+                        onPress: async () => {
+                            this._Mounted && await this.setState({
+                                modalOpen: true,
+                                defaultEvent: event
+                            });
+                        },
+                    },
+                    { text: "No", },
+                ]
+            );
         } else {
             this._Mounted && this.setState({
                 modalOpen: false,
+                defaultEvent: null
             });
         }
     }
 
     render() {
-        const { index, routes, modalOpen } = this.state;
+        const { index, routes, modalOpen, defaultEvent } = this.state;
 
         return (
             <View style={styles.container} >
@@ -156,6 +175,7 @@ class ScoreCardScreen extends PureComponent {
                     initialLayout={{ width: screenWidth }}
                 />
                 <AddScoreModal onAddScoreCard={this.onAddScoreCard}
+                    defaultEvent={defaultEvent}
                     modalOpen={modalOpen} />
             </View>
         )
