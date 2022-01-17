@@ -1,37 +1,35 @@
-import React, { PureComponent } from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, BackHandler } from 'react-native';
 import { Layout } from '@ui-kitten/components';
 import { WebView } from 'react-native-webview';
 
-export default class NewsDetailScreen extends PureComponent {
-    render() {
-        const { route } = this.props;
-        const { params: { uri } } = route;
+const NewsDetailScreen = (props) => {
+    const { route: { params: { uri } } } = props;
 
-        return (
-            <Layout style={styles.container}>
-                <WebView source={{ uri: uri }} />
-            </Layout>
-        );
-    }
-
-    componentDidMount() {
-        this.backHandler = BackHandler.addEventListener(
-            "hardwareBackPress",
-            this.backAction
-        );
-    }
-
-    componentWillUnmount() {
-        this.backHandler.remove();
-    }
-
-    backAction = () => {
-        const { navigation } = this.props;
+    const backAction = () => {
+        const { navigation } = props;
         navigation.navigate('AllNews')
         return true;
     };
+
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            backAction
+        );
+        return () => {
+            backHandler.remove();
+        }
+    }, [])
+
+    return (
+        <Layout style={styles.container}>
+            <WebView source={{ uri: uri }} />
+        </Layout>
+    );
 };
+
+export default NewsDetailScreen;
 
 const styles = StyleSheet.create({
     container: {
