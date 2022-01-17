@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { PureComponent } from 'react';
 import {
     StyleSheet,
     TouchableOpacity,
     View,
+    Image,
     BackHandler,
     FlatList,
     Dimensions
@@ -16,86 +17,91 @@ import { CloseIcon, SearchIcon } from '../../libs/icons';
 import format from 'date-fns/format';
 
 const screenWidth = Dimensions.get('window').width;
-const NewsListScreen = (props) => {
-    const [loading, setLoading] = useState(false);
-    const [page, setPage] = useState(1);
-    const [listNews, setListNews] = useState([]);
-    const [search, setSearch] = useState('');
-    const [gotAll, setGotAll] = useState(false);
-    const [searchTimeout, setSearchTimeout] = useState(null);
-
-    useEffect(() => {
-        const backHandler = BackHandler.addEventListener(
-            "hardwareBackPress",
-            backAction
-        );
-        onLoadNews(page);
-        return () => {
-            backHandler.remove();
+export default class NewsListScreen extends PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
+            loading: false,
+            page: 1,
+            listNews: [],
+            gotAll: false,
+            search: '',
+            searchTimeout: null,
         }
-    }, [page])
+        this._Mounted = false;
+    }
+    componentDidMount() {
+        this.backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            this.backAction
+        );
+        this._Mounted = true;
+        this.onLoadNews(1);
+    }
 
-    const backAction = () => {
-        const { navigation } = props;
+    componentWillUnmount() {
+        this.backHandler.remove();
+        this._Mounted = false;
+    }
+
+    backAction = () => {
+        const { navigation } = this.props;
         navigation.navigate('Scores')
         return true;
     };
 
-    const onLoadNews = (page) => {
+    onLoadNews = (page) => {
+        const { listNews, search, loading } = this.state;
         if (loading) return;
-        setLoading(true);
+        this._Mounted && this.setState({ loading: true, page: page });
         getNews(page, search)
             .then(({ data }) => {
                 const { success, total, data: news, per_page } = data;
                 if (success) {
                     if (news.length > 0) {
                         if (page == 1) {
-                            setListNews(news);
-                            setLoading(false);
-                            if (total == news.length) {
-                                setGotAll(true);
-                            } else {
-                                setGotAll(false);
-                            }
+                            this._Mounted && this.setState({
+                                listNews: news,
+                                loading: false,
+                                total: page * per_page >= total
+                            });
                         } else {
-                            const newListNews = [...listNews, ...news];
-                            setListNews(newListNews);
-                            setLoading(false);
-                            if (total == newListNews.length) {
-                                setGotAll(true)
-                            } else {
-                                setGotAll(false);
-                            }
+                            this._Mounted && this.setState({
+                                listNews: [...listNews, ...news],
+                                loading: false,
+                                total: page * per_page >= total
+                            })
                         }
                     }
                 } else {
-                    setLoading(false);
+                    this._Mounted && this.setState({ loading: false });
                 }
             })
             .catch(error => {
-                setLoading(false);
+                this._Mounted && this.setState({ loading: false })
             });
     }
 
-    const goToItemDetail = (newsItem) => {
-        const { navigation } = props;
+    goToItemDetail = (newsItem) => {
+        const { navigation } = this.props;
         navigation && navigation.navigate('NewsDetail', { uri: newsItem.url });
     };
 
-    const renderFooterItem = () => {
+
+    renderFooterItem = () => {
+        const { loading, gotAll, page } = this.state;
         if (loading) {
             return (
                 <LoadingIndicator style={styles.loadingIndicator} />
             )
         }
         if (gotAll) return null;
-
         return (
             <Button
                 style={styles.loadButton}
                 size='small'
                 accessoryRight={PlusOutlineIcon}
-                onPress={() => setPage(page + 1)}>
+                onPress={() => this.onLoadNews(page + 1)}>
                 <Text style={styles.loadButtonText}>
                     LOAD MORE
                 </Text>
@@ -103,11 +109,11 @@ const NewsListScreen = (props) => {
         )
     }
 
-    const renderNewsItem = (info) => (
+    renderNewsItem = (info) => (
         <TouchableOpacity
             style={styles.item}
             activeOpacity={0.8}
-            onPress={() => goToItemDetail(info.item)}>
+            onPress={() => this.goToItemDetail(info.item)}>
             <View style={styles.itemSection}>
                 <Text style={styles.itemTitle}>
                     {info.item.title}
@@ -118,7 +124,7 @@ const NewsListScreen = (props) => {
                 width={screenWidth - 28}
             />
             <View style={styles.itemFooter}>
-                <Text style={styles.itemPublishedTime}>{formatDate(info.item.publishedAt)}</Text>
+                <Text style={styles.itemPublishedTime}>{this.formatDate(info.item.publishedAt)}</Text>
                 {info.item.source && info.item.source.name && <Text
                     style={styles.itemSource}>
                     {info.item.source.name}
@@ -127,57 +133,58 @@ const NewsListScreen = (props) => {
         </TouchableOpacity>
     );
 
-    const formatDate = (date) => {
+    formatDate = (date) => {
         return format(new Date(date), "eee, MMM dd yyyy");
     }
 
-    const customSearchIcon = () => {
+    customSearchIcon = () => {
         return <SearchIcon style={styles.searchIcon} />
     }
 
-    const customClearIcon = () => {
-        return search ? <TouchableOpacity activeOpacity={0.8} onPress={() => onChangeSearch('')}>
+    customClearIcon = () => {
+        const { search } = this.state;
+        return search ? <TouchableOpacity activeOpacity={0.8} onPress={() => this.onChangeSearch('')}>
             <CloseIcon style={styles.searchIcon} />
         </TouchableOpacity> : null
     }
 
-    const onSearch = () => {
-        setListNews([]);
-        setPage(1);
-        onLoadNews(1);
+    onSearch = async () => {
+        await this.setState({ listNews: [] });
+        this.onLoadNews(1);
     }
 
-    const onChangeSearch = (search) => {
+    onChangeSearch = (search) => {
+        const { searchTimeout } = this.state;
         if (searchTimeout) clearTimeout(searchTimeout);
-        setSearch(search);
-        setSearchTimeout(setTimeout(onSearch, 500))
+        this._Mounted && this.setState({ search, searchTimeout: setTimeout(this.onSearch, 500) })
     }
 
-    return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <Input
-                    style={styles.searchInput}
-                    placeholder='Search ...'
-                    placeholderTextColor="#888"
-                    value={search}
-                    onChangeText={onChangeSearch}
-                    accessoryLeft={customSearchIcon}
-                    accessoryRight={customClearIcon}
+    render() {
+        const { listNews, search } = this.state;
+        return (
+            <View style={styles.container}>
+                <View style={styles.header}>
+                    <Input
+                        style={styles.searchInput}
+                        placeholder='Search ...'
+                        placeholderTextColor="#888"
+                        value={search}
+                        onChangeText={this.onChangeSearch}
+                        accessoryLeft={this.customSearchIcon}
+                        accessoryRight={this.customClearIcon}
+                    />
+                </View>
+                <FlatList
+                    style={styles.list}
+                    data={listNews}
+                    renderItem={this.renderNewsItem}
+                    ListFooterComponent={this.renderFooterItem}
+                    keyExtractor={(item, index) => index.toString()}
                 />
             </View>
-            <FlatList
-                style={styles.list}
-                data={listNews}
-                renderItem={renderNewsItem}
-                ListFooterComponent={renderFooterItem}
-                keyExtractor={(item, index) => index.toString()}
-            />
-        </View>
-    );
+        );
+    };
 }
-
-export default NewsListScreen;
 
 const styles = StyleSheet.create({
     container: {
