@@ -9,7 +9,7 @@ class ScoresScreen extends Component {
         super(props);
 
         const tabs = [
-            { key: null, title: 'All', type: 'sport' },
+            // { key: null, title: 'All', type: 'sport' },
             { key: 2274, title: 'NBA', type: 'league' },
             { key: 459, title: 'NFL', type: 'league' },
             { key: 474, title: 'NCAAF', type: 'league' },
