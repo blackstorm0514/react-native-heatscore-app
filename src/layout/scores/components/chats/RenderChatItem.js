@@ -29,19 +29,21 @@ const RenderChatReply = ({ chatReply }) => {
 const RenderChatItem = (props) => {
     const scrollRef = useRef(null);
 
-    const onScroll = () => {
+    const onScroll = ({ nativeEvent: { layoutMeasurement, contentOffset, contentSize } }) => {
         const { chat, onSelectReply } = props;
         const { user, createdAt, text, image } = chat;
+        if (layoutMeasurement.width + contentOffset.x + 1 >= contentSize.width) {
+            onSelectReply({
+                user,
+                createdAt,
+                text: text ? text : null,
+                image: image ? image : null
+            });
+        }
         scrollRef.current?.scrollTo({ x: 0, y: 0, animated: true });
-        onSelectReply({
-            user,
-            createdAt,
-            text: text ? text : null,
-            image: image ? image : null
-        });
     }
 
-    const { chat } = props;
+    const { chat, onSelectReport } = props;
     const { user, createdAt, text, image, chatReply } = chat;
     const time_str = format(new Date(createdAt.seconds * 1000), "MMM d, hh:mm aaa");
     return (
@@ -50,7 +52,9 @@ const RenderChatItem = (props) => {
             onScrollEndDrag={onScroll}
             showsHorizontalScrollIndicator={false}
         >
-            <View style={styles.chatItemContainer}>
+            <TouchableOpacity style={styles.chatItemContainer}
+                onPress={() => onSelectReport(chat)}
+                activeOpacity={0.8}>
                 <FeatherIcon
                     size={20}
                     color='#ddd'
@@ -68,7 +72,7 @@ const RenderChatItem = (props) => {
                     </>}
                     {text && <Text style={styles.chatContent}>{user.username}: <Text style={{ color: 'white', fontWeight: '100', fontSize: 13 }}>{text}</Text></Text>}
                 </View>
-            </View>
+            </TouchableOpacity>
             <View style={styles.replyButtonContainer}>
                 <View style={styles.replyButtonWrapper}>
                     <FontAwesomeIcon size={16}

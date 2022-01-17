@@ -350,8 +350,13 @@ class RenderEventChatComponent extends Component {
     }
 
     onSelectReport = async (chatReport) => {
-        // this._Mounted && await this.setState({ chatReport })
-        // this.reportModalizeRef.current?.open();
+        this._Mounted && await this.setState({ chatReport });
+        this.reportModalizeRef.current?.open();
+    }
+
+    onReportChat = async () => {
+        this._Mounted && await this.setState({ chatReport: null });
+        this.reportModalizeRef.current?.close();
     }
 
     onSelectReply = (chatReply) => {
@@ -431,6 +436,7 @@ class RenderEventChatComponent extends Component {
                     scrollViewProps={{ showsVerticalScrollIndicator: true }}
                     adjustToContentHeight={true}>
                     <ReportChat chatReport={chatReport}
+                        onReportChat={this.onReportChat}
                         onCloseReport={this.onCloseReport} />
                 </Modalize>
             </View>

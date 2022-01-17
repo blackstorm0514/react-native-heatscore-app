@@ -6,10 +6,9 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { reportChat as reportChatAction } from '../../../../redux/services';
 import Toast from 'react-native-simple-toast';
 
-const ReportChat = ({ chatReport, onCloseReport }) => {
+const ReportChat = ({ chatReport, onCloseReport, onReportChat }) => {
     const reportChat = () => {
-        const { text, image, user: { email } } = chatReport;
-        reportChatAction({ text, image, email })
+        reportChatAction(chatReport)
             .then(({ data }) => {
                 const { success, error } = data;
                 if (success) {
@@ -19,7 +18,7 @@ const ReportChat = ({ chatReport, onCloseReport }) => {
                         [
                             {
                                 text: "OK",
-                                onPress: onCloseReport,
+                                onPress: onReportChat,
                             },
                         ]
                     )
@@ -53,7 +52,7 @@ const ReportChat = ({ chatReport, onCloseReport }) => {
                     />
                 </TouchableOpacity>
             </View>
-            <View style={styles.inLineButtons}>
+            {/* <View style={styles.inLineButtons}>
                 <TouchableOpacity activeOpacity={0.8}
                     style={styles.pressItem}>
                     <Text style={styles.pressItemText}>Like!</Text>
@@ -62,7 +61,7 @@ const ReportChat = ({ chatReport, onCloseReport }) => {
                     style={styles.pressItem}>
                     <Text style={styles.pressItemText}>Reply</Text>
                 </TouchableOpacity>
-            </View>
+            </View> */}
             <View style={styles.inLineButtons}>
                 <TouchableOpacity activeOpacity={0.8}
                     style={styles.pressItem}
