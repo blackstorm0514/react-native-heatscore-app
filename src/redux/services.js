@@ -86,7 +86,7 @@ export const getEventDetail = (event_id) => {
 }
 
 export const reportChat = (data) => {
-    return ApiService.get(`/chats/report`, data);
+    return ApiService.post(`/chats/report`, data);
 }
 
 export const toggleFavoriteEvent = (event_id, data) => {

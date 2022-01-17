@@ -350,6 +350,8 @@ class RenderEventChatComponent extends Component {
     }
 
     onSelectReport = async (chatReport) => {
+        const { user } = this.props;
+        if (!user) return;
         this._Mounted && await this.setState({ chatReport });
         this.reportModalizeRef.current?.open();
     }

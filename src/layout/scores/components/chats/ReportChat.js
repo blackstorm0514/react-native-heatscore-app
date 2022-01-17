@@ -27,6 +27,7 @@ const ReportChat = ({ chatReport, onCloseReport, onReportChat }) => {
                 }
             })
             .catch(error => {
+                console.log(error)
                 Toast.show('Cannot report chat. Please try again later.');
             })
     }
