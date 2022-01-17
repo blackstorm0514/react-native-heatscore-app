@@ -21,7 +21,7 @@ const ScaledImage = ({ uri, width: propsWidth, height: propsHeight }) => {
                 setWidth(width);
                 setHeight(height);
             }
-        });
+        }, () => { });
     }, [uri]);
 
     return (
