@@ -3,7 +3,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 export const googleClientID = {
     android: '893401532366-1vg223i13gku5088khe3ipa6ikalpsue.apps.googleusercontent.com',
     ios: '',
-    web: '893401532366-dss8umug8f3at3cmsjfii8f86n87iig0.apps.googleusercontent.com'
+    web: '893401532366-4g012n0outuoq1ouhrmlft2h3c3c9urc.apps.googleusercontent.com'
 }
 
 export const GoogleConfigure = {
