@@ -162,7 +162,7 @@ const EventDetailScreen = (props) => {
                     <MaterialIcons name="star-rate"
                         onPress={toggleFavorite}
                         color='#fdcb04'
-                        size={20} />
+                        size={24} />
                 </TouchableOpacity>
             );
         } else {
@@ -171,7 +171,7 @@ const EventDetailScreen = (props) => {
                     <MaterialIcons name="star-outline"
                         onPress={toggleFavorite}
                         color='#888'
-                        size={20} />
+                        size={24} />
                 </TouchableOpacity>
             );
         }

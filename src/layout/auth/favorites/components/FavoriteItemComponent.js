@@ -20,8 +20,8 @@ class FavoriteItemComponent extends PureComponent {
                 <TeamLogoImage image_id={team.image_id} size={20} style={styles.teamLogoImage} />
                 <Text style={styles.teamName} numberOfLines={1}>{team.name}</Text>
                 <TouchableOpacity activeOpacity={0.8} style={styles.toggleFavorite} onPress={() => onPress(sport, team, exist)}>
-                    {exist && <MaterialIcons name="star-rate" color='#fdcb04' size={16} />}
-                    {!exist && <MaterialIcons name="star-outline" color='#888' size={16} />}
+                    {exist && <MaterialIcons name="star-rate" color='#fdcb04' size={24} />}
+                    {!exist && <MaterialIcons name="star-outline" color='#888' size={24} />}
                 </TouchableOpacity>
             </View>
         );

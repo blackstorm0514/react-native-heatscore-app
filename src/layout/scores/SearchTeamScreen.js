@@ -161,8 +161,8 @@ class SearchScreen extends PureComponent {
                 <TouchableOpacity activeOpacity={0.8}
                     style={styles.toggleFavorite}
                     onPress={() => this.toggleFavorite(item)}>
-                    {item.favorite && <MaterialIcons name="star-rate" color='#fdcb04' size={18} />}
-                    {!item.favorite && <MaterialIcons name="star-outline" color='#888' size={18} />}
+                    {item.favorite && <MaterialIcons name="star-rate" color='#fdcb04' size={24} />}
+                    {!item.favorite && <MaterialIcons name="star-outline" color='#888' size={24} />}
                 </TouchableOpacity>
             </TouchableOpacity >
         );
