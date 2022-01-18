@@ -28,7 +28,7 @@ export default class SelectPointComponent extends PureComponent {
 
     render() {
         const { points, type } = this.props;
-        if (!['total', 'spread'].includes(type)) return null;
+        if (!['total', 'spread', 'total_home', 'total_away'].includes(type)) return null;
         return (
             <View style={styles.container}>
                 <View style={styles.titleContainer}>

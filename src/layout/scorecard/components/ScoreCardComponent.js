@@ -23,6 +23,7 @@ export default class ScoreCardComponent extends PureComponent {
         if (winLoss == 'win') winLossStyle = styles.winContainer;
         if (winLoss == 'lose') winLossStyle = styles.loseContainer;
         this.state = {
+            time_status: time_status,
             card_id: card._id,
             pickName: getPickName(home, away, team, type, points, timeline),
             winLoss: winLoss,
@@ -40,7 +41,7 @@ export default class ScoreCardComponent extends PureComponent {
     }
 
     render() {
-        const { pickName, winLossStyle,
+        const { pickName, winLossStyle, time_status,
             home, away,
             home_image, away_image,
             home_score, away_score,
@@ -67,11 +68,23 @@ export default class ScoreCardComponent extends PureComponent {
                                 <Text style={styles.eventItemTeamName} numberOfLines={1}>{away}</Text>
                                 <Text style={styles.eventItemTeamScore}>{away_score}</Text>
                             </View>
-                            {type == 'total' && showMode == 'total' && <View style={styles.totalPointContainer}>
-                                <Text style={{ flex: 2 }} />
-                                <Text style={styles.totalPointTitle} numberOfLines={1}>Total Points</Text>
-                                <Text style={styles.totalPointScore}>{away_score ? away_score + home_score : ''}</Text>
-                            </View>}
+                            {time_status == 3 && showMode == 'total' && <>
+                                {type == 'total' && <View style={styles.totalPointContainer}>
+                                    <Text style={{ flex: 2 }} />
+                                    <Text style={styles.totalPointTitle} numberOfLines={1}>Total Points</Text>
+                                    <Text style={styles.totalPointScore}>{away_score + home_score}</Text>
+                                </View>}
+                                {type == 'total_home' && <View style={styles.totalPointContainer}>
+                                    <Text style={{ flex: 2 }} />
+                                    <Text style={styles.totalPointTitle} numberOfLines={1}>Total Points</Text>
+                                    <Text style={styles.totalPointScore}>{home_score}</Text>
+                                </View>}
+                                {type == 'total_away' && <View style={styles.totalPointContainer}>
+                                    <Text style={{ flex: 2 }} />
+                                    <Text style={styles.totalPointTitle} numberOfLines={1}>Total Points</Text>
+                                    <Text style={styles.totalPointScore}>{away_score}</Text>
+                                </View>}
+                            </>}
                         </View>
                         <View style={styles.eventItemStatus}>
                             <Text style={styles.eventItemStatusText}>{time}</Text>

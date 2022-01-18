@@ -14,12 +14,13 @@ export default class SelectTeamComponent extends PureComponent {
     render() {
         const { event, type, team, onSelect } = this.props;
         if (!event) return null;
+        const isTotal = ['total', 'total_home', 'total_away'].includes(type);
         return (
             <View style={styles.container}>
                 <View style={styles.titleContainer}>
                     <Text style={styles.titleText}>TEAM</Text>
                 </View>
-                {type != 'total' && <>
+                {!isTotal && <>
                     <TouchableOpacity style={styles.radioContainer}
                         activeOpacity={0.7}
                         onPress={() => onSelect('home')}>
@@ -37,19 +38,19 @@ export default class SelectTeamComponent extends PureComponent {
                         <Text style={styles.selectItemTeamName} numberOfLines={1}>{event.away.name}</Text>
                     </TouchableOpacity>
                 </>}
-                {type == 'total' && <>
+                {isTotal && <>
                     <TouchableOpacity style={styles.radioContainer}
                         activeOpacity={0.7}
-                        onPress={() => onSelect('home')}>
+                        onPress={() => onSelect('over')}>
                         <FontAwesomeIcon color='white' size={14}
-                            name={team == 'home' ? 'check-circle' : 'circle-thin'} />
+                            name={team == 'over' ? 'check-circle' : 'circle-thin'} />
                         <Text style={[styles.selectItemTeamName, styles.selectItemOverUnder]} numberOfLines={1}>Over</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.radioContainer}
                         activeOpacity={0.7}
-                        onPress={() => onSelect('away')}>
+                        onPress={() => onSelect('under')}>
                         <FontAwesomeIcon color='white' size={14}
-                            name={team == 'away' ? 'check-circle' : 'circle-thin'} />
+                            name={team == 'under' ? 'check-circle' : 'circle-thin'} />
                         <Text style={[styles.selectItemTeamName, styles.selectItemOverUnder]} numberOfLines={1}>Under</Text>
                     </TouchableOpacity>
                 </>}

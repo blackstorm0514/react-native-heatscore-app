@@ -100,7 +100,7 @@ class ScoreCardPerDayScreen extends PureComponent {
 
     renderScoreCard = (item, index) => {
         const { showMode } = this.state;
-        return showMode == 'basic' || showMode == item.type ? (
+        return showMode == 'basic' || item.type.startsWith(showMode) ? (
             <ScoreCardComponent
                 card={item}
                 showMode={showMode}

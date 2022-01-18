@@ -36,6 +36,22 @@ export default class SelectTypeComponent extends PureComponent {
                         <Text style={styles.selectItemType} numberOfLines={1}>Over / Under</Text>
                     </TouchableOpacity>
                 </View>
+                <View style={styles.typeContainer}>
+                    <TouchableOpacity style={styles.radioContainer}
+                        activeOpacity={0.7}
+                        onPress={() => onSelect('total_home')}>
+                        <FontAwesomeIcon color='white' size={14}
+                            name={type == 'total_home' ? 'check-circle' : 'circle-thin'} />
+                        <Text style={styles.selectItemType} numberOfLines={1}>Over / Under (Home)</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.radioContainer}
+                        activeOpacity={0.7}
+                        onPress={() => onSelect('total_away')}>
+                        <FontAwesomeIcon color='white' size={14}
+                            name={type == 'total_away' ? 'check-circle' : 'circle-thin'} />
+                        <Text style={styles.selectItemType} numberOfLines={1}>Over / Under (away)</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         )
     }
