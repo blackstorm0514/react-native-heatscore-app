@@ -3,11 +3,19 @@ import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Text, List } from '@ui-kitten/components';
 import RenderEventComponent from './RenderEventComponent';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import ScoreCardComponent from './ScoreCardComponent';
 
 const RenderFavoriteComponent = ({ navigation, favorites, scorecards }) => {
     const renderEvent = ({ item }) => {
         return (
             <RenderEventComponent event={item}
+                navigation={navigation} />
+        )
+    }
+
+    const renderScoreCard = ({item}) => {
+        return (
+            <ScoreCardComponent event={item}
                 navigation={navigation} />
         )
     }
@@ -37,7 +45,7 @@ const RenderFavoriteComponent = ({ navigation, favorites, scorecards }) => {
                     listKey='scorecards'
                     style={styles.list}
                     data={scorecards}
-                    renderItem={renderEvent}
+                    renderItem={renderScoreCard}
                 />
             </View>}
             {favorites && favorites.length > 0 && <View>

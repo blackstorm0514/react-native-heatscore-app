@@ -29,7 +29,7 @@ const RenderEventComponent = ({ navigation, event }) => {
         <TouchableOpacity
             style={[styles.eventItem, winLossStyle]}
             activeOpacity={0.6}
-            onPress={() => onItemPress()}>
+            onPress={onItemPress}>
             <View style={styles.eventItemDetail}>
                 <View style={styles.eventItemTeam}>
                     <TeamLogoImage
