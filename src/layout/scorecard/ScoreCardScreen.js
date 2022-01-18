@@ -132,8 +132,8 @@ class ScoreCardScreen extends PureComponent {
                 defaultEvent: null,
             });
             Alert.alert(
-                "Add a Score Card",
-                "Do you want to make score card on the same game?",
+                "Add another Score Card",
+                "Do you want to add a bet for the same game?",
                 [
                     {
                         text: "Yes",

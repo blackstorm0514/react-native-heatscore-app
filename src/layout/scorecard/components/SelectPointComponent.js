@@ -2,7 +2,6 @@ import React, { PureComponent } from "react";
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Text, Input } from '@ui-kitten/components';
 import Toast from 'react-native-simple-toast';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 export default class SelectPointComponent extends PureComponent {
     onChangeText = (points) => {
@@ -27,26 +26,6 @@ export default class SelectPointComponent extends PureComponent {
         onSelect(points + step);
     }
 
-    renderPlusIcon = () => {
-        return (
-            <TouchableOpacity activeOpacity={0.7}
-                style={styles.buttonStyle}
-                onPress={() => this.changeNumber(0.5)}>
-                <FontAwesomeIcon color={'#FFF'} size={16} name="plus" />
-            </TouchableOpacity>
-        )
-    }
-
-    renderMinusIcon = () => {
-        return (
-            <TouchableOpacity activeOpacity={0.7}
-                style={styles.buttonStyle}
-                onPress={() => this.changeNumber(-0.5)}>
-                <FontAwesomeIcon color={'#FFF'} size={16} name="minus" />
-            </TouchableOpacity>
-        )
-    }
-
     render() {
         const { points, type } = this.props;
         if (!['total', 'spread'].includes(type)) return null;
@@ -62,8 +41,6 @@ export default class SelectPointComponent extends PureComponent {
                         textAlign="center"
                         keyboardType="numeric"
                         onChangeText={this.onChangeText}
-                        accessoryLeft={this.renderMinusIcon}
-                        accessoryRight={this.renderPlusIcon}
                     />
                 </View>
             </View>
