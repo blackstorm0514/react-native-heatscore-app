@@ -15,8 +15,7 @@ import { AppNavigator } from '../navigation/app.navigator';
 import { Theming } from '../services/theme.service';
 import { VectorIconsPack } from './vector-icons-pack';
 import { store, persistor } from '../redux/store';
-import { ApiService } from '../services/api.service';
-import { CheckPermissionAndReturnFcmToken } from '../libs/fcm_utils';
+import { sendFcmToken } from '../libs/sendFcmToken';
 
 export const navigationRef = createNavigationContainerRef();
 
@@ -29,18 +28,6 @@ const defaultConfig = {
 const App = ({ userToken }) => {
     const [mappingContext, currentMapping] = Theming.useMapping(appMappings, defaultConfig.mapping);
     const [themeContext, currentTheme] = Theming.useTheming(appThemes, defaultConfig.mapping, defaultConfig.theme);
-
-    const sendFcmToken = async () => {
-        try {
-            const fcmToken = await CheckPermissionAndReturnFcmToken();
-            if (fcmToken) {
-                await ApiService.post('/notifications/register', { token: fcmToken });
-            }
-        }
-        catch (error) {
-            console.warn('Error', error);
-        };
-    }
 
     const navigate = (name, params = null) => {
         navigationRef.current?.navigate(name, params);

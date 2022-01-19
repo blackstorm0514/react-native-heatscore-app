@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { statusCodes, GoogleSigninButton } from '@react-native-google-signin/google-signin';
 import { GoogleSigninConfigured } from '../../../services/google.service';
 import { signIn, signInGoogle } from '../../../redux/services';
+import { sendFcmToken } from '../../../libs/sendFcmToken';
 
 const LoadingIndicator = (props) => (
     <View style={[props.style, styles.indicator]}>
@@ -63,6 +64,7 @@ class SignInForm extends PureComponent {
                     this._Mounted && this.setState({ submitting: false });
                     setUserAction(user);
                     AppStorage.setToken(accessToken).then(() => navigation.navigate('Profile'));
+                    sendFcmToken();
                 } else {
                     this._Mounted && this.setState({ submitting: false, error: { ...errorOject, ...error } });
                 }
@@ -89,6 +91,7 @@ class SignInForm extends PureComponent {
                         this._Mounted && this.setState({ submitting: false });
                         setUserAction(user);
                         AppStorage.setToken(accessToken).then(() => navigation.navigate('Profile'));
+                        sendFcmToken();
                     } else {
                         this._Mounted && this.setState({ submitting: false, error: { ...errorOject, ...error } });
                     }
