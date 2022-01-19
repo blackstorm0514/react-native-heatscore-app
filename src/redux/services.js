@@ -40,7 +40,6 @@ export const updateProfile = (data) => {
     return ApiService.post('/auth/profile', data);
 }
 
-
 export const phoneVerify = (data) => {
     return ApiService.post('/auth/phone-verify', data);
 }
