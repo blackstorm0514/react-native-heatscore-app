@@ -13,7 +13,7 @@ const RenderFavoriteComponent = ({ navigation, favorites, scorecards }) => {
         )
     }
 
-    const renderScoreCard = ({item}) => {
+    const renderScoreCard = ({ item }) => {
         return (
             <ScoreCardComponent event={item}
                 navigation={navigation} />
@@ -75,7 +75,9 @@ export default RenderFavoriteComponent;
 
 const styles = StyleSheet.create({
     favoriteContainer: {
-        paddingBottom: 0
+        paddingBottom: 0,
+        borderBottomColor: '#888',
+        borderBottomWidth: 1,
     },
     favoriteTitle: {
         backgroundColor: '#222',

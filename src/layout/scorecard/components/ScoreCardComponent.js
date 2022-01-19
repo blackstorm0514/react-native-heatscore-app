@@ -22,6 +22,7 @@ export default class ScoreCardComponent extends PureComponent {
         let winLossStyle = null;
         if (winLoss == 'win') winLossStyle = styles.winContainer;
         if (winLoss == 'lose') winLossStyle = styles.loseContainer;
+        if (winLoss == 'draw') winLossStyle = styles.drawContainer;
         this.state = {
             time_status: time_status,
             card_id: card._id,
@@ -110,17 +111,20 @@ const styles = StyleSheet.create({
     eventWrapper: {
         paddingTop: 2,
         borderLeftWidth: 6,
-        borderLeftColor: '#FFF',
+        borderLeftColor: '#000',
         paddingBottom: 5,
         backgroundColor: '#202020',
     },
     winContainer: {
-        borderLeftColor: 'green',
+        borderLeftColor: '#0F0',
         backgroundColor: '#89FC991A',
     },
     loseContainer: {
-        borderLeftColor: 'red',
+        borderLeftColor: '#F00',
         backgroundColor: '#FFD7D726',
+    },
+    drawContainer: {
+        borderLeftColor: '#FFF',
     },
     eventPickText: {
         color: 'white',
@@ -133,7 +137,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     deleteButtonContainer: {
-        backgroundColor: 'red',
+        backgroundColor: '#F00',
         width: 60,
         justifyContent: 'center',
         alignItems: 'center'

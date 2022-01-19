@@ -99,7 +99,6 @@ export default class ScoresPerDayScreen extends Component {
             <View style={styles.container}>
                 {loading && <LoadingIndicator style={styles.loadingIndicator} />}
                 {!loading && <FlatList
-
                     onScroll={this._handleScroll}
                     onScrollAnimationEnd={this._handleScroll}
                     style={styles.list}

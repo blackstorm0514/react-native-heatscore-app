@@ -174,23 +174,28 @@ export function getWinLoss(home_score, away_score, team, type, points) {
         case 'spread':
             if (team == 'home') home_score += points;
             if (team == 'away') away_score += points;
+            if (home_score == away_score) return 'draw';
             if (home_score > away_score) winner = 'home';
             else if (home_score < away_score) winner = 'away';
             return winner == team ? 'win' : 'lose';
         case 'total':
+            if (home_score + away_score == points) return 'draw';
             if (home_score + away_score > points) winner = 'over';
             else if (home_score + away_score < points) winner = 'under';
             return winner == team ? 'win' : 'lose';
         case 'total_home':
+            if (home_score == points) return 'draw';
             if (home_score > points) winner = 'over';
             else if (home_score < points) winner = 'under';
             return winner == team ? 'win' : 'lose';
         case 'total_away':
+            if (away_score == points) return 'draw';
             if (away_score > points) winner = 'over';
             else if (away_score < points) winner = 'under';
             return winner == team ? 'win' : 'lose';
         case 'moneyline':
         default:
+            if (home_score == away_score) return 'draw';
             if (home_score > away_score) winner = 'home';
             else if (home_score < away_score) winner = 'away';
             return winner == team ? 'win' : 'lose';
