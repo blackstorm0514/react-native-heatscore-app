@@ -183,7 +183,7 @@ export default class AddScoreModal extends PureComponent {
             this.onAddScoreCard(null);
             return Toast.show('Please select timeline.');
         }
-        if (!points && ['total', 'spread'].includes(type)) {
+        if (!points && ['total', 'spread', 'total_home', 'total_away'].includes(type)) {
             this.onAddScoreCard(null);
             return Toast.show('Please select points.');
         }
@@ -248,6 +248,7 @@ export default class AddScoreModal extends PureComponent {
                             team={team}
                             type={type}
                             onSelect={this.onSelectTeam}
+                            onSelectType={this.onSelectType}
                         />
                         <SelectTimeLineComponent
                             event={event}

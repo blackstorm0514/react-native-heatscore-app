@@ -33,7 +33,7 @@ export default class SelectTypeComponent extends PureComponent {
                         onPress={() => onSelect('total')}>
                         <FontAwesomeIcon color='white' size={14}
                             name={type == 'total' ? 'check-circle' : 'circle-thin'} />
-                        <Text style={styles.selectItemType} numberOfLines={1}>Over / Under</Text>
+                        <Text style={styles.selectItemType} numberOfLines={1}>Total Over / Under</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.typeContainer}>
@@ -41,15 +41,8 @@ export default class SelectTypeComponent extends PureComponent {
                         activeOpacity={0.7}
                         onPress={() => onSelect('total_home')}>
                         <FontAwesomeIcon color='white' size={14}
-                            name={type == 'total_home' ? 'check-circle' : 'circle-thin'} />
-                        <Text style={styles.selectItemType} numberOfLines={1}>Over / Under (Home)</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.radioContainer}
-                        activeOpacity={0.7}
-                        onPress={() => onSelect('total_away')}>
-                        <FontAwesomeIcon color='white' size={14}
-                            name={type == 'total_away' ? 'check-circle' : 'circle-thin'} />
-                        <Text style={styles.selectItemType} numberOfLines={1}>Over / Under (away)</Text>
+                            name={['total_home', 'total_away'].includes(type) ? 'check-circle' : 'circle-thin'} />
+                        <Text style={styles.selectItemType} numberOfLines={1}>Team Over / Under</Text>
                     </TouchableOpacity>
                 </View>
             </View>

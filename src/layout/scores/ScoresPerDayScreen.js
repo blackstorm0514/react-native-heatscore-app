@@ -24,7 +24,7 @@ export default class ScoresPerDayScreen extends Component {
     componentDidMount() {
         const { navigation } = this.props;
         this._Mounted = true;
-        this.getEventsData();
+        this.getEventsData(true);
         this.willFocusSubscription = navigation.addListener('focus', () => this.getEventsData(false, true));
     }
 

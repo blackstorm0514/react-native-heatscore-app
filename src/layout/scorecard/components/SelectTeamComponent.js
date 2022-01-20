@@ -1,18 +1,12 @@
 import React, { PureComponent } from "react";
-import {
-    StyleSheet,
-    View,
-    TouchableOpacity,
-    Image,
-} from 'react-native';
+import { StyleSheet, View, TouchableOpacity, } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import ModalAction from "./ModalAction";
 import TeamLogoImage from "../../../components/team-logo-image";
 
 export default class SelectTeamComponent extends PureComponent {
     render() {
-        const { event, type, team, onSelect } = this.props;
+        const { event, type, team, onSelect, onSelectType } = this.props;
         if (!event) return null;
         const isTotal = ['total', 'total_home', 'total_away'].includes(type);
         return (
@@ -39,6 +33,24 @@ export default class SelectTeamComponent extends PureComponent {
                     </TouchableOpacity>
                 </>}
                 {isTotal && <>
+                    {type != 'total' && <>
+                        <TouchableOpacity style={styles.radioContainer}
+                            activeOpacity={0.7}
+                            onPress={() => onSelectType('total_home')}>
+                            <FontAwesomeIcon color='white' size={14}
+                                name={type == 'total_home' ? 'check-circle' : 'circle-thin'} />
+                            <TeamLogoImage image_id={event.home.image_id} size={14} style={styles.teamLogoImage} />
+                            <Text style={styles.selectItemTeamName} numberOfLines={1}>{event.home.name}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.radioContainer}
+                            activeOpacity={0.7}
+                            onPress={() => onSelectType('total_away')}>
+                            <FontAwesomeIcon color='white' size={14}
+                                name={type == 'total_away' ? 'check-circle' : 'circle-thin'} />
+                            <TeamLogoImage image_id={event.away.image_id} size={14} style={styles.teamLogoImage} />
+                            <Text style={styles.selectItemTeamName} numberOfLines={1}>{event.away.name}</Text>
+                        </TouchableOpacity>
+                    </>}
                     <TouchableOpacity style={styles.radioContainer}
                         activeOpacity={0.7}
                         onPress={() => onSelect('over')}>
