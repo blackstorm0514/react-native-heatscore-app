@@ -13,7 +13,7 @@ const RenderLeagueTopScorerComponent = ({ loading, topgoals, topassists }) => {
                 style={styles.scrollViewContainer}>
                 <List
                     style={styles.list}
-                    data={topgoals ? ['title', ...topgoals.slice(0, 20)] : []}
+                    data={topgoals ? ['title', ...topgoals] : []}
                     renderItem={renderGoalsTableRow}
                     ListHeaderComponent={() => renderTitle('Top Scorers')}
                 />
@@ -62,7 +62,7 @@ const RenderLeagueTopScorerComponent = ({ loading, topgoals, topassists }) => {
                 style={styles.scrollViewContainer}>
                 <List
                     style={styles.list}
-                    data={topassists ? ['title', ...topassists.slice(0, 20)] : []}
+                    data={topassists ? ['title', ...topassists] : []}
                     renderItem={renderAssistsTableRow}
                     ListHeaderComponent={() => renderTitle('Top Assists')}
                 />
