@@ -34,10 +34,10 @@ public class MainApplication extends Application implements ReactApplication {
             // example:
             // packages.add(new MyReactNativePackage());
             // packages.add(new RNFirebasePackage());
+            packages.add(new RNFirebaseAuthPackage());
+            packages.add(new RNFirebaseFirestorePackage());
             packages.add(new RNFirebaseMessagingPackage());
             packages.add(new RNFirebaseNotificationsPackage());
-            packages.add(new RNFirebaseFirestorePackage());
-            packages.add(new RNFirebaseAuthPackage());
             return packages;
         }
 

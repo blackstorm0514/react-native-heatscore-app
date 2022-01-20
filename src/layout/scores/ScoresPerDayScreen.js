@@ -16,6 +16,7 @@ export default class ScoresPerDayScreen extends Component {
             data: null,
             favorites: null,
             scorecards: null,
+            inplayInterval: null,
         }
         this._Mounted = false;
     }
@@ -24,7 +25,7 @@ export default class ScoresPerDayScreen extends Component {
         const { navigation } = this.props;
         this._Mounted = true;
         this.getEventsData();
-        this.willFocusSubscription = navigation.addListener('focus', this.getEventsData);
+        this.willFocusSubscription = navigation.addListener('focus', () => this.getEventsData(false, true));
     }
 
     componentWillUnmount() {
@@ -32,27 +33,72 @@ export default class ScoresPerDayScreen extends Component {
         if (this.willFocusSubscription) {
             this.willFocusSubscription();
         }
+        this.clearInplayInterval()
     }
 
-    getEventsData = (refreshing = false) => {
+    clearInplayInterval = () => {
+        const { inplayInterval } = this.state;
+        if (inplayInterval) {
+            clearInterval(inplayInterval);
+        }
+    }
+
+    getEventsData = (loading = true, refreshing = false) => {
         const { date, sport, league } = this.props;
-        const { refreshing: refreshingState, loading } = this.state;
+        const { refreshing: refreshingState, loading: loadingState } = this.state;
 
-        if (refreshingState || loading) return;
+        if (refreshingState || loadingState) return;
 
-        this._Mounted && this.setState({ [refreshing ? 'refreshing' : 'loading']: true });
+        this._Mounted && this.setState({
+            loading: loading,
+            refreshing: refreshing
+        });
         getEvent(date, sport, league)
             .then(({ data: result }) => {
                 const { data, favorites, scorecards } = result;
+                let hasInplay = false;
+                if (data) {
+                    for (const league of data) {
+                        for (const event of league.events) {
+                            if (event.time_status == "1") {
+                                hasInplay = true;
+                                break;
+                            }
+                        }
+                        if (hasInplay) {
+                            break;
+                        }
+                    }
+                }
+                if (!hasInplay && scorecards) {
+                    for (const event of scorecards) {
+                        if (event.time_status == "1") {
+                            hasInplay = true;
+                            break;
+                        }
+                    }
+                }
+                this.clearInplayInterval();
+                if (hasInplay) {
+                    setInterval(() => this.getEventsData(false, false), 15 * 1000);
+                }
                 this._Mounted && this.setState({
-                    [refreshing ? 'refreshing' : 'loading']: false,
+                    loading: false,
+                    refreshing: false,
                     data: data,
                     favorites: favorites && favorites.length ? favorites : null,
                     scorecards: scorecards && scorecards.length ? scorecards : null,
                 });
             })
             .catch(() => {
-                this._Mounted && this.setState({ [refreshing ? 'refreshing' : 'loading']: false, data: null, favorites: null });
+                this.clearInplayInterval();
+                this._Mounted && this.setState({
+                    loading: false,
+                    refreshing: false,
+                    data: null,
+                    favorites: null,
+                    scorecards: null
+                });
             })
     }
 
@@ -89,7 +135,7 @@ export default class ScoresPerDayScreen extends Component {
     }
 
     onRefresh = () => {
-        this.getEventsData(true);
+        this.getEventsData(false, true);
     }
 
     render() {
