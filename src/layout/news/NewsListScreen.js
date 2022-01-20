@@ -3,7 +3,6 @@ import {
     StyleSheet,
     TouchableOpacity,
     View,
-    Image,
     BackHandler,
     FlatList,
     Dimensions
@@ -40,8 +39,8 @@ export default class NewsListScreen extends PureComponent {
     }
 
     componentWillUnmount() {
-        this.backHandler.remove();
         this._Mounted = false;
+        this.backHandler.remove();
     }
 
     backAction = () => {

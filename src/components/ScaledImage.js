@@ -3,25 +3,26 @@ import { Image } from "react-native";
 
 const ScaledImage = ({ uri, width: propsWidth, height: propsHeight }) => {
     if (!uri) return null;
-
+    let isMounted = false;
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
 
     useEffect(() => {
+        isMounted = true;
         Image.getSize(uri, (width, height) => {
             if (propsWidth && !propsHeight) {
                 const realWidth = propsWidth > width ? width : propsWidth;
-                setWidth(realWidth);
-                setHeight(height * (realWidth / width));
+                isMounted && setWidth(realWidth);
+                isMounted && setHeight(height * (realWidth / width));
             } else if (!propsWidth && propsHeight) {
                 const realHeight = propsHeight > height ? height : propsHeight;
-                setWidth(width * (realHeight / height));
-                setHeight(realHeight);
+                isMounted && setWidth(width * (realHeight / height));
+                isMounted && setHeight(realHeight);
             } else {
-                setWidth(width);
-                setHeight(height);
+                isMounted && setWidth(width);
+                isMounted && setHeight(height);
             }
-        }, () => { });
+        }, () => { isMounted = false });
     }, [uri]);
 
     return (
