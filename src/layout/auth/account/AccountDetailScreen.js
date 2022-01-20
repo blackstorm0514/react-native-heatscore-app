@@ -63,7 +63,7 @@ class AccountDetailForm extends PureComponent {
         this._Mounted && this.setState({ error: errorOject, submitting: true });
         const profileObj = { username, firstname, lastname, password };
         if (password) {
-            delete profileObj.password;
+            delete profileObj.passwordConfirm;
         }
         updateProfile(profileObj)
             .then(({ data }) => {
