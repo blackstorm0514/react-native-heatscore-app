@@ -15,7 +15,7 @@ class ScoresScreen extends Component {
             { key: 2274, title: 'NBA', type: 'league' },
             { key: 459, title: 'NFL', type: 'league' },
             { key: 474, title: 'NCAAF', type: 'league' },
-            // { key: null, title: 'All', type: 'sport' },
+            { key: null, title: 'All', type: 'sport' },
             { key: 270, title: 'CFL', type: 'league' },
             { key: 1926, title: 'NHL', type: 'league' },
             { key: 2638, title: 'NCAAB', type: 'league' },
@@ -27,7 +27,7 @@ class ScoresScreen extends Component {
             { key: 16, title: 'Baseball', type: 'sport' },
         ];
         this.state = {
-            index: 0,
+            index: 3,
             routes: tabs
         }
         this._Mounted = false;
