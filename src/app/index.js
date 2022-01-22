@@ -35,7 +35,6 @@ const App = ({ userToken }) => {
 
     const foregroundNotificationsListener = () => {
         notifications().onNotification((notification) => {
-            // console.log(notification)
             notification.android.setChannelId("HeatScore");
             notification.android.setSmallIcon("ic_notification");
             notification.android.setColor("#b90000")
