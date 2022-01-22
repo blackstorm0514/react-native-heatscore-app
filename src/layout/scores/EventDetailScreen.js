@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { Component, useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Dimensions } from 'react-native';
 import { TopNavigationAction, TopNavigation, Text } from '@ui-kitten/components';
 import { ArrowIosBackIcon } from '../../libs/icons';
@@ -15,52 +15,57 @@ import Toast from 'react-native-simple-toast';
 import { connect } from 'react-redux';
 
 const screenWidth = Dimensions.get('window').width;
-const EventDetailScreen = (props) => {
-    const routes = [
-        { key: 'chat', title: 'Chat' },
-        { key: 'matchup', title: 'MatchUp' },
-        { key: 'lineup', title: 'LineUp' },
-        { key: 'history', title: 'History' }
-    ];
-    const [index, setIndex] = useState(1);
-    const [event, setEvent] = useState(null);
-    const [isFav, setIsFav] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [refreshing, setRefreshing] = useState(false);
+class EventDetailScreen extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            index: 1,
+            routes: [
+                { key: 'chat', title: 'Chat' },
+                { key: 'matchup', title: 'MatchUp' },
+                { key: 'lineup', title: 'LineUp' },
+                { key: 'history', title: 'History' }
+            ],
+            event: null,
+            isFav: false,
+            loading: false,
+            refreshing: false,
+        }
+        this._Mounted = false;
+    }
 
-    useEffect(() => {
-        const { route: { params: { event } }, navigation } = props;
+    componentDidMount() {
+        const { route: { params: { event } }, navigation } = this.props;
         if (!event) {
             navigation.navigate('AllScores');
         }
-        getEventData();
-    }, [])
+        this._Mounted = true;
+        this.getEventData();
+    }
 
-
-    const getEventData = (refreshing = false) => {
-        const { route: { params: { event } } } = props;
-        (refreshing ? setRefreshing : setLoading)(true);
+    getEventData = (refreshing = false) => {
+        const { route: { params: { event } } } = this.props;
+        this._Mounted && this.setState({ [refreshing ? 'refreshing' : 'loading']: true });
         getEventDetail(event.event_id)
             .then(({ data }) => {
                 const { success, event, isFav } = data;
                 if (success) {
-                    setEvent(event);
-                    setIsFav(isFav);
+                    this._Mounted && this.setState({ event: event, isFav: isFav, [refreshing ? 'refreshing' : 'loading']: false });
                 } else {
-                    setEvent(null);
-                    setIsFav(false);
+                    this._Mounted && this.setState({ event: null, isFav: false, [refreshing ? 'refreshing' : 'loading']: false });
                 }
-                (refreshing ? setRefreshing : setLoading)(false);
             })
             .catch(() => {
-                setEvent(null);
-                setIsFav(false);
-                (refreshing ? setRefreshing : setLoading)(false);
+                this._Mounted && this.setState({ event: null, isFav: false, [refreshing ? 'refreshing' : 'loading']: false });
             })
     }
 
-    const goBackAction = () => {
-        const { navigation } = props;
+    componentWillUnmount() {
+        this._Mounted = false;
+    }
+
+    goBackAction = () => {
+        const { navigation } = this.props;
         return (
             <TopNavigationAction
                 icon={ArrowIosBackIcon}
@@ -69,12 +74,12 @@ const EventDetailScreen = (props) => {
         )
     }
 
-    const onRefresh = () => {
-        getEventData(true);
+    onRefresh = () => {
+        this.getEventData(true);
     }
 
-    const renderTitle = () => {
-        const { route: { params: { event } } } = props;
+    renderTitle = () => {
+        const { route: { params: { event } } } = this.props;
         if (!event) {
             return <Text style={styles.titleText}>Event Not Found</Text>
         }
@@ -84,7 +89,7 @@ const EventDetailScreen = (props) => {
         </View>
     }
 
-    const renderTabBar = (props) => (
+    renderTabBar = (props) => (
         <View style={styles.tabBarContainer}>
             <TabBar
                 {...props}
@@ -104,7 +109,7 @@ const EventDetailScreen = (props) => {
                     paddingVertical: 0,
                     paddingHorizontal: 2,
                     marginVertical: 0,
-                    // minHeight: 30,
+                    minHeight: 30,
                     flexDirection: 'row'
                 }}
                 labelStyle={{
@@ -115,12 +120,12 @@ const EventDetailScreen = (props) => {
                 }}
                 activeColor='#B90000'
                 inactiveColor='white'
-                renderIcon={renderIcon}
+                renderIcon={this.renderIcon}
             />
         </View>
     )
 
-    const renderIcon = ({ route }) => {
+    renderIcon = ({ route }) => {
         if (route.key == 'chat') {
             return (
                 <Ionicons color='green'
@@ -131,13 +136,14 @@ const EventDetailScreen = (props) => {
         return null;
     }
 
-    const renderScene = ({ route }) => {
-        const { route: { params: { event: propsEvent } } } = props;
+    renderScene = ({ route }) => {
+        const { route: { params: { event: propsEvent } } } = this.props;
+        const { event, loading, refreshing } = this.state;
         switch (route.key) {
             case 'chat':
                 return <RenderEventChatComponent event={propsEvent} />
             case 'matchup':
-                return <RenderEventMatchupComponent event={event} loading={loading} refreshing={refreshing} onRefresh={onRefresh} />
+                return <RenderEventMatchupComponent event={event} loading={loading} refreshing={refreshing} onRefresh={this.onRefresh} />
             case 'lineup':
                 return <RenderEventLineupComponent event={event} loading={loading} />
             case 'history':
@@ -147,79 +153,84 @@ const EventDetailScreen = (props) => {
         }
     }
 
-    const favoriteIcon = () => {
+    favoriteIcon = () => {
         return (
             <TopNavigationAction
-                icon={renderFavoriteIcon}
+                icon={this.renderFavoriteIcon}
             />
         )
     }
 
-    const renderFavoriteIcon = (style) => {
+    renderFavoriteIcon = (style) => {
+        const { isFav } = this.state;
         if (isFav) {
             return (
                 <TouchableOpacity activeOpacity={0.8}>
                     <MaterialIcons name="star-rate"
-                        onPress={toggleFavorite}
+                        onPress={this.toggleFavorite}
                         color='#fdcb04'
-                        size={24} />
+                        size={20} />
                 </TouchableOpacity>
             );
         } else {
             return (
                 <TouchableOpacity activeOpacity={0.8}>
                     <MaterialIcons name="star-outline"
-                        onPress={toggleFavorite}
+                        onPress={this.toggleFavorite}
                         color='#888'
-                        size={24} />
+                        size={20} />
                 </TouchableOpacity>
             );
         }
     }
 
-    const toggleFavorite = () => {
-        const { user } = props;
+    toggleFavorite = () => {
+        const { loading, refreshing, isFav } = this.state;
+        const { user } = this.props;
         if (!user) {
             Toast.show('Please login to access your favorites.');
             return;
         }
         if (loading || refreshing) return;
 
-        const { route: { params: { event } } } = props;
-        setRefreshing(true)
+        const { route: { params: { event } } } = this.props;
+        this.setState({ refreshing: true });
         toggleFavoriteEvent(event.event_id, { isFav })
             .then(({ data }) => {
                 const { success, isFav, error } = data;
                 if (success) {
-                    setIsFav(isFav)
+                    this.setState({ isFav });
                 } else {
                     Toast.show(error);
                 }
-                setRefreshing(false);
+                this.setState({ refreshing: false });
             })
             .catch(() => {
                 Toast.show('Cannot Add/Remove favorite event. Please try again later.');
-                setRefreshing(false);
+                this.setState({ refreshing: false });
             })
     }
 
-    return (
-        <View style={styles.container} >
-            <TopNavigation
-                accessoryLeft={goBackAction}
-                accessoryRight={favoriteIcon}
-                title={renderTitle}
-                style={styles.headerStyle}
-            />
-            <TabView
-                renderTabBar={renderTabBar}
-                navigationState={{ index, routes }}
-                renderScene={renderScene}
-                onIndexChange={(index) => setIndex(index)}
-                initialLayout={{ width: Dimensions.get('window').width }}
-            />
-        </View>
-    )
+    render() {
+        const { index, routes } = this.state;
+        return (
+            <View style={styles.container} >
+                <TopNavigation
+                    accessoryLeft={this.goBackAction}
+                    accessoryRight={this.favoriteIcon}
+                    title={this.renderTitle}
+                    style={styles.headerStyle}
+                />
+                <TabView
+                    renderTabBar={this.renderTabBar}
+                    navigationState={{ index, routes }}
+                    renderScene={this.renderScene}
+                    onIndexChange={(index) => this._Mounted && this.setState({ index })}
+                    initialLayout={{ width: Dimensions.get('window').width }}
+                />
+            </View>
+        )
+    }
 };
 
 const mapStateToProps = (state) => ({
