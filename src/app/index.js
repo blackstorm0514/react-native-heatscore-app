@@ -56,7 +56,7 @@ const App = ({ userToken }) => {
         // get notification data when notification is clicked to open app when app is in background
         notifications().getInitialNotification()
             .then((notificationData) => {
-                if(notificationData) {
+                if (notificationData) {
                     const data = notificationData.notification.data;
                     switch (data.type) {
                         case 'game_start':
