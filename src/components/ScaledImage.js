@@ -3,12 +3,11 @@ import { Image } from "react-native";
 
 const ScaledImage = ({ uri, width: propsWidth, height: propsHeight }) => {
     if (!uri) return null;
-    let isMounted = false;
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
 
     useEffect(() => {
-        isMounted = true;
+        let isMounted = true;
         Image.getSize(uri, (width, height) => {
             if (propsWidth && !propsHeight) {
                 const realWidth = propsWidth > width ? width : propsWidth;
