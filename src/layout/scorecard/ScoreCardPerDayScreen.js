@@ -33,33 +33,68 @@ class ScoreCardPerDayScreen extends PureComponent {
             data: [],
             showMenu: false,
             showMode: 'basic',
+            inplayInterval: null,
         }
         this._Mounted = false;
     }
 
     componentDidMount() {
+        const { navigation } = this.props;
         this._Mounted = true;
         this.getEventsData();
+        this.willFocusSubscription = navigation.addListener('focus', () => this.getEventsData(false, true));
     }
 
     componentWillUnmount() {
         this._Mounted = false;
+        if (this.willFocusSubscription) {
+            this.willFocusSubscription();
+        }
+        this.clearInplayInterval();
     }
 
-    getEventsData = (refreshing = false) => {
+    clearInplayInterval = () => {
+        const { inplayInterval } = this.state;
+        if (inplayInterval) {
+            clearInterval(inplayInterval);
+        }
+    }
+
+    getEventsData = (loading = true, refreshing = false) => {
         const { date } = this.props;
-        this._Mounted && this.setState({ [refreshing ? 'refreshing' : 'loading']: true });
+        const { loading: loadingState, refreshing: refreshingState } = this.state;
+        if (loadingState || refreshingState) return;
+
+        this._Mounted && this.setState({ loading: loading, refreshing: refreshing });
         getScoreCards(date)
             .then(({ data: result }) => {
                 const { success, data: score_cards, error } = result;
+                this.clearInplayInterval();
                 if (success) {
-                    this._Mounted && this.setState({ data: score_cards, [refreshing ? 'refreshing' : 'loading']: false });
+                    let hasInplay = false;
+                    for (const score_card of score_cards) {
+                        if (score_card.event.time_status == "1") {
+                            hasInplay = true;
+                            break;
+                        }
+                    }
+
+                    if (hasInplay) {
+                        const inplayInterval = setInterval(() => this.getEventsData(false, false), 15 * 1000);
+                        this.setState({ inplayInterval })
+                    }
+                    this._Mounted && this.setState({
+                        data: score_cards,
+                        loading: false,
+                        refreshing: false
+                    });
                 } else {
-                    this._Mounted && this.setState({ data: [], [refreshing ? 'refreshing' : 'loading']: false });
+                    this._Mounted && this.setState({ data: [], loading: false, refreshing: false, inplayInterval: null });
                 }
             })
             .catch(() => {
-                this._Mounted && this.setState({ [refreshing ? 'refreshing' : 'loading']: false, data: [] });
+                this.clearInplayInterval();
+                this._Mounted && this.setState({ loading: false, refreshing: false, data: [], inplayInterval: null });
             });
     }
 
@@ -223,7 +258,7 @@ class ScoreCardPerDayScreen extends PureComponent {
     }
 
     onRefresh = () => {
-        this.getEventsData(true);
+        this.getEventsData(false, true);
     }
 
     render() {
