@@ -80,7 +80,8 @@ export default class ScoresPerDayScreen extends Component {
                 }
                 this.clearInplayInterval();
                 if (hasInplay) {
-                    setInterval(() => this.getEventsData(false, false), 15 * 1000);
+                    const inplayInterval = setInterval(() => this.getEventsData(false, false), 15 * 1000);
+                    this.setState({ inplayInterval })
                 }
                 this._Mounted && this.setState({
                     loading: false,
