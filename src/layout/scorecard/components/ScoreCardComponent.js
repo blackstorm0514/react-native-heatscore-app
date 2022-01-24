@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet, View, ScrollView, Dimensions, Image } from 'react-native';
+import { StyleSheet, View, ScrollView, Dimensions } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import { TouchableOpacity } from 'react-native';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
@@ -9,45 +9,18 @@ import TeamLogoImage from '../../../components/team-logo-image';
 const screenWidth = Dimensions.get('screen').width;
 
 export default class ScoreCardComponent extends PureComponent {
-    constructor(props) {
-        super(props);
+    render() {
         const { card } = props;
         const { event: { home, away, scores, timer, sport, time_status }, type, team, timeline, points, time } = card;
         const { home_score, away_score } = getMatchScore(sport, scores, timeline);
-
         const time_str = getTimeString(timer, time, time_status);
         const { status_text } = getStatusString(time_status, timer, sport);
-
         const winLoss = getWinLoss(home_score, away_score, team, type, points);
         let winLossStyle = null;
         if (winLoss == 'win') winLossStyle = styles.winContainer;
         if (winLoss == 'lose') winLossStyle = styles.loseContainer;
         if (winLoss == 'draw') winLossStyle = styles.drawContainer;
-        this.state = {
-            time_status: time_status,
-            card_id: card._id,
-            pickName: getPickName(home, away, team, type, points, timeline),
-            winLoss: winLoss,
-            winLossStyle: winLossStyle,
-            home: home.name,
-            away: away.name,
-            home_image: home.image_id,
-            away_image: away.image_id,
-            home_score: home_score,
-            away_score: away_score,
-            time: time_str,
-            status: status_text,
-            type: type,
-        };
-    }
-
-    render() {
-        const { pickName, winLossStyle, time_status,
-            home, away,
-            home_image, away_image,
-            home_score, away_score,
-            time, status, card_id, type
-        } = this.state;
+        const pickName = getPickName(home, away, team, type, points, timeline);
         const { onDeleteCard, showMode } = this.props;
 
         return (
@@ -60,13 +33,13 @@ export default class ScoreCardComponent extends PureComponent {
                     <View style={styles.eventContainer}>
                         <View style={styles.eventItemDetail}>
                             <View style={styles.eventItemTeam}>
-                                <TeamLogoImage image_id={home_image} size={16} style={styles.teamLogoImage} />
-                                <Text style={styles.eventItemTeamName} numberOfLines={1}>{home}</Text>
+                                <TeamLogoImage image_id={home.image_id} size={16} style={styles.teamLogoImage} />
+                                <Text style={styles.eventItemTeamName} numberOfLines={1}>{home.name}</Text>
                                 <Text style={styles.eventItemTeamScore}>{home_score}</Text>
                             </View>
                             <View style={styles.eventItemTeam}>
-                                <TeamLogoImage image_id={away_image} size={16} style={styles.teamLogoImage} />
-                                <Text style={styles.eventItemTeamName} numberOfLines={1}>{away}</Text>
+                                <TeamLogoImage image_id={away.image_id} size={16} style={styles.teamLogoImage} />
+                                <Text style={styles.eventItemTeamName} numberOfLines={1}>{away.name}</Text>
                                 <Text style={styles.eventItemTeamScore}>{away_score}</Text>
                             </View>
                             {time_status == 3 && showMode == 'total' && <>
@@ -88,13 +61,13 @@ export default class ScoreCardComponent extends PureComponent {
                             </>}
                         </View>
                         <View style={styles.eventItemStatus}>
-                            <Text style={styles.eventItemStatusText}>{time}</Text>
-                            <Text style={styles.eventItemStatusText} numberOfLines={1}>{status}</Text>
+                            <Text style={styles.eventItemStatusText}>{time_str}</Text>
+                            <Text style={styles.eventItemStatusText} numberOfLines={1}>{status_text}</Text>
                         </View>
                     </View>
                 </View>
                 <TouchableOpacity style={styles.deleteButtonContainer}
-                    onPress={() => onDeleteCard(card_id)}
+                    onPress={() => onDeleteCard(card._id)}
                     activeOpacity={0.8}>
                     <FontAwesomeIcon name='trash' size={32} color='white' />
                 </TouchableOpacity>
