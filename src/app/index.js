@@ -47,6 +47,7 @@ const App = ({ userToken }) => {
             switch (data.type) {
                 case 'game_start':
                 case 'game_end':
+                case 'game_scoring':
                     navigate('Scores', { screen: 'EventDetail', params: { event: JSON.parse(data.event) } })
                     break;
                 default:
@@ -61,6 +62,7 @@ const App = ({ userToken }) => {
                     switch (data.type) {
                         case 'game_start':
                         case 'game_end':
+                        case 'game_scoring':
                             setTimeout(() => navigate('Scores', { screen: 'EventDetail', params: { event: JSON.parse(data.event) } }),
                                 2000);
                             break;
