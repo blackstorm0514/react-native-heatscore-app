@@ -14,7 +14,7 @@ export default class ScoreCardComponent extends PureComponent {
     };
 
     render() {
-        const { event } = props;
+        const { event } = this.props;
         const { home, away, scores, timer, sport, time_status, scorecard: { type, team, timeline, points, time } } = event;
         const { home_score, away_score } = getMatchScore(sport, scores, timeline);
 

@@ -10,7 +10,7 @@ const screenWidth = Dimensions.get('screen').width;
 
 export default class ScoreCardComponent extends PureComponent {
     render() {
-        const { card } = props;
+        const { card, onDeleteCard, showMode } = this.props;
         const { event: { home, away, scores, timer, sport, time_status }, type, team, timeline, points, time } = card;
         const { home_score, away_score } = getMatchScore(sport, scores, timeline);
         const time_str = getTimeString(timer, time, time_status);
@@ -21,7 +21,6 @@ export default class ScoreCardComponent extends PureComponent {
         if (winLoss == 'lose') winLossStyle = styles.loseContainer;
         if (winLoss == 'draw') winLossStyle = styles.drawContainer;
         const pickName = getPickName(home, away, team, type, points, timeline);
-        const { onDeleteCard, showMode } = this.props;
 
         return (
             <ScrollView
