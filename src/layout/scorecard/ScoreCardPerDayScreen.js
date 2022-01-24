@@ -200,7 +200,7 @@ class ScoreCardPerDayScreen extends PureComponent {
             case 'Others':
                 return (otherEvents.length > 0 &&
                     <ScoreCardList
-                        data={[]}
+                        data={otherEvents}
                         renderItem={this.renderScoreCard}
                         ListHeaderComponent={() => this.renderHeader(item, notStartedEvents.length == 0 && inPlayEvents.length == 0 && endedEvents.length == 0)}
                         key={index}
