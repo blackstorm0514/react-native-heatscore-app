@@ -93,7 +93,7 @@ export default class ScoresPerDayScreen extends Component {
                 this.clearInplayUpcomingTimeout();
                 let inplayTimeout = null;
                 if (hasInplay) {
-                    inplayTimeout = setTimeout(() => this.getEventsData(false, false), 5 * 1000);
+                    inplayTimeout = setTimeout(() => this.getEventsData(false, false), 15 * 1000);
                 }
                 let upcomingTimeout = null;
                 if (!hasInplay && hasUpcoming && keyDate == 'Today') {
