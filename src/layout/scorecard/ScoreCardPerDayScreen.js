@@ -33,7 +33,7 @@ class ScoreCardPerDayScreen extends PureComponent {
             data: [],
             showMenu: false,
             showMode: 'basic',
-            inplayInterval: null,
+            inplayTimeout: null,
         }
         this._Mounted = false;
     }
@@ -50,13 +50,13 @@ class ScoreCardPerDayScreen extends PureComponent {
         if (this.willFocusSubscription) {
             this.willFocusSubscription();
         }
-        this.clearInplayInterval();
+        this.clearInplayTimeout();
     }
 
-    clearInplayInterval = () => {
-        const { inplayInterval } = this.state;
-        if (inplayInterval) {
-            clearInterval(inplayInterval);
+    clearInplayTimeout = () => {
+        const { inplayTimeout } = this.state;
+        if (inplayTimeout) {
+            clearInterval(inplayTimeout);
         }
     }
 
@@ -68,8 +68,8 @@ class ScoreCardPerDayScreen extends PureComponent {
         this._Mounted && this.setState({ loading: loading, refreshing: refreshing });
         getScoreCards(date)
             .then(({ data: result }) => {
-                const { success, data: score_cards, error } = result;
-                this.clearInplayInterval();
+                const { success, data: score_cards } = result;
+                this.clearInplayTimeout();
                 if (success) {
                     let hasInplay = false;
                     for (const score_card of score_cards) {
@@ -80,8 +80,8 @@ class ScoreCardPerDayScreen extends PureComponent {
                     }
 
                     if (hasInplay) {
-                        const inplayInterval = setInterval(() => this.getEventsData(false, false), 15 * 1000);
-                        this.setState({ inplayInterval })
+                        const inplayTimeout = setInterval(() => this.getEventsData(false, false), 5 * 1000);
+                        this.setState({ inplayTimeout })
                     }
                     this._Mounted && this.setState({
                         data: score_cards,
@@ -89,12 +89,12 @@ class ScoreCardPerDayScreen extends PureComponent {
                         refreshing: false
                     });
                 } else {
-                    this._Mounted && this.setState({ data: [], loading: false, refreshing: false, inplayInterval: null });
+                    this._Mounted && this.setState({ data: [], loading: false, refreshing: false, inplayTimeout: null });
                 }
             })
             .catch(() => {
-                this.clearInplayInterval();
-                this._Mounted && this.setState({ loading: false, refreshing: false, data: [], inplayInterval: null });
+                this.clearInplayTimeout();
+                this._Mounted && this.setState({ loading: false, refreshing: false, data: [], inplayTimeout: null });
             });
     }
 

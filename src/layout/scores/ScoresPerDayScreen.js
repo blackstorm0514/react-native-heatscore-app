@@ -16,7 +16,7 @@ export default class ScoresPerDayScreen extends Component {
             data: null,
             favorites: null,
             scorecards: null,
-            inplayInterval: null,
+            inplayTimeout: null,
         }
         this._Mounted = false;
     }
@@ -33,13 +33,13 @@ export default class ScoresPerDayScreen extends Component {
         if (this.willFocusSubscription) {
             this.willFocusSubscription();
         }
-        this.clearInplayInterval()
+        this.clearInplayTimeout()
     }
 
-    clearInplayInterval = () => {
-        const { inplayInterval } = this.state;
-        if (inplayInterval) {
-            clearInterval(inplayInterval);
+    clearInplayTimeout = () => {
+        const { inplayTimeout } = this.state;
+        if (inplayTimeout) {
+            clearTimeout(inplayTimeout);
         }
     }
 
@@ -78,10 +78,10 @@ export default class ScoresPerDayScreen extends Component {
                         }
                     }
                 }
-                this.clearInplayInterval();
+                this.clearInplayTimeout();
                 if (hasInplay) {
-                    const inplayInterval = setInterval(() => this.getEventsData(false, false), 15 * 1000);
-                    this.setState({ inplayInterval })
+                    const inplayTimeout = setTimeout(() => this.getEventsData(false, false), 5 * 1000);
+                    this.setState({ inplayTimeout })
                 }
                 this._Mounted && this.setState({
                     loading: false,
@@ -92,7 +92,7 @@ export default class ScoresPerDayScreen extends Component {
                 });
             })
             .catch(() => {
-                this.clearInplayInterval();
+                this.clearInplayTimeout();
                 this._Mounted && this.setState({
                     loading: false,
                     refreshing: false,
