@@ -34,6 +34,7 @@ class ScoreCardPerDayScreen extends PureComponent {
             showMenu: false,
             showMode: 'basic',
             inplayTimeout: null,
+            upcomingTimeout: null,
         }
         this._Mounted = false;
     }
@@ -50,18 +51,21 @@ class ScoreCardPerDayScreen extends PureComponent {
         if (this.willFocusSubscription) {
             this.willFocusSubscription();
         }
-        this.clearInplayTimeout();
+        this.clearInplayUpcomingTimeout();
     }
 
-    clearInplayTimeout = () => {
-        const { inplayTimeout } = this.state;
+    clearInplayUpcomingTimeout = () => {
+        const { inplayTimeout, upcomingTimeout } = this.state;
         if (inplayTimeout) {
-            clearInterval(inplayTimeout);
+            clearTimeout(inplayTimeout);
+        }
+        if (upcomingTimeout) {
+            clearTimeout(upcomingTimeout)
         }
     }
 
     getEventsData = (loading = true, refreshing = false) => {
-        const { date } = this.props;
+        const { date, keyDate } = this.props;
         const { loading: loadingState, refreshing: refreshingState } = this.state;
         if (loadingState || refreshingState) return;
 
@@ -69,32 +73,52 @@ class ScoreCardPerDayScreen extends PureComponent {
         getScoreCards(date)
             .then(({ data: result }) => {
                 const { success, data: score_cards } = result;
-                this.clearInplayTimeout();
+                this.clearInplayUpcomingTimeout();
                 if (success) {
                     let hasInplay = false;
+                    let hasUpcoming = false;
                     for (const score_card of score_cards) {
                         if (score_card.event.time_status == "1") {
                             hasInplay = true;
-                            break;
+                        }
+                        if (score_card.event.time_status == "0") {
+                            hasUpcoming = true;
                         }
                     }
-
+                    let inplayTimeout = null;
                     if (hasInplay) {
-                        const inplayTimeout = setInterval(() => this.getEventsData(false, false), 5 * 1000);
-                        this.setState({ inplayTimeout })
+                        inplayTimeout = setInterval(() => this.getEventsData(false, false), 5 * 1000);
+                    }
+                    let upcomingTimeout = null;
+                    if (!hasInplay && hasUpcoming && keyDate == 'Today') {
+                        upcomingTimeout = setTimeout(() => this.getEventsData(false, false), 10 * 60 * 1000);
                     }
                     this._Mounted && this.setState({
                         data: score_cards,
                         loading: false,
-                        refreshing: false
+                        refreshing: false,
+                        inplayTimeout,
+                        upcomingTimeout,
                     });
                 } else {
-                    this._Mounted && this.setState({ data: [], loading: false, refreshing: false, inplayTimeout: null });
+                    this._Mounted && this.setState({
+                        data: [],
+                        loading: false,
+                        refreshing: false,
+                        inplayTimeout: null,
+                        upcomingTimeout: null,
+                    });
                 }
             })
             .catch(() => {
-                this.clearInplayTimeout();
-                this._Mounted && this.setState({ loading: false, refreshing: false, data: [], inplayTimeout: null });
+                this.clearInplayUpcomingTimeout();
+                this._Mounted && this.setState({
+                    loading: false,
+                    refreshing: false,
+                    data: [],
+                    inplayTimeout: null,
+                    upcomingTimeout: null,
+                });
             });
     }
 

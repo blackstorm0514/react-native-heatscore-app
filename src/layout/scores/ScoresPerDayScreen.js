@@ -17,6 +17,7 @@ export default class ScoresPerDayScreen extends Component {
             favorites: null,
             scorecards: null,
             inplayTimeout: null,
+            upcomingTimeout: null,
         }
         this._Mounted = false;
     }
@@ -33,18 +34,21 @@ export default class ScoresPerDayScreen extends Component {
         if (this.willFocusSubscription) {
             this.willFocusSubscription();
         }
-        this.clearInplayTimeout()
+        this.clearInplayUpcomingTimeout()
     }
 
-    clearInplayTimeout = () => {
-        const { inplayTimeout } = this.state;
+    clearInplayUpcomingTimeout = () => {
+        const { inplayTimeout, upcomingTimeout } = this.state;
         if (inplayTimeout) {
             clearTimeout(inplayTimeout);
+        }
+        if (upcomingTimeout) {
+            clearTimeout(upcomingTimeout);
         }
     }
 
     getEventsData = (loading = true, refreshing = false) => {
-        const { date, sport, league } = this.props;
+        const { date, sport, league, keyDate } = this.props;
         const { refreshing: refreshingState, loading: loadingState } = this.state;
 
         if (refreshingState || loadingState) return;
@@ -57,15 +61,18 @@ export default class ScoresPerDayScreen extends Component {
             .then(({ data: result }) => {
                 const { data, favorites, scorecards } = result;
                 let hasInplay = false;
+                let hasUpcoming = false;
                 if (data) {
                     for (const league of data) {
                         for (const event of league.events) {
                             if (event.time_status == "1") {
                                 hasInplay = true;
-                                break;
+                            }
+                            if (event.time_status == "0") {
+                                hasUpcoming = true;
                             }
                         }
-                        if (hasInplay) {
+                        if (hasInplay && hasUpcoming) {
                             break;
                         }
                     }
@@ -78,10 +85,14 @@ export default class ScoresPerDayScreen extends Component {
                         }
                     }
                 }
-                this.clearInplayTimeout();
+                this.clearInplayUpcomingTimeout();
+                let inplayTimeout = null;
                 if (hasInplay) {
-                    const inplayTimeout = setTimeout(() => this.getEventsData(false, false), 5 * 1000);
-                    this.setState({ inplayTimeout })
+                    inplayTimeout = setTimeout(() => this.getEventsData(false, false), 5 * 1000);
+                }
+                let upcomingTimeout = null;
+                if (!hasInplay && hasUpcoming && keyDate == 'Today') {
+                    upcomingTimeout = setTimeout(() => this.getEventsData(false, false), 10 * 60 * 1000);
                 }
                 this._Mounted && this.setState({
                     loading: false,
@@ -89,16 +100,20 @@ export default class ScoresPerDayScreen extends Component {
                     data: data,
                     favorites: favorites && favorites.length ? favorites : null,
                     scorecards: scorecards && scorecards.length ? scorecards : null,
+                    inplayTimeout,
+                    upcomingTimeout,
                 });
             })
             .catch(() => {
-                this.clearInplayTimeout();
+                this.clearInplayUpcomingTimeout();
                 this._Mounted && this.setState({
                     loading: false,
                     refreshing: false,
                     data: null,
                     favorites: null,
-                    scorecards: null
+                    scorecards: null,
+                    upcomingTimeout: null,
+                    inplayTimeout: null
                 });
             })
     }
