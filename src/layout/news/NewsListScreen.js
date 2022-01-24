@@ -1,21 +1,12 @@
 import React, { PureComponent } from 'react';
-import {
-    StyleSheet,
-    TouchableOpacity,
-    View,
-    BackHandler,
-    FlatList,
-    Dimensions
-} from 'react-native';
+import { StyleSheet, TouchableOpacity, View, BackHandler, FlatList } from 'react-native';
 import { Button, Text, Input } from '@ui-kitten/components';
 import { PlusOutlineIcon } from '../../libs/icons';
 import { getNews } from '../../redux/services';
 import { LoadingIndicator } from '../scores/components/LoadingIndicator';
-import ScaledImage from '../../components/ScaledImage';
 import { CloseIcon, SearchIcon } from '../../libs/icons';
-import format from 'date-fns/format';
+import NewsItemComponent from './components/NewsItemComponent';
 
-const screenWidth = Dimensions.get('window').width;
 export default class NewsListScreen extends PureComponent {
     constructor(props) {
         super(props);
@@ -81,12 +72,6 @@ export default class NewsListScreen extends PureComponent {
             });
     }
 
-    goToItemDetail = (newsItem) => {
-        const { navigation } = this.props;
-        navigation && navigation.navigate('NewsDetail', { uri: newsItem.url });
-    };
-
-
     renderFooterItem = () => {
         const { loading, gotAll, page } = this.state;
         if (loading) {
@@ -109,32 +94,8 @@ export default class NewsListScreen extends PureComponent {
     }
 
     renderNewsItem = (info) => (
-        <TouchableOpacity
-            style={styles.item}
-            activeOpacity={0.8}
-            onPress={() => this.goToItemDetail(info.item)}>
-            <View style={styles.itemSection}>
-                <Text style={styles.itemTitle}>
-                    {info.item.title}
-                </Text>
-            </View>
-            <ScaledImage
-                uri={info.item.urlToImage}
-                width={screenWidth - 28}
-            />
-            <View style={styles.itemFooter}>
-                <Text style={styles.itemPublishedTime}>{this.formatDate(info.item.publishedAt)}</Text>
-                {info.item.source && info.item.source.name && <Text
-                    style={styles.itemSource}>
-                    {info.item.source.name}
-                </Text>}
-            </View>
-        </TouchableOpacity>
+        <NewsItemComponent {...info} navigation={this.props.navigation} />
     );
-
-    formatDate = (date) => {
-        return format(new Date(date), "eee, MMM dd yyyy");
-    }
 
     customSearchIcon = () => {
         return <SearchIcon style={styles.searchIcon} />
@@ -203,38 +164,6 @@ const styles = StyleSheet.create({
         color: '#000',
         fontSize: 14,
         fontWeight: 'bold',
-    },
-    item: {
-        marginVertical: 4,
-        backgroundColor: '#222',
-        marginHorizontal: 4,
-        padding: 10,
-        borderRadius: 4,
-    },
-    itemImageSection: {
-        flex: 1,
-        padding: 0,
-        width: '100%',
-        resizeMode: 'contain',
-        height: 'auto'
-    },
-    itemTitle: {
-        flex: 1,
-        fontSize: 14,
-        fontWeight: 'bold'
-    },
-    itemSource: {
-        fontSize: 13,
-        fontWeight: 'bold',
-        marginLeft: 10,
-    },
-    itemFooter: {
-        flexDirection: 'row',
-        alignItems: 'baseline'
-    },
-    itemPublishedTime: {
-        color: '#888',
-        fontSize: 12
     },
     iconButton: {
         paddingHorizontal: 0,
