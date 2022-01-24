@@ -81,6 +81,11 @@ export default class ScoresPerDayScreen extends Component {
                     for (const event of scorecards) {
                         if (event.time_status == "1") {
                             hasInplay = true;
+                        }
+                        if (event.time_status == "0") {
+                            hasUpcoming = true;
+                        }
+                        if (hasInplay && hasUpcoming) {
                             break;
                         }
                     }
