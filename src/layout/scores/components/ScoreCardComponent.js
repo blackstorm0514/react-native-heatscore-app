@@ -21,7 +21,6 @@ export default class ScoreCardComponent extends PureComponent {
                 {
                     text: "Yes",
                     onPress: () => {
-                        console.log(card_id)
                         hideScoreCard(card_id)
                             .then(({ data }) => {
                                 const { success, error } = data;
