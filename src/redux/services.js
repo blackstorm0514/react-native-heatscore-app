@@ -80,6 +80,10 @@ export const deleteScoreCard = (card_id) => {
     return ApiService.delete(`/scorecards/${card_id}`);
 }
 
+export const hideScoreCard = (card_id) => {
+    return ApiService.put(`/scorecards/${card_id}/hide`, {});
+}
+
 export const getEventDetail = (event_id) => {
     return ApiService.get(`/events/${event_id}/detail`);
 }

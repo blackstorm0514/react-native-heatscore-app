@@ -1,13 +1,48 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet, View, ScrollView, Dimensions, Image } from 'react-native';
+import { StyleSheet, View, ScrollView, Dimensions, Alert } from 'react-native';
 import { Text } from '@ui-kitten/components';
 import { TouchableOpacity } from 'react-native';
 import { getMatchScore, getPickName, getStatusString, getTimeString, getWinLoss } from '../../../libs/functions';
 import TeamLogoImage from '../../../components/team-logo-image';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import { hideScoreCard } from '../../../redux/services';
+import Toast from 'react-native-simple-toast';
 
 const screenWidth = Dimensions.get('screen').width;
 
 export default class ScoreCardComponent extends PureComponent {
+    onDeletePress = () => {
+        const { onRefresh, event } = this.props;
+        const { scorecard: { _id: card_id } } = event;
+        Alert.alert(
+            "Hide Score Card",
+            "Are you sure you want to hide this card from the dashboard?",
+            [
+                {
+                    text: "Yes",
+                    onPress: () => {
+                        console.log(card_id)
+                        hideScoreCard(card_id)
+                            .then(({ data }) => {
+                                const { success, error } = data;
+                                if (success) {
+                                    onRefresh();
+                                    Toast.show('Score Card removed.');
+                                } else {
+                                    Toast.show(error);
+                                }
+                            })
+                            .catch((error) => {
+                                console.warn(error)
+                                Toast.show('Cannot remove card. Please try again later.')
+                            })
+                    },
+                },
+                { text: "No", },
+            ]
+        );
+    }
+
     onItemPress = () => {
         const { navigation, event } = this.props;
         if (navigation) navigation.navigate('EventDetail', { event: event });
@@ -29,31 +64,41 @@ export default class ScoreCardComponent extends PureComponent {
         const pickName = getPickName(home, away, team, type, points, timeline);
 
         return (
-            <TouchableOpacity style={styles.container}
-                activeOpacity={0.8}
-                onPress={this.onItemPress}>
-                <View style={[styles.eventWrapper, winLossStyle]}>
-                    <Text style={styles.eventPickText}>{pickName}</Text>
-                    <View style={styles.eventContainer}>
-                        <View style={styles.eventItemDetail}>
-                            <View style={styles.eventItemTeam}>
-                                <TeamLogoImage image_id={home.image_id} size={16} style={styles.teamLogoImage} />
-                                <Text style={styles.eventItemTeamName} numberOfLines={1}>{home.name}</Text>
-                                <Text style={styles.eventItemTeamScore}>{home_score}</Text>
+            <ScrollView
+                style={styles.container}
+                showsHorizontalScrollIndicator={false}
+                horizontal>
+                <TouchableOpacity style={styles.container}
+                    activeOpacity={0.8}
+                    onPress={this.onItemPress}>
+                    <View style={[styles.eventWrapper, winLossStyle]}>
+                        <Text style={styles.eventPickText}>{pickName}</Text>
+                        <View style={styles.eventContainer}>
+                            <View style={styles.eventItemDetail}>
+                                <View style={styles.eventItemTeam}>
+                                    <TeamLogoImage image_id={home.image_id} size={16} style={styles.teamLogoImage} />
+                                    <Text style={styles.eventItemTeamName} numberOfLines={1}>{home.name}</Text>
+                                    <Text style={styles.eventItemTeamScore}>{home_score}</Text>
+                                </View>
+                                <View style={styles.eventItemTeam}>
+                                    <TeamLogoImage image_id={away.image_id} size={16} style={styles.teamLogoImage} />
+                                    <Text style={styles.eventItemTeamName} numberOfLines={1}>{away.name}</Text>
+                                    <Text style={styles.eventItemTeamScore}>{away_score}</Text>
+                                </View>
                             </View>
-                            <View style={styles.eventItemTeam}>
-                                <TeamLogoImage image_id={away.image_id} size={16} style={styles.teamLogoImage} />
-                                <Text style={styles.eventItemTeamName} numberOfLines={1}>{away.name}</Text>
-                                <Text style={styles.eventItemTeamScore}>{away_score}</Text>
+                            <View style={styles.eventItemStatus}>
+                                <Text style={styles.eventItemStatusText}>{time_str}</Text>
+                                <Text style={styles.eventItemStatusText} numberOfLines={1}>{status_text}</Text>
                             </View>
-                        </View>
-                        <View style={styles.eventItemStatus}>
-                            <Text style={styles.eventItemStatusText}>{time_str}</Text>
-                            <Text style={styles.eventItemStatusText} numberOfLines={1}>{status_text}</Text>
                         </View>
                     </View>
-                </View>
-            </TouchableOpacity>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.deleteButtonContainer}
+                    onPress={this.onDeletePress}
+                    activeOpacity={0.8}>
+                    <FontAwesomeIcon name='trash' size={32} color='white' />
+                </TouchableOpacity>
+            </ScrollView>
         )
     }
 }
@@ -61,7 +106,6 @@ export default class ScoreCardComponent extends PureComponent {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        marginTop: 1,
     },
     eventWrapper: {
         paddingTop: 2,

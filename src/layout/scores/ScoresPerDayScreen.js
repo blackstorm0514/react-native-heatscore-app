@@ -129,6 +129,7 @@ export default class ScoresPerDayScreen extends Component {
         if (favorites || scorecards) {
             return (
                 <RenderFavoriteComponent favorites={favorites}
+                    onRefresh={this.onRefresh}
                     scorecards={scorecards}
                     navigation={navigation} />
             )

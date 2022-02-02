@@ -5,7 +5,7 @@ import RenderEventComponent from './RenderEventComponent';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import ScoreCardComponent from './ScoreCardComponent';
 
-const RenderFavoriteComponent = ({ navigation, favorites, scorecards }) => {
+const RenderFavoriteComponent = ({ navigation, favorites, scorecards, onRefresh }) => {
     const renderEvent = ({ item }) => {
         return (
             <RenderEventComponent event={item}
@@ -16,6 +16,7 @@ const RenderFavoriteComponent = ({ navigation, favorites, scorecards }) => {
     const renderScoreCard = ({ item }) => {
         return (
             <ScoreCardComponent event={item}
+                onRefresh={onRefresh}
                 navigation={navigation} />
         )
     }
