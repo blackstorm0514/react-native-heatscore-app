@@ -32,7 +32,6 @@ export default class ScoreCardComponent extends PureComponent {
                                 }
                             })
                             .catch((error) => {
-                                console.warn(error)
                                 Toast.show('Cannot remove card. Please try again later.')
                             })
                     },
