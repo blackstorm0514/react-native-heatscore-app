@@ -10,14 +10,18 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 const TIMELINES_PER_SPORTS = {
     "Soccer": [
-        [{ name: 'Full Game', value: 'game' }],
+        [
+            { name: 'Full Game', value: 'game' }
+        ],
         [
             { name: '1H', value: '1st_half' },
             { name: '2H', value: '2nd_half' },
         ]
     ],
     "American Football": [
-        [{ name: 'Full Game', value: 'game' }],
+        [
+            { name: 'Full Game', value: 'game' }
+        ],
         [
             { name: '1H', value: '1st_half' },
             { name: '2H', value: '2nd_half' }
@@ -30,7 +34,9 @@ const TIMELINES_PER_SPORTS = {
         ],
     ],
     "Basketball": [
-        [{ name: 'Full Game', value: 'game' }],
+        [
+            { name: 'Full Game', value: 'game' }
+        ],
         [
             { name: '1H', value: '1st_half' },
             { name: '2H', value: '2nd_half' }
@@ -43,7 +49,9 @@ const TIMELINES_PER_SPORTS = {
         ],
     ],
     "Ice Hockey": [
-        [{ name: 'Full Game', value: 'game' }],
+        [
+            { name: 'Full Game', value: 'game' }
+        ],
         [
             { name: 'P1', value: '1st_peorid' },
             { name: 'P2', value: '2nd_peorid' },
@@ -51,8 +59,12 @@ const TIMELINES_PER_SPORTS = {
         ],
     ],
     "Baseball": [
-        [{ name: 'Full Game', value: 'game' }],
-        [{ name: 'I5', value: '5th_innings' }],
+        [
+            { name: 'Full Game', value: 'game' }
+        ],
+        [
+            { name: 'I5', value: '5th_innings' }
+        ],
     ],
 }
 
@@ -67,9 +79,9 @@ export default class SelectTimeLineComponent extends PureComponent {
                 <View style={styles.titleContainer}>
                     <Text style={styles.titleText}>TIME</Text>
                 </View>
-                {TIMELINES_PER_SPORTS[event.sport.name].map((peorids, index) => (
+                {TIMELINES_PER_SPORTS[event.sport.name] && TIMELINES_PER_SPORTS[event.sport.name].map((peorids, index) => (
                     <View style={styles.timelineContainer} key={index}>
-                        {peorids.map(peorid => (
+                        {peorids && peorids.map(peorid => (
                             <TouchableOpacity key={peorid.value}
                                 style={styles.radioContainer}
                                 activeOpacity={0.7}

@@ -18,12 +18,38 @@ export default class SelectPointComponent extends PureComponent {
         }
     }
 
-    changeNumber = (step) => {
+    onKeyPress = ({ nativeEvent: { key } }) => {
         const { points, onSelect } = this.props;
-        if (typeof points == 'string') {
-            return;
+        switch (key) {
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+            case '0':
+                const numberPoints = Number((points ? points : '') + key);
+                onSelect(numberPoints.toString());
+                break;
+            case '+':
+                if (points && points.startsWith('-')) {
+                    onSelect((-Number(points)).toString());
+                }
+                break;
+            case '-':
+                if (points && !points.startsWith('-')) {
+                    onSelect('-' + points);
+                }
+                break;
+            case '.':
+                if (points != null && points.toString().indexOf('.') == -1) {
+                    onSelect(points + '.');
+                }
+                break;
         }
-        onSelect(points + step);
     }
 
     render() {
@@ -40,7 +66,8 @@ export default class SelectPointComponent extends PureComponent {
                         value={(points == null ? 0 : points).toString()}
                         textAlign="center"
                         keyboardType="numeric"
-                        onChangeText={this.onChangeText}
+                        // onChangeText={this.onChangeText}
+                        onKeyPress={this.onKeyPress}
                     />
                 </View>
             </View>

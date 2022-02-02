@@ -21,7 +21,7 @@ const defaultEventTemplate = {
     team: null,
     type: null,
     timeline: null,
-    points: null,
+    points: 0,
     allowAlerts: true,
     alert_gameStart: true,
     alert_gameEnd: true,
@@ -78,7 +78,7 @@ export default class AddScoreModal extends PureComponent {
             team: null,
             type: null,
             timeline: null,
-            points: null,
+            points: 0,
             allowAlerts: true,
             alert_gameStart: true,
             alert_gameEnd: true,
@@ -127,7 +127,7 @@ export default class AddScoreModal extends PureComponent {
             team: null,
             type: null,
             timeline: null,
-            points: null,
+            points: 0,
         });
     }
 
@@ -188,9 +188,15 @@ export default class AddScoreModal extends PureComponent {
             return Toast.show('Please select points.');
         }
 
+        const numberPoints = Number(points)
+        if (isNaN(numberPoints)) {
+            this.onAddScoreCard(null);
+            return Toast.show('Please input valid points.');
+        }
+
         this._Mounted && this.setState({ submitting: true });
         addScoreCard({
-            event_id: event.event_id, team, type, timeline, points,
+            event_id: event.event_id, team, type, timeline, points: numberPoints,
             allowAlerts,
             alert_gameStart,
             alert_gameEnd,
