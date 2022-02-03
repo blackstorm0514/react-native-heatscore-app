@@ -1,79 +1,52 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, useEffect, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Text, Input } from '@ui-kitten/components';
 import Toast from 'react-native-simple-toast';
+import { Slider } from '@miblanchard/react-native-slider';
 
-export default class SelectPointComponent extends PureComponent {
-    onChangeText = (points) => {
-        const { onSelect } = this.props;
-        const numberPoint = Number(points);
-        if (['-', ''].includes(points)) {
-            onSelect(points);
-        } else {
-            if (isNaN(numberPoint)) {
-                Toast.show('Please input valid number.');
-            } else {
-                onSelect(numberPoint);
-            }
-        }
+
+const SelectPointComponent = (props) => {
+    const [points, setPoints] = useState(0);
+    const { type, onSelect } = props;
+
+    useEffect(() => {
+        setPoints(props.points)
+    }, []);
+
+    const onChangePoint = (value) => {
+        setPoints(value);
+        onSelect(value);
     }
 
-    onKeyPress = ({ nativeEvent: { key } }) => {
-        const { points, onSelect } = this.props;
-        switch (key) {
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-            case '0':
-                const numberPoints = Number((points ? points : '') + key);
-                onSelect(numberPoints.toString());
-                break;
-            case '+':
-                if (points && points.startsWith('-')) {
-                    onSelect((-Number(points)).toString());
-                }
-                break;
-            case '-':
-                if (points && !points.startsWith('-')) {
-                    onSelect('-' + points);
-                }
-                break;
-            case '.':
-                if (points != null && points.toString().indexOf('.') == -1) {
-                    onSelect(points + '.');
-                }
-                break;
-        }
-    }
-
-    render() {
-        const { points, type } = this.props;
-        if (!['total', 'spread', 'total_home', 'total_away'].includes(type)) return null;
-        return (
-            <View style={styles.container}>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.titleText}>{type == 'spread' ? 'Spread' : 'Total Points'}</Text>
-                </View>
-                <View style={styles.inputContainer}>
-                    <Input
+    if (!['total', 'spread', 'total_home', 'total_away'].includes(type)) return null;
+    return (
+        <View style={styles.container}>
+            <View style={styles.titleContainer}>
+                <Text style={styles.titleText}>{type == 'spread' ? 'Spread' : 'Total Points'} {points}</Text>
+            </View>
+            <View style={styles.inputContainer}>
+                {/* <Input
                         style={styles.numberInput}
-                        value={(points == null ? 0 : points).toString()}
+                        value={points.toString()}
                         textAlign="center"
                         keyboardType="numeric"
                         // onChangeText={this.onChangeText}
                         onKeyPress={this.onKeyPress}
-                    />
-                </View>
+                    /> */}
+                <Slider
+                    value={points}
+                    onValueChange={onChangePoint}
+                    minimumValue={type == 'spread' ? -30 : 0}
+                    maximumValue={type == 'spread' ? 30 : 250}
+                    step={0.5}
+                    thumbTintColor="#B90000"
+                />
             </View>
-        )
-    }
+        </View>
+    )
 }
+
+export default SelectPointComponent
 
 const styles = StyleSheet.create({
     titleContainer: {
@@ -84,12 +57,17 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     inputContainer: {
-        borderColor: '#222',
-        borderBottomWidth: 1,
-        paddingVertical: 6,
-        paddingHorizontal: 10,
-        flexDirection: 'row',
-        alignItems: 'center'
+        // borderColor: '#222',
+        // borderBottomWidth: 1,
+        // paddingVertical: 6,
+        // paddingHorizontal: 10,
+        // flexDirection: 'row',
+        // alignItems: 'center'
+        flex: 1,
+        marginLeft: 10,
+        marginRight: 10,
+        alignItems: 'stretch',
+        justifyContent: 'center',
     },
     numberInput: {
         backgroundColor: '#040404',

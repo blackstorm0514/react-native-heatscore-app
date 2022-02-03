@@ -1,4 +1,4 @@
-import React, { PureComponent, createRef } from 'react';
+import React, { Component, createRef } from 'react';
 import { StyleSheet, View, TouchableOpacity, Dimensions } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Text, ViewPager } from '@ui-kitten/components';
@@ -28,7 +28,7 @@ const defaultEventTemplate = {
     alert_gameScoring: false,
 }
 
-export default class AddScoreModal extends PureComponent {
+export default class AddScoreModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -53,6 +53,13 @@ export default class AddScoreModal extends PureComponent {
 
     getSnapshotBeforeUpdate(prevProps) {
         return { shouldOpen: !prevProps.modalOpen && this.props.modalOpen };
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        if (this.state.points != nextState.points) {
+            return false;
+        }
+        return true;
     }
 
     async componentDidUpdate(prevProps, parevState, snapshot) {
