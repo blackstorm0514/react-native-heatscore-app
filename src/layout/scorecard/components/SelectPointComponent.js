@@ -22,7 +22,7 @@ const SelectPointComponent = (props) => {
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>
-                <Text style={styles.titleText}>{type == 'spread' ? 'Spread' : 'Total Points'} {points}</Text>
+                <Text style={styles.titleText}>{type == 'spread' ? 'Spread' : 'Total Points'}: {points}</Text>
             </View>
             <View style={styles.inputContainer}>
                 {/* <Input
