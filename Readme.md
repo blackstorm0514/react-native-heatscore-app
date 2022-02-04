@@ -14,3 +14,6 @@ gradlew bundleRelease
 
 # Get SHA Key
 keytool -list -v -keystore heatscore.keystore -alias heatscore -storepass heatscore -keypass heatscore
+
+# betsapi country svg
+https://assets.betsapi.com/v2/images/flags/fr.svg
