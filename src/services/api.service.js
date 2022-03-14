@@ -3,7 +3,10 @@ import { AppStorage } from './app-storage.service';
 
 export const ApiService = axios.create({
     baseURL: 'https://app.heatscore.co/',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+    },
 })
 
 ApiService.interceptors.request.use(
