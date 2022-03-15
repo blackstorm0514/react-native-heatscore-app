@@ -17,3 +17,6 @@ keytool -list -v -keystore heatscore.keystore -alias heatscore -storepass heatsc
 
 # betsapi country svg
 https://assets.betsapi.com/v2/images/flags/fr.svg
+
+# VM
+https://techspite.com/how-to-install-macos-big-sur-on-vmware-on-windows/
