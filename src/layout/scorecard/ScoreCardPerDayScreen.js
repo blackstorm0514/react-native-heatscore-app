@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Alert, StyleSheet, View, RefreshControl, ScrollView } from 'react-native';
+import { Alert, StyleSheet, View, RefreshControl, ScrollView, TouchableOpacity } from 'react-native';
 import { Text } from '@ui-kitten/components';
-import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { LoadingIndicator } from '../scores/components/LoadingIndicator';
 import ScoreCardComponent from './components/ScoreCardComponent';
@@ -263,11 +262,17 @@ class ScoreCardPerDayScreen extends PureComponent {
         );
     }
 
-    renderEmptyList = () => (
+    renderEmptyList = (addModalOpen) => (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Text style={{ fontSize: 16, textAlign: 'center' }}>The Score Card lets you track the</Text>
             <Text style={{ fontSize: 16, textAlign: 'center' }}>progress of your bet. Click on +</Text>
             <Text style={{ fontSize: 16, textAlign: 'center' }}>to add a game to your score card.</Text>
+            <TouchableOpacity
+                style={[styles.createButton]}
+                onPress={addModalOpen}
+            >
+                <Text style={styles.buttonText}>+ Create Score Card</Text>
+            </TouchableOpacity>
         </View>
     )
 
@@ -287,6 +292,7 @@ class ScoreCardPerDayScreen extends PureComponent {
 
     render() {
         const { data, loading, refreshing } = this.state;
+        const { addModalOpen } = this.props;
 
         return (
             <ScrollView style={styles.container}
@@ -297,7 +303,7 @@ class ScoreCardPerDayScreen extends PureComponent {
                     refreshing={refreshing}
                     onRefresh={this.onRefresh} />}>
                 {loading && <LoadingIndicator style={styles.loadingIndicator} />}
-                {!loading && (!data || !data.length) && this.renderEmptyList()}
+                {!loading && (!data || !data.length) && this.renderEmptyList(addModalOpen)}
                 {!loading && data && data.length > 0 && ['In-play', 'Not Started', 'Ended', 'Others'].map(this.renderScoreList)}
             </ScrollView>
         )
@@ -367,5 +373,16 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: 'white',
         paddingVertical: 6
+    },
+    createButton: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 40,
+        borderRadius: 10,
+        marginTop: 200
+    },
+    buttonText: {
+        color: '#B90000',
+        fontSize: 20
     }
 });

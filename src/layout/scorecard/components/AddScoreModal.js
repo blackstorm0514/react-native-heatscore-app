@@ -1,5 +1,5 @@
 import React, { Component, createRef } from 'react';
-import { StyleSheet, View, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Dimensions, BackHandler } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import { Text, ViewPager } from '@ui-kitten/components';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
@@ -41,6 +41,10 @@ export default class AddScoreModal extends Component {
 
         this._Mounted = false;
         this.addModalRef = createRef();
+        this.backHandler = BackHandler.addEventListener(
+            "hardwareBackPress",
+            () => { console.log("here"); this.onCloseModal(); return true; }
+        );
     }
 
     componentDidMount() {
@@ -49,6 +53,7 @@ export default class AddScoreModal extends Component {
 
     componentWillUnmount() {
         this._Mounted = false;
+        this.backHandler.remove();
     }
 
     getSnapshotBeforeUpdate(prevProps) {

@@ -61,6 +61,7 @@ class ScoreCardScreen extends PureComponent {
                 date={route.date}
                 keyDate={route.key}
                 newlyAdded={newlyAdded}
+                addModalOpen={this.onAddModalOpen}
                 setLeague={(league) => this._Mounted && this.setState({ league: league })}
                 navigation={navigation} />
         )
@@ -135,6 +136,7 @@ class ScoreCardScreen extends PureComponent {
                 "Add another Score Card",
                 "Do you want to add a bet for the same game?",
                 [
+                    { text: "No", },
                     {
                         text: "Yes",
                         onPress: async () => {
@@ -144,7 +146,6 @@ class ScoreCardScreen extends PureComponent {
                             });
                         },
                     },
-                    { text: "No", },
                 ]
             );
         } else {
