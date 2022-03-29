@@ -20,7 +20,7 @@
 //     }
 // };
 
-// export const CheckPermissionAndReturnFcmToken = async () => {
+export const CheckPermissionAndReturnFcmToken = async () => {
 //     try {
 //         const enabled = await firebase.messaging().hasPermission();
 //         if (enabled) {
@@ -38,6 +38,6 @@
 //         }
 //     } catch (error) {
 //         console.warn('CheckPermissionAndReturnFcmToken', error);
-//         return null;
+        return null;
 //     }
-// };
+};
