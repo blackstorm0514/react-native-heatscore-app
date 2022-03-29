@@ -4,7 +4,7 @@ import { TopNavigationAction, TopNavigation, Text } from '@ui-kitten/components'
 import { ArrowIosBackIcon } from '../../libs/icons';
 import { TabView, TabBar, TabBarTop } from 'react-native-tab-view';
 import RenderEventMatchupComponent from './components/RenderEventMatchupComponent';
-import RenderEventChatComponent from './components/RenderEventChatComponent';
+// import RenderEventChatComponent from './components/RenderEventChatComponent';
 import { truncateString } from '../../libs/functions';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -140,8 +140,8 @@ class EventDetailScreen extends Component {
         const { route: { params: { event: propsEvent } } } = this.props;
         const { event, loading, refreshing } = this.state;
         switch (route.key) {
-            case 'chat':
-                return <RenderEventChatComponent event={propsEvent} />
+            // case 'chat':
+            //     return <RenderEventChatComponent event={propsEvent} />
             case 'matchup':
                 return <RenderEventMatchupComponent event={event} loading={loading} refreshing={refreshing} onRefresh={this.onRefresh} />
             case 'lineup':
