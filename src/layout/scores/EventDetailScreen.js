@@ -21,7 +21,7 @@ class EventDetailScreen extends Component {
         this.state = {
             index: 1,
             routes: [
-                { key: 'chat', title: 'Chat' },
+                // { key: 'chat', title: 'Chat' },
                 { key: 'matchup', title: 'MatchUp' },
                 { key: 'lineup', title: 'LineUp' },
                 { key: 'history', title: 'History' }
