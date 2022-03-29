@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { actions } from '../redux/reducer';
 import { getProfile } from '../redux/services';
-// import { auth } from 'react-native-firebase';
+import { auth } from 'react-native-firebase';
 
 const AppLoading = ({ initialConfig, children, placeholder, setUserAction }) => {
 
@@ -21,12 +21,12 @@ const AppLoading = ({ initialConfig, children, placeholder, setUserAction }) => 
 
     const startTasks = async () => {
         try {
-            // try {
-            //     await auth().signInAnonymously();
-            //     // console.log('Firebase user signed in.', value);
-            // } catch (error) {
-            //     console.warn('Firebase signin error', error);
-            // }
+            try {
+                await auth().signInAnonymously();
+                // console.log('Firebase user signed in.', value);
+            } catch (error) {
+                console.warn('Firebase signin error', error);
+            }
             const { data: { success, user } } = await getProfile();
             success && setUserAction(user);
             return Promise.resolve();
