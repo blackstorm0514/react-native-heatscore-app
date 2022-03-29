@@ -37,9 +37,12 @@ const RenderFavoriteComponent = ({ navigation, favorites, scorecards, onRefresh 
                     <TouchableOpacity style={styles.addFavoriteButton}
                         onPress={goToScoreCard}
                         activeOpacity={0.8}>
+                            <View style={styles.addBetRow}>
                         <FeatherIcon size={20}
                             color='red'
                             name='plus' />
+                            <Text style={styles.addBetLabel}> Add a bet</Text>
+                            </View>
                     </TouchableOpacity>
                 </View>
                 <List
@@ -102,4 +105,11 @@ const styles = StyleSheet.create({
     list: {
         backgroundColor: '#121212',
     },
+    addBetRow:{
+        flexDirection:'row',
+        alignItems: 'center',
+    },
+    addBetLabel:{
+        color:'red'
+    }
 });
