@@ -2,7 +2,7 @@ import React, { Component, createRef } from 'react';
 import { StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
 import { Button, Input, Text } from '@ui-kitten/components';
 import { LoadingIndicator } from './LoadingIndicator';
-// import { firestore } from 'react-native-firebase';
+import { firestore } from 'react-native-firebase';
 import { connect } from 'react-redux';
 import Toast from 'react-native-simple-toast';
 import { GiftedChat, Actions, Composer, Send, LoadEarlier } from 'react-native-gifted-chat';
@@ -49,33 +49,33 @@ class RenderEventChatComponent extends Component {
         this._Mounted = true;
         const { event_id } = this.state;
         if (event_id) {
-            // firestore()
-            //     .collection('ROOMS')
-            //     .where('event_id', '==', event_id)
-            //     .get()
-            //     .then((res) => {
-            //         if (res && res.size == 0) {
-            //             firestore()
-            //                 .collection('ROOMS')
-            //                 .add({ event_id: event_id })
-            //                 .then(res => {
-            //                     const room_id = res.id;
-            //                     this._Mounted && this.setState({ room_id: room_id });
-            //                     this.getChatLogs(room_id);
-            //                 })
-            //                 .catch(error => {
-            //                     console.warn('rooms', error)
-            //                 })
-            //         } else if (res.size > 0) {
-            //             const room_id = res.docs[0].id
-            //             this._Mounted && this.setState({ room_id: room_id });
-            //             this.getChatLogs(room_id);
-            //         } else {
-            //         }
-            //     })
-            //     .catch(error => {
-            //         console.warn('room id', error)
-            //     })
+            firestore()
+                .collection('ROOMS')
+                .where('event_id', '==', event_id)
+                .get()
+                .then((res) => {
+                    if (res && res.size == 0) {
+                        firestore()
+                            .collection('ROOMS')
+                            .add({ event_id: event_id })
+                            .then(res => {
+                                const room_id = res.id;
+                                this._Mounted && this.setState({ room_id: room_id });
+                                this.getChatLogs(room_id);
+                            })
+                            .catch(error => {
+                                console.warn('rooms', error)
+                            })
+                    } else if (res.size > 0) {
+                        const room_id = res.docs[0].id
+                        this._Mounted && this.setState({ room_id: room_id });
+                        this.getChatLogs(room_id);
+                    } else {
+                    }
+                })
+                .catch(error => {
+                    console.warn('room id', error)
+                })
 
         }
     }
@@ -83,39 +83,39 @@ class RenderEventChatComponent extends Component {
     getChatLogs = (room_id) => {
         const { messagesListener } = this.state;
         if (messagesListener) return;
-        // let newMessagesListener = firestore()
-        //     .collection('ROOMS')
-        //     .doc(room_id)
-        //     .collection('MESSAGES')
-        //     .orderBy('createdAt', 'desc')
-        //     .limit(MESSAGE_LIMIT)
-        //     .onSnapshot(querySnapshot => {
-        //         const chats = querySnapshot.docs.map(snapshot => {
-        //             return snapshot.data();
-        //         });
-        //         const { recentChats } = this.state;
-        //         if (recentChats.length > 0) {
-        //             const newRecentChats = [];
-        //             for (let i = 0; i < chats.length; i++) {
-        //                 if (chats[i]._id === recentChats[0]._id) {
-        //                     break;
-        //                 }
-        //                 newRecentChats.push(chats[i]);
-        //             }
-        //             if (newRecentChats.length) {
-        //                 this._Mounted && this.setState({ recentChats: [...newRecentChats, ...recentChats] });
-        //                 this.giftedChatRef.current?.scrollToBottom();
-        //             }
-        //         } else {
-        //             this._Mounted && this.setState({
-        //                 recentChats: chats,
-        //                 earlierChatsAvailable: chats.length >= MESSAGE_LIMIT,
-        //                 lastVisible: querySnapshot.docs[chats.length - 1]
-        //             });
-        //         }
-        //     });
+        let newMessagesListener = firestore()
+            .collection('ROOMS')
+            .doc(room_id)
+            .collection('MESSAGES')
+            .orderBy('createdAt', 'desc')
+            .limit(MESSAGE_LIMIT)
+            .onSnapshot(querySnapshot => {
+                const chats = querySnapshot.docs.map(snapshot => {
+                    return snapshot.data();
+                });
+                const { recentChats } = this.state;
+                if (recentChats.length > 0) {
+                    const newRecentChats = [];
+                    for (let i = 0; i < chats.length; i++) {
+                        if (chats[i]._id === recentChats[0]._id) {
+                            break;
+                        }
+                        newRecentChats.push(chats[i]);
+                    }
+                    if (newRecentChats.length) {
+                        this._Mounted && this.setState({ recentChats: [...newRecentChats, ...recentChats] });
+                        this.giftedChatRef.current?.scrollToBottom();
+                    }
+                } else {
+                    this._Mounted && this.setState({
+                        recentChats: chats,
+                        earlierChatsAvailable: chats.length >= MESSAGE_LIMIT,
+                        lastVisible: querySnapshot.docs[chats.length - 1]
+                    });
+                }
+            });
 
-        // this._Mounted && this.setState({ messagesListener: newMessagesListener });
+        this._Mounted && this.setState({ messagesListener: newMessagesListener });
     }
 
     onLoadEarlier = () => {
@@ -126,31 +126,31 @@ class RenderEventChatComponent extends Component {
         }
 
         this._Mounted && this.setState({ isLoadingEarlier: true });
-        // firestore()
-        //     .collection('ROOMS')
-        //     .doc(room_id)
-        //     .collection('MESSAGES')
-        //     .orderBy('createdAt', 'desc')
-        //     .startAfter(lastVisible)
-        //     .limit(MESSAGE_LIMIT)
-        //     .get()
-        //     .then(querySnapshot => {
-        //         const chats = querySnapshot.docs.map(snapshot => {
-        //             return snapshot.data()
-        //         });
-        //         if (chats.length === 0) {
-        //             this._Mounted && this.setState({ earlierChatsAvailable: false, isLoadingEarlier: false });
-        //         } else {
-        //             this._Mounted && this.setState({
-        //                 oldChats: [...oldChats, ...chats],
-        //                 isLoadingEarlier: false,
-        //                 lastVisible: querySnapshot.docs[chats.length - 1]
-        //             });
-        //         }
-        //     })
-        //     .catch(error => {
-        //         this._Mounted && this.setState({ isLoadingEarlier: false });
-        //     });
+        firestore()
+            .collection('ROOMS')
+            .doc(room_id)
+            .collection('MESSAGES')
+            .orderBy('createdAt', 'desc')
+            .startAfter(lastVisible)
+            .limit(MESSAGE_LIMIT)
+            .get()
+            .then(querySnapshot => {
+                const chats = querySnapshot.docs.map(snapshot => {
+                    return snapshot.data()
+                });
+                if (chats.length === 0) {
+                    this._Mounted && this.setState({ earlierChatsAvailable: false, isLoadingEarlier: false });
+                } else {
+                    this._Mounted && this.setState({
+                        oldChats: [...oldChats, ...chats],
+                        isLoadingEarlier: false,
+                        lastVisible: querySnapshot.docs[chats.length - 1]
+                    });
+                }
+            })
+            .catch(error => {
+                this._Mounted && this.setState({ isLoadingEarlier: false });
+            });
     }
 
     renderLoadEarlier = (props) => {
@@ -184,17 +184,17 @@ class RenderEventChatComponent extends Component {
         }
 
         if (message && room_id) {
-            // firestore()
-            //     .collection('ROOMS')
-            //     .doc(room_id)
-            //     .collection('MESSAGES')
-            //     .add({
-            //         _id: message._id,
-            //         createdAt: date,
-            //         text: message.text,
-            //         user: message.user,
-            //         chatReply: chatReply ? chatReply : null,
-            //     });
+            firestore()
+                .collection('ROOMS')
+                .doc(room_id)
+                .collection('MESSAGES')
+                .add({
+                    _id: message._id,
+                    createdAt: date,
+                    text: message.text,
+                    user: message.user,
+                    chatReply: chatReply ? chatReply : null,
+                });
             this.setState({ chatReply: null });
         }
         this.setState({ chatReply: null });
@@ -213,16 +213,16 @@ class RenderEventChatComponent extends Component {
             )
         }
         if (url && room_id) {
-            // firestore()
-            //     .collection('ROOMS')
-            //     .doc(room_id)
-            //     .collection('MESSAGES')
-            //     .add({
-            //         _id: uuidv4(),
-            //         createdAt: date,
-            //         image: url,
-            //         user: user
-            //     })
+            firestore()
+                .collection('ROOMS')
+                .doc(room_id)
+                .collection('MESSAGES')
+                .add({
+                    _id: uuidv4(),
+                    createdAt: date,
+                    image: url,
+                    user: user
+                })
         }
         this.onCloseModal();
         addChatItemAction({ type: 'image' });
