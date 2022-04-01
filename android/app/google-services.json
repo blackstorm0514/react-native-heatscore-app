@@ -22,7 +22,7 @@
           }
         },
         {
-          "client_id": "893401532366-dss8umug8f3at3cmsjfii8f86n87iig0.apps.googleusercontent.com",
+          "client_id": "893401532366-4g012n0outuoq1ouhrmlft2h3c3c9urc.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -35,8 +35,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "893401532366-dss8umug8f3at3cmsjfii8f86n87iig0.apps.googleusercontent.com",
+              "client_id": "893401532366-4g012n0outuoq1ouhrmlft2h3c3c9urc.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "893401532366-5v9on5m6395l4ole10prccpfce194cja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.heatscoreinc.HeatScore"
+              }
             }
           ]
         }
