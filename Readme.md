@@ -21,3 +21,6 @@ https://assets.betsapi.com/v2/images/flags/fr.svg
 # VM
 https://techspite.com/how-to-install-macos-big-sur-on-vmware-on-windows/
 https://techsprobe.com/6-step-install-macos-catalina-10-15-on-vmware-on-windows-pc/
+
+# React Native push notification
+https://www.npmjs.com/package/react-native-firebase-push-notifications
