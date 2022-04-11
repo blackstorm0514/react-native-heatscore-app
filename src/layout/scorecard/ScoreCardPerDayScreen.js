@@ -86,7 +86,7 @@ class ScoreCardPerDayScreen extends PureComponent {
                     }
                     let inplayTimeout = null;
                     if (hasInplay) {
-                        inplayTimeout = setInterval(() => this.getEventsData(false, false), 15 * 1000);
+                        inplayTimeout = setTimeout(() => this.getEventsData(false, false), 15 * 1000);
                     }
                     let upcomingTimeout = null;
                     if (!hasInplay && hasUpcoming && keyDate == 'Today') {

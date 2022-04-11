@@ -19,6 +19,7 @@ class ScoresScreen extends Component {
             { key: 270, title: 'CFL', type: 'league' },
             { key: 1926, title: 'NHL', type: 'league' },
             { key: 2638, title: 'NCAAB', type: 'league' },
+            { key: 225, title: 'MLB', type: 'league' },
             { key: 1040, title: 'UEFA CL', type: 'league' },
             { key: 1, title: 'Soccer', type: 'sport' },
             { key: 12, title: 'Football', type: 'sport' },

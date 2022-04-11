@@ -1,4 +1,4 @@
-import React, { PureComponent, useState } from 'react';
+import React, { PureComponent } from 'react';
 import { Text, Layout, Button, Input, Spinner } from '@ui-kitten/components';
 import { StyleSheet, View, TouchableOpacity, BackHandler } from 'react-native';
 import { TopNavigationComponent } from '../signup/components/TopNavigationComponent';

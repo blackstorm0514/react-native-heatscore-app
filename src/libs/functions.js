@@ -245,7 +245,8 @@ const logoImages = {
     'CFL': require('../assets/images/league_logos/cfl.png'),
     'NCAAB': require('../assets/images/league_logos/ncaab.png'),
     'UEFA CL': require('../assets/images/league_logos/uefa.png'),
-    'NHL': require('../assets/images/league_logos/nhl.png')
+    'NHL': require('../assets/images/league_logos/nhl.png'),
+    'MLB': require('../assets/images/league_logos/mlb.png'),
 }
 
 export function getSportsIcon(title, leagueTitle, color, size) {
