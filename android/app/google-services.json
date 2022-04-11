@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "893401532366-jmtrk3q4dplqhq8rp85tjvv5r9kv52fd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.heatscore",
+            "certificate_hash": "a9fed592bf634f2edc9ff10df62d02d348f5b23b"
+          }
+        },
+        {
           "client_id": "893401532366-4g012n0outuoq1ouhrmlft2h3c3c9urc.apps.googleusercontent.com",
           "client_type": 3
         }
