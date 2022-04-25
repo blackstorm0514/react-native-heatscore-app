@@ -5,7 +5,7 @@ import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { notifications } from 'react-native-firebase';
+// import { notifications } from 'react-native-firebase';
 import { createNavigationContainerRef } from '@react-navigation/native';
 
 import AppLoading from './app-loading.component';
@@ -33,53 +33,53 @@ const App = ({ userToken }) => {
         navigationRef.current?.navigate(name, params);
     }
 
-    const foregroundNotificationsListener = () => {
-        notifications().onNotification((notification) => {
-            notification.android.setChannelId("HeatScore");
-            notification.android.setSmallIcon("ic_notification");
-            notification.android.setColor("#b90000")
-            notifications().displayNotification(notification);
-        });
+    // const foregroundNotificationsListener = () => {
+    //     notifications().onNotification((notification) => {
+    //         notification.android.setChannelId("HeatScore");
+    //         notification.android.setSmallIcon("ic_notification");
+    //         notification.android.setColor("#b90000")
+    //         notifications().displayNotification(notification);
+    //     });
 
-        // get notification data when notification is clicked when app is in foreground
-        const notificationOpenedListener = notifications().onNotificationOpened((notificationData) => {
-            const data = notificationData.notification.data;
-            switch (data.type) {
-                case 'game_start':
-                case 'game_end':
-                case 'game_scoring':
-                    navigate('Scores', { screen: 'EventDetail', params: { event: JSON.parse(data.event) } })
-                    break;
-                default:
-            }
-        });
+    //     // get notification data when notification is clicked when app is in foreground
+    //     const notificationOpenedListener = notifications().onNotificationOpened((notificationData) => {
+    //         const data = notificationData.notification.data;
+    //         switch (data.type) {
+    //             case 'game_start':
+    //             case 'game_end':
+    //             case 'game_scoring':
+    //                 navigate('Scores', { screen: 'EventDetail', params: { event: JSON.parse(data.event) } })
+    //                 break;
+    //             default:
+    //         }
+    //     });
 
-        // get notification data when notification is clicked to open app when app is in background
-        notifications().getInitialNotification()
-            .then((notificationData) => {
-                if (notificationData) {
-                    const data = notificationData.notification.data;
-                    switch (data.type) {
-                        case 'game_start':
-                        case 'game_end':
-                        case 'game_scoring':
-                            setTimeout(() => navigate('Scores', { screen: 'EventDetail', params: { event: JSON.parse(data.event) } }),
-                                2000);
-                            break;
-                        default:
-                    }
-                }
-            });
+    //     // get notification data when notification is clicked to open app when app is in background
+    //     notifications().getInitialNotification()
+    //         .then((notificationData) => {
+    //             if (notificationData) {
+    //                 const data = notificationData.notification.data;
+    //                 switch (data.type) {
+    //                     case 'game_start':
+    //                     case 'game_end':
+    //                     case 'game_scoring':
+    //                         setTimeout(() => navigate('Scores', { screen: 'EventDetail', params: { event: JSON.parse(data.event) } }),
+    //                             2000);
+    //                         break;
+    //                     default:
+    //                 }
+    //             }
+    //         });
 
-        return () => {
-            messageListener();
-            notificationOpenedListener();
-        }
-    }
+    //     return () => {
+    //         messageListener();
+    //         notificationOpenedListener();
+    //     }
+    // }
 
     useEffect(() => {
         sendFcmToken();
-        return foregroundNotificationsListener();
+        // return foregroundNotificationsListener();
     }, []);
 
     return (
