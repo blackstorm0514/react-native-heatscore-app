@@ -2,41 +2,24 @@
   package="com.heatscore">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
-      android:usesCleartextTraffic="true"
       android:theme="@style/AppTheme">
-      <meta-data
-          android:name="com.google.firebase.messaging.default_notification_icon"
-          android:resource="@mipmap/ic_notification" />
-      <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming notification message. -->
-      <meta-data
-          android:name="com.google.firebase.messaging.default_notification_color"
-          android:resource="@color/notification_background" />
       <activity
         android:name=".MainActivity"
-        android:exported="true"
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
         android:launchMode="singleTask"
-        android:screenOrientation="portrait"
         android:windowSoftInputMode="adjustResize">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
-      <service
-        android:name="com.heatscore.FirebaseMessageService"
-        android:enabled="true"
-        android:exported="false">
-        <intent-filter>
-            <action android:name="com.google.firebase.MESSAGING_EVENT" />
-        </intent-filter>
-      </service>
     </application>
 </manifest>
