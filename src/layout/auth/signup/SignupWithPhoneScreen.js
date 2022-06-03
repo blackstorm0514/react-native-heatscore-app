@@ -6,6 +6,7 @@ import PhoneInput, { isValidNumber } from "react-native-phone-number-input";
 import { KeyboardAvoidingView } from '../../../components/keyboard-avoiding-view';
 import CodeInput from 'react-native-confirmation-code-input';
 import { phoneVerify } from '../../../redux/services';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const LoadingIndicator = (props) => (
     <View style={[props.style, styles.indicator]}>
@@ -94,6 +95,7 @@ class SignupWithPhoneForm extends PureComponent {
         const { navigation } = this.props;
         return (
             <KeyboardAvoidingView>
+                <SafeAreaView>
                 {!sentCode && <Layout style={styles.layoutContainer}>
                     <View style={styles.headerContainer}>
                         <Text
@@ -185,6 +187,7 @@ class SignupWithPhoneForm extends PureComponent {
                         {submitting ? null : () => <Text style={styles.nextButtonText}>N E X T</Text>}
                     </Button>
                 </Layout>}
+                </SafeAreaView>
             </KeyboardAvoidingView>
         )
     }
