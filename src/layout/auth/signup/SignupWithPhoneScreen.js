@@ -95,7 +95,6 @@ class SignupWithPhoneForm extends PureComponent {
         const { navigation } = this.props;
         return (
             <KeyboardAvoidingView>
-                <SafeAreaView>
                 {!sentCode && <Layout style={styles.layoutContainer}>
                     <View style={styles.headerContainer}>
                         <Text
@@ -187,7 +186,6 @@ class SignupWithPhoneForm extends PureComponent {
                         {submitting ? null : () => <Text style={styles.nextButtonText}>N E X T</Text>}
                     </Button>
                 </Layout>}
-                </SafeAreaView>
             </KeyboardAvoidingView>
         )
     }
@@ -197,10 +195,10 @@ export default class SignupWithPhoneScreen extends PureComponent {
     render() {
         const { navigation } = this.props;
         return (
-            <View style={styles.container}>
+            <SafeAreaView style={styles.container}>
                 <TopNavigationComponent navigation={navigation} backPosition="SignupHome" />
                 <SignupWithPhoneForm {...this.props} />
-            </View>
+            </SafeAreaView>
         )
     }
 }
