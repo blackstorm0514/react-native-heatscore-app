@@ -11,7 +11,6 @@ import { statusCodes, GoogleSigninButton } from '@react-native-google-signin/goo
 import { GoogleSigninConfigured } from '../../../services/google.service';
 import { signIn, signInGoogle } from '../../../redux/services';
 import { sendFcmToken } from '../../../libs/sendFcmToken';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 const LoadingIndicator = (props) => (
     <View style={[props.style, styles.indicator]}>
@@ -119,50 +118,49 @@ class SignInForm extends PureComponent {
         const { navigation } = this.props;
 
         return (
-            <SafeAreaView>
-                <KeyboardAvoidingView>
-                    <Layout level="1" style={styles.layoutContainer}>
-                        <View>
-                            <Text style={styles.titleText}>SIGN IN</Text>
-                            <Layout style={styles.boxLayout}>
-                                <Text style={styles.formLabel}>Email</Text>
-                                <Input
-                                    style={styles.formInput}
-                                    placeholder='jone.doe@gmail.com'
-                                    placeholderTextColor="#888"
-                                    value={email}
-                                    onChangeText={(text) => this.changeField('email', text)}
-                                />
-                                {error && error.email && <Text style={styles.errorText}>{error.email}</Text>}
-                            </Layout>
-                            <Layout style={styles.boxLayout}>
-                                <Text style={styles.formLabel}>Password</Text>
-                                <Input
-                                    style={styles.formInput}
-                                    placeholder='Password'
-                                    placeholderTextColor="#888"
-                                    value={password}
-                                    secureTextEntry
-                                    autoCapitalize="none"
-                                    onChangeText={(text) => this.changeField('password', text)}
-                                />
-                            </Layout>
-                            <Layout style={styles.boxLayout}>
-                                <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('ForgotPassword')}>
-                                    <Text style={styles.forgotPasswordText}>Forgot password</Text>
-                                </TouchableOpacity>
-                            </Layout>
-                            {error && error.server && <Text style={styles.errorText}>{error.server}</Text>}
-                        </View>
-                        <Button
-                            style={styles.signInButton}
-                            size='small'
-                            accessoryLeft={submitting ? LoadingIndicator : null}
-                            onPress={this.onSignInButtonPressed}>
-                            {submitting ? null : () => <Text style={styles.signInButtonText}>S I G N   I N</Text>}
-                        </Button>
+            <KeyboardAvoidingView>
+                <Layout level="1" style={styles.layoutContainer}>
+                    <View>
+                        <Text style={styles.titleText}>SIGN IN</Text>
+                        <Layout style={styles.boxLayout}>
+                            <Text style={styles.formLabel}>Email</Text>
+                            <Input
+                                style={styles.formInput}
+                                placeholder='jone.doe@gmail.com'
+                                placeholderTextColor="#888"
+                                value={email}
+                                onChangeText={(text) => this.changeField('email', text)}
+                            />
+                            {error && error.email && <Text style={styles.errorText}>{error.email}</Text>}
+                        </Layout>
+                        <Layout style={styles.boxLayout}>
+                            <Text style={styles.formLabel}>Password</Text>
+                            <Input
+                                style={styles.formInput}
+                                placeholder='Password'
+                                placeholderTextColor="#888"
+                                value={password}
+                                secureTextEntry
+                                autoCapitalize="none"
+                                onChangeText={(text) => this.changeField('password', text)}
+                            />
+                        </Layout>
+                        <Layout style={styles.boxLayout}>
+                            <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('ForgotPassword')}>
+                                <Text style={styles.forgotPasswordText}>Forgot password</Text>
+                            </TouchableOpacity>
+                        </Layout>
+                        {error && error.server && <Text style={styles.errorText}>{error.server}</Text>}
+                    </View>
+                    <Button
+                        style={styles.signInButton}
+                        size='small'
+                        accessoryLeft={submitting ? LoadingIndicator : null}
+                        onPress={this.onSignInButtonPressed}>
+                        {submitting ? null : () => <Text style={styles.signInButtonText}>S I G N   I N</Text>}
+                    </Button>
 
-                        {/* <View style={styles.socialAuthContainer}>
+                    {/* <View style={styles.socialAuthContainer}>
                         <Text style={styles.socialAuthHintText}>OR</Text>
                         <View style={styles.socialAuthButtonsContainer}>
                             <GoogleSigninButton
@@ -172,9 +170,8 @@ class SignInForm extends PureComponent {
                                 disabled={submitting} />
                         </View>
                     </View> */}
-                    </Layout>
-                </KeyboardAvoidingView>
-            </SafeAreaView>
+                </Layout>
+            </KeyboardAvoidingView>
         );
     }
 }
