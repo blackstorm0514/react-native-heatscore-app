@@ -160,7 +160,7 @@ class SignInForm extends PureComponent {
                         {submitting ? null : () => <Text style={styles.signInButtonText}>S I G N   I N</Text>}
                     </Button>
 
-                    <View style={styles.socialAuthContainer}>
+                    {/* <View style={styles.socialAuthContainer}>
                         <Text style={styles.socialAuthHintText}>OR</Text>
                         <View style={styles.socialAuthButtonsContainer}>
                             <GoogleSigninButton
@@ -169,7 +169,7 @@ class SignInForm extends PureComponent {
                                 onPress={this.onGoogleSignIn}
                                 disabled={submitting} />
                         </View>
-                    </View>
+                    </View> */}
                 </Layout>
             </KeyboardAvoidingView>
         );
