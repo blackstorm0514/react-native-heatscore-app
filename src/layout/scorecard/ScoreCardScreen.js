@@ -8,6 +8,7 @@ import { PlusOutlineIcon } from '../../libs/icons';
 import { connect } from 'react-redux';
 import Toast from 'react-native-simple-toast';
 import AddScoreModal from './components/AddScoreModal';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const screenWidth = Dimensions.get('window').width;
 class ScoreCardScreen extends PureComponent {
@@ -160,7 +161,7 @@ class ScoreCardScreen extends PureComponent {
         const { index, routes, modalOpen, defaultEvent } = this.state;
 
         return (
-            <View style={styles.container} >
+            <SafeAreaView style={styles.container} >
                 <TopNavigation
                     title={this.renderTitle}
                     accessoryRight={this.addScoreCardActionButton}
@@ -178,7 +179,7 @@ class ScoreCardScreen extends PureComponent {
                 <AddScoreModal onAddScoreCard={this.onAddScoreCard}
                     defaultEvent={defaultEvent}
                     modalOpen={modalOpen} />
-            </View>
+            </SafeAreaView>
         )
     }
 };
