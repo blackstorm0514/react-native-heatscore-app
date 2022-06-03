@@ -116,7 +116,8 @@ export default class SignupHomeScreen extends PureComponent {
                     ListHeaderComponent={this.renderHeader}
                     ListFooterComponent={this.renderLoginLink}
                     renderItem={this.renderItem}
-                    data={['phone', 'google']}
+                    // data={['phone', 'google']}
+                    data={['phone']}
                 />
             </SafeAreaView>
         );
