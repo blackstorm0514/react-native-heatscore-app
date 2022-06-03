@@ -6,6 +6,7 @@ import { getNews } from '../../redux/services';
 import { LoadingIndicator } from '../scores/components/LoadingIndicator';
 import { CloseIcon, SearchIcon } from '../../libs/icons';
 import NewsItemComponent from './components/NewsItemComponent';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default class NewsListScreen extends PureComponent {
     constructor(props) {
@@ -122,7 +123,7 @@ export default class NewsListScreen extends PureComponent {
     render() {
         const { listNews, search } = this.state;
         return (
-            <View style={styles.container}>
+            <SafeAreaView style={styles.container}>
                 <View style={styles.header}>
                     <Input
                         style={styles.searchInput}
@@ -141,7 +142,7 @@ export default class NewsListScreen extends PureComponent {
                     ListFooterComponent={this.renderFooterItem}
                     keyExtractor={(item, index) => index.toString()}
                 />
-            </View>
+            </SafeAreaView>
         );
     };
 }
