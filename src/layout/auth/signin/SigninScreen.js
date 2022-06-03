@@ -11,6 +11,7 @@ import { statusCodes, GoogleSigninButton } from '@react-native-google-signin/goo
 import { GoogleSigninConfigured } from '../../../services/google.service';
 import { signIn, signInGoogle } from '../../../redux/services';
 import { sendFcmToken } from '../../../libs/sendFcmToken';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const LoadingIndicator = (props) => (
     <View style={[props.style, styles.indicator]}>
@@ -193,10 +194,12 @@ class SigninScreen extends PureComponent {
         const { navigation } = this.props;
 
         return (
-            <View style={styles.container}>
-                <TopNavigationComponent navigation={navigation} backPosition="Profile" />
-                <SignInForm {...this.props} navigation={navigation} />
-            </View>
+            <SafeAreaView>
+                <View style={styles.container}>
+                    <TopNavigationComponent navigation={navigation} backPosition="Profile" />
+                    <SignInForm {...this.props} navigation={navigation} />
+                </View>
+            </SafeAreaView>
         );
     }
 };
