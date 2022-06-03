@@ -7,6 +7,7 @@ import { actions } from '../../../redux/reducer';
 import { AppStorage } from '../../../services/app-storage.service';
 import { GoogleLogOut } from '../../../services/google.service';
 import Toast from 'react-native-simple-toast';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 class ProfileScreen extends PureComponent {
 
@@ -56,54 +57,56 @@ class ProfileScreen extends PureComponent {
     render() {
         const { navigation, user } = this.props;
         return (
-            <ScrollView style={styles.container}>
-                <TopNavigation
-                    title={this.renderTitle}
-                    style={styles.headerStyle}
-                />
-                {!user && <ProfileSettingComponent
-                    style={[styles.profileSetting, styles.section]}
-                    title='Sign In'
-                    navigateAction={() => navigation.navigate('SignIn')}
-                />}
-                {!user && <ProfileSettingComponent
-                    style={styles.profileSetting}
-                    title='Create Account'
-                    navigateAction={() => navigation.navigate('SignUp')}
-                />}
-                {user && <ProfileSettingComponent
-                    style={[styles.profileSetting, styles.section]}
-                    title='Log out'
-                    navigateAction={this.logOutAction}
-                />}
-                {user && <ProfileSettingComponent
-                    style={styles.profileSetting}
-                    title='Account Details'
-                    navigateAction={() => navigation.navigate('AccountDetail')}
-                />}
-                <ProfileSettingComponent
-                    style={[styles.profileSetting, styles.section]}
-                    title='Edition'
-                    value="US - English"
-                    disabled={user == null}
-                    navigateAction={() => { }}
-                />
-                <ProfileSettingComponent
-                    style={styles.profileSetting}
-                    title='Favorites'
-                    navigateAction={() => this.navigateFavorite('Favorites')}
-                />
-                <ProfileSettingComponent
-                    style={styles.profileSetting}
-                    title='Version'
-                    value="1.0.0"
-                />
-                <ProfileSettingComponent
-                    style={styles.profileSetting}
-                    title='Feedback'
-                    navigateAction={() => { }}
-                />
-            </ScrollView>
+            <SafeAreaView>
+                <ScrollView style={styles.container}>
+                    <TopNavigation
+                        title={this.renderTitle}
+                        style={styles.headerStyle}
+                    />
+                    {!user && <ProfileSettingComponent
+                        style={[styles.profileSetting, styles.section]}
+                        title='Sign In'
+                        navigateAction={() => navigation.navigate('SignIn')}
+                    />}
+                    {!user && <ProfileSettingComponent
+                        style={styles.profileSetting}
+                        title='Create Account'
+                        navigateAction={() => navigation.navigate('SignUp')}
+                    />}
+                    {user && <ProfileSettingComponent
+                        style={[styles.profileSetting, styles.section]}
+                        title='Log out'
+                        navigateAction={this.logOutAction}
+                    />}
+                    {user && <ProfileSettingComponent
+                        style={styles.profileSetting}
+                        title='Account Details'
+                        navigateAction={() => navigation.navigate('AccountDetail')}
+                    />}
+                    <ProfileSettingComponent
+                        style={[styles.profileSetting, styles.section]}
+                        title='Edition'
+                        value="US - English"
+                        disabled={user == null}
+                        navigateAction={() => { }}
+                    />
+                    <ProfileSettingComponent
+                        style={styles.profileSetting}
+                        title='Favorites'
+                        navigateAction={() => this.navigateFavorite('Favorites')}
+                    />
+                    <ProfileSettingComponent
+                        style={styles.profileSetting}
+                        title='Version'
+                        value="1.0.0"
+                    />
+                    <ProfileSettingComponent
+                        style={styles.profileSetting}
+                        title='Feedback'
+                        navigateAction={() => { }}
+                    />
+                </ScrollView>
+            </SafeAreaView>
         );
     }
 };
