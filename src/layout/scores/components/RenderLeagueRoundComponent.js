@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ScrollView, SafeAreaView, Dimensions, } from 'react-native';
+import { StyleSheet, View, ScrollView, Dimensions, } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, List } from '@ui-kitten/components';
 import { LoadingIndicator } from './LoadingIndicator';
 import TeamLogoImage from '../../../components/team-logo-image';
