@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Text, Layout, List } from '@ui-kitten/components';
-import { StyleSheet, BackHandler, TouchableOpacity, SafeAreaView, View } from 'react-native';
+import { StyleSheet, BackHandler, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { TopNavigationComponent } from './components/TopNavigationComponent';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import { statusCodes } from '@react-native-google-signin/google-signin';

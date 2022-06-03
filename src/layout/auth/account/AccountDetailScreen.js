@@ -1,6 +1,7 @@
 import React, { PureComponent, useState } from 'react';
 import { Text, Layout, Button, Input, Spinner } from '@ui-kitten/components';
-import { StyleSheet, View, BackHandler, SafeAreaView } from 'react-native';
+import { StyleSheet, View, BackHandler } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { TopNavigationComponent } from '../signup/components/TopNavigationComponent';
 import { KeyboardAvoidingView } from '../../../components/keyboard-avoiding-view';
 import { ValidateFields } from '../../../services/validator.service';

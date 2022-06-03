@@ -6,6 +6,7 @@ import ScoresPerSportScreen from './ScoresPerSportScreen';
 import { getSportsIcon } from '../../libs/functions';
 import smallAppIcon from '../../assets/images/hs-app-icon-72.png';
 import { SearchIcon } from '../../libs/icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 class ScoresScreen extends Component {
     constructor(props) {
@@ -76,40 +77,42 @@ class ScoresScreen extends Component {
     }
 
     renderTabBar = (props) => (
-        <View style={styles.tabBarContainer}>
-            <TabBar
-                {...props}
-                scrollEnabled
-                style={{
-                    backgroundColor: '#121212',
-                    paddingVertical: 0,
-                }}
-                indicatorStyle={{
-                    backgroundColor: '#B90000',
-                    height: 1,
-                    marginVertical: 0,
-                }}
-                tabStyle={{
-                    width: 'auto',
-                    paddingVertical: 0,
-                    paddingHorizontal: 6,
-                    marginVertical: 0,
-                    minHeight: 30,
-                }}
-                labelStyle={{
-                    fontWeight: 'bold',
-                    fontSize: 12,
-                    marginVertical: 0,
-                    paddingVertical: 0,
-                    marginBottom: 6,
-                    textTransform: 'none',
-                    backgroundColor: '#121212'
-                }}
-                activeColor='#B90000'
-                inactiveColor='white'
-                renderIcon={this.renderIcon}
-            />
-        </View>
+        <SafeAreaView>
+            <View style={styles.tabBarContainer}>
+                <TabBar
+                    {...props}
+                    scrollEnabled
+                    style={{
+                        backgroundColor: '#121212',
+                        paddingVertical: 0,
+                    }}
+                    indicatorStyle={{
+                        backgroundColor: '#B90000',
+                        height: 1,
+                        marginVertical: 0,
+                    }}
+                    tabStyle={{
+                        width: 'auto',
+                        paddingVertical: 0,
+                        paddingHorizontal: 6,
+                        marginVertical: 0,
+                        minHeight: 30,
+                    }}
+                    labelStyle={{
+                        fontWeight: 'bold',
+                        fontSize: 12,
+                        marginVertical: 0,
+                        paddingVertical: 0,
+                        marginBottom: 6,
+                        textTransform: 'none',
+                        backgroundColor: '#121212'
+                    }}
+                    activeColor='#B90000'
+                    inactiveColor='white'
+                    renderIcon={this.renderIcon}
+                />
+            </View>
+        </SafeAreaView>
     )
 
     renderIcon = ({ route, color }) => {

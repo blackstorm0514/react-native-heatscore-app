@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { AppearanceProvider } from 'react-native-appearance';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 // import { notifications } from 'react-native-firebase';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createNavigationContainerRef } from '@react-navigation/native';
 
 import AppLoading from './app-loading.component';
