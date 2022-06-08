@@ -304,6 +304,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 20,
         paddingVertical: 10,
+        marginTop: 80,
         height: 42
     },
     modalBackIcon: {
