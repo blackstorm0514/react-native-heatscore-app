@@ -243,6 +243,7 @@ export default connect(mapStateToProps, null)(EventDetailScreen);
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        paddingTop: 44,
         backgroundColor: 'black'
     },
     titleText: {
