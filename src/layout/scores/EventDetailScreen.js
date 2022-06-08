@@ -13,6 +13,7 @@ import RenderEventLineupComponent from './components/RenderEventLineupComponent'
 import RenderEventHistoryComponent from './components/RenderEventHistoryComponent';
 import Toast from 'react-native-simple-toast';
 import { connect } from 'react-redux';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const screenWidth = Dimensions.get('window').width;
 class EventDetailScreen extends Component {

@@ -13,6 +13,7 @@ import { truncateString } from "../../../libs/functions";
 import ManageAlertComponent from "./ManageAlertComponent";
 import { addScoreCard } from "../../../redux/services";
 import { ArrowIosBackIcon } from '../../../libs/icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const screenHeight = Dimensions.get('screen').height;
 
@@ -243,6 +244,7 @@ export default class AddScoreModal extends Component {
                 HeaderComponent={this.renderModalHeader}
                 disableScrollIfPossible
                 modalStyle={{ backgroundColor: '#121212' }}>
+                    <SafeAreaView>
                 <ViewPager selectedIndex={selectedIndex}
                     swipeEnabled={false}
                     style={{ backgroundColor: '#121212', flex: 1 }}>
@@ -288,6 +290,7 @@ export default class AddScoreModal extends Component {
                         />
                     </View>
                 </ViewPager>
+                </SafeAreaView>
             </Modalize>
         )
     }
