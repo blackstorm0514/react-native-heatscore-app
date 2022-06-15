@@ -48,7 +48,7 @@ class BannerImage extends Component {
                     />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.onCloseBanner()} >
-                    <CloseIcon style={[styles.closeIcon, { marginTop: Platform.OS === 'ios' ? 40 : 30 }]} />
+                    <CloseIcon style={[styles.closeIcon, { marginTop: Platform.OS === 'ios' ? 20 : 30 }]} />
                 </TouchableOpacity>
             </SafeAreaView>
         ) : null;
