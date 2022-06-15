@@ -24,13 +24,13 @@ class BannerImage extends Component {
     render() {
         const { visible } = this.state;
         const { width, height } = this.props;
+        const deviceHeight = Platform.OS === 'ios' ? height + 40 : height;
 
         return visible ? (
             <SafeAreaView style={{
-                height: Platform.OS === 'ios' ? height + 40 : height,
+                height: deviceHeight,
                 width: width,
-                alignItems: 'flex-end',
-                marginTop: Platform.OS === 'ios' ? 40 : 0
+                alignItems: 'flex-end'
             }}>
                 <TouchableOpacity onPress={() => this.onVisitBanner()}
                     style={{
@@ -42,7 +42,7 @@ class BannerImage extends Component {
                         style={{
                             flex: 1,
                             width: width,
-                            height: Platform.OS === 'ios' ? height + 40 : height,
+                            height: deviceHeight,
                             resizeMode: 'stretch'
                         }}
                     />
