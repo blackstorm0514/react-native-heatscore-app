@@ -100,11 +100,13 @@ class SearchScreen extends PureComponent {
             );
         }
         if (search == '') {
-            return null
+            <View style={styles.item}>
+                <Text style={styles.noResultText}>There is no search result, please enter a new search term.</Text>
+            </View>
         }
         return (
             <View style={styles.item}>
-                <Text style={styles.noResultText}>No Result. Please retry with another terms.</Text>
+                <Text style={styles.noResultText}>There is no search result, please enter a new search term.</Text>
             </View>
         )
     }
@@ -174,6 +176,7 @@ class SearchScreen extends PureComponent {
         return (
             <View style={styles.container}>
                 {this.renderHeader()}
+
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     keyExtractor={(item, key) => key.toString()}
