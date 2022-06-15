@@ -77,7 +77,6 @@ class ScoresScreen extends Component {
     }
 
     renderTabBar = (props) => (
-        <SafeAreaView>
             <View style={styles.tabBarContainer}>
                 <TabBar
                     {...props}
@@ -112,7 +111,6 @@ class ScoresScreen extends Component {
                     renderIcon={this.renderIcon}
                 />
             </View>
-        </SafeAreaView>
     )
 
     renderIcon = ({ route, color }) => {
@@ -137,7 +135,7 @@ class ScoresScreen extends Component {
         const { navigation } = this.props;
 
         return (
-            <View style={styles.container} >
+            <SafeAreaView style={styles.container} >
                 <TopNavigation title={this.renderTitle} style={styles.headerStyle} />
                 <TouchableOpacity style={styles.searchHeader}
                     activeOpacity={0.9}
@@ -157,7 +155,7 @@ class ScoresScreen extends Component {
                     onIndexChange={(index) => this._Mounted && this.setState({ index })}
                     initialLayout={{ width: Dimensions.get('window').width }}
                 />
-            </View>
+            </SafeAreaView>
         )
     }
 };

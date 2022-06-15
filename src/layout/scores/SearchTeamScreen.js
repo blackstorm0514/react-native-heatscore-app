@@ -8,6 +8,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import TeamLogoImage from '../../components/team-logo-image';
 import Toast from 'react-native-simple-toast';
 import { connect } from 'react-redux';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -172,7 +173,7 @@ class SearchScreen extends PureComponent {
         const { items, refreshing } = this.state;
 
         return (
-            <View style={styles.container}>
+            <SafeAreaView style={styles.container}>
                 {this.renderHeader()}
                 <FlatList
                     showsVerticalScrollIndicator={false}
@@ -187,7 +188,7 @@ class SearchScreen extends PureComponent {
                         refreshing={refreshing}
                         onRefresh={() => this.searchTeams(true)}
                     />} />
-            </View>
+            </SafeAreaView>
         );
     }
 };

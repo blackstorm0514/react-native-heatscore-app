@@ -126,7 +126,7 @@ class SignInForm extends PureComponent {
                         <Text style={styles.formLabel}>Email</Text>
                         <Input
                             style={styles.formInput}
-                            placeholder='jone.doe@gmail.com'
+                            placeholder='john.doe@gmail.com'
                             placeholderTextColor="#888"
                             value={email}
                             onChangeText={(text) => this.changeField('email', text)}
