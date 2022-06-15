@@ -8,6 +8,11 @@ import { NewsNavigator } from './news.navigator';
 import { ScoresNavigator } from './scores.navigator';
 import ScoreCardScreen from '../layout/scorecard/ScoreCardScreen';
 import FeedScreen from '../layout/feed/FeedScreen';
+import BannerImage from '../components/BannerImage';
+import { Dimensions } from 'react-native';
+
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 
 const BottomTab = createBottomTabNavigator();
 
@@ -25,10 +30,25 @@ const TabBarVisibilityOptions = ({ route }) => {
     return { tabBarVisible: true };
 };
 
+const onClickBanner = () => {
+    console.log("click banner")
+}
+
+const onCloseBanner = () => {
+    console.log("close banner")
+}
+
 const screenOption = { headerShown: false };
 
 export const AppNavigator = () => (
     <NavigationContainer theme={navigatorTheme} ref={navigationRef}>
+        <BannerImage
+            uri="https://images.freeimages.com/images/large-previews/84f/canadian-flag-1444866.jpg"
+            width={screenWidth}
+            height={screenHeight}
+            onClick={onClickBanner}
+            onClose={onCloseBanner}
+        />
         <BottomTab.Navigator
             screenOptions={TabBarVisibilityOptions}
             initialRouteName={initialTabRoute}

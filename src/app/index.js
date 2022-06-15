@@ -29,9 +29,9 @@ const App = ({ userToken }) => {
     const [mappingContext, currentMapping] = Theming.useMapping(appMappings, defaultConfig.mapping);
     const [themeContext, currentTheme] = Theming.useTheming(appThemes, defaultConfig.mapping, defaultConfig.theme);
 
-    const navigate = (name, params = null) => {
-        navigationRef.current?.navigate(name, params);
-    }
+    // const navigate = (name, params = null) => {
+    //     navigationRef.current?.navigate(name, params);
+    // }
 
     // const foregroundNotificationsListener = () => {
     //     notifications().onNotification((notification) => {
