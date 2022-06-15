@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Component } from "react";
-import { View, Image, TouchableOpacity, StyleSheet, SafeAreaView } from "react-native";
+import { View, Image, TouchableOpacity, StyleSheet, SafeAreaView, Platform } from "react-native";
 import { CloseIcon } from '../libs/icons';
 
 var uri = "https://images.freeimages.com/images/large-previews/84f/canadian-flag-1444866.jpg"
@@ -29,7 +29,8 @@ class BannerImage extends Component {
             <SafeAreaView style={{
                 height: height,
                 width: width,
-                alignItems: 'flex-end'
+                alignItems: 'flex-end',
+                marginTop: Platform.OS === 'ios' ? 40 : 0
             }}>
                 <TouchableOpacity onPress={() => this.onVisitBanner()}
                     style={{
