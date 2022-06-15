@@ -30,24 +30,13 @@ const TabBarVisibilityOptions = ({ route }) => {
     return { tabBarVisible: true };
 };
 
-const onClickBanner = () => {
-    console.log("click banner")
-}
-
-const onCloseBanner = () => {
-    console.log("close banner")
-}
-
 const screenOption = { headerShown: false };
 
 export const AppNavigator = () => (
     <NavigationContainer theme={navigatorTheme} ref={navigationRef}>
         <BannerImage
-            uri="https://images.freeimages.com/images/large-previews/84f/canadian-flag-1444866.jpg"
             width={screenWidth}
-            height={screenHeight}
-            onClick={onClickBanner}
-            onClose={onCloseBanner}
+            height={60}
         />
         <BottomTab.Navigator
             screenOptions={TabBarVisibilityOptions}
