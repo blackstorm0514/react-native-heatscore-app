@@ -1,8 +1,8 @@
 import React, { useEffect, useState, Component } from "react";
-import { View, Image, TouchableOpacity, StyleSheet, SafeAreaView, Platform, Dimensions } from "react-native";
+import { View, Image, TouchableOpacity, StyleSheet, SafeAreaView, Platform, Dimensions, Linking } from "react-native";
 import { CloseIcon } from '../libs/icons';
+import { getBanner, visitBanner } from '../redux/services';
 
-const uri = "https://images.freeimages.com/images/large-previews/84f/canadian-flag-1444866.jpg"
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
@@ -13,11 +13,29 @@ class BannerImage extends Component {
             visible: true,
             where: 'first',
             height: screenHeight,
+            bannerURL: '',
+            uri: ''
         }
     }
 
     componentDidMount = () => {
-        
+        getBanner()
+            .then(({ data }) => {
+                const { success, bannerSetting } = data;
+                if (success) {
+                    const { link, imageData } = bannerSetting;
+                    if (imageData == "") {
+                        this.setState({ visible: false });
+                    } else {
+                        this.setState({ bannerURL: link, uri: imageData });
+                    }
+                } else {
+                    this.setState({ visible: false });
+                }
+            })
+            .catch((error) => {
+                this.setState({ visible: false });
+            });
     }
 
     setHeight = () => {
@@ -29,7 +47,9 @@ class BannerImage extends Component {
     };
 
     visitBanner = () => {
-
+        const { bannerURL } = this.state;
+        Linking.openURL(bannerURL);
+        visitBanner();
     }
 
     onVisitBanner = () => {
@@ -44,7 +64,7 @@ class BannerImage extends Component {
     }
 
     render() {
-        const { visible, height } = this.state;
+        const { visible, height, uri } = this.state;
         const deviceHeight = Platform.OS === 'ios' ? height + 40 : height;
 
         return visible ? (

@@ -103,3 +103,11 @@ export const searchTeamsForEvents = (search) => {
 export const searchEventsForTeam = (team) => {
     return ApiService.get(`/events/team/upcoming`, { params: { team } });
 }
+
+export const getBanner = () => {
+    return ApiService.get(`/banners/interstitial`);
+}
+
+export const visitBanner = () => {
+    return ApiService.post(`/banners/interstitial-view`);
+}
