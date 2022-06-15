@@ -9,10 +9,8 @@ import { ScoresNavigator } from './scores.navigator';
 import ScoreCardScreen from '../layout/scorecard/ScoreCardScreen';
 import FeedScreen from '../layout/feed/FeedScreen';
 import BannerImage from '../components/BannerImage';
-import { Dimensions } from 'react-native';
 
-const screenWidth = Dimensions.get('window').width;
-const screenHeight = Dimensions.get('window').height;
+
 
 const BottomTab = createBottomTabNavigator();
 
@@ -34,10 +32,7 @@ const screenOption = { headerShown: false };
 
 export const AppNavigator = () => (
     <NavigationContainer theme={navigatorTheme} ref={navigationRef}>
-        <BannerImage
-            width={screenWidth}
-            height={60}
-        />
+        <BannerImage/>
         <BottomTab.Navigator
             screenOptions={TabBarVisibilityOptions}
             initialRouteName={initialTabRoute}

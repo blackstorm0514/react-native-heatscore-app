@@ -1,35 +1,56 @@
 import React, { useEffect, useState, Component } from "react";
-import { View, Image, TouchableOpacity, StyleSheet, SafeAreaView, Platform } from "react-native";
+import { View, Image, TouchableOpacity, StyleSheet, SafeAreaView, Platform, Dimensions } from "react-native";
 import { CloseIcon } from '../libs/icons';
 
-var uri = "https://images.freeimages.com/images/large-previews/84f/canadian-flag-1444866.jpg"
+const uri = "https://images.freeimages.com/images/large-previews/84f/canadian-flag-1444866.jpg"
+const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 
 class BannerImage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            visible: true
+            visible: true,
+            where: 'first',
+            height: screenHeight,
         }
     }
 
+    componentDidMount = () => {
+        
+    }
+
+    setHeight = () => {
+        if (this.state.where == 'first') {
+            this.setState({ height: 60 });
+        } else {
+            this.setState({ visible: false });
+        }
+    };
+
+    visitBanner = () => {
+
+    }
+
     onVisitBanner = () => {
-        console.log("visit banner", this.props)
-        // this.setState({ visible: false });
+        this.setHeight();
+        this.setState({ where: 'second' });
+        this.visitBanner();
     }
 
     onCloseBanner = () => {
-        this.setState({ visible: false });
+        this.setHeight();
+        this.setState({ where: 'second' });
     }
 
     render() {
-        const { visible } = this.state;
-        const { width, height } = this.props;
+        const { visible, height } = this.state;
         const deviceHeight = Platform.OS === 'ios' ? height + 40 : height;
 
         return visible ? (
             <SafeAreaView style={{
                 height: deviceHeight,
-                width: width,
+                width: screenWidth,
                 alignItems: 'flex-end'
             }}>
                 <TouchableOpacity onPress={() => this.onVisitBanner()}
@@ -41,7 +62,7 @@ class BannerImage extends Component {
                         source={{ uri }}
                         style={{
                             flex: 1,
-                            width: width,
+                            width: screenWidth,
                             height: deviceHeight,
                             resizeMode: 'stretch'
                         }}
