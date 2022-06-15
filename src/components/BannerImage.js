@@ -42,7 +42,7 @@ class BannerImage extends Component {
                         style={{
                             flex: 1,
                             width: width,
-                            height: height,
+                            height: Platform.OS === 'ios' ? height + 40 : height,
                             resizeMode: 'stretch'
                         }}
                     />
