@@ -27,7 +27,7 @@ class BannerImage extends Component {
 
         return visible ? (
             <SafeAreaView style={{
-                height: height,
+                height: Platform.OS === 'ios' ? height + 40 : height,
                 width: width,
                 alignItems: 'flex-end',
                 marginTop: Platform.OS === 'ios' ? 40 : 0
@@ -48,7 +48,7 @@ class BannerImage extends Component {
                     />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.onCloseBanner()} >
-                    <CloseIcon style={styles.closeIcon} />
+                    <CloseIcon style={[styles.closeIcon, { marginTop: Platform.OS === 'ios' ? 70 : 30 }]} />
                 </TouchableOpacity>
             </SafeAreaView>
         ) : null;
@@ -62,7 +62,6 @@ const styles = StyleSheet.create({
         height: 30,
         width: 30,
         tintColor: '#FFF',
-        marginTop: 30,
         marginRight: 20
     },
 })
