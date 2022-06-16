@@ -89,6 +89,9 @@ class SearchScreen extends PureComponent {
                     accessoryRight={this.customClearIcon}
                     size="small"
                 />
+                <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                    <CloseIcon style={styles.backHeaderIcon} />
+                </TouchableOpacity>
             </View>
         );
     }
@@ -212,9 +215,17 @@ const styles = StyleSheet.create({
     },
     header: {
         paddingHorizontal: 16,
-        paddingVertical: 2,
-        backgroundColor: '#121212',
-        flexDirection: 'row'
+        paddingBottom: 4,
+        backgroundColor: '#111',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    backHeaderIcon: {
+        height: 30,
+        width: 30,
+        marginHorizontal: 4,
+        marginTop: 3,
+        tintColor: '#FFF'
     },
     item: {
         paddingVertical: 16,
