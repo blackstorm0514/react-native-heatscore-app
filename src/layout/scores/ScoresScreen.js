@@ -7,6 +7,7 @@ import { getSportsIcon } from '../../libs/functions';
 import smallAppIcon from '../../assets/images/hs-app-icon-72.png';
 import { SearchIcon } from '../../libs/icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import BannerImage from '../../components/BannerImage';
 
 class ScoresScreen extends Component {
     constructor(props) {
@@ -136,6 +137,7 @@ class ScoresScreen extends Component {
 
         return (
             <SafeAreaView style={styles.container} >
+                <BannerImage height={60} />
                 <TopNavigation title={this.renderTitle} style={styles.headerStyle} />
                 <TouchableOpacity style={styles.searchHeader}
                     activeOpacity={0.9}

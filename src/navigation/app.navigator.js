@@ -1,6 +1,7 @@
 import React from 'react';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Dimensions } from "react-native";
 import { HomeBottomNavigation } from '../components/home-bottom-navigation.component';
 import { navigationRef } from '../app';
 import { AuthNavigator } from './auth.navigator';
@@ -29,10 +30,13 @@ const TabBarVisibilityOptions = ({ route }) => {
 };
 
 const screenOption = { headerShown: false };
+const screenHeight = Dimensions.get('window').height;
 
 export const AppNavigator = () => (
     <NavigationContainer theme={navigatorTheme} ref={navigationRef}>
-        <BannerImage/>
+        <BannerImage
+            height={screenHeight}
+        />
         <BottomTab.Navigator
             screenOptions={TabBarVisibilityOptions}
             initialRouteName={initialTabRoute}

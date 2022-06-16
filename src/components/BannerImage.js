@@ -4,7 +4,6 @@ import { CloseIcon } from '../libs/icons';
 import { getBanner, visitBanner } from '../redux/services';
 
 const screenWidth = Dimensions.get('window').width;
-const screenHeight = Dimensions.get('window').height;
 
 class BannerImage extends Component {
     constructor(props) {
@@ -12,7 +11,6 @@ class BannerImage extends Component {
         this.state = {
             visible: true,
             where: 'first',
-            height: screenHeight,
             bannerURL: '',
             uri: ''
         }
@@ -38,14 +36,6 @@ class BannerImage extends Component {
             });
     }
 
-    setHeight = () => {
-        if (this.state.where == 'first') {
-            this.setState({ height: 60 });
-        } else {
-            this.setState({ visible: false });
-        }
-    };
-
     visitBanner = () => {
         const { bannerURL } = this.state;
         Linking.openURL(bannerURL);
@@ -53,23 +43,21 @@ class BannerImage extends Component {
     }
 
     onVisitBanner = () => {
-        this.setHeight();
-        this.setState({ where: 'second' });
+        this.setState({ visible: false });
         this.visitBanner();
     }
 
     onCloseBanner = () => {
-        this.setHeight();
-        this.setState({ where: 'second' });
+        this.setState({ visible: false });
     }
 
     render() {
-        const { visible, height, uri } = this.state;
-        const deviceHeight = Platform.OS === 'ios' ? height + 40 : height;
+        const { visible, uri } = this.state;
+        const {height} = this.props;
 
         return visible ? (
             <SafeAreaView style={{
-                height: deviceHeight,
+                height: height,
                 width: screenWidth,
                 alignItems: 'flex-end'
             }}>
@@ -83,13 +71,13 @@ class BannerImage extends Component {
                         style={{
                             flex: 1,
                             width: screenWidth,
-                            height: deviceHeight,
+                            height: height,
                             resizeMode: 'stretch'
                         }}
                     />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.onCloseBanner()} >
-                    <CloseIcon style={[styles.closeIcon, { marginTop: Platform.OS === 'ios' ? 20 : 30 }]} />
+                    <CloseIcon style={styles.closeIcon} />
                 </TouchableOpacity>
             </SafeAreaView>
         ) : null;
