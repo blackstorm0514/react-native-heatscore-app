@@ -33,28 +33,28 @@ const screenOption = { headerShown: false };
 
 export const AppNavigator = () => (
     <NavigationContainer theme={navigatorTheme} ref={navigationRef}>
-        <SafeAreaView>
-        <BannerImage/>
-        <BottomTab.Navigator
-            screenOptions={TabBarVisibilityOptions}
-            initialRouteName={initialTabRoute}
-            tabBar={props => <HomeBottomNavigation {...props} />}>
-            <BottomTab.Screen name='Scores'
-                component={ScoresNavigator}
-                options={{ headerShown: false }} />
-            <BottomTab.Screen name='News'
-                component={NewsNavigator}
-                options={screenOption} />
-            <BottomTab.Screen name='Score Card'
-                component={ScoreCardScreen}
-                options={screenOption} />
-            {/* <BottomTab.Screen name='Feed'
+        <SafeAreaView style={{ flex: 1 }}>
+            <BannerImage />
+            <BottomTab.Navigator
+                screenOptions={TabBarVisibilityOptions}
+                initialRouteName={initialTabRoute}
+                tabBar={props => <HomeBottomNavigation {...props} />}>
+                <BottomTab.Screen name='Scores'
+                    component={ScoresNavigator}
+                    options={screenOption} />
+                <BottomTab.Screen name='News'
+                    component={NewsNavigator}
+                    options={screenOption} />
+                <BottomTab.Screen name='Score Card'
+                    component={ScoreCardScreen}
+                    options={screenOption} />
+                {/* <BottomTab.Screen name='Feed'
                 component={FeedScreen}
                 options={screenOption} /> */}
-            <BottomTab.Screen name='Auth'
-                component={AuthNavigator}
-                options={screenOption} />
-        </BottomTab.Navigator>
+                <BottomTab.Screen name='Auth'
+                    component={AuthNavigator}
+                    options={screenOption} />
+            </BottomTab.Navigator>
         </SafeAreaView>
     </NavigationContainer>
 );
