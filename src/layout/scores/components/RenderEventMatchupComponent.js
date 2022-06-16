@@ -21,9 +21,9 @@ const RenderEventMatchupComponent = ({ event, loading, refreshing, onRefresh }) 
                 <Text style={styles.noDataText}>No Data Availale.</Text>
             );
         }
-        const { home, away, extra, events, scores, time_status, sport, timer, stats, time } = event;
+        const { home, away, extra, events, scores, time_status, sport, timer, stats, time, ss } = event;
         const { status_text, status_class } = getStatusString(time_status, timer, sport);
-        const { home_score, away_score } = getMatchScore(sport, scores, 'game');
+        const { home_score, away_score } = getMatchScore(sport, scores, 'game', ss);
         return (
             <View>
                 <View style={styles.mainBoard}>
@@ -44,7 +44,8 @@ const RenderEventMatchupComponent = ({ event, loading, refreshing, onRefresh }) 
                     home={home}
                     away={away}
                     scores={scores}
-                    sport={sport} />}
+                    sport={sport}
+                    ss={ss} />}
                 {events && events.length > 0 && <GameEventsComponent
                     home={home}
                     away={away}

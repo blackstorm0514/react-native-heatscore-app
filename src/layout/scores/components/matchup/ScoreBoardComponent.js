@@ -44,11 +44,32 @@ const peoridPerSports = {
     ]
 }
 
-const ScoreBoardComponent = ({ scores, home, away, sport }) => {
-    const peorids = peoridPerSports[sport.name].map(item => {
-        const score = getMatchScore(sport, scores, item.value);
+const ScoreBoardComponent = ({ scores, home, away, sport, ss }) => {
+    var peorids = peoridPerSports[sport.name].map(item => {
+        if (sport.name != 'Ice Hockey') ss = '';
+        const score = getMatchScore(sport, scores, item.value, ss);
         return { ...item, ...score };
     });
+
+    var sum_home_score = 0;
+    var sum_away_score = 0;
+    for(let i = 0; i < peorids.length - 1; i++) {
+        sum_home_score += parseInt(peorids[i].home_score);
+        sum_away_score += parseInt(peorids[i].away_score);
+    }
+    if (ss != '') {
+        const ot_home_score = ss.split('-')[0];
+        const ot_away_score = ss.split('-')[1];
+        if (sum_home_score != ot_home_score || sum_away_score != ot_away_score) {
+
+            peorids.splice(peorids.length - 1, 0, {
+                title: 'O',
+                value: 'over_time',
+                home_score: ot_home_score - sum_home_score,
+                away_score: ot_away_score - sum_away_score
+            })
+        }
+    }
 
     return (
         <ScrollView horizontal style={styles.container}>

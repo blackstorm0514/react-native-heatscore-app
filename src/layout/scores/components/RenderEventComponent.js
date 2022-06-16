@@ -14,7 +14,7 @@ const RenderEventComponent = ({ navigation, event }) => {
 
     const { home, away, time, time_status, timer, sport, scores } = event;
     const time_str = getTimeString(timer, time, time_status);
-    const { home_score, away_score } = getMatchScore(sport, scores, 'game');
+    const { home_score, away_score } = getMatchScore(sport, scores, 'game', event.ss);
     const { status_class, status_text } = getStatusString(time_status, timer, sport);
 
     let winLossStyle = null;

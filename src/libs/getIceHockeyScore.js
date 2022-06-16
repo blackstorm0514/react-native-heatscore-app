@@ -1,4 +1,4 @@
-export const getIceHockeyMatchScore = (timeline, scores) => {
+export const getIceHockeyMatchScore = (timeline, scores, ss) => {
     const matchResult = {
         home_score: '',
         away_score: '',
@@ -19,8 +19,13 @@ export const getIceHockeyMatchScore = (timeline, scores) => {
                 matchResult.away_score = scores["3"] ? parseInt(scores["3"].away) : '';
                 break;
             default:
-                matchResult.home_score = scores["5"] ? parseInt(scores["5"].home) : '';
-                matchResult.away_score = scores["5"] ? parseInt(scores["5"].away) : '';
+                if (!ss) {
+                    matchResult.home_score = scores["5"] ? parseInt(scores["5"].home) : '';
+                    matchResult.away_score = scores["5"] ? parseInt(scores["5"].away) : '';
+                } else {
+                    matchResult.home_score = ss.split('-')[0];
+                    matchResult.away_score = ss.split('-')[1];
+                }
                 break;
         }
         return matchResult;

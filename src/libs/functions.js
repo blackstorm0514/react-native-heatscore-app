@@ -50,7 +50,7 @@ export function getTimeString(timer, time, time_status) {
     return time_str;
 }
 
-export function getMatchScore(sport, scores, timeline) {
+export function getMatchScore(sport, scores, timeline, ss='') {
     if (!sport) return { home_score: '', away_score: '' };
     switch (sport.name) {
         case 'Soccer':
@@ -62,7 +62,7 @@ export function getMatchScore(sport, scores, timeline) {
         case 'Basketball':
             return getBasketballMatchScore(timeline, scores);
         case 'Ice Hockey':
-            return getIceHockeyMatchScore(timeline, scores);
+            return getIceHockeyMatchScore(timeline, scores, ss);
     }
     return { home_score: '', away_score: '' }
 }
