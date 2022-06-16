@@ -1,7 +1,6 @@
 import React from 'react';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Dimensions } from "react-native";
 import { HomeBottomNavigation } from '../components/home-bottom-navigation.component';
 import { navigationRef } from '../app';
 import { AuthNavigator } from './auth.navigator';
@@ -10,6 +9,7 @@ import { ScoresNavigator } from './scores.navigator';
 import ScoreCardScreen from '../layout/scorecard/ScoreCardScreen';
 import FeedScreen from '../layout/feed/FeedScreen';
 import BannerImage from '../components/BannerImage';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 
@@ -30,13 +30,11 @@ const TabBarVisibilityOptions = ({ route }) => {
 };
 
 const screenOption = { headerShown: false };
-const screenHeight = Dimensions.get('window').height;
 
 export const AppNavigator = () => (
     <NavigationContainer theme={navigatorTheme} ref={navigationRef}>
-        <BannerImage
-            height={screenHeight}
-        />
+        <SafeAreaView>
+        <BannerImage/>
         <BottomTab.Navigator
             screenOptions={TabBarVisibilityOptions}
             initialRouteName={initialTabRoute}
@@ -57,5 +55,6 @@ export const AppNavigator = () => (
                 component={AuthNavigator}
                 options={screenOption} />
         </BottomTab.Navigator>
+        </SafeAreaView>
     </NavigationContainer>
 );
