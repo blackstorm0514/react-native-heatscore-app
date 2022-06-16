@@ -175,7 +175,7 @@ class SearchScreen extends PureComponent {
         const { items, refreshing } = this.state;
 
         return (
-            <SafeAreaView style={styles.container}>
+            <View style={styles.container}>
                 {this.renderHeader()}
 
                 <FlatList
@@ -191,7 +191,7 @@ class SearchScreen extends PureComponent {
                         refreshing={refreshing}
                         onRefresh={() => this.searchTeams(true)}
                     />} />
-            </SafeAreaView>
+            </View>
         );
     }
 };

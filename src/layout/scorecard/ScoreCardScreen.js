@@ -161,7 +161,7 @@ class ScoreCardScreen extends PureComponent {
         const { index, routes, modalOpen, defaultEvent } = this.state;
 
         return (
-            <SafeAreaView style={styles.container} >
+            <View style={styles.container} >
                 <TopNavigation
                     title={this.renderTitle}
                     accessoryRight={this.addScoreCardActionButton}
@@ -179,7 +179,7 @@ class ScoreCardScreen extends PureComponent {
                 <AddScoreModal onAddScoreCard={this.onAddScoreCard}
                     defaultEvent={defaultEvent}
                     modalOpen={modalOpen} />
-            </SafeAreaView>
+            </View>
         )
     }
 };

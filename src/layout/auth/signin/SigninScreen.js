@@ -193,10 +193,10 @@ class SigninScreen extends PureComponent {
 
         return (
             <KeyboardAvoidingView>
-                <SafeAreaView style={styles.container}>
+                <View style={styles.container}>
                     <TopNavigationComponent navigation={navigation} backPosition="Profile" />
                     <SignInForm {...this.props} navigation={navigation} />
-                </SafeAreaView>
+                </View>
             </KeyboardAvoidingView>
         );
     }

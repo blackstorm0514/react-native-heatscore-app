@@ -123,7 +123,7 @@ export default class NewsListScreen extends PureComponent {
     render() {
         const { listNews, search } = this.state;
         return (
-            <SafeAreaView style={styles.container}>
+            <View style={styles.container}>
                 <View style={styles.header}>
                     <Input
                         style={styles.searchInput}
@@ -142,7 +142,7 @@ export default class NewsListScreen extends PureComponent {
                     ListFooterComponent={this.renderFooterItem}
                     keyExtractor={(item, index) => index.toString()}
                 />
-            </SafeAreaView>
+            </View>
         );
     };
 }

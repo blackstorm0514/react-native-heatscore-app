@@ -58,7 +58,6 @@ class ProfileScreen extends PureComponent {
         const { navigation, user } = this.props;
         return (
             <ScrollView style={styles.container}>
-                <SafeAreaView>
                     <TopNavigation
                         title={this.renderTitle}
                         style={styles.headerStyle}
@@ -105,7 +104,6 @@ class ProfileScreen extends PureComponent {
                         title='Feedback'
                         navigateAction={() => { }}
                     />
-                </SafeAreaView>
             </ScrollView>
         );
     }
